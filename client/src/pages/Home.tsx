@@ -1,25 +1,51 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
-
 /**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
+ * INUSMUSIC 웨딩 전문 브랜드 홈페이지
+ * Design: Warm Dramatic Wedding - 풀스크린 히어로, 다크/라이트 교차, 대담한 타이포그래피
+ * Brand Color: Mint (#5BB5A2) + Soft Gold (#d4b896)
  */
-export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
+import Navbar from "@/components/Navbar";
+import HeroSection from "@/components/sections/HeroSection";
+import IntroSection from "@/components/sections/IntroSection";
+import RecommendSection from "@/components/sections/RecommendSection";
+import DifferenceSection from "@/components/sections/DifferenceSection";
+import PackageSection from "@/components/sections/PackageSection";
+import PricingSection from "@/components/sections/PricingSection";
+import ProcessSection from "@/components/sections/ProcessSection";
+import McSection from "@/components/sections/McSection";
+import VideoSection from "@/components/sections/VideoSection";
+import VideoGuideSection from "@/components/sections/VideoGuideSection";
+import ReviewSection from "@/components/sections/ReviewSection";
+import QnaSection from "@/components/sections/QnaSection";
+import BookingSection from "@/components/sections/BookingSection";
+import ServiceSection from "@/components/sections/ServiceSection";
+import EventSection from "@/components/sections/EventSection";
+import CtaSection from "@/components/sections/CtaSection";
+import Footer from "@/components/Footer";
+import BottomCTA from "@/components/BottomCTA";
 
+
+export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
+    <div className="min-h-screen">
+      <Navbar />
+      <HeroSection />
+      <IntroSection />
+      <RecommendSection />
+      <DifferenceSection />
+      <PackageSection />
+      <ProcessSection />
+      <ReviewSection />
+      <McSection />
+      <VideoSection />
+      <VideoGuideSection />
+      <BookingSection />
+      <PricingSection />
+      <EventSection />
+      <QnaSection />
+      <ServiceSection />
+      <CtaSection />
+      <Footer />
+      <BottomCTA />
     </div>
   );
 }

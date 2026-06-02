@@ -19,6 +19,7 @@ const MCS = [
     highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223996383838",
     styles: ["품격형", "아나운서형"],
+    youtubeId: "",
   },
   {
     name: "고승범",
@@ -30,6 +31,7 @@ const MCS = [
     highlight: "자연스럽고 세련된 진행 스타일이 특징입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223235771542",
     styles: ["품격형", "아나운서형"],
+    youtubeId: "",
   },
   {
     name: "이도영",
@@ -41,6 +43,7 @@ const MCS = [
     highlight: "따뜻하고 안정적인 진행으로 신랑신부님의 이야기를 감동적으로 전달합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",
     styles: ["품격형", "밝은형", "감동형"],
+    youtubeId: "ali34pV7ALk",
   },
   {
     name: "석재선",
@@ -52,6 +55,7 @@ const MCS = [
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223822182933",
     styles: ["품격형", "감동형"],
+    youtubeId: "zx_iAhMkMns",
   },
   {
     name: "이우영",
@@ -63,6 +67,7 @@ const MCS = [
     highlight: "편안한 아나운서 톤과 안정적인 진행력으로 위트 있고 깔끔한 예식을 완성하는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/220767962639",
     styles: ["품격형", "밝은형", "감동형", "아나운서형"],
+    youtubeId: "prhKZqfMjfM",
   },
   {
     name: "김선혁",
@@ -74,6 +79,7 @@ const MCS = [
     highlight: "깔끔하고 안정감 있는 진행력을 기반으로 다년간의 연극 경험에서 비롯된 탁월한 상황 대처 능력을 갖춘 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/221025505211",
     styles: ["품격형", "아나운서형"],
+    youtubeId: "4Quvg9TIGAk",
   },
   {
     name: "장윤태",
@@ -85,6 +91,7 @@ const MCS = [
     highlight: "안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",
     styles: ["품격형", "감동형"],
+    youtubeId: "",
   },
 ];
 
@@ -153,13 +160,26 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
 
         {/* 본문 */}
         <div className="flex flex-col sm:flex-row overflow-auto" style={{ maxHeight: "calc(90vh - 70px)" }}>
-          {/* 프로필 이미지 */}
-          <div className="sm:w-56 flex-shrink-0">
-            <img
-              src={mc.image}
-              alt={mc.name}
-              className="w-full h-64 sm:h-full object-cover object-top"
-            />
+          {/* 영상 or 프로필 이미지 */}
+          <div className="sm:w-64 flex-shrink-0">
+            {mc.youtubeId ? (
+              <div className="relative w-full" style={{ paddingBottom: "177.78%" }}>
+                <iframe
+                  src={`https://www.youtube.com/embed/${mc.youtubeId}?autoplay=1&mute=0&rel=0&playsinline=1`}
+                  title={`${mc.name} 진행 영상`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full"
+                  style={{ border: 0 }}
+                />
+              </div>
+            ) : (
+              <img
+                src={mc.image}
+                alt={mc.name}
+                className="w-full h-64 sm:h-full object-cover object-top"
+              />
+            )}
           </div>
 
           {/* 정보 */}

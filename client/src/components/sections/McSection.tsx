@@ -118,50 +118,39 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
     };
   }, [onClose]);
 
+  const tierColor = mc.tier === "PREMIUM"
+    ? { border: "border-[#d4b896]/60", text: "text-[#d4b896]", bg: "bg-[#d4b896]/10" }
+    : { border: "border-[#5BB5A2]/60", text: "text-[#5BB5A2]", bg: "bg-[#5BB5A2]/10" };
+
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(4px)" }}
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
+      style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(8px)" }}
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-[#111] rounded-lg overflow-hidden shadow-2xl"
-        style={{ animation: "fadeInUp 0.3s cubic-bezier(0.23,1,0.32,1)", maxHeight: "90vh" }}
+        className="relative w-full max-w-3xl overflow-hidden shadow-2xl"
+        style={{
+          animation: "fadeInUp 0.35s cubic-bezier(0.23,1,0.32,1)",
+          maxHeight: "92vh",
+          background: "linear-gradient(145deg, #161616 0%, #0d0d0d 100%)",
+          border: "1px solid rgba(255,255,255,0.07)",
+          borderRadius: "12px",
+        }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 헤더 */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <span
-              className={`px-2.5 py-1 text-[10px] tracking-[0.2em] uppercase border ${
-                mc.tier === "PREMIUM"
-                  ? "border-[#d4b896]/50 text-[#d4b896]"
-                  : "border-[#5BB5A2]/40 text-[#5BB5A2]"
-              }`}
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
-            >
-              {mc.tier}
-            </span>
-            <h3
-              className="text-white text-xl font-bold"
-              style={{ fontFamily: "'Noto Serif KR', serif" }}
-            >
-              {mc.name}
-            </h3>
-            <span className="text-white/40 text-sm">{mc.desc}</span>
-          </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/60 hover:text-white hover:bg-white/20 transition-colors"
-          >
-            <X size={16} />
-          </button>
-        </div>
+        {/* 닫기 버튼 */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full text-white/40 hover:text-white transition-colors"
+          style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+        >
+          <X size={16} />
+        </button>
 
-        {/* 본문 */}
-        <div className="flex flex-col sm:flex-row overflow-auto" style={{ maxHeight: "calc(90vh - 70px)" }}>
-          {/* 영상 or 프로필 이미지 */}
-          <div className="sm:w-64 flex-shrink-0">
+        <div className="flex flex-col md:flex-row overflow-auto" style={{ maxHeight: "92vh" }}>
+          {/* 왼쪽: 영상 or 이미지 */}
+          <div className="md:w-[300px] flex-shrink-0 relative">
             {mc.youtubeId ? (
               <div className="relative w-full" style={{ paddingBottom: "177.78%" }}>
                 <iframe
@@ -174,65 +163,90 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
                 />
               </div>
             ) : (
-              <img
-                src={mc.image}
-                alt={mc.name}
-                className="w-full h-64 sm:h-full object-cover object-top"
-              />
+              <div className="relative h-72 md:h-full min-h-[320px]">
+                <img
+                  src={mc.image}
+                  alt={mc.name}
+                  className="w-full h-full object-cover object-top"
+                />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(13,13,13,0.7) 0%, transparent 50%)" }} />
+              </div>
             )}
           </div>
 
-          {/* 정보 */}
-          <div className="flex-1 p-6 flex flex-col gap-5 overflow-y-auto">
-            <p className="text-white/70 text-sm leading-relaxed" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
-              {mc.highlight}
-            </p>
-
-            <div className="space-y-2">
-              {mc.tags.map((tag, i) => (
-                <div key={i} className="flex items-center gap-2.5 text-white/50 text-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#5BB5A2] flex-shrink-0" />
-                  {tag}
+          {/* 오른쪽: 정보 */}
+          <div className="flex-1 flex flex-col overflow-y-auto">
+            {/* 상단 헤더 */}
+            <div className="px-7 pt-8 pb-5" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="flex items-center gap-2 mb-3">
+                <span
+                  className={`px-2.5 py-1 text-[10px] tracking-[0.25em] uppercase ${tierColor.border} ${tierColor.text} border`}
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                >
+                  {mc.tier}
+                </span>
+                <div className="flex gap-1.5">
+                  {mc.styles.map((style) => (
+                    <span
+                      key={style}
+                      className="px-2 py-0.5 text-[10px] text-white/40 rounded-full"
+                      style={{ background: "rgba(255,255,255,0.05)", fontFamily: "'Noto Sans KR', sans-serif" }}
+                    >
+                      {style}
+                    </span>
+                  ))}
                 </div>
-              ))}
+              </div>
+              <h3
+                className="text-white text-3xl font-bold mb-1"
+                style={{ fontFamily: "'Noto Serif KR', serif" }}
+              >
+                {mc.name}
+              </h3>
+              <p className="text-white/40 text-sm" style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic" }}>
+                {mc.desc}
+              </p>
             </div>
 
-            <div>
-              <p className="text-white/30 text-xs mb-2 tracking-wider uppercase" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                진행 스타일
+            {/* 소개 */}
+            <div className="px-7 py-5 flex-1">
+              <p
+                className="text-white/65 text-sm leading-7 mb-6"
+                style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+              >
+                {mc.highlight}
               </p>
-              <div className="flex flex-wrap gap-2">
-                {mc.styles.map((style) => (
-                  <span
-                    key={style}
-                    className="px-3 py-1 text-xs border border-white/15 text-white/60 rounded-full"
-                    style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
-                  >
-                    {style}
-                  </span>
+
+              <div className="space-y-2.5 mb-6">
+                {mc.tags.map((tag, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <span className={`w-1 h-4 rounded-full flex-shrink-0 ${tierColor.bg} ${tierColor.border} border`} />
+                    <span className="text-white/55 text-sm" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>{tag}</span>
+                  </div>
                 ))}
               </div>
             </div>
 
-            <div className="mt-auto pt-4 flex flex-col gap-2">
-              <a
-                href={mc.profileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-3 bg-[#5BB5A2]/10 border border-[#5BB5A2]/30 text-[#5BB5A2] text-sm tracking-wide hover:bg-[#5BB5A2]/20 transition-all duration-300 rounded-sm"
-                style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
-              >
-                네이버 블로그에서 전체 프로필 보기
-                <ExternalLink size={14} />
-              </a>
+            {/* 하단 버튼 */}
+            <div className="px-7 pb-7 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "1.25rem" }}>
               <a
                 href="https://pf.kakao.com/_wxovaM/chat"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-3 bg-[#FEE500] text-[#3C1E1E] text-sm font-medium tracking-wide hover:bg-[#FFD700] transition-all duration-300 rounded-sm"
+                className="flex items-center justify-center w-full py-3.5 text-[#1a1a1a] text-sm font-semibold tracking-wide transition-all duration-300 hover:opacity-90 rounded-sm"
+                style={{ background: "#FEE500", fontFamily: "'Noto Sans KR', sans-serif" }}
+              >
+                💬 이 사회자로 카카오 상담하기
+              </a>
+              <a
+                href={mc.profileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center justify-center gap-2 w-full py-3 text-sm tracking-wide transition-all duration-300 rounded-sm ${tierColor.text} ${tierColor.bg} ${tierColor.border} border hover:opacity-80`}
                 style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
               >
-                이 사회자로 상담하기 →
+                블로그에서 전체 프로필 보기
+                <ExternalLink size={13} />
               </a>
             </div>
           </div>

@@ -20,6 +20,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223996383838",
     styles: ["품격형", "아나운서형"],
     youtubeId: "",
+    profileCardImg: "/manus-storage/profile-card-minsu_45926235.png",
   },
   {
     name: "고승범",
@@ -32,6 +33,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223235771542",
     styles: ["품격형", "아나운서형"],
     youtubeId: "",
+    profileCardImg: "/manus-storage/profile-card-seungbeom_21ec2feb.png",
   },
   {
     name: "이도영",
@@ -44,6 +46,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",
     styles: ["품격형", "밝은형", "감동형"],
     youtubeId: "ali34pV7ALk",
+    profileCardImg: "/manus-storage/profile-card-idoyoung_e8b6b43a.png",
   },
   {
     name: "석재선",
@@ -56,6 +59,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223822182933",
     styles: ["품격형", "감동형"],
     youtubeId: "zx_iAhMkMns",
+    profileCardImg: "/manus-storage/profile-card-jaesun_a7762998.png",
   },
   {
     name: "이우영",
@@ -68,6 +72,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/220767962639",
     styles: ["품격형", "밝은형", "감동형", "아나운서형"],
     youtubeId: "prhKZqfMjfM",
+    profileCardImg: "/manus-storage/profile-card-wooyoung_96a8b934.png",
   },
   {
     name: "김선혁",
@@ -80,6 +85,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/221025505211",
     styles: ["품격형", "아나운서형"],
     youtubeId: "4Quvg9TIGAk",
+    profileCardImg: "/manus-storage/profile-card-sunhyuk_55ae1e19.png",
   },
   {
     name: "장윤태",
@@ -92,6 +98,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",
     styles: ["품격형", "감동형"],
     youtubeId: "",
+    profileCardImg: "/manus-storage/profile-card-yuntae_7ac66c58.png",
   },
 ];
 
@@ -148,11 +155,11 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
           <X size={16} />
         </button>
 
-        <div className="flex flex-col md:flex-row overflow-auto" style={{ maxHeight: "92vh" }}>
-          {/* 왼쪽: 영상 or 이미지 */}
-          <div className="md:w-[300px] flex-shrink-0 relative">
+        <div className="flex flex-col overflow-auto" style={{ maxHeight: "92vh" }}>
+          {/* 위: 영상 or 프로필 카드 이미지 */}
+          <div className="w-full">
             {mc.youtubeId ? (
-              <div className="relative w-full" style={{ paddingBottom: "177.78%" }}>
+              <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
                 <iframe
                   src={`https://www.youtube.com/embed/${mc.youtubeId}?autoplay=1&mute=0&rel=0&playsinline=1`}
                   title={`${mc.name} 진행 영상`}
@@ -163,93 +170,49 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
                 />
               </div>
             ) : (
-              <div className="relative h-72 md:h-full min-h-[320px]">
-                <img
-                  src={mc.image}
-                  alt={mc.name}
-                  className="w-full h-full object-cover object-top"
-                />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(13,13,13,0.7) 0%, transparent 50%)" }} />
-              </div>
+              <img
+                src={mc.profileCardImg}
+                alt={`${mc.name} 프로필`}
+                className="w-full block"
+              />
             )}
           </div>
 
-          {/* 오른쪽: 정보 */}
-          <div className="flex-1 flex flex-col overflow-y-auto">
-            {/* 상단 헤더 */}
-            <div className="px-7 pt-8 pb-5" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-              <div className="flex items-center gap-2 mb-3">
-                <span
-                  className={`px-2.5 py-1 text-[10px] tracking-[0.25em] uppercase ${tierColor.border} ${tierColor.text} border`}
-                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                >
-                  {mc.tier}
-                </span>
-                <div className="flex gap-1.5">
-                  {mc.styles.map((style) => (
-                    <span
-                      key={style}
-                      className="px-2 py-0.5 text-[10px] text-white/40 rounded-full"
-                      style={{ background: "rgba(255,255,255,0.05)", fontFamily: "'Noto Sans KR', sans-serif" }}
-                    >
-                      {style}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <h3
-                className="text-white text-3xl font-bold mb-1"
-                style={{ fontFamily: "'Noto Serif KR', serif" }}
-              >
-                {mc.name}
-              </h3>
-              <p className="text-white/40 text-sm" style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic" }}>
-                {mc.desc}
-              </p>
+          {/* 영상 있는 경우 아래에 프로필 카드 이미지도 표시 */}
+          {mc.youtubeId && (
+            <div className="w-full" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+              <img
+                src={mc.profileCardImg}
+                alt={`${mc.name} 프로필`}
+                className="w-full block"
+              />
             </div>
+          )}
 
-            {/* 소개 */}
-            <div className="px-7 py-5 flex-1">
-              <p
-                className="text-white/65 text-sm leading-7 mb-6"
-                style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
-              >
-                {mc.highlight}
-              </p>
-
-              <div className="space-y-2.5 mb-6">
-                {mc.tags.map((tag, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <span className={`w-1 h-4 rounded-full flex-shrink-0 ${tierColor.bg} ${tierColor.border} border`} />
-                    <span className="text-white/55 text-sm" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>{tag}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* 하단 버튼 */}
-            <div className="px-7 pb-7 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "1.25rem" }}>
-              <a
-                href="https://pf.kakao.com/_wxovaM/chat"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-full py-3.5 text-[#1a1a1a] text-sm font-semibold tracking-wide transition-all duration-300 hover:opacity-90 rounded-sm"
-                style={{ background: "#FEE500", fontFamily: "'Noto Sans KR', sans-serif" }}
-              >
-                💬 이 사회자로 카카오 상담하기
-              </a>
-              <a
-                href={mc.profileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`flex items-center justify-center gap-2 w-full py-3 text-sm tracking-wide transition-all duration-300 rounded-sm ${tierColor.text} ${tierColor.bg} ${tierColor.border} border hover:opacity-80`}
-                style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
-              >
-                블로그에서 전체 프로필 보기
-                <ExternalLink size={13} />
-              </a>
-            </div>
+          {/* 하단 버튼 */}
+          <div className="px-6 py-5 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(0,0,0,0.3)" }}>
+            <a
+              href="https://pf.kakao.com/_wxovaM/chat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-full py-3.5 text-[#1a1a1a] text-sm font-semibold tracking-wide transition-all duration-300 hover:opacity-90 rounded-sm"
+              style={{ background: "#FEE500", fontFamily: "'Noto Sans KR', sans-serif" }}
+            >
+              💬 {mc.name} 사회자로 카카오 상담하기
+            </a>
+            <a
+              href={mc.profileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`flex items-center justify-center gap-2 w-full py-3 text-sm tracking-wide transition-all duration-300 rounded-sm ${tierColor.text} ${tierColor.bg} ${tierColor.border} border hover:opacity-80`}
+              style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+            >
+              블로그에서 전체 프로필 보기
+              <ExternalLink size={13} />
+            </a>
           </div>
+
+
         </div>
       </div>
     </div>

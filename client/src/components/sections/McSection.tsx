@@ -159,10 +159,10 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
         {/* 닫기 버튼 */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full text-white/40 hover:text-white transition-colors"
-          style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+          className="absolute top-3 right-3 z-10 w-9 h-9 flex items-center justify-center rounded-full text-white hover:scale-110 transition-all duration-200"
+          style={{ background: "rgba(0,0,0,0.7)", border: "1.5px solid rgba(255,255,255,0.3)", boxShadow: "0 2px 8px rgba(0,0,0,0.5)" }}
         >
-          <X size={16} />
+          <X size={17} strokeWidth={2.5} />
         </button>
 
         <div className="flex flex-col overflow-auto" style={{ maxHeight: "92vh" }}>

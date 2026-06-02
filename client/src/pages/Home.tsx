@@ -22,11 +22,13 @@ import EventSection from "@/components/sections/EventSection";
 import CtaSection from "@/components/sections/CtaSection";
 import Footer from "@/components/Footer";
 import BottomCTA from "@/components/BottomCTA";
+import InusCardPopup from "@/components/InusCardPopup";
 
 
 export default function Home() {
   return (
     <div className="min-h-screen">
+      <InusCardPopup />
       <Navbar />
       <HeroSection />
       <IntroSection />

@@ -6,7 +6,7 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, ExternalLink } from "lucide-react";
 
 const MCS = [
   {
@@ -97,6 +97,131 @@ const STYLE_DESCRIPTIONS: Record<string, string> = {
   "아나운서형": "정확한 발성, 안정적인 톤, 깔끔한 식순 진행에 강한 사회자입니다.",
 };
 
+type MC = typeof MCS[0];
+
+// 프로필 모달 컴포넌트
+function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(4px)" }}
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-2xl bg-[#111] rounded-lg overflow-hidden shadow-2xl"
+        style={{ animation: "fadeInUp 0.3s cubic-bezier(0.23,1,0.32,1)", maxHeight: "90vh" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 헤더 */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <span
+              className={`px-2.5 py-1 text-[10px] tracking-[0.2em] uppercase border ${
+                mc.tier === "PREMIUM"
+                  ? "border-[#d4b896]/50 text-[#d4b896]"
+                  : "border-[#5BB5A2]/40 text-[#5BB5A2]"
+              }`}
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
+              {mc.tier}
+            </span>
+            <h3
+              className="text-white text-xl font-bold"
+              style={{ fontFamily: "'Noto Serif KR', serif" }}
+            >
+              {mc.name}
+            </h3>
+            <span className="text-white/40 text-sm">{mc.desc}</span>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/60 hover:text-white hover:bg-white/20 transition-colors"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* 본문 */}
+        <div className="flex flex-col sm:flex-row overflow-auto" style={{ maxHeight: "calc(90vh - 70px)" }}>
+          {/* 프로필 이미지 */}
+          <div className="sm:w-56 flex-shrink-0">
+            <img
+              src={mc.image}
+              alt={mc.name}
+              className="w-full h-64 sm:h-full object-cover object-top"
+            />
+          </div>
+
+          {/* 정보 */}
+          <div className="flex-1 p-6 flex flex-col gap-5 overflow-y-auto">
+            <p className="text-white/70 text-sm leading-relaxed" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
+              {mc.highlight}
+            </p>
+
+            <div className="space-y-2">
+              {mc.tags.map((tag, i) => (
+                <div key={i} className="flex items-center gap-2.5 text-white/50 text-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#5BB5A2] flex-shrink-0" />
+                  {tag}
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <p className="text-white/30 text-xs mb-2 tracking-wider uppercase" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                진행 스타일
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {mc.styles.map((style) => (
+                  <span
+                    key={style}
+                    className="px-3 py-1 text-xs border border-white/15 text-white/60 rounded-full"
+                    style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+                  >
+                    {style}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-auto pt-4 flex flex-col gap-2">
+              <a
+                href={mc.profileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full py-3 bg-[#5BB5A2]/10 border border-[#5BB5A2]/30 text-[#5BB5A2] text-sm tracking-wide hover:bg-[#5BB5A2]/20 transition-all duration-300 rounded-sm"
+                style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+              >
+                네이버 블로그에서 전체 프로필 보기
+                <ExternalLink size={14} />
+              </a>
+              <a
+                href="https://pf.kakao.com/_wxovaM/chat"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full py-3 bg-[#FEE500] text-[#3C1E1E] text-sm font-medium tracking-wide hover:bg-[#FFD700] transition-all duration-300 rounded-sm"
+                style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+              >
+                이 사회자로 상담하기 →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function McSection() {
   const anim1 = useScrollAnimation();
   const [activeFilter, setActiveFilter] = useState("전체");
@@ -108,10 +233,8 @@ export default function McSection() {
     slidesToScroll: 1,
   });
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(false);
+  const [selectedMc, setSelectedMc] = useState<MC | null>(null);
 
-  // Filter logic with fade animation
   const handleFilterChange = useCallback((filter: string) => {
     if (filter === activeFilter) return;
     setIsTransitioning(true);
@@ -123,13 +246,10 @@ export default function McSection() {
         setFilteredMcs(MCS.filter((mc) => mc.styles.includes(filter)));
       }
       setSelectedIndex(0);
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 50);
+      setTimeout(() => setIsTransitioning(false), 50);
     }, 300);
   }, [activeFilter]);
 
-  // Re-init carousel when filtered list changes
   useEffect(() => {
     if (emblaApi) {
       emblaApi.reInit();
@@ -143,8 +263,6 @@ export default function McSection() {
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
   }, [emblaApi]);
 
   useEffect(() => {
@@ -159,173 +277,166 @@ export default function McSection() {
   }, [emblaApi, onSelect]);
 
   return (
-    <section id="mc" className="bg-[#0d0d0d] py-24 sm:py-32 lg:py-40 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div ref={anim1.ref} className={`text-center mb-12 sm:mb-16 fade-up ${anim1.isVisible ? "visible" : ""}`}>
-          <span
-            className="text-[#d4b896] text-xs sm:text-sm tracking-[0.3em] uppercase"
-            style={{ fontFamily: "'Cormorant Garamond', serif" }}
-          >
-            INUSMUSIC MCs
-          </span>
-          <h2
-            className="mt-4 text-white text-2xl sm:text-3xl md:text-4xl"
-            style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-          >
-            전문 사회자를 <span className="text-[#5BB5A2]">직접 선택</span>하세요
-          </h2>
-          <p className="mt-4 text-white/50 text-sm sm:text-base">
-            고객님들이 가장 많이 선택한 TOP 사회자들입니다
-          </p>
+    <>
+      <section id="mc" className="bg-[#0d0d0d] py-24 sm:py-32 lg:py-40 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div ref={anim1.ref} className={`text-center mb-12 sm:mb-16 fade-up ${anim1.isVisible ? "visible" : ""}`}>
+            <span
+              className="text-[#d4b896] text-xs sm:text-sm tracking-[0.3em] uppercase"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
+              INUSMUSIC MCs
+            </span>
+            <h2
+              className="mt-4 text-white text-2xl sm:text-3xl md:text-4xl"
+              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+            >
+              전문 사회자를 <span className="text-[#5BB5A2]">직접 선택</span>하세요
+            </h2>
+            <p className="mt-4 text-white/50 text-sm sm:text-base">
+              고객님들이 가장 많이 선택한 TOP 사회자들입니다
+            </p>
 
-          {/* Style Filter Tabs */}
-          <div className="mt-8 flex overflow-x-auto no-scrollbar justify-start sm:justify-center gap-2 sm:gap-3 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
-            {STYLE_FILTERS.map((filter) => (
-              <button
-                key={filter}
-                onClick={() => handleFilterChange(filter)}
-                className={`flex-shrink-0 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm tracking-wider transition-all duration-300 border ${
-                  activeFilter === filter
-                    ? "bg-[#5BB5A2] border-[#5BB5A2] text-white shadow-lg shadow-[#5BB5A2]/20"
-                    : "bg-transparent border-white/20 text-white/60 hover:border-[#5BB5A2]/50 hover:text-white/90"
+            <div className="mt-8 flex overflow-x-auto no-scrollbar justify-start sm:justify-center gap-2 sm:gap-3 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+              {STYLE_FILTERS.map((filter) => (
+                <button
+                  key={filter}
+                  onClick={() => handleFilterChange(filter)}
+                  className={`flex-shrink-0 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm tracking-wider transition-all duration-300 border ${
+                    activeFilter === filter
+                      ? "bg-[#5BB5A2] border-[#5BB5A2] text-white shadow-lg shadow-[#5BB5A2]/20"
+                      : "bg-transparent border-white/20 text-white/60 hover:border-[#5BB5A2]/50 hover:text-white/90"
+                  }`}
+                  style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-4 h-6 flex items-center justify-center">
+              <p
+                className={`text-white/50 text-xs sm:text-sm transition-all duration-400 ${
+                  activeFilter !== "전체" && STYLE_DESCRIPTIONS[activeFilter]
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-1"
                 }`}
                 style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
               >
-                {filter}
-              </button>
-            ))}
-          </div>
-
-          {/* Style Description - 탭 아래 페이드인 */}
-          <div className="mt-4 h-6 flex items-center justify-center">
-            <p
-              className={`text-white/50 text-xs sm:text-sm transition-all duration-400 ${
-                activeFilter !== "전체" && STYLE_DESCRIPTIONS[activeFilter]
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 -translate-y-1"
-              }`}
-              style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
-            >
-              {STYLE_DESCRIPTIONS[activeFilter] || ""}
-            </p>
-          </div>
-        </div>
-
-        {/* Carousel */}
-        <div className="relative">
-          <div ref={emblaRef} className={`overflow-hidden transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
-            <div className="flex">
-              {filteredMcs.map((mc, i) => (
-                <div
-                  key={mc.name}
-                  className="flex-[0_0_85%] sm:flex-[0_0_70%] md:flex-[0_0_50%] lg:flex-[0_0_42%] min-w-0 px-3 sm:px-4"
-                >
-                  <div
-                    className={`group relative bg-[#161616] border rounded-sm overflow-hidden transition-all duration-500 ${
-                      selectedIndex === i
-                        ? "border-[#5BB5A2]/40 shadow-lg shadow-[#5BB5A2]/5"
-                        : "border-white/5 opacity-60"
-                    }`}
-                  >
-                    {/* Profile Image */}
-                    <div className="relative aspect-[3/4] overflow-hidden">
-                      <img
-                        src={mc.image}
-                        alt={mc.name}
-                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                      />
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#161616] via-[#161616]/30 to-transparent" />
-
-                      {/* Tier badge */}
-                      <div className="absolute top-4 left-4">
-                        <span className={`inline-block px-3 py-1.5 bg-[#1a1a1a]/80 backdrop-blur-sm border text-[10px] sm:text-xs tracking-[0.2em] uppercase ${mc.tier === "PREMIUM" ? "border-[#d4b896]/50 text-[#d4b896]" : mc.tier === "STANDARD" ? "border-white/30 text-white/70" : "border-[#5BB5A2]/40 text-[#5BB5A2]"}`}
-                          style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                        >
-                          {mc.tier}
-                        </span>
-                      </div>
-
-                      {/* Name overlay at bottom of image */}
-                      <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
-                        {mc.role && (
-                          <p className="text-[#d4b896] text-xs tracking-wider mb-1" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                            {mc.role}
-                          </p>
-                        )}
-                        <h3
-                          className="text-white text-2xl sm:text-3xl font-bold"
-                          style={{ fontFamily: "'Noto Serif KR', serif" }}
-                        >
-                          {mc.name}
-                        </h3>
-                        <p className="text-white/50 text-sm mt-1">{mc.desc}</p>
-                      </div>
-                    </div>
-
-                    {/* Info */}
-                    <div className="p-5 sm:p-6">
-                      <p className="text-white/60 text-sm leading-relaxed mb-5">
-                        {mc.highlight}
-                      </p>
-
-                      <div className="space-y-2 mb-6">
-                        {mc.tags.map((tag, j) => (
-                          <div key={j} className="flex items-center gap-2.5 text-white/50 text-xs sm:text-sm">
-                            <span className="w-1 h-1 rounded-full bg-[#5BB5A2] flex-shrink-0" />
-                            {tag}
-                          </div>
-                        ))}
-                       </div>
-                      {/* Profile Button */}
-                      <a
-                        href={mc.profileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 w-full py-3 bg-[#5BB5A2]/10 border border-[#5BB5A2]/30 text-[#5BB5A2] text-sm tracking-wide hover:bg-[#5BB5A2]/20 hover:border-[#5BB5A2]/50 transition-all duration-300"
-                        style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
-                      >
-                        프로필 보기
-                        <ExternalLink size={14} />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                {STYLE_DESCRIPTIONS[activeFilter] || ""}
+              </p>
             </div>
           </div>
 
-          {/* Navigation Arrows */}
-          <button
-            onClick={scrollPrev}
-            className="absolute left-0 top-1/3 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-[#1a1a1a]/80 backdrop-blur-sm border border-white/10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:border-[#5BB5A2]/40 transition-all duration-300"
-          >
-            <ChevronLeft size={20} />
-          </button>
-          <button
-            onClick={scrollNext}
-            className="absolute right-0 top-1/3 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-[#1a1a1a]/80 backdrop-blur-sm border border-white/10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:border-[#5BB5A2]/40 transition-all duration-300"
-          >
-            <ChevronRight size={20} />
-          </button>
+          {/* Carousel */}
+          <div className="relative">
+            <div ref={emblaRef} className={`overflow-hidden transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+              <div className="flex">
+                {filteredMcs.map((mc, i) => (
+                  <div
+                    key={mc.name}
+                    className="flex-[0_0_85%] sm:flex-[0_0_70%] md:flex-[0_0_50%] lg:flex-[0_0_42%] min-w-0 px-3 sm:px-4"
+                  >
+                    <div
+                      className={`group relative bg-[#161616] border rounded-sm overflow-hidden transition-all duration-500 ${
+                        selectedIndex === i
+                          ? "border-[#5BB5A2]/40 shadow-lg shadow-[#5BB5A2]/5"
+                          : "border-white/5 opacity-60"
+                      }`}
+                    >
+                      {/* Profile Image */}
+                      <div className="relative aspect-[3/4] overflow-hidden">
+                        <img
+                          src={mc.image}
+                          alt={mc.name}
+                          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#161616] via-[#161616]/30 to-transparent" />
 
-          {/* Dots */}
-          <div className="flex justify-center gap-2 mt-8">
-            {filteredMcs.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => emblaApi?.scrollTo(i)}
-                className={`transition-all duration-300 rounded-full ${
-                  selectedIndex === i
-                    ? "w-8 h-2 bg-[#5BB5A2]"
-                    : "w-2 h-2 bg-white/20 hover:bg-white/40"
-                }`}
-              />
-            ))}
+                        <div className="absolute top-4 left-4">
+                          <span className={`inline-block px-3 py-1.5 bg-[#1a1a1a]/80 backdrop-blur-sm border text-[10px] sm:text-xs tracking-[0.2em] uppercase ${mc.tier === "PREMIUM" ? "border-[#d4b896]/50 text-[#d4b896]" : "border-[#5BB5A2]/40 text-[#5BB5A2]"}`}
+                            style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                          >
+                            {mc.tier}
+                          </span>
+                        </div>
+
+                        <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+                          <h3
+                            className="text-white text-2xl sm:text-3xl font-bold"
+                            style={{ fontFamily: "'Noto Serif KR', serif" }}
+                          >
+                            {mc.name}
+                          </h3>
+                          <p className="text-white/50 text-sm mt-1">{mc.desc}</p>
+                        </div>
+                      </div>
+
+                      {/* Info */}
+                      <div className="p-5 sm:p-6">
+                        <p className="text-white/60 text-sm leading-relaxed mb-5">
+                          {mc.highlight}
+                        </p>
+
+                        <div className="space-y-2 mb-6">
+                          {mc.tags.map((tag, j) => (
+                            <div key={j} className="flex items-center gap-2.5 text-white/50 text-xs sm:text-sm">
+                              <span className="w-1 h-1 rounded-full bg-[#5BB5A2] flex-shrink-0" />
+                              {tag}
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* 프로필 버튼 → 모달 오픈 */}
+                        <button
+                          onClick={() => setSelectedMc(mc)}
+                          className="flex items-center justify-center gap-2 w-full py-3 bg-[#5BB5A2]/10 border border-[#5BB5A2]/30 text-[#5BB5A2] text-sm tracking-wide hover:bg-[#5BB5A2]/20 hover:border-[#5BB5A2]/50 transition-all duration-300"
+                          style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+                        >
+                          프로필 보기
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={scrollPrev}
+              className="absolute left-0 top-1/3 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-[#1a1a1a]/80 backdrop-blur-sm border border-white/10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:border-[#5BB5A2]/40 transition-all duration-300"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={scrollNext}
+              className="absolute right-0 top-1/3 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-[#1a1a1a]/80 backdrop-blur-sm border border-white/10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:border-[#5BB5A2]/40 transition-all duration-300"
+            >
+              <ChevronRight size={20} />
+            </button>
+
+            <div className="flex justify-center gap-2 mt-8">
+              {filteredMcs.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => emblaApi?.scrollTo(i)}
+                  className={`transition-all duration-300 rounded-full ${
+                    selectedIndex === i
+                      ? "w-8 h-2 bg-[#5BB5A2]"
+                      : "w-2 h-2 bg-white/20 hover:bg-white/40"
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* 프로필 모달 */}
+      {selectedMc && (
+        <ProfileModal mc={selectedMc} onClose={() => setSelectedMc(null)} />
+      )}
+    </>
   );
 }

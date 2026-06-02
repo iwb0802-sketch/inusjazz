@@ -80,7 +80,7 @@ const MCS = [
     role: "",
     tier: "PREMIUM",
     desc: "10년+ 경력",
-    image: "/images/mc_yuntae_jang_b14b17a1.jpg",
+    image: "/manus-storage/mc_yuntae_jang_b14b17a1_4ea989cc.jpg",
     tags: ["웨딩 사회 경력 10년+", "누적 진행 1000회 이상"],
     highlight: "안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",

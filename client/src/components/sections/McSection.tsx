@@ -20,7 +20,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223996383838",
     styles: ["품격형", "아나운서형"],
     youtubeId: "",
-    profileCardImg: "/manus-storage/profile-card-minsu_45926235.png",
+    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/DyhPmZzlNmUwZcsY.png",
   },
   {
     name: "고승범",
@@ -33,7 +33,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223235771542",
     styles: ["품격형", "아나운서형"],
     youtubeId: "",
-    profileCardImg: "/manus-storage/profile-card-seungbeom_21ec2feb.png",
+    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/SPAinOSuRkaiNJTx.png",
   },
   {
     name: "이도영",
@@ -46,7 +46,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",
     styles: ["품격형", "밝은형", "감동형"],
     youtubeId: "ali34pV7ALk",
-    profileCardImg: "/manus-storage/profile-card-idoyoung_e8b6b43a.png",
+    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/ppTgmcIFaCtGyINq.png",
   },
   {
     name: "석재선",
@@ -59,7 +59,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223822182933",
     styles: ["품격형", "감동형"],
     youtubeId: "zx_iAhMkMns",
-    profileCardImg: "/manus-storage/profile-card-jaesun_a7762998.png",
+    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/RWSmnUABYYeEBdIF.png",
   },
   {
     name: "이우영",
@@ -72,7 +72,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/220767962639",
     styles: ["품격형", "밝은형", "감동형", "아나운서형"],
     youtubeId: "prhKZqfMjfM",
-    profileCardImg: "/manus-storage/profile-card-wooyoung_96a8b934.png",
+    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/COZSQEgdKVpfNtAZ.png",
   },
   {
     name: "김선혁",
@@ -85,7 +85,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/221025505211",
     styles: ["품격형", "아나운서형"],
     youtubeId: "4Quvg9TIGAk",
-    profileCardImg: "/manus-storage/profile-card-sunhyuk_55ae1e19.png",
+    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/BNPzIkSNQIGLZEfs.png",
   },
   {
     name: "장윤태",
@@ -98,7 +98,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",
     styles: ["품격형", "감동형"],
     youtubeId: "",
-    profileCardImg: "/manus-storage/profile-card-yuntae_7ac66c58.png",
+    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/BzyEbfDYgsDXpYvx.png",
   },
 ];
 

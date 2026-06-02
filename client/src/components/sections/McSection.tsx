@@ -202,15 +202,6 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
           {/* 하단 버튼 */}
           <div className="px-6 py-5 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(0,0,0,0.3)" }}>
             <a
-              href="https://pf.kakao.com/_wxovaM/chat"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-full py-3.5 text-white text-sm font-semibold tracking-wide transition-all duration-300 hover:opacity-90 rounded-sm"
-              style={{ background: "#5BB5A2", fontFamily: "'Noto Sans KR', sans-serif" }}
-            >
-              💬 {mc.name} 사회자로 카카오 상담하기
-            </a>
-            <a
               href={mc.profileUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -219,6 +210,15 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
             >
               블로그에서 전체 프로필 보기
               <ExternalLink size={13} />
+            </a>
+            <a
+              href="https://pf.kakao.com/_wxovaM/chat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-full py-3.5 text-white text-sm font-semibold tracking-wide transition-all duration-300 hover:opacity-90 rounded-sm"
+              style={{ background: "#5BB5A2", fontFamily: "'Noto Sans KR', sans-serif" }}
+            >
+              💬 {mc.name} 사회자로 카카오 상담하기
             </a>
           </div>
 

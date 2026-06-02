@@ -13,9 +13,10 @@ const NAV_LINKS = [
 const SERVICE_LINKS = [
   { label: "클래식 연주", href: "https://inusclassic.kr/" },
   { label: "재즈 연주", href: "https://inusjazz.kr/" },
-  { label: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
   { label: "축가", href: "https://inusmusic.kr/" },
+  { label: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
   { label: "모바일 청첩장", href: "https://inuscard.com" },
+  { label: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
 ];
 
 export default function Navbar() {

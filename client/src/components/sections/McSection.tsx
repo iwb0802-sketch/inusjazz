@@ -205,8 +205,8 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
               href="https://pf.kakao.com/_wxovaM/chat"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-full py-3.5 text-[#1a1a1a] text-sm font-semibold tracking-wide transition-all duration-300 hover:opacity-90 rounded-sm"
-              style={{ background: "#FEE500", fontFamily: "'Noto Sans KR', sans-serif" }}
+              className="flex items-center justify-center w-full py-3.5 text-white text-sm font-semibold tracking-wide transition-all duration-300 hover:opacity-90 rounded-sm"
+              style={{ background: "#5BB5A2", fontFamily: "'Noto Sans KR', sans-serif" }}
             >
               💬 {mc.name} 사회자로 카카오 상담하기
             </a>

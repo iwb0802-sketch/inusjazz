@@ -79,7 +79,7 @@ export default function InusCardPopup() {
           expanded ? "max-h-[700px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="w-80 bg-white rounded-lg shadow-2xl overflow-hidden border border-[#e8e4df]">
+        <div className="w-80 sm:w-96 md:w-[420px] bg-white rounded-lg shadow-2xl overflow-hidden border border-[#e8e4df]">
           <img
             src={POPUP_IMG}
             alt="이너스 모바일 청첩장 오픈"

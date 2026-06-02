@@ -1,12 +1,12 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Music, Mic, Users, Theater, MicVocal, Package } from "lucide-react";
+import { Music, Mic, Theater, MicVocal, Package, Smartphone } from "lucide-react";
 
 const EXTRAS = [
   { icon: Music, label: "클래식 연주", href: "https://inusclassic.kr/" },
   { icon: Mic, label: "재즈 연주", href: "https://inusjazz.kr/" },
-  { icon: Users, label: "중창/팝페라", href: "https://blog.naver.com/inusmusics/220622621535" },
-  { icon: Theater, label: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
   { icon: MicVocal, label: "축가", href: "https://inusmusic.kr/" },
+  { icon: Theater, label: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
+  { icon: Smartphone, label: "모바일 청첩장", href: "https://inuscard.com" },
   { icon: Package, label: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
 ];
 

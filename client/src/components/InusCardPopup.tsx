@@ -43,7 +43,7 @@ export default function InusCardPopup() {
       onClick={handleClose}
     >
       <div
-        className="relative w-full max-w-sm bg-white rounded-lg overflow-hidden shadow-2xl"
+        className="relative w-full max-w-xs bg-white rounded-lg overflow-hidden shadow-2xl"
         style={{ animation: "fadeInUp 0.35s cubic-bezier(0.23,1,0.32,1)" }}
         onClick={(e) => e.stopPropagation()}
       >

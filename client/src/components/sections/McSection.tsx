@@ -165,7 +165,8 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
           <X size={17} strokeWidth={2.5} />
         </button>
 
-        <div className="flex flex-col overflow-auto" style={{ maxHeight: "92vh" }}>
+        {/* 스크롤 영역 */}
+        <div className="overflow-y-auto" style={{ maxHeight: "calc(92vh - 80px)" }}>
           {/* 위: 영상 or 프로필 카드 이미지 */}
           <div className="w-full">
             {mc.youtubeId ? (
@@ -198,31 +199,29 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
               />
             </div>
           )}
+        </div>
 
-          {/* 하단 버튼 */}
-          <div className="px-6 py-5 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(0,0,0,0.3)" }}>
-            <a
-              href={mc.profileUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`flex items-center justify-center gap-2 w-full py-3 text-sm tracking-wide transition-all duration-300 rounded-sm ${tierColor.text} ${tierColor.bg} ${tierColor.border} border hover:opacity-80`}
-              style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
-            >
-              블로그에서 전체 프로필 보기
-              <ExternalLink size={13} />
-            </a>
-            <a
-              href="https://pf.kakao.com/_wxovaM/chat"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-full py-3.5 text-white text-sm font-semibold tracking-wide transition-all duration-300 hover:opacity-90 rounded-sm"
-              style={{ background: "#5BB5A2", fontFamily: "'Noto Sans KR', sans-serif" }}
-            >
-              💬 {mc.name} 사회자로 카카오 상담하기
-            </a>
-          </div>
-
-
+        {/* 하단 고정 버튼 영역 */}
+        <div className="px-4 py-3 flex flex-row gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.08)", background: "rgba(0,0,0,0.5)", flexShrink: 0 }}>
+          <a
+            href={mc.profileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`flex items-center justify-center gap-1.5 flex-1 py-3 text-sm tracking-wide transition-all duration-300 rounded-sm ${tierColor.text} ${tierColor.bg} ${tierColor.border} border hover:opacity-80`}
+            style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+          >
+            블로그 프로필 보기
+            <ExternalLink size={13} />
+          </a>
+          <a
+            href="https://pf.kakao.com/_wxovaM/chat"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 flex-1 py-3 text-white text-sm font-semibold tracking-wide transition-all duration-300 hover:opacity-90 rounded-sm"
+            style={{ background: "#5BB5A2", fontFamily: "'Noto Sans KR', sans-serif" }}
+          >
+            💬 카카오 상담하기
+          </a>
         </div>
       </div>
     </div>

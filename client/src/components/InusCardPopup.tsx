@@ -38,7 +38,7 @@ export default function InusCardPopup() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center px-4"
+      className="fixed inset-0 z-[100] flex items-start justify-start p-4 sm:p-6"
       style={{ background: "rgba(0,0,0,0.6)" }}
       onClick={handleClose}
     >

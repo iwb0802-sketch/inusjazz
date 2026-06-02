@@ -172,7 +172,7 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
             {mc.youtubeId ? (
               <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
                 <iframe
-                  src={`https://www.youtube.com/embed/${mc.youtubeId}?autoplay=1&mute=0&rel=0&playsinline=1`}
+                  src={`https://www.youtube.com/embed/${mc.youtubeId}?autoplay=1&mute=0&rel=0&playsinline=1&modestbranding=1`}
                   title={`${mc.name} 진행 영상`}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen

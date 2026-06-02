@@ -34,7 +34,7 @@ const MCS = [
   {
     name: "이도영",
     role: "",
-    tier: "STANDARD",
+    tier: "BEST",
     desc: "4년+ 경력",
     image: "/images/mc-profile-2_f194877b.jpg",
     tags: ["웨딩 사회 경력 4년+", "누적 진행 400회 이상"],

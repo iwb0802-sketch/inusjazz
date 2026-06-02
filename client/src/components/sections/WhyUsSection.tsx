@@ -1,6 +1,6 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
-const STAGE_IMG = "/manus-storage/wedding-stage_d8dd01ed_52791386.jpg";
+const STAGE_IMG = "/images/wedding-stage_d8dd01ed.jpg";
 
 const REASONS = [
   "사회경험 없는 지인에게 맡기기엔 부담을 느끼시는 분",

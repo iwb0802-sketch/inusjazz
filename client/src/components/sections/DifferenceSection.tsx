@@ -1,7 +1,7 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { CheckCircle, Video, Shield } from "lucide-react";
 
-const HALL_IMG = "/manus-storage/wedding-stage-mic_e898b9a4.webp";
+const HALL_IMG = "/images/wedding-stage-mic.webp";
 
 const DIFFERENCES = [
   {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-const HERO_BG = "/manus-storage/hero-v2-option2_ac61c4e8.webp";
-const HERO_BG_MOBILE = "/manus-storage/hero-mobile-v3_b4dd8415.webp";
+const HERO_BG = "/images/hero-v2-option2.webp";
+const HERO_BG_MOBILE = "/images/hero-mobile-v3.webp";
 
 export default function HeroSection() {
   const [loaded, setLoaded] = useState(false);

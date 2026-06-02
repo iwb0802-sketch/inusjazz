@@ -113,6 +113,16 @@ const STYLE_DESCRIPTIONS: Record<string, string> = {
 
 type MC = typeof MCS[0];
 
+// 페이지 로드 시 모든 프로필 카드 이미지 프리로드
+if (typeof window !== "undefined") {
+  MCS.forEach((mc) => {
+    if (mc.profileCardImg) {
+      const img = new Image();
+      img.src = mc.profileCardImg;
+    }
+  });
+}
+
 // 프로필 모달 컴포넌트
 function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
   useEffect(() => {

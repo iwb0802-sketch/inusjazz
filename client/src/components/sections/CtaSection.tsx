@@ -1,6 +1,6 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
-const CTA_BG = "/images/wedding-stage_d8dd01ed.jpg";
+const CTA_BG = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/dSEPyYhKaURpakfz.jpg";
 
 export default function CtaSection() {
   const anim1 = useScrollAnimation();

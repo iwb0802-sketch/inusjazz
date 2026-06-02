@@ -8,13 +8,13 @@ import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
 
 const REVIEW_IMAGES = [
-  { src: "/images/review1_d832f6e4.jpg", alt: "고객 후기 1" },
-  { src: "/images/review2_c7a1d025.jpg", alt: "고객 후기 2" },
-  { src: "/images/review3_66458291.jpg", alt: "고객 후기 3" },
-  { src: "/images/review4_6af988b6.jpg", alt: "고객 후기 4" },
-  { src: "/images/review5_d5052560.jpg", alt: "고객 후기 5" },
-  { src: "/images/review6_4590abae.jpg", alt: "고객 후기 6" },
-  { src: "/images/review7_e35c2a63.jpg", alt: "고객 후기 7" },
+  { src: "/manus-storage/review1_d832f6e4_a421bbd4.jpg", alt: "고객 후기 1" },
+  { src: "/manus-storage/review2_c7a1d025_49d0f221.jpg", alt: "고객 후기 2" },
+  { src: "/manus-storage/review3_66458291_bfd009cc.jpg", alt: "고객 후기 3" },
+  { src: "/manus-storage/review4_6af988b6_806f63e7.jpg", alt: "고객 후기 4" },
+  { src: "/manus-storage/review5_d5052560_8bffdd2b.jpg", alt: "고객 후기 5" },
+  { src: "/manus-storage/review6_4590abae_5ff07ac2.jpg", alt: "고객 후기 6" },
+  { src: "/manus-storage/review7_e35c2a63_c23932cd.jpg", alt: "고객 후기 7" },
 ];
 
 export default function ReviewSection() {

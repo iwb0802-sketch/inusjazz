@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
-const POPUP_IMG = "/manus-storage/popup-inuscard_cc6b7bb0.png";
+const POPUP_IMG = "/images/popup-inuscard.png";
 const INUSCARD_URL = "https://inuscard.com";
 const STORAGE_KEY = "inuscard_popup_closed";
 

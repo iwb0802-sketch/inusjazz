@@ -158,55 +158,72 @@ function IframeModal({ url, onClose }: { url: string; onClose: () => void }) {
 
   return (
     <div
-      className="fixed inset-0 z-[300] flex flex-col"
-      style={{ background: "#0b0b0b" }}
+      className="fixed inset-0 z-[300] flex items-center justify-center"
+      style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(6px)" }}
+      onClick={onClose}
     >
-      {/* 닫기 바 */}
+      {/* 모달 상자 - PC: 80vw, 모바일: 전체 */}
       <div
-        className="flex items-center justify-between px-4 py-3 flex-shrink-0"
-        style={{ borderBottom: "1px solid rgba(214,177,107,0.2)", background: "rgba(11,11,11,0.98)" }}
+        className="relative flex flex-col w-full md:rounded-lg overflow-hidden shadow-2xl"
+        style={{
+          background: "#0b0b0b",
+          border: "1px solid rgba(214,177,107,0.2)",
+          maxWidth: "min(900px, 95vw)",
+          height: "min(90vh, 900px)",
+          animation: "fadeInUp 0.3s cubic-bezier(0.23,1,0.32,1)",
+        }}
+        onClick={(e) => e.stopPropagation()}
       >
-        <span
-          className="text-sm tracking-widest"
-          style={{ fontFamily: "'Cormorant Garamond', serif", color: "#d6b16b" }}
+        {/* 닫기 바 */}
+        <div
+          className="flex items-center justify-between px-4 py-3 flex-shrink-0"
+          style={{ borderBottom: "1px solid rgba(214,177,107,0.2)", background: "rgba(11,11,11,0.98)" }}
         >
-          INUSMUSIC PROFILE
-        </span>
-        <button
-          onClick={onClose}
-          className="w-8 h-8 flex items-center justify-center rounded-full text-white/60 hover:text-white transition-colors"
-          style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}
-        >
-          <X size={15} />
-        </button>
-      </div>
-      {/* 로딩 스피너 */}
-      {!loaded && (
-        <div className="flex-1 flex items-center justify-center" style={{ background: "#0b0b0b" }}>
-          <div style={{ textAlign: "center" }}>
-            <div
-              style={{
-                width: 40, height: 40,
-                border: "2px solid rgba(214,177,107,0.2)",
-                borderTop: "2px solid #d6b16b",
-                borderRadius: "50%",
-                animation: "spin 0.8s linear infinite",
-                margin: "0 auto 16px",
-              }}
-            />
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 13, letterSpacing: "0.3em", color: "rgba(214,177,107,0.6)" }}>LOADING</p>
-          </div>
+          <span
+            className="text-sm tracking-widest"
+            style={{ fontFamily: "'Cormorant Garamond', serif", color: "#d6b16b" }}
+          >
+            INUSMUSIC PROFILE
+          </span>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-full text-white/60 hover:text-white transition-colors"
+            style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}
+          >
+            <X size={15} />
+          </button>
         </div>
-      )}
-      {/* iframe */}
-      <iframe
-        src={url}
-        className="flex-1 w-full"
-        style={{ border: 0, display: loaded ? "block" : "none" }}
-        title="사회자 프로필"
-        onLoad={() => setLoaded(true)}
-      />
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        {/* 로딩 스피너 */}
+        {!loaded && (
+          <div className="flex-1 flex items-center justify-center" style={{ background: "#0b0b0b" }}>
+            <div style={{ textAlign: "center" }}>
+              <div
+                style={{
+                  width: 40, height: 40,
+                  border: "2px solid rgba(214,177,107,0.2)",
+                  borderTop: "2px solid #d6b16b",
+                  borderRadius: "50%",
+                  animation: "spin 0.8s linear infinite",
+                  margin: "0 auto 16px",
+                }}
+              />
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 13, letterSpacing: "0.3em", color: "rgba(214,177,107,0.6)" }}>LOADING</p>
+            </div>
+          </div>
+        )}
+        {/* iframe */}
+        <iframe
+          src={url}
+          className="flex-1 w-full"
+          style={{ border: 0, display: loaded ? "block" : "none" }}
+          title="사회자 프로필"
+          onLoad={() => setLoaded(true)}
+        />
+      </div>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+      `}</style>
     </div>
   );
 }

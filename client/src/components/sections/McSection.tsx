@@ -504,7 +504,7 @@ export default function McSection() {
                           ))}
                         </div>
 
-                        {/* 프로필 버튼 → 이우영은 직접 풀페이지, 나머지는 모달 */}
+                        {/* 프로필 버튼 → 프리미엄 골드 스타일 */}
                         <button
                           onClick={() => {
                             const profileMap: Record<string, string> = {
@@ -519,10 +519,24 @@ export default function McSection() {
                             if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
                             else setSelectedMc(mc);
                           }}
-                          className="flex items-center justify-center gap-2 w-full py-3 bg-[#5BB5A2]/10 border border-[#5BB5A2]/30 text-[#5BB5A2] text-sm tracking-wide hover:bg-[#5BB5A2]/20 hover:border-[#5BB5A2]/50 transition-all duration-300"
-                          style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+                          className="relative flex items-center justify-center gap-2 w-full py-3.5 text-sm tracking-widest font-medium overflow-hidden group transition-all duration-300"
+                          style={{
+                            fontFamily: "'Cormorant Garamond', serif",
+                            fontSize: "13px",
+                            letterSpacing: "0.25em",
+                            background: "linear-gradient(135deg, rgba(214,177,107,0.15) 0%, rgba(214,177,107,0.05) 100%)",
+                            border: "1px solid rgba(214,177,107,0.5)",
+                            color: "#d6b16b",
+                          }}
                         >
-                          프로필 보기
+                          <span
+                            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                            style={{ background: "linear-gradient(135deg, rgba(214,177,107,0.3) 0%, rgba(214,177,107,0.1) 100%)" }}
+                          />
+                          <span className="relative">PROFILE VIEW</span>
+                          <svg className="relative" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                          </svg>
                         </button>
                       </div>
                     </div>

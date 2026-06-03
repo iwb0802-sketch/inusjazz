@@ -1,418 +1,263 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>석재선 사회자 프로필</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #000000; /* Black */
-            --secondary-color: #FFD700; /* Gold */
-            --text-color: #FFFFFF; /* White */
-            --light-text-color: #CCCCCC;
-            --accent-color: #FFD700; /* Gold for accents */
-            --bg-dark: #1a1a1a;
-            --bg-light: #2a2a2a;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>석재선 사회자 프로필</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root { --black:#0b0b0b; --dark:#111111; --dark2:#181818; --gold:#d6b16b; --gold-dim:rgba(214,177,107,0.12); --gold-border:rgba(214,177,107,0.25); --champagne:#f5efe6; --mint:#7fd6c2; --white:#ffffff; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--black); color:var(--white); font-family:'Noto Sans KR',sans-serif; -webkit-font-smoothing:antialiased; }
 
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--primary-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+    .hero { position:relative; min-height:100vh; display:flex; align-items:center; overflow:hidden; }
+    .hero-bg { position:absolute; inset:0; background:var(--black); }
+    .hero-bg-photo { position:absolute; inset:0; background:url('/manus-storage/jaesun-photo_8d3aa803.jpg') center top / cover no-repeat; filter:brightness(0.28) saturate(0.4); }
+    .hero-inner { position:relative; z-index:2; max-width:1100px; margin:0 auto; padding:80px 40px; display:grid; grid-template-columns:1fr 360px; gap:60px; align-items:center; width:100%; }
+    .hero-tag { font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:0.5em; color:var(--gold); text-transform:uppercase; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+    .hero-tag::before { content:''; width:32px; height:1px; background:var(--gold); }
+    .hero-name { font-family:'Noto Serif KR',serif; font-size:clamp(48px,7vw,80px); font-weight:900; line-height:1.05; margin-bottom:8px; letter-spacing:-0.02em; }
+    .hero-role { font-family:'Cormorant Garamond',serif; font-size:18px; color:var(--gold); margin-bottom:32px; font-style:italic; }
+    .hero-desc { font-size:15px; line-height:2; color:rgba(255,255,255,0.6); margin-bottom:44px; font-weight:300; }
+    .hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
+    .btn-mint { padding:11px 22px; background:var(--gold); color:var(--black); font-size:13px; font-weight:700; letter-spacing:0.08em; border:none; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:5px; transition:opacity 0.2s; }
+    .btn-mint:hover { opacity:0.85; }
+    .btn-outline { padding:10px 20px; background:transparent; color:rgba(255,255,255,0.7); font-size:12px; font-weight:400; letter-spacing:0.12em; border:1px solid rgba(255,255,255,0.25); cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s; }
+    .btn-outline:hover { border-color:var(--gold); color:var(--gold); }
+    .hero-photo-wrap { position:relative; }
+    .hero-photo { width:100%; height:520px; object-fit:cover; object-position:center top; display:block; border:1px solid var(--gold-border); filter:brightness(0.85) contrast(1.05); }
+    .hero-photo-border { position:absolute; inset:-10px; border:1px solid var(--gold-border); pointer-events:none; }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    .stats { background:var(--dark); border-top:1px solid var(--gold-border); border-bottom:1px solid var(--gold-border); }
+    .stats-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
+    .stat-item { padding:24px 20px; display:flex; align-items:center; gap:16px; border-right:1px solid var(--gold-border); transition:background 0.3s; }
+    .stat-item:last-child { border-right:none; }
+    .stat-item:hover { background:var(--gold-dim); }
+    .stat-icon { width:40px; height:40px; color:var(--gold); flex-shrink:0; }
+    .stat-num { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:400; color:var(--gold); line-height:1; }
+    .stat-label { font-size:11px; letter-spacing:0.2em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-top:4px; }
 
-        /* Hero Section */
-        .hero-section {
-            background: var(--bg-dark);
-            color: var(--text-color);
-            text-align: center;
-            padding: 80px 20px;
-            position: relative;
-            overflow: hidden;
-        }
+    .strengths { background:var(--black); padding:80px 40px; }
+    .sec-header { max-width:1100px; margin:0 auto 48px; text-align:center; }
+    .sec-tag { font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:0.5em; color:var(--gold); text-transform:uppercase; margin-bottom:12px; }
+    .sec-divider { display:flex; align-items:center; gap:16px; justify-content:center; }
+    .sec-divider::before,.sec-divider::after { content:''; flex:1; max-width:60px; height:1px; background:var(--gold-border); }
+    .sec-title { font-family:'Noto Serif KR',serif; font-size:clamp(20px,3vw,28px); font-weight:700; }
+    .strength-grid { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .strength-card { background:var(--dark); border:1px solid rgba(255,255,255,0.06); padding:36px 24px; text-align:center; transition:all 0.3s; }
+    .strength-card:hover { border-color:var(--gold-border); background:#141414; transform:translateY(-4px); }
+    .strength-icon-box { width:48px; height:48px; margin:0 auto 20px; background:var(--gold-dim); border:1px solid var(--gold-border); display:flex; align-items:center; justify-content:center; }
+    .strength-icon-box svg { width:22px; height:22px; color:var(--gold); }
+    .strength-title { font-family:'Noto Serif KR',serif; font-size:17px; font-weight:700; margin-bottom:12px; }
+    .strength-desc { font-size:13px; color:rgba(255,255,255,0.45); line-height:1.9; font-weight:300; }
 
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6));
-            z-index: 1;
-        }
+    .career { background:var(--dark); padding:80px 40px; }
+    .career-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:60px; }
+    .career-list { list-style:none; }
+    .career-list li { display:flex; align-items:flex-start; gap:14px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; }
+    .career-list li:last-child { border-bottom:none; }
+    .career-dot { width:20px; height:20px; flex-shrink:0; margin-top:2px; border:1px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .career-dot::after { content:''; width:6px; height:6px; background:var(--gold); border-radius:50%; }
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
+    .video-section { background:var(--black); padding:0; }
+    .video-inner { max-width:900px; margin:0 auto; padding:40px 20px 0; }
+    .video-label { font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:0.5em; color:var(--gold); text-transform:uppercase; text-align:center; margin-bottom:16px; }
+    .video-wrap { position:relative; width:100%; padding-bottom:56.25%; background:#111; border:1px solid var(--gold-border); }
+    .video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .video-note { text-align:center; font-size:12px; color:rgba(255,255,255,0.35); margin-top:10px; font-weight:300; }
 
-        .hero-image {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid var(--secondary-color);
-            margin-bottom: 20px;
-        }
+    .closing { position:relative; overflow:hidden; background:var(--dark); border-top:1px solid var(--gold-border); }
+    .closing-inner { position:relative; z-index:2; max-width:1100px; margin:0 auto; padding:80px 40px; display:grid; grid-template-columns:320px 1fr; gap:60px; align-items:center; }
+    .closing-photo-wrap { position:relative; width:100%; height:380px; flex-shrink:0; }
+    .closing-photo { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; filter:brightness(0.7) contrast(1.05); }
+    .closing-photo-overlay { position:absolute; inset:0; background:linear-gradient(135deg,rgba(11,11,11,0.2) 0%,rgba(214,177,107,0.06) 100%); }
+    .closing-photo-frame { position:absolute; bottom:-12px; right:-12px; width:70%; height:70%; border-right:1px solid var(--gold-border); border-bottom:1px solid var(--gold-border); pointer-events:none; }
+    .closing-photo-frame2 { position:absolute; top:-12px; left:-12px; width:40%; height:40%; border-left:1px solid var(--gold-border); border-top:1px solid var(--gold-border); pointer-events:none; }
+    .closing-quote { font-family:'Noto Serif KR',serif; font-size:clamp(18px,2.5vw,26px); font-weight:600; line-height:1.7; margin-bottom:20px; }
+    .closing-quote em { font-style:normal; color:var(--gold); }
+    .closing-line { width:40px; height:1px; background:var(--gold); margin-bottom:16px; }
+    .closing-sub { font-size:13px; color:rgba(255,255,255,0.45); line-height:1.9; font-weight:300; }
 
-        .hero-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5em;
-            margin-bottom: 10px;
-            color: var(--secondary-color);
-        }
+    .cta { position:relative; overflow:hidden; padding:100px 40px; text-align:center; }
+    .cta::before { content:''; position:absolute; inset:0; background:linear-gradient(rgba(11,11,11,0.85),rgba(11,11,11,0.85)),url('/manus-storage/jaesun-photo_8d3aa803.jpg') center/cover no-repeat; }
+    .cta-inner-wrap { position:relative; z-index:2; }
+    .cta-title { font-family:'Noto Serif KR',serif; font-size:clamp(20px,3vw,32px); font-weight:700; margin-bottom:32px; line-height:1.5; }
+    .cta-title em { font-style:normal; color:var(--gold); }
 
-        .hero-intro {
-            font-size: 1.2em;
-            max-width: 600px;
-            margin: 0 auto 30px auto;
-            color: var(--light-text-color);
-        }
-
-        /* Section Styling */
-        .section {
-            padding: 60px 20px;
-            text-align: center;
-            background-color: var(--primary-color);
-        }
-
-        .section:nth-child(even) {
-            background-color: var(--bg-dark);
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5em;
-            color: var(--secondary-color);
-            margin-bottom: 40px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            bottom: -10px;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background-color: var(--accent-color);
-        }
-
-        /* Stats Section */
-        .stats-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .stat-item {
-            background-color: var(--bg-light);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            width: 250px;
-            text-align: center;
-            border: 1px solid var(--secondary-color);
-        }
-
-        .stat-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5em;
-            color: var(--secondary-color);
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            font-size: 1.1em;
-            color: var(--light-text-color);
-        }
-
-        /* Strengths Section */
-        .strengths-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .strength-item {
-            background-color: var(--bg-light);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            border: 1px solid var(--secondary-color);
-        }
-
-        .strength-item i {
-            font-size: 2em;
-            color: var(--secondary-color);
-            margin-bottom: 15px;
-        }
-
-        .strength-item h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5em;
-            color: var(--secondary-color);
-            margin-bottom: 10px;
-        }
-
-        .strength-item p {
-            color: var(--light-text-color);
-        }
-
-        /* Video Section */
-        .video-section .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-            max-width: 800px;
-            margin: 40px auto 0 auto;
-            background-color: var(--bg-light);
-            border-radius: 10px;
-            border: 1px solid var(--secondary-color);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .video-section .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        /* Closing Section */
-        .closing-section {
-            background: var(--bg-dark);
-            color: var(--text-color);
-            text-align: center;
-            padding: 80px 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .closing-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6));
-            z-index: 1;
-        }
-
-        .closing-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .closing-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid var(--secondary-color);
-            margin-bottom: 20px;
-        }
-
-        .signature-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 2em;
-            color: var(--secondary-color);
-            margin-bottom: 30px;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            padding: 60px 20px;
-            text-align: center;
-            background-color: var(--primary-color);
-        }
-
-        .cta-button {
-            display: inline-block;
-            background-color: #FEE500; /* Kakao Yellow */
-            color: #3C1E1E; /* Kakao Dark Text */
-            padding: 15px 30px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.2em;
-            transition: background-color 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-
-        .cta-button:hover {
-            background-color: #E6CC00;
-        }
-
-        /* Footer */
-        .footer {
-            background-color: var(--bg-dark);
-            color: var(--light-text-color);
-            text-align: center;
-            padding: 30px 20px;
-            font-size: 0.9em;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero-name {
-                font-size: 2.5em;
-            }
-
-            .hero-intro {
-                font-size: 1em;
-            }
-
-            .section-title {
-                font-size: 2em;
-            }
-
-            .stats-grid, .strengths-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stat-item, .strength-item {
-                width: 100%;
-            }
-
-            .closing-image {
-                width: 120px;
-                height: 120px;
-            }
-
-            .signature-text {
-                font-size: 1.5em;
-            }
-
-            .cta-button {
-                font-size: 1em;
-                padding: 12px 25px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-section {
-                padding: 60px 10px;
-            }
-
-            .hero-image {
-                width: 150px;
-                height: 150px;
-            }
-
-            .hero-name {
-                font-size: 2em;
-            }
-
-            .section {
-                padding: 40px 10px;
-            }
-
-            .section-title {
-                font-size: 1.8em;
-            }
-        }
-    </style>
+    @media (max-width:900px) {
+      .hero { min-height:100vh; }
+      .hero-inner { grid-template-columns:1fr; padding:0; align-items:flex-end; min-height:100vh; position:relative; }
+      .hero-photo-wrap { position:absolute; inset:0; z-index:0; }
+      .hero-photo { width:100%; height:100%; border:none; filter:brightness(0.5) contrast(1.1); }
+      .hero-photo-border { display:none; }
+      .hero-bg-photo { display:none; }
+      .hero-inner > div:first-child { position:relative; z-index:2; padding:40px 24px; background:linear-gradient(to top,rgba(11,11,11,0.95) 0%,rgba(11,11,11,0.5) 60%,transparent 100%); width:100%; }
+      .stats-inner { grid-template-columns:1fr; }
+      .stat-item { border-right:none; border-bottom:1px solid var(--gold-border); padding:16px 20px; }
+      .stat-item:last-child { border-bottom:none; }
+      .strength-grid { grid-template-columns:1fr !important; }
+      .career-inner,.closing-inner { grid-template-columns:1fr; }
+      .strengths,.career,.video-section,.closing,.cta { padding:60px 20px; }
+      .video-inner { padding:40px 20px 0; }
+    }
+  </style>
 </head>
 <body>
-    <header class="hero-section">
-        <div class="hero-content">
-            <img src="/manus-storage/jaesun-photo_8d3aa803.jpg" alt="석재선 사회자" class="hero-image">
-            <h1 class="hero-name">석재선 사회자</h1>
-            <p class="hero-intro">차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.</p>
-        </div>
-    </header>
 
-    <section class="section stats-section">
-        <div class="container">
-            <h2 class="section-title">EXPERIENCE</h2>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">BEST</div>
-                    <div class="stat-label">등급</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">5년+</div>
-                    <div class="stat-label">경력</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">500회+</div>
-                    <div class="stat-label">진행 횟수</div>
-                </div>
-            </div>
-        </div>
-    </section>
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-bg-photo"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">BEST WEDDING HOST</div>
+      <h1 class="hero-name">석재선</h1>
+      <p class="hero-role">사회자 Profile</p>
+      <p class="hero-desc">
+        차분하면서도 격식 있는 진행으로<br>
+        <strong style="color:var(--white)">품격 있는 예식</strong>을<br>
+        만들어드립니다.
+      </p>
+      <div class="hero-btns">
+        <a href="https://pf.kakao.com/_wxovaM/chat" class="btn-mint" target="_blank">💬 카카오 상담하기</a>
+        <a href="https://blog.naver.com/inusmusics/223822182933" class="btn-outline" target="_blank">블로그 프로필 보기</a>
+      </div>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-border"></div>
+      <img src="/manus-storage/jaesun-photo_8d3aa803.jpg" alt="석재선 사회자" class="hero-photo" />
+    </div>
+  </div>
+</section>
 
-    <section class="section strengths-section">
-        <div class="container">
-            <h2 class="section-title">STRENGTHS</h2>
-            <div class="strengths-grid">
-                <div class="strength-item">
-                    <h3>차분하고 격식 있는 진행</h3>
-                    <p>안정적인 분위기 속에서 품격 있는 예식을 선사합니다.</p>
-                </div>
-                <div class="strength-item">
-                    <h3>품격 있는 예식</h3>
-                    <p>고객의 소중한 순간을 더욱 특별하게 만들어 드립니다.</p>
-                </div>
-                <div class="strength-item">
-                    <h3>호텔 웨딩 전문</h3>
-                    <p>다양한 호텔 웨딩 경험으로 완벽한 진행을 약속합니다.</p>
-                </div>
-                <div class="strength-item">
-                    <h3>안정적인 운영</h3>
-                    <p>돌발 상황에도 능숙하게 대처하여 매끄러운 진행을 보장합니다.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="section video-section">
-        <div class="container">
-            <h2 class="section-title">VIDEO</h2>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/zx_iAhMkMns" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-        </div>
-    </section>
+<section class="video-section">
+  <div class="video-inner">
+    <div class="video-label">REAL WEDDING FILM</div>
+    <div class="video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/zx_iAhMkMns?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1"
+        title="석재선 사회자 실제 진행 영상"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <p class="video-note">실제 본식에서 촬영된 진행 영상입니다</p>
+  </div>
+</section>
 
-    <section class="closing-section">
-        <div class="closing-content">
-            <img src="/manus-storage/jaesun-photo_8d3aa803.jpg" alt="석재선 사회자" class="closing-image">
-            <p class="signature-text">당신의 가장 빛나는 순간을 함께합니다.</p>
-        </div>
-    </section>
+<section class="stats">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+      </svg>
+      <div><div class="stat-num">200<span style="font-size:20px">+</span></div><div class="stat-label">주례있는 사회</div></div>
+    </div>
+    <div class="stat-item">
+      <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      <div><div class="stat-num">250<span style="font-size:20px">+</span></div><div class="stat-label">주례없는 사회</div></div>
+    </div>
+    <div class="stat-item">
+      <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+      <div><div class="stat-num" style="font-size:22px; line-height:1.3">웨딩홀, 호텔<br>하우스 웨딩</div><div class="stat-label">전문 사회자</div></div>
+    </div>
+  </div>
+</section>
 
-    <section class="cta-section">
-        <div class="container">
-            <a href="https://blog.naver.com/inusmusics/223822182933" target="_blank" class="cta-button">카카오 상담하기</a>
+<section class="strengths">
+  <div class="sec-header">
+    <div class="sec-tag">Strengths</div>
+    <div class="sec-divider"><span class="sec-title">석재선 사회자의 강점</span></div>
+  </div>
+  <div class="strength-grid">
+    <div class="strength-card">
+      <div class="strength-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg></div>
+      <div class="strength-title">안정감 있는 진행</div>
+      <div class="strength-desc">돌발 상황에도 침착하게 대응하여 매끄러운 진행을 이끌어갑니다.</div>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="strength-title">정확한 전달력</div>
+      <div class="strength-desc">핵심을 정확하고 깔끔하게 전달하여 예식의 완성도를 높입니다.</div>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <div class="strength-title">세심한 상황 대응</div>
+      <div class="strength-desc">예식의 흐름을 놓치지 않고 세심하게 상황을 이끌어갑니다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="career">
+  <div class="sec-header">
+    <div class="sec-tag">Career</div>
+    <div class="sec-divider"><span class="sec-title">주요 경력 및 활동</span></div>
+  </div>
+  <div class="career-inner">
+    <ul class="career-list">
+      <li><div class="career-dot"></div>주례있는 사회 200회 이상</li>
+      <li><div class="career-dot"></div>주례없는 사회 250회 이상</li>
+      <li><div class="career-dot"></div>웨딩홀, 호텔, 하우스 웨딩 전문 사회자</li>
+      <li><div class="career-dot"></div>차분하고 격식 있는 진행 스타일</li>
+      <li><div class="career-dot"></div>신랑신부의 특별한 순간을 빛내는 커뮤니케이션</li>
+    </ul>
+    <div style="background:var(--dark2); border:1px solid var(--gold-border); padding:32px;">
+      <div class="sec-tag" style="margin-bottom:20px">BEST 사회자</div>
+      <div style="display:grid; gap:20px;">
+        <div>
+          <div style="font-size:13px; color:var(--gold); margin-bottom:8px; font-weight:600;">등급</div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.5); line-height:1.9; font-weight:300;">이너스뮤직 BEST 등급 사회자<br>누적 진행 500회 이상</div>
         </div>
-    </section>
-    
-    <footer class="footer">
-        <p>&copy; 2026 석재선 사회자. All rights reserved.</p>
-    </footer>
+        <div style="border-top:1px solid rgba(255,255,255,0.06); padding-top:16px;">
+          <div style="font-size:13px; color:var(--gold); margin-bottom:8px; font-weight:600;">전문 분야</div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.5); line-height:1.9; font-weight:300;">호텔 웨딩 전문<br>대형 웨딩홀 전문<br>하우스 웨딩 전문</div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,0.06); padding-top:16px;">
+          <div style="font-size:13px; color:var(--gold); margin-bottom:8px; font-weight:600;">운영 시스템</div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.5); line-height:1.9; font-weight:300;">전속 계약 시스템<br>예식 2시간 전 / 1시간 전 이중 체크<br>펑크율 0%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="closing-inner">
+    <div class="closing-photo-wrap">
+      <img src="/manus-storage/jaesun-photo_8d3aa803.jpg" alt="석재선 사회자" class="closing-photo" />
+      <div class="closing-photo-overlay"></div>
+      <div class="closing-photo-frame"></div>
+      <div class="closing-photo-frame2"></div>
+    </div>
+    <div>
+      <div class="sec-tag" style="margin-bottom:24px">Signature</div>
+      <h2 class="closing-quote">
+        돌발 상황에서도<br>
+        안정적인 대처와 정확한<br>
+        전달력을 바탕으로<br>
+        <em>매끄러운 진행</em>을 완성하는<br>
+        사회자입니다.
+      </h2>
+      <div class="closing-line"></div>
+      <p class="closing-sub">신랑신부님의 특별한 하루,<br>잊지 못할 순간으로 만들어드리겠습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta-inner-wrap">
+    <h2 class="cta-title">결혼식의 완성도를 높이고 싶다면<br><em>석재선 사회자</em>와 함께하세요.</h2>
+    <a href="https://pf.kakao.com/_wxovaM/chat" class="btn-mint" target="_blank" style="margin:0 auto; font-size:15px; padding:16px 44px;">💬 무료 상담 시작하기</a>
+  </div>
+</section>
+
 </body>
 </html>

@@ -113,8 +113,39 @@ const STYLE_DESCRIPTIONS: Record<string, string> = {
 
 type MC = typeof MCS[0];
 
+// 페이지 로드 시 프로필 HTML 파일 프리페치 + 이미지 프리로드
+if (typeof window !== "undefined") {
+  // 프로필 HTML 프리페치 (백그라운드 다운로드)
+  const profileUrls = [
+    "/profile-wooyoung.html",
+    "/profile-sunhyuk.html",
+    "/profile-seungbeom.html",
+    "/profile-yuntae.html",
+    "/profile-idoyoung.html",
+    "/profile-jaesun.html",
+    "/profile-minsu.html",
+  ];
+  profileUrls.forEach((url) => {
+    const link = document.createElement("link");
+    link.rel = "prefetch";
+    link.href = url;
+    link.as = "document";
+    document.head.appendChild(link);
+  });
+
+  // 프로필 카드 이미지 프리로드
+  MCS.forEach((mc) => {
+    if (mc.profileCardImg) {
+      const img = new Image();
+      img.src = mc.profileCardImg;
+    }
+  });
+}
+
 // iframe 모달 컴포넌트
 function IframeModal({ url, onClose }: { url: string; onClose: () => void }) {
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -149,13 +180,33 @@ function IframeModal({ url, onClose }: { url: string; onClose: () => void }) {
           <X size={15} />
         </button>
       </div>
+      {/* 로딩 스피너 */}
+      {!loaded && (
+        <div className="flex-1 flex items-center justify-center" style={{ background: "#0b0b0b" }}>
+          <div style={{ textAlign: "center" }}>
+            <div
+              style={{
+                width: 40, height: 40,
+                border: "2px solid rgba(214,177,107,0.2)",
+                borderTop: "2px solid #d6b16b",
+                borderRadius: "50%",
+                animation: "spin 0.8s linear infinite",
+                margin: "0 auto 16px",
+              }}
+            />
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 13, letterSpacing: "0.3em", color: "rgba(214,177,107,0.6)" }}>LOADING</p>
+          </div>
+        </div>
+      )}
       {/* iframe */}
       <iframe
         src={url}
         className="flex-1 w-full"
-        style={{ border: 0 }}
+        style={{ border: 0, display: loaded ? "block" : "none" }}
         title="사회자 프로필"
+        onLoad={() => setLoaded(true)}
       />
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

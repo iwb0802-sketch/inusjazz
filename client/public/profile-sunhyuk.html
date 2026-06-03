@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>김선혁 사회자 프로필</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root { --black:#0b0b0b; --dark:#111111; --dark2:#181818; --gold:#d6b16b; --gold-dim:rgba(214,177,107,0.12); --gold-border:rgba(214,177,107,0.25); --champagne:#f5efe6; --mint:#7fd6c2; --white:#ffffff; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--black); color:var(--white); font-family:'Noto Sans KR',sans-serif; -webkit-font-smoothing:antialiased; }
+
+    .hero { position:relative; min-height:100vh; display:flex; align-items:center; overflow:hidden; }
+    .hero-bg { position:absolute; inset:0; background:linear-gradient(135deg,#0b0b0b 0%,#1a1208 100%); }
+    .hero-inner { position:relative; z-index:2; max-width:1100px; margin:0 auto; padding:80px 40px; display:grid; grid-template-columns:1fr 360px; gap:60px; align-items:center; width:100%; }
+    .hero-tag { font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:0.5em; color:var(--gold); text-transform:uppercase; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+    .hero-tag::before { content:''; width:32px; height:1px; background:var(--gold); }
+    .hero-name { font-family:'Noto Serif KR',serif; font-size:clamp(48px,7vw,80px); font-weight:900; line-height:1.05; margin-bottom:8px; letter-spacing:-0.02em; }
+    .hero-role { font-family:'Cormorant Garamond',serif; font-size:18px; color:var(--gold); margin-bottom:32px; font-style:italic; }
+    .hero-desc { font-size:15px; line-height:2; color:rgba(255,255,255,0.65); margin-bottom:44px; font-weight:300; }
+    .hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
+    .btn-gold { padding:11px 22px; background:var(--gold); color:var(--black); font-size:13px; font-weight:700; letter-spacing:0.08em; border:none; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:5px; transition:opacity 0.2s; }
+    .btn-gold:hover { opacity:0.85; }
+    .btn-outline { padding:10px 20px; background:transparent; color:rgba(255,255,255,0.7); font-size:12px; font-weight:400; letter-spacing:0.12em; border:1px solid rgba(255,255,255,0.25); cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s; }
+    .btn-outline:hover { border-color:var(--gold); color:var(--gold); }
+    .hero-photo-wrap { position:relative; }
+    .hero-photo { width:100%; height:520px; object-fit:cover; object-position:center top; display:block; border:1px solid var(--gold-border); filter:brightness(0.92) contrast(1.05); }
+    .hero-photo-border { position:absolute; inset:-10px; border:1px solid var(--gold-border); pointer-events:none; }
+
+    .stats { background:var(--dark); border-top:1px solid var(--gold-border); border-bottom:1px solid var(--gold-border); }
+    .stats-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); }
+    .stat-item { padding:24px 20px; display:flex; align-items:center; gap:16px; border-right:1px solid var(--gold-border); transition:background 0.3s; }
+    .stat-item:last-child { border-right:none; }
+    .stat-item:hover { background:var(--gold-dim); }
+    .stat-icon { width:40px; height:40px; color:var(--gold); flex-shrink:0; }
+    .stat-num { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:400; color:var(--gold); line-height:1; }
+    .stat-label { font-size:11px; letter-spacing:0.2em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-top:4px; }
+
+    .strengths { background:var(--black); padding:80px 40px; }
+    .sec-header { max-width:1100px; margin:0 auto 48px; text-align:center; }
+    .sec-tag { font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:0.5em; color:var(--gold); text-transform:uppercase; margin-bottom:12px; }
+    .sec-divider { display:flex; align-items:center; gap:16px; justify-content:center; }
+    .sec-divider::before,.sec-divider::after { content:''; flex:1; max-width:60px; height:1px; background:var(--gold-border); }
+    .sec-title { font-family:'Noto Serif KR',serif; font-size:clamp(20px,3vw,28px); font-weight:700; }
+    .strength-grid { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .strength-card { background:var(--dark); border:1px solid rgba(255,255,255,0.06); padding:36px 24px; text-align:center; transition:all 0.3s; }
+    .strength-card:hover { border-color:var(--gold-border); background:#141414; transform:translateY(-4px); }
+    .strength-icon-box { width:48px; height:48px; margin:0 auto 20px; background:var(--gold-dim); border:1px solid var(--gold-border); display:flex; align-items:center; justify-content:center; }
+    .strength-icon-box svg { width:22px; height:22px; color:var(--gold); }
+    .strength-title { font-family:'Noto Serif KR',serif; font-size:17px; font-weight:700; margin-bottom:12px; }
+    .strength-desc { font-size:13px; color:rgba(255,255,255,0.45); line-height:1.9; font-weight:300; }
+
+    .career { background:var(--dark); padding:80px 40px; }
+    .career-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:60px; }
+    .career-list { list-style:none; }
+    .career-list li { display:flex; align-items:flex-start; gap:14px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; }
+    .career-list li:last-child { border-bottom:none; }
+    .career-dot { width:20px; height:20px; flex-shrink:0; margin-top:2px; border:1px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .career-dot::after { content:''; width:6px; height:6px; background:var(--gold); border-radius:50%; }
+
+    .closing { position:relative; overflow:hidden; background:var(--dark); border-top:1px solid var(--gold-border); }
+    .closing-inner { position:relative; z-index:2; max-width:1100px; margin:0 auto; padding:80px 40px; display:grid; grid-template-columns:320px 1fr; gap:60px; align-items:center; }
+    .closing-photo { width:100%; height:360px; object-fit:cover; object-position:center top; display:block; border:1px solid var(--gold-border); filter:brightness(0.9) contrast(1.05); }
+    .closing-quote { font-family:'Noto Serif KR',serif; font-size:clamp(18px,2.5vw,26px); font-weight:600; line-height:1.7; margin-bottom:20px; }
+    .closing-quote em { font-style:normal; color:var(--gold); }
+    .closing-line { width:40px; height:1px; background:var(--gold); margin-bottom:16px; }
+    .closing-sub { font-size:13px; color:rgba(255,255,255,0.45); line-height:1.9; font-weight:300; }
+
+    .cta { padding:100px 40px; text-align:center; background:var(--black); border-top:1px solid var(--gold-border); }
+    .cta-title { font-family:'Noto Serif KR',serif; font-size:clamp(20px,3vw,32px); font-weight:700; margin-bottom:32px; line-height:1.5; }
+    .cta-title em { font-style:normal; color:var(--gold); }
+
+    @media (max-width:900px) {
+      .hero { min-height:100vh; }
+      .hero-inner { grid-template-columns:1fr; padding:0; align-items:flex-end; min-height:100vh; position:relative; }
+      .hero-photo-wrap { position:absolute; inset:0; z-index:0; }
+      .hero-photo { width:100%; height:100%; border:none; filter:brightness(0.5) contrast(1.1); }
+      .hero-photo-border { display:none; }
+      .hero-inner > div:first-child { position:relative; z-index:2; padding:40px 24px; background:linear-gradient(to top,rgba(11,11,11,0.95) 0%,rgba(11,11,11,0.5) 60%,transparent 100%); width:100%; }
+      .stats-inner { grid-template-columns:1fr; }
+      .stat-item { border-right:none; border-bottom:1px solid var(--gold-border); padding:16px 20px; }
+      .stat-item:last-child { border-bottom:none; }
+      .strength-grid { grid-template-columns:1fr !important; }
+      .career-inner,.closing-inner { grid-template-columns:1fr; }
+      .strengths,.career,.closing,.cta { padding:60px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">BEST WEDDING HOST</div>
+      <h1 class="hero-name">김선혁</h1>
+      <p class="hero-role">사회자 Profile</p>
+      <p class="hero-desc">
+        깔끔하고 안정감 있는 진행력을 기반으로<br>
+        다년간의 연극 경험에서 비롯된<br>
+        <strong style="color:var(--white)">탁월한 상황 대처 능력</strong>을 갖춘 사회자입니다.
+      </p>
+      <div class="hero-btns">
+        <a href="https://pf.kakao.com/_wxovaM/chat" class="btn-gold" target="_blank">💬 카카오 상담하기</a>
+        <a href="https://blog.naver.com/inusmusics/221025505211" class="btn-outline" target="_blank">블로그 프로필 보기</a>
+      </div>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-border"></div>
+      <img src="/manus-storage/sunhyuk-photo_4f461def.jpg" alt="김선혁 사회자" class="hero-photo" />
+    </div>
+  </div>
+</section>
+
+<section style="background:#0b0b0b; padding:0;">
+  <div style="max-width:900px; margin:0 auto; padding:40px 20px 0;">
+    <div style="font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:0.5em; color:#d6b16b; text-transform:uppercase; text-align:center; margin-bottom:16px;">REAL WEDDING FILM</div>
+    <div style="position:relative; width:100%; padding-bottom:56.25%; background:#111; border:1px solid rgba(214,177,107,0.2);">
+      <iframe
+        src="https://www.youtube.com/embed/4Quvg9TIGAk?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1"
+        title="김선혁 사회자 실제 진행 영상"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        style="position:absolute; inset:0; width:100%; height:100%; border:0;"
+      ></iframe>
+    </div>
+    <p style="text-align:center; font-size:12px; color:rgba(255,255,255,0.35); margin-top:10px; font-family:'Noto Sans KR',sans-serif; font-weight:300;">실제 본식에서 촬영된 진행 영상입니다</p>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+      </svg>
+      <div><div class="stat-num">200<span style="font-size:20px">+</span></div><div class="stat-label">주례있는 사회</div></div>
+    </div>
+    <div class="stat-item">
+      <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      <div><div class="stat-num">250<span style="font-size:20px">+</span></div><div class="stat-label">주례없는 사회</div></div>
+    </div>
+    <div class="stat-item">
+      <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+      <div><div class="stat-num" style="font-size:22px; line-height:1.3">웨딩홀, 호텔<br>하우스 웨딩</div><div class="stat-label">전문 사회자</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="strengths">
+  <div class="sec-header">
+    <div class="sec-tag">Strengths</div>
+    <div class="sec-divider"><span class="sec-title">김선혁 사회자의 강점</span></div>
+  </div>
+  <div class="strength-grid">
+    <div class="strength-card">
+      <div class="strength-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg></div>
+      <div class="strength-title">깔끔한 진행력</div>
+      <div class="strength-desc">정확한 전달력과 단정한 진행으로 예식의 흐름을 깔끔하게 이끌어 갑니다.</div>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="strength-title">안정감 있는 운영</div>
+      <div class="strength-desc">돌발 상황에도 흔들림 없는 대처 능력으로 신랑신부와 하객 모두가 편안한 예식을 만듭니다.</div>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.44-4.14z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.44-4.14z"/></svg></div>
+      <div class="strength-title">연극 경험 기반</div>
+      <div class="strength-desc">다년간의 연극 무대 경험으로 다양한 상황에 유연하게 대응할 수 있는 감각을 갖추고 있습니다.</div>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <div class="strength-title">탁월한 상황 대처</div>
+      <div class="strength-desc">순발력과 센스를 바탕으로 어떤 상황에서도 자연스럽고 위트 있게 예식을 완성합니다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="career">
+  <div class="sec-header">
+    <div class="sec-tag">Career</div>
+    <div class="sec-divider"><span class="sec-title">주요 경력 및 활동</span></div>
+  </div>
+  <div class="career-inner">
+    <ul class="career-list">
+      <li><div class="career-dot"></div>주례있는 사회 200회 이상</li>
+      <li><div class="career-dot"></div>주례없는 사회 250회 이상</li>
+      <li><div class="career-dot"></div>웨딩홀, 호텔, 하우스 웨딩 전문 사회자</li>
+      <li><div class="career-dot"></div>다양한 예식 경험을 통한 맞춤형 진행</li>
+      <li><div class="career-dot"></div>신랑신부의 특별한 순간을 빛내는 커뮤니케이션</li>
+    </ul>
+    <div style="background:var(--dark2); border:1px solid var(--gold-border); padding:32px;">
+      <div class="sec-tag" style="margin-bottom:20px">그 밖의 이력</div>
+      <div style="display:grid; gap:20px;">
+        <div>
+          <div style="font-size:13px; color:var(--gold); margin-bottom:8px; font-weight:600;">연극</div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.5); line-height:1.9; font-weight:300;">&lt;한여름밤의 꿈&gt;<br>&lt;The ugly one&gt;<br>&lt;보통사람지망생&gt; 외 다수</div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,0.06); padding-top:16px;">
+          <div style="font-size:13px; color:var(--gold); margin-bottom:8px; font-weight:600;">거리예술</div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.5); line-height:1.9; font-weight:300;">&lt;하이서울페스티벌 나비돌아오다&gt;<br>&lt;공작소 365 앨리스&gt;<br>&lt;위대한 독재자&gt;<br>&lt;neo-pino&gt; 외 다수</div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,0.06); padding-top:16px;">
+          <div style="font-size:13px; color:var(--gold); margin-bottom:8px; font-weight:600;">교육연극, 프로젝트</div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.5); line-height:1.9; font-weight:300;">&lt;푸른,봄&gt;<br>&lt;2017 프로젝트 연 평창아트드림캠프&gt;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="closing-inner">
+    <img src="/manus-storage/sunhyuk-photo_4f461def.jpg" alt="김선혁 사회자" class="closing-photo" />
+    <div>
+      <div class="sec-tag" style="margin-bottom:24px">Signature</div>
+      <h2 class="closing-quote">
+        깔끔하고 안정감 있는 진행력을 기반으로<br>
+        다년간의 연극 경험에서 비롯된<br>
+        <em>탁월한 상황 대처 능력</em>을<br>
+        갖춘 사회자입니다.
+      </h2>
+      <div class="closing-line"></div>
+      <p class="closing-sub">소중한 순간을 더욱 빛나게,<br>진심을 담아 함께하겠습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <h2 class="cta-title">결혼식의 완성도를 높이고 싶다면<br><em>김선혁 사회자</em>와 함께하세요.</h2>
+  <a href="https://pf.kakao.com/_wxovaM/chat" class="btn-gold" target="_blank" style="margin:0 auto; font-size:15px; padding:16px 44px;">💬 무료 상담 시작하기</a>
+</section>
+
+</body>
+</html>

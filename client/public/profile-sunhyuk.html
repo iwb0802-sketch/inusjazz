@@ -14,8 +14,8 @@
     body { background:var(--black); color:var(--white); font-family:'Noto Sans KR',sans-serif; -webkit-font-smoothing:antialiased; }
 
     .hero { position:relative; min-height:100vh; display:flex; align-items:center; overflow:hidden; }
-    .hero-bg { position:absolute; inset:0; background:#0b0b0b; }
-    .hero-bg-photo { position:absolute; inset:0; background:url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/hAeWHYSAgbevLwEC.webp') center center / cover no-repeat; filter:brightness(0.18) saturate(0.5); }
+    .hero-bg { position:absolute; inset:0; background:linear-gradient(to right, rgba(11,11,11,0.7) 45%, rgba(11,11,11,0.3) 100%); z-index:1; }
+    .hero-bg-photo { position:absolute; inset:0; background:url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/hAeWHYSAgbevLwEC.webp') center center / cover no-repeat; filter:brightness(0.35) saturate(0.5); }
     .hero-inner { position:relative; z-index:2; max-width:1100px; margin:0 auto; padding:80px 40px; display:grid; grid-template-columns:1fr 360px; gap:60px; align-items:center; width:100%; }
     .hero-tag { font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:0.5em; color:var(--gold); text-transform:uppercase; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
     .hero-tag::before { content:''; width:32px; height:1px; background:var(--gold); }

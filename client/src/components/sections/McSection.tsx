@@ -300,26 +300,43 @@ function ProfileModal({ mc, onClose, onOpenIframe }: { mc: MC; onClose: () => vo
         </div>
 
         {/* 하단 고정 버튼 영역 */}
-        <div className="px-4 py-3 flex flex-row gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.08)", background: "rgba(0,0,0,0.5)", flexShrink: 0 }}>
+        <div className="px-4 py-3 flex flex-row gap-2" style={{ borderTop: "1px solid rgba(214,177,107,0.2)", background: "rgba(0,0,0,0.6)", flexShrink: 0 }}>
           {mc.name === "이우영" ? (
             <button
               onClick={() => onOpenIframe("/profile-wooyoung.html")}
-              className={`flex items-center justify-center gap-1.5 flex-1 py-3 text-sm tracking-wide transition-all duration-300 rounded-sm ${tierColor.text} ${tierColor.bg} ${tierColor.border} border hover:opacity-80`}
-              style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+              className="relative flex items-center justify-center gap-2 flex-1 py-3.5 overflow-hidden group transition-all duration-300"
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "13px",
+                letterSpacing: "0.2em",
+                background: "linear-gradient(135deg, rgba(214,177,107,0.15) 0%, rgba(214,177,107,0.05) 100%)",
+                border: "1px solid rgba(214,177,107,0.5)",
+                color: "#d6b16b",
+              }}
             >
-              프로필 자세히 보기
-              <ExternalLink size={13} />
+              <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "linear-gradient(135deg, rgba(214,177,107,0.3) 0%, rgba(214,177,107,0.1) 100%)" }} />
+              <span className="relative" style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: "13px", letterSpacing: "0.05em", fontWeight: 500 }}>사회자 프로필 자세히 보기</span>
+              <ExternalLink size={13} className="relative" />
             </button>
           ) : (
             <a
               href={mc.profileUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex items-center justify-center gap-1.5 flex-1 py-3 text-sm tracking-wide transition-all duration-300 rounded-sm ${tierColor.text} ${tierColor.bg} ${tierColor.border} border hover:opacity-80`}
-              style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+              className="relative flex items-center justify-center gap-2 flex-1 py-3.5 overflow-hidden group transition-all duration-300"
+              style={{
+                fontFamily: "'Noto Sans KR', sans-serif",
+                fontSize: "13px",
+                letterSpacing: "0.05em",
+                fontWeight: 500,
+                background: "linear-gradient(135deg, rgba(214,177,107,0.15) 0%, rgba(214,177,107,0.05) 100%)",
+                border: "1px solid rgba(214,177,107,0.5)",
+                color: "#d6b16b",
+              }}
             >
-              블로그 프로필 보기
-              <ExternalLink size={13} />
+              <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "linear-gradient(135deg, rgba(214,177,107,0.3) 0%, rgba(214,177,107,0.1) 100%)" }} />
+              <span className="relative">사회자 프로필 자세히 보기</span>
+              <ExternalLink size={13} className="relative" />
             </a>
           )}
           <a

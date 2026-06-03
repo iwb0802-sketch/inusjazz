@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장윤태 사회자 프로필</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Reset & Body Styling */
+        body {
+            margin: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #000;
+            color: #FFF;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #FFD700;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        a {
+            color: #FFD700;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Premium Gold Color */
+        .gold-text {
+            color: #FFD700;
+        }
+        .gold-border {
+            border-color: #FFD700;
+        }
+        .gold-bg {
+            background-color: #FFD700;
+            color: #000;
+        }
+
+        /* Container for content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 60px 20px;
+            margin-bottom: 20px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        section h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+        section h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #FFD700;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 100px 20px;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('/manus-storage/yuntae-photo_811d91d3.jpg') no-repeat center center/cover;
+            color: #FFF;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            border-radius: 0;
+            margin-bottom: 0;
+        }
+        .hero-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #FFD700;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .hero-name {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .hero-intro {
+            font-size: 1.4em;
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            font-weight: 300;
+        }
+        .hero-grade {
+            font-size: 1.2em;
+            font-weight: 700;
+            padding: 8px 20px;
+            border: 2px solid #FFD700;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        /* Stats Section */
+        .stats-section .stats-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .stats-section .stat-item {
+            background-color: #0a0a0a;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            flex: 1 1 250px;
+            max-width: 300px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .stats-section .stat-item .value {
+            font-size: 3em;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        .stats-section .stat-item .label {
+            font-size: 1.1em;
+            color: #AAA;
+        }
+
+        /* Strengths Section */
+        .strengths-section .strengths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .strengths-section .strength-item {
+            background-color: #0a0a0a;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            position: relative;
+            padding-left: 70px;
+        }
+        .strengths-section .strength-item::before {
+            content: '★'; /* Star icon */
+            color: #FFD700;
+            font-size: 2em;
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .strengths-section .strength-item h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .strengths-section .strength-item p {
+            color: #CCC;
+        }
+
+        /* Closing Section */
+        .closing-section {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('/manus-storage/yuntae-photo_811d91d3.jpg') no-repeat center center/cover;
+            color: #FFF;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            padding: 80px 20px;
+        }
+        .closing-section .closing-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #FFD700;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        .closing-section .signature-text {
+            font-size: 1.8em;
+            font-weight: 300;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 50px 20px;
+            background-color: #0a0a0a;
+            border-radius: 0;
+            margin-bottom: 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #FFD700;
+            color: #000;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+        .cta-button:hover {
+            background-color: #e6c200;
+            transform: translateY(-3px);
+            text-decoration: none;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: #000;
+            color: #555;
+            font-size: 0.9em;
+            border-top: 1px solid #222;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-name {
+                font-size: 2.5em;
+            }
+            .hero-intro {
+                font-size: 1.2em;
+            }
+            section h2 {
+                font-size: 2em;
+            }
+            .stats-section .stat-item {
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+            .strengths-section .strength-item {
+                padding-left: 50px;
+            }
+            .strengths-section .strength-item::before {
+                font-size: 1.5em;
+                left: 20px;
+            }
+            .closing-section .signature-text {
+                font-size: 1.4em;
+            }
+            .cta-button {
+                font-size: 1.1em;
+                padding: 15px 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-name {
+                font-size: 2em;
+            }
+            .hero-intro {
+                font-size: 1em;
+            }
+            .hero-photo {
+                width: 150px;
+                height: 150px;
+            }
+            section {
+                padding: 40px 15px;
+            }
+            section h2 {
+                font-size: 1.8em;
+            }
+            .stats-section .stat-item .value {
+                font-size: 2.5em;
+            }
+            .closing-section .closing-photo {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero-section">
+        <img src="/manus-storage/yuntae-photo_811d91d3.jpg" alt="장윤태 사회자" class="hero-photo">
+        <h1 class="hero-name gold-text">장윤태</h1>
+        <p class="hero-grade">PREMIUM 등급</p>
+        <p class="hero-intro">안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.</p>
+        <a href="https://blog.naver.com/inusmusics/223246261228" target="_blank" class="gold-text" style="font-size: 1.1em;">블로그 방문하기</a>
+    </header>
+
+    <div class="container">
+
+        <section class="stats-section">
+            <h2>진행 통계</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="value gold-text">10년+</div>
+                    <div class="label">경력</div>
+                </div>
+                <div class="stat-item">
+                    <div class="value gold-text">1000회+</div>
+                    <div class="label">진행 횟수</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="strengths-section">
+            <h2>장점</h2>
+            <div class="strengths-grid">
+                <div class="strength-item">
+                    <h3>안정적인 진행력</h3>
+                    <p>어떤 상황에서도 흔들림 없는 노련한 진행으로 신뢰를 드립니다.</p>
+                </div>
+                <div class="strength-item">
+                    <h3>젠틀한 분위기</h3>
+                    <p>부드럽고 품격 있는 매너로 예식의 품격을 한층 높여드립니다.</p>
+                </div>
+                <div class="strength-item">
+                    <h3>10년+ 풍부한 경험</h3>
+                    <p>수많은 예식을 통해 쌓은 노하우로 완벽한 결혼식을 선사합니다.</p>
+                </div>
+                <div class="strength-item">
+                    <h3>완성도 높은 예식</h3>
+                    <p>세심한 준비와 뛰어난 순발력으로 최고의 순간을 만들어 드립니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="closing-section">
+            <img src="/manus-storage/yuntae-photo_811d91d3.jpg" alt="장윤태 사회자" class="closing-photo">
+            <p class="signature-text gold-text">"당신의 가장 빛나는 순간을, 제가 함께 만들어 드리겠습니다."
+            </p>
+        </section>
+
+        <section class="cta-section">
+            <h2>지금 바로 문의하세요!</h2>
+            <a href="https://pf.kakao.com/_xgjrxixj/chat" target="_blank" class="cta-button">카카오톡 상담하기</a>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 장윤태 사회자 프로필. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -204,13 +204,13 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
         {/* 하단 고정 버튼 영역 */}
         <div className="px-4 py-3 flex flex-row gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.08)", background: "rgba(0,0,0,0.5)", flexShrink: 0 }}>
           <a
-            href={mc.profileUrl}
+            href={mc.name === "이우영" ? "/profile-wooyoung.html" : mc.profileUrl}
             target="_blank"
             rel="noopener noreferrer"
             className={`flex items-center justify-center gap-1.5 flex-1 py-3 text-sm tracking-wide transition-all duration-300 rounded-sm ${tierColor.text} ${tierColor.bg} ${tierColor.border} border hover:opacity-80`}
             style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
           >
-            블로그 프로필 보기
+            {mc.name === "이우영" ? "프로필 자세히 보기" : "블로그 프로필 보기"}
             <ExternalLink size={13} />
           </a>
           <a

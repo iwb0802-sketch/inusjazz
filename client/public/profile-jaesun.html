@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>석재선 사회자 프로필</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #000000; /* Black */
+            --secondary-color: #FFD700; /* Gold */
+            --text-color: #FFFFFF; /* White */
+            --light-text-color: #CCCCCC;
+            --accent-color: #FFD700; /* Gold for accents */
+            --bg-dark: #1a1a1a;
+            --bg-light: #2a2a2a;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: var(--bg-dark);
+            color: var(--text-color);
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .hero-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .hero-intro {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            color: var(--light-text-color);
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 60px 20px;
+            text-align: center;
+            background-color: var(--primary-color);
+        }
+
+        .section:nth-child(even) {
+            background-color: var(--bg-dark);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5em;
+            color: var(--secondary-color);
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            width: 250px;
+            text-align: center;
+            border: 1px solid var(--secondary-color);
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5em;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            color: var(--light-text-color);
+        }
+
+        /* Strengths Section */
+        .strengths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .strength-item {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            border: 1px solid var(--secondary-color);
+        }
+
+        .strength-item i {
+            font-size: 2em;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .strength-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5em;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .strength-item p {
+            color: var(--light-text-color);
+        }
+
+        /* Video Section */
+        .video-section .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 800px;
+            margin: 40px auto 0 auto;
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            border: 1px solid var(--secondary-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-section .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Closing Section */
+        .closing-section {
+            background: var(--bg-dark);
+            color: var(--text-color);
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .closing-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6));
+            z-index: 1;
+        }
+
+        .closing-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .closing-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .signature-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2em;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 60px 20px;
+            text-align: center;
+            background-color: var(--primary-color);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #FEE500; /* Kakao Yellow */
+            color: #3C1E1E; /* Kakao Dark Text */
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background-color: #E6CC00;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bg-dark);
+            color: var(--light-text-color);
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-name {
+                font-size: 2.5em;
+            }
+
+            .hero-intro {
+                font-size: 1em;
+            }
+
+            .section-title {
+                font-size: 2em;
+            }
+
+            .stats-grid, .strengths-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-item, .strength-item {
+                width: 100%;
+            }
+
+            .closing-image {
+                width: 120px;
+                height: 120px;
+            }
+
+            .signature-text {
+                font-size: 1.5em;
+            }
+
+            .cta-button {
+                font-size: 1em;
+                padding: 12px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section {
+                padding: 60px 10px;
+            }
+
+            .hero-image {
+                width: 150px;
+                height: 150px;
+            }
+
+            .hero-name {
+                font-size: 2em;
+            }
+
+            .section {
+                padding: 40px 10px;
+            }
+
+            .section-title {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section">
+        <div class="hero-content">
+            <img src="/manus-storage/jaesun-photo_8d3aa803.jpg" alt="석재선 사회자" class="hero-image">
+            <h1 class="hero-name">석재선 사회자</h1>
+            <p class="hero-intro">차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.</p>
+        </div>
+    </header>
+
+    <section class="section stats-section">
+        <div class="container">
+            <h2 class="section-title">EXPERIENCE</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">BEST</div>
+                    <div class="stat-label">등급</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5년+</div>
+                    <div class="stat-label">경력</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500회+</div>
+                    <div class="stat-label">진행 횟수</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section strengths-section">
+        <div class="container">
+            <h2 class="section-title">STRENGTHS</h2>
+            <div class="strengths-grid">
+                <div class="strength-item">
+                    <h3>차분하고 격식 있는 진행</h3>
+                    <p>안정적인 분위기 속에서 품격 있는 예식을 선사합니다.</p>
+                </div>
+                <div class="strength-item">
+                    <h3>품격 있는 예식</h3>
+                    <p>고객의 소중한 순간을 더욱 특별하게 만들어 드립니다.</p>
+                </div>
+                <div class="strength-item">
+                    <h3>호텔 웨딩 전문</h3>
+                    <p>다양한 호텔 웨딩 경험으로 완벽한 진행을 약속합니다.</p>
+                </div>
+                <div class="strength-item">
+                    <h3>안정적인 운영</h3>
+                    <p>돌발 상황에도 능숙하게 대처하여 매끄러운 진행을 보장합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section video-section">
+        <div class="container">
+            <h2 class="section-title">VIDEO</h2>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/zx_iAhMkMns" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="closing-section">
+        <div class="closing-content">
+            <img src="/manus-storage/jaesun-photo_8d3aa803.jpg" alt="석재선 사회자" class="closing-image">
+            <p class="signature-text">당신의 가장 빛나는 순간을 함께합니다.</p>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <a href="https://blog.naver.com/inusmusics/223822182933" target="_blank" class="cta-button">카카오 상담하기</a>
+        </div>
+    </section>
+    
+    <footer class="footer">
+        <p>&copy; 2026 석재선 사회자. All rights reserved.</p>
+    </footer>
+</body>
+</html>

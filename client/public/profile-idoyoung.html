@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이도영 사회자 프로필</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap');
+
+        :root {
+            --color-black: #1a1a1a;
+            --color-gold: #b8860b;
+            --color-white: #f5f5f5;
+            --color-gray: #cccccc;
+            --font-serif-kr: 'Noto Serif KR', serif;
+            --font-playfair: 'Playfair Display', serif;
+        }
+
+        body {
+            font-family: var(--font-serif-kr);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-black);
+            color: var(--color-white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--color-white);
+            overflow: hidden;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/manus-storage/idoyoung-photo_00a64a93.jpg'); /* Placeholder */
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.6);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-playfair);
+            font-size: 4em;
+            margin-bottom: 10px;
+            color: var(--color-gold);
+        }
+
+        .hero-content p {
+            font-size: 1.5em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        section h2 {
+            font-family: var(--font-playfair);
+            font-size: 3em;
+            color: var(--color-gold);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        section h2::after {
+            content: '';
+            width: 80px;
+            height: 3px;
+            background-color: var(--color-gold);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -10px;
+        }
+
+        /* Video Section */
+        .video-section {
+            background-color: var(--color-black);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid var(--color-gold);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background-color: #222;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-family: var(--font-playfair);
+            font-size: 4em;
+            color: var(--color-gold);
+            font-weight: 700;
+        }
+
+        .stat-item .label {
+            font-size: 1.2em;
+            color: var(--color-gray);
+        }
+
+        /* Strengths Section */
+        .strengths-section {
+            background-color: var(--color-black);
+        }
+
+        .strengths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .strength-item {
+            background-color: #222;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--color-gold);
+            transition: transform 0.3s ease;
+        }
+
+        .strength-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .strength-item h3 {
+            font-family: var(--font-playfair);
+            color: var(--color-gold);
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .strength-item p {
+            color: var(--color-gray);
+        }
+
+        /* Closing Section */
+        .closing-section {
+            background-color: #222;
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .closing-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--color-gold);
+            margin-bottom: 30px;
+        }
+
+        .closing-text {
+            font-family: var(--font-playfair);
+            font-size: 2.5em;
+            color: var(--color-gold);
+            margin-bottom: 20px;
+        }
+
+        .closing-signature {
+            font-family: var(--font-serif-kr);
+            font-size: 1.2em;
+            color: var(--color-gray);
+        }
+
+        /* CTA Button */
+        .cta-button-container {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: var(--color-black);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--color-gold);
+            color: var(--color-black);
+            padding: 15px 40px;
+            font-size: 1.5em;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #d4af37;
+            transform: translateY(-3px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-content p {
+                font-size: 1.2em;
+            }
+
+            section {
+                padding: 50px 15px;
+            }
+
+            section h2 {
+                font-size: 2em;
+            }
+
+            .stats-grid {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .stat-item .number {
+                font-size: 3em;
+            }
+
+            .strengths-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .closing-image {
+                width: 150px;
+                height: 150px;
+            }
+
+            .closing-text {
+                font-size: 1.8em;
+            }
+
+            .cta-button {
+                font-size: 1.2em;
+                padding: 12px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <p class="grade">BEST</p>
+            <h1>이도영 사회자</h1>
+            <p>따뜻하고 안정적인 진행으로 신랑신부님의 이야기를 감동적으로 전달합니다.</p>
+        </div>
+    </div>
+
+    <section class="video-section">
+        <div class="container">
+            <h2>진행 영상</h2>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/ali34pV7ALk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <h2>이도영 사회자 기록</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="number">4년+</div>
+                    <div class="label">경력</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">400회+</div>
+                    <div class="label">진행 횟수</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="strengths-section">
+        <div class="container">
+            <h2>이도영 사회자 강점</h2>
+            <div class="strengths-grid">
+                <div class="strength-item">
+                    <h3>따뜻한 진행</h3>
+                    <p>신랑신부님의 소중한 순간을 따뜻한 감성으로 채워드립니다.</p>
+                </div>
+                <div class="strength-item">
+                    <h3>감동적인 스토리텔링</h3>
+                    <p>두 분의 사랑 이야기를 더욱 특별하게 만들어 드립니다.</p>
+                </div>
+                <div class="strength-item">
+                    <h3>안정적인 운영</h3>
+                    <p>매끄러운 진행으로 예식의 품격을 높여드립니다.</p>
+                </div>
+                <div class="strength-item">
+                    <h3>맞춤형 대본</h3>
+                    <p>두 분만을 위한 특별한 대본으로 잊지 못할 추억을 선사합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="closing-section">
+        <img src="/manus-storage/idoyoung-photo_00a64a93.jpg" alt="이도영 사회자" class="closing-image">
+        <p class="closing-text">
+두 분의 가장 아름다운 날, 이도영 사회자가 함께합니다.</p>
+        <p class="closing-signature">#이도영사회자 #웨딩MC #감동진행</p>
+    </section>
+
+    <div class="cta-button-container">
+        <a href="https://blog.naver.com/inusmusics/223845891681" target="_blank" class="cta-button">카카오톡 상담하기</a>
+    </div>
+</body>
+</html>

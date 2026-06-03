@@ -456,8 +456,16 @@ export default function McSection() {
                         {/* 프로필 버튼 → 이우영은 직접 풀페이지, 나머지는 모달 */}
                         <button
                           onClick={() => {
-                            if (mc.name === "이우영") setIframeUrl("/profile-wooyoung.html");
-                            else if (mc.name === "김선혁") setIframeUrl("/profile-sunhyuk.html");
+                            const profileMap: Record<string, string> = {
+                              "이우영": "/profile-wooyoung.html",
+                              "김선혁": "/profile-sunhyuk.html",
+                              "고승범": "/profile-seungbeom.html",
+                              "장윤태": "/profile-yuntae.html",
+                              "이도영": "/profile-idoyoung.html",
+                              "석재선": "/profile-jaesun.html",
+                              "김민수": "/profile-minsu.html",
+                            };
+                            if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
                             else setSelectedMc(mc);
                           }}
                           className="flex items-center justify-center gap-2 w-full py-3 bg-[#5BB5A2]/10 border border-[#5BB5A2]/30 text-[#5BB5A2] text-sm tracking-wide hover:bg-[#5BB5A2]/20 hover:border-[#5BB5A2]/50 transition-all duration-300"

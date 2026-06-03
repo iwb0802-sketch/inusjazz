@@ -113,6 +113,53 @@ const STYLE_DESCRIPTIONS: Record<string, string> = {
 
 type MC = typeof MCS[0];
 
+// iframe 모달 컴포넌트
+function IframeModal({ url, onClose }: { url: string; onClose: () => void }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[300] flex flex-col"
+      style={{ background: "#0b0b0b" }}
+    >
+      {/* 닫기 바 */}
+      <div
+        className="flex items-center justify-between px-4 py-3 flex-shrink-0"
+        style={{ borderBottom: "1px solid rgba(214,177,107,0.2)", background: "rgba(11,11,11,0.98)" }}
+      >
+        <span
+          className="text-sm tracking-widest"
+          style={{ fontFamily: "'Cormorant Garamond', serif", color: "#d6b16b" }}
+        >
+          INUSMUSIC PROFILE
+        </span>
+        <button
+          onClick={onClose}
+          className="w-8 h-8 flex items-center justify-center rounded-full text-white/60 hover:text-white transition-colors"
+          style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}
+        >
+          <X size={15} />
+        </button>
+      </div>
+      {/* iframe */}
+      <iframe
+        src={url}
+        className="flex-1 w-full"
+        style={{ border: 0 }}
+        title="사회자 프로필"
+      />
+    </div>
+  );
+}
+
 // 페이지 로드 시 모든 프로필 카드 이미지 프리로드
 if (typeof window !== "undefined") {
   MCS.forEach((mc) => {
@@ -124,7 +171,7 @@ if (typeof window !== "undefined") {
 }
 
 // 프로필 모달 컴포넌트
-function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
+function ProfileModal({ mc, onClose, onOpenIframe }: { mc: MC; onClose: () => void; onOpenIframe: (url: string) => void }) {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -203,16 +250,27 @@ function ProfileModal({ mc, onClose }: { mc: MC; onClose: () => void }) {
 
         {/* 하단 고정 버튼 영역 */}
         <div className="px-4 py-3 flex flex-row gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.08)", background: "rgba(0,0,0,0.5)", flexShrink: 0 }}>
-          <a
-            href={mc.name === "이우영" ? "/profile-wooyoung.html" : mc.profileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`flex items-center justify-center gap-1.5 flex-1 py-3 text-sm tracking-wide transition-all duration-300 rounded-sm ${tierColor.text} ${tierColor.bg} ${tierColor.border} border hover:opacity-80`}
-            style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
-          >
-            {mc.name === "이우영" ? "프로필 자세히 보기" : "블로그 프로필 보기"}
-            <ExternalLink size={13} />
-          </a>
+          {mc.name === "이우영" ? (
+            <button
+              onClick={() => onOpenIframe("/profile-wooyoung.html")}
+              className={`flex items-center justify-center gap-1.5 flex-1 py-3 text-sm tracking-wide transition-all duration-300 rounded-sm ${tierColor.text} ${tierColor.bg} ${tierColor.border} border hover:opacity-80`}
+              style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+            >
+              프로필 자세히 보기
+              <ExternalLink size={13} />
+            </button>
+          ) : (
+            <a
+              href={mc.profileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`flex items-center justify-center gap-1.5 flex-1 py-3 text-sm tracking-wide transition-all duration-300 rounded-sm ${tierColor.text} ${tierColor.bg} ${tierColor.border} border hover:opacity-80`}
+              style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+            >
+              블로그 프로필 보기
+              <ExternalLink size={13} />
+            </a>
+          )}
           <a
             href="https://pf.kakao.com/_wxovaM/chat"
             target="_blank"
@@ -240,6 +298,7 @@ export default function McSection() {
   });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedMc, setSelectedMc] = useState<MC | null>(null);
+  const [iframeUrl, setIframeUrl] = useState<string | null>(null);
 
   const handleFilterChange = useCallback((filter: string) => {
     if (filter === activeFilter) return;
@@ -441,7 +500,16 @@ export default function McSection() {
 
       {/* 프로필 모달 */}
       {selectedMc && (
-        <ProfileModal mc={selectedMc} onClose={() => setSelectedMc(null)} />
+        <ProfileModal
+          mc={selectedMc}
+          onClose={() => setSelectedMc(null)}
+          onOpenIframe={(url) => { setSelectedMc(null); setIframeUrl(url); }}
+        />
+      )}
+
+      {/* iframe 풀페이지 프로필 모달 */}
+      {iframeUrl && (
+        <IframeModal url={iframeUrl} onClose={() => setIframeUrl(null)} />
       )}
     </>
   );

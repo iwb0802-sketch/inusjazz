@@ -1,0 +1,26 @@
+# Project TODO
+
+- [x] 테마 설정 (색상 팔레트 업데이트)
+- [x] 탭 네비게이션 구성 (Home, Chart, Sessions)
+- [x] 피치 감지 엔진 (YIN 알고리즘) 구현
+- [x] 스트로브 감지 엔진 구현
+- [x] 88건반 피아노 키 데이터 모델
+- [x] PT-100 허용 범위 데이터 (UPPER_ABS, LOWER_ABS)
+- [x] 튜닝 세션 데이터 모델 (AsyncStorage 기반)
+- [x] Home 화면 - 음 표시 및 센트 미터
+- [x] Home 화면 - 스트로브 튜너 (Animated API)
+- [x] Home 화면 - 마이크 컨트롤 (시작/정지)
+- [x] Home 화면 - 자동저장/수동저장 모드
+- [x] Home 화면 - 되돌리기(Undo) 기능
+- [x] Chart 화면 - 조율 커브 그래프 (SVG)
+- [x] Chart 화면 - 스크롤 기반 확대
+- [x] Chart 화면 - 피아노 건반 시각화
+- [x] Sessions 화면 - 세션 목록/생성/삭제
+- [x] Sessions 화면 - 세션 이름 변경
+- [x] Settings 모달 구현
+- [x] Settings 모달 - 기준음(440Hz) 재생
+- [x] Settings 모달 - 맥놀이(Beat) 재생
+- [x] 내보내기 - 리포트/CSV 공유
+- [x] 화면 꺼짐 방지 (expo-keep-awake)
+- [x] 앱 로고 생성 및 브랜딩 설정
+- [ ] GitHub 레포지토리 푸시

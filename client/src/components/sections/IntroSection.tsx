@@ -1,5 +1,6 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Calendar, FileText, Users } from "lucide-react";
+import CountUpNumber from "@/components/CountUpNumber";
 
 export default function IntroSection() {
   const anim1 = useScrollAnimation();
@@ -68,7 +69,12 @@ export default function IntroSection() {
                 </div>
               </div>
               <p className="text-[#5BB5A2] text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
-                <span style={{ fontFamily: "'Cormorant Garamond', serif" }}>1,000</span>
+                <CountUpNumber
+                  targetNumber={1000}
+                  duration={2000}
+                  className="text-[#5BB5A2]"
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                />
                 <span className="text-lg sm:text-xl lg:text-2xl text-white/60 ml-1">건 이상</span>
               </p>
               <p
@@ -87,7 +93,12 @@ export default function IntroSection() {
                 </div>
               </div>
               <p className="text-[#5BB5A2] text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
-                <span style={{ fontFamily: "'Cormorant Garamond', serif" }}>40,000</span>
+                <CountUpNumber
+                  targetNumber={40000}
+                  duration={2000}
+                  className="text-[#5BB5A2]"
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                />
                 <span className="text-lg sm:text-xl lg:text-2xl text-white/60 ml-1">쌍 이상</span>
               </p>
               <p

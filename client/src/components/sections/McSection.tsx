@@ -14,7 +14,7 @@ const MCS = [
     role: "",
     tier: "BEST",
     desc: "5년+ 경력",
-    image: "/images/mc-profile-1_33531819.jpg",
+    image: "/manus-storage/mc-profile-1_33531819_b8997d1f.jpg",
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500회 이상"],
     highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223996383838",
@@ -27,7 +27,7 @@ const MCS = [
     role: "",
     tier: "BEST",
     desc: "5년+ 경력",
-    image: "/images/mc-profile-4_a9e52880.jpg",
+    image: "/manus-storage/mc-profile-4_a9e52880_b49d5d16.jpg",
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500건+"],
     highlight: "자연스럽고 세련된 진행 스타일이 특징입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223235771542",
@@ -40,7 +40,7 @@ const MCS = [
     role: "",
     tier: "BEST",
     desc: "4년+ 경력",
-    image: "/images/mc-profile-2_f194877b.jpg",
+    image: "/manus-storage/mc-profile-2_f194877b_60f4818a.jpg",
     tags: ["웨딩 사회 경력 4년+", "누적 진행 400회 이상"],
     highlight: "따뜻하고 안정적인 진행으로 신랑신부님의 이야기를 감동적으로 전달합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",
@@ -53,7 +53,7 @@ const MCS = [
     role: "",
     tier: "BEST",
     desc: "5년+ 경력",
-    image: "/images/mc-profile-3_33ff7a32.jpg",
+    image: "/manus-storage/mc-profile-3_33ff7a32_3d967c04.jpg",
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500회 이상"],
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223822182933",
@@ -66,7 +66,7 @@ const MCS = [
     role: "",
     tier: "PREMIUM",
     desc: "10년+ 경력",
-    image: "/images/mc-lee-wooyoung-new_fa27e84d.webp",
+    image: "/manus-storage/mc-lee-wooyoung-new_fa27e84d_a3c2e117.webp",
     tags: ["웨딩 사회 경력 10년+", "누적 진행 1000회 이상"],
     highlight: "편안한 아나운서 톤과 안정적인 진행력으로 위트 있고 깔끔한 예식을 완성하는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/220767962639",
@@ -79,7 +79,7 @@ const MCS = [
     role: "",
     tier: "BEST",
     desc: "5년+ 경력",
-    image: "/images/host_sunhyuk_1ed704ab.jpg",
+    image: "/manus-storage/host_sunhyuk_1ed704ab_40fb9fca.jpg",
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500회 이상"],
     highlight: "깔끔하고 안정감 있는 진행력을 기반으로 다년간의 연극 경험에서 비롯된 탁월한 상황 대처 능력을 갖춘 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/221025505211",
@@ -462,132 +462,108 @@ export default function McSection() {
             </div>
           </div>
 
-          {/* Carousel */}
-          <div className="relative">
-            <div ref={emblaRef} className={`overflow-hidden transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
-              <div className="flex">
-                {filteredMcs.map((mc, i) => (
-                  <div
-                    key={mc.name}
-                    className="flex-[0_0_85%] sm:flex-[0_0_70%] md:flex-[0_0_50%] lg:flex-[0_0_42%] min-w-0 px-3 sm:px-4"
-                  >
-                    <div
-                      className={`group relative bg-[#161616] border rounded-sm overflow-hidden transition-all duration-500 ${
-                        selectedIndex === i
-                          ? "border-[#5BB5A2]/40 shadow-lg shadow-[#5BB5A2]/5"
-                          : "border-white/5 opacity-60"
-                      }`}
-                    >
-                      {/* Profile Image */}
-                      <div className="relative aspect-[3/4] overflow-hidden">
-                        <img
-                          src={mc.image}
-                          alt={mc.name}
-                          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#161616] via-[#161616]/30 to-transparent" />
+          {/* Grid Layout */}
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {filteredMcs.map((mc) => (
+              <div
+                key={mc.name}
+                className="group relative bg-[#161616] border rounded-sm overflow-hidden transition-all duration-500 border-white/5 hover:border-[#5BB5A2]/40 hover:shadow-lg hover:shadow-[#5BB5A2]/5 cursor-pointer"
+                onClick={() => setSelectedMc(mc)}
+              >
+                {/* Profile Image */}
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  <img
+                    src={mc.image}
+                    alt={mc.name}
+                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#161616] via-[#161616]/30 to-transparent" />
 
-                        <div className="absolute top-4 left-4">
-                          <span className={`inline-block px-3 py-1.5 bg-[#1a1a1a]/80 backdrop-blur-sm border text-[10px] sm:text-xs tracking-[0.2em] uppercase ${mc.tier === "PREMIUM" ? "border-[#d4b896]/50 text-[#d4b896]" : "border-[#5BB5A2]/40 text-[#5BB5A2]"}`}
-                            style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                          >
-                            {mc.tier}
-                          </span>
-                        </div>
-
-                        <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
-                          <h3
-                            className="text-white text-2xl sm:text-3xl font-bold"
-                            style={{ fontFamily: "'Noto Serif KR', serif" }}
-                          >
-                            {mc.name}
-                          </h3>
-                          <p className="text-white/50 text-sm mt-1">{mc.desc}</p>
-                        </div>
-                      </div>
-
-                      {/* Info */}
-                      <div className="p-5 sm:p-6">
-                        <p className="text-white/60 text-sm leading-relaxed mb-5">
-                          {mc.highlight}
-                        </p>
-
-                        <div className="space-y-2 mb-6">
-                          {mc.tags.map((tag, j) => (
-                            <div key={j} className="flex items-center gap-2.5 text-white/50 text-xs sm:text-sm">
-                              <span className="w-1 h-1 rounded-full bg-[#5BB5A2] flex-shrink-0" />
-                              {tag}
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* 프로필 버튼 → 프리미엄 골드 스타일 */}
-                        <button
-                          onClick={() => {
-                            const profileMap: Record<string, string> = {
-                              "이우영": "/profile-wooyoung.html",
-                              "김선혁": "/profile-sunhyuk.html",
-                              "고승범": "/profile-seungbeom.html",
-                              "장윤태": "/profile-yuntae.html",
-                              "이도영": "/profile-idoyoung.html",
-                              "석재선": "/profile-jaesun.html",
-                              "김민수": "/profile-minsu.html",
-                            };
-                            if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
-                            else setSelectedMc(mc);
-                          }}
-                          className="relative flex items-center justify-center gap-2 w-full py-3.5 text-sm tracking-widest font-medium overflow-hidden group transition-all duration-300"
-                          style={{
-                            fontFamily: "'Cormorant Garamond', serif",
-                            fontSize: "13px",
-                            letterSpacing: "0.25em",
-                            background: "linear-gradient(135deg, rgba(214,177,107,0.15) 0%, rgba(214,177,107,0.05) 100%)",
-                            border: "1px solid rgba(214,177,107,0.5)",
-                            color: "#d6b16b",
-                          }}
-                        >
-                          <span
-                            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                            style={{ background: "linear-gradient(135deg, rgba(214,177,107,0.3) 0%, rgba(214,177,107,0.1) 100%)" }}
-                          />
-                          <span className="relative">PROFILE VIEW</span>
-                          <svg className="relative" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
+                  <div className="absolute top-3 right-3 flex items-start justify-end gap-2">
+                    {mc.styles.slice(0, 3).map((style) => (
+                      <span
+                        key={style}
+                        className="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-[#f5f1e8] backdrop-blur-lg border border-[#d4b896]/40 text-[11px] sm:text-[12px] font-bold text-[#8b7355] rounded-full shadow-md shadow-black/10 hover:shadow-lg hover:shadow-[#d4b896]/20 transition-all duration-300 hover:bg-[#faf8f3]"
+                        style={{ fontFamily: "'Montserrat', sans-serif", letterSpacing: "0.02em" }}
+                        title={style}
+                      >
+                        {style.charAt(0)}
+                      </span>
+                    ))}
                   </div>
-                ))}
+
+                  <div className="absolute top-4 left-4 flex items-start justify-start gap-2">
+                    <span className={`inline-block px-3 py-1.5 bg-[#1a1a1a]/80 backdrop-blur-sm border text-[10px] sm:text-xs tracking-[0.2em] uppercase ${mc.tier === "PREMIUM" ? "border-[#d4b896]/50 text-[#d4b896]" : "border-[#5BB5A2]/40 text-[#5BB5A2]"}`}
+                      style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                    >
+                      {mc.tier}
+                    </span>
+                  </div>
+
+                  <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+                    <h3
+                      className="text-white text-lg sm:text-xl font-bold"
+                      style={{ fontFamily: "'Noto Serif KR', serif" }}
+                    >
+                      {mc.name}
+                    </h3>
+                    <p className="text-white/50 text-xs sm:text-sm mt-1">{mc.desc}</p>
+                  </div>
+                </div>
+
+                {/* Info */}
+                <div className="p-3 sm:p-4">
+                  <p className="text-white/60 text-xs sm:text-sm leading-relaxed mb-3">
+                    {mc.highlight}
+                  </p>
+
+                  <div className="space-y-1.5 mb-4">
+                    {mc.tags.slice(0, 2).map((tag, j) => (
+                      <div key={j} className="flex items-center gap-2 text-white/50 text-xs">
+                        <span className="w-0.5 h-0.5 rounded-full bg-[#5BB5A2] flex-shrink-0" />
+                        {tag}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* 프로필 버튼 */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const profileMap: Record<string, string> = {
+                        "이우영": "/profile-wooyoung.html",
+                        "김선혁": "/profile-sunhyuk.html",
+                        "고승범": "/profile-seungbeom.html",
+                        "장윤태": "/profile-yuntae.html",
+                        "이도영": "/profile-idoyoung.html",
+                        "석재선": "/profile-jaesun.html",
+                        "김민수": "/profile-minsu.html",
+                      };
+                      if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
+                      else setSelectedMc(mc);
+                    }}
+                    className="relative flex items-center justify-center gap-1.5 w-full py-2.5 text-xs tracking-wider font-medium overflow-hidden group transition-all duration-300"
+                    style={{
+                      fontFamily: "'Cormorant Garamond', serif",
+                      fontSize: "11px",
+                      letterSpacing: "0.2em",
+                      background: "linear-gradient(135deg, rgba(214,177,107,0.15) 0%, rgba(214,177,107,0.05) 100%)",
+                      border: "1px solid rgba(214,177,107,0.5)",
+                      color: "#d6b16b",
+                    }}
+                  >
+                    <span
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ background: "linear-gradient(135deg, rgba(214,177,107,0.3) 0%, rgba(214,177,107,0.1) 100%)" }}
+                    />
+                    <span className="relative">PROFILE</span>
+                    <svg className="relative" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
-
-            <button
-              onClick={scrollPrev}
-              className="absolute left-0 top-1/3 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-[#1a1a1a]/80 backdrop-blur-sm border border-white/10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:border-[#5BB5A2]/40 transition-all duration-300"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              onClick={scrollNext}
-              className="absolute right-0 top-1/3 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-[#1a1a1a]/80 backdrop-blur-sm border border-white/10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:border-[#5BB5A2]/40 transition-all duration-300"
-            >
-              <ChevronRight size={20} />
-            </button>
-
-            <div className="flex justify-center gap-2 mt-8">
-              {filteredMcs.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => emblaApi?.scrollTo(i)}
-                  className={`transition-all duration-300 rounded-full ${
-                    selectedIndex === i
-                      ? "w-8 h-2 bg-[#5BB5A2]"
-                      : "w-2 h-2 bg-white/20 hover:bg-white/40"
-                  }`}
-                />
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </section>

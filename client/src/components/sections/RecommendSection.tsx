@@ -41,7 +41,7 @@ export default function RecommendSection() {
       <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none" style={{ background: "linear-gradient(to bottom, transparent 0%, #0d0d0d 100%)" }} />
       {/* Subtle background accent */}
       <div className="absolute inset-0 opacity-[0.03]">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#5BB5A2] blur-[200px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#d4b896] blur-[200px]" />
       </div>
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
@@ -57,7 +57,7 @@ export default function RecommendSection() {
             className="mt-4 text-white text-2xl sm:text-3xl md:text-4xl leading-snug"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            이런 분들께<br className="sm:hidden" /> <span className="text-[#5BB5A2]">전문 사회자</span>를 추천드립니다
+            이런 분들께<br className="sm:hidden" /> <span className="text-[#d4b896]">전문 사회자</span>를 추천드립니다
           </h2>
         </div>
 
@@ -75,19 +75,19 @@ export default function RecommendSection() {
               >
                 {/* 상단 라인 강조 */}
                 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ background: "linear-gradient(to right, transparent, rgba(91,181,162,0.6), transparent)" }} />
+                  style={{ background: "linear-gradient(to right, transparent, rgba(212,184,150,0.6), transparent)" }} />
                 {/* hover 배경 */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ background: "linear-gradient(145deg, rgba(91,181,162,0.05) 0%, transparent 100%)" }} />
+                  style={{ background: "linear-gradient(145deg, rgba(212,184,150,0.05) 0%, transparent 100%)" }} />
 
                 <div className="relative flex items-start gap-5">
                   {/* 아이콘 번호 배지 */}
                   <div className="flex-shrink-0 flex flex-col items-center gap-2">
                     <div className="w-11 h-11 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110"
-                      style={{ background: "rgba(91,181,162,0.1)", border: "1px solid rgba(91,181,162,0.2)" }}>
-                      <item.icon size={19} className="text-[#5BB5A2]" />
+                      style={{ background: "rgba(212,184,150,0.1)", border: "1px solid rgba(212,184,150,0.25)" }}>
+                      <item.icon size={19} className="text-[#d4b896]" />
                     </div>
-                    <span className="text-[#5BB5A2]/40 text-[10px] tracking-widest" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                    <span className="text-[#d4b896]/60 text-[10px] tracking-widest" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
                       0{i + 1}
                     </span>
                   </div>

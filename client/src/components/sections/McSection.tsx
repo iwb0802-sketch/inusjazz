@@ -523,44 +523,44 @@ export default function McSection() {
                       }}
                       title="목소리 듣기"
                     >
-                      {/* 첫 번째 카드 + 재생 안 한 말풍선 툴팁 */}
+                      {/* 첫 번째 카드 말풍선 툴팁 - 카드 위로 완전히 올려서 표시 */}
                       {mcIndex === 0 && playingAudio !== mc.name && (
                         <div
                           style={{
                             position: "absolute",
-                            bottom: "calc(100% + 14px)",
-                            right: "-4px",
-                            background: "rgba(15,15,15,0.72)",
-                            backdropFilter: "blur(14px)",
-                            borderRadius: "10px",
-                            padding: "10px 12px",
-                            fontSize: "10px",
-                            color: "rgba(255,255,255,0.92)",
+                            bottom: "calc(100% + 12px)",
+                            right: "0px",
+                            background: "rgba(10,10,10,0.78)",
+                            backdropFilter: "blur(16px)",
+                            WebkitBackdropFilter: "blur(16px)",
+                            borderRadius: "12px",
+                            padding: "10px 14px",
+                            color: "rgba(255,255,255,0.9)",
+                            whiteSpace: "nowrap",
+                            fontFamily: "'Noto Serif KR', serif",
+                            fontSize: "11px",
                             fontWeight: 500,
-                            whiteSpace: "pre-line",
+                            lineHeight: 1.6,
                             textAlign: "center",
-                            width: "80px",
-                            lineHeight: 1.5,
-                            fontFamily: "'Noto Sans KR', sans-serif",
-                            boxShadow: "0 4px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1)",
+                            boxShadow: "0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(91,181,162,0.25)",
                             pointerEvents: "none",
                             zIndex: 50,
-                            letterSpacing: "0.01em",
                           }}
                         >
-                          <span style={{ color: "#5BB5A2", display: "block", marginBottom: "3px", fontSize: "13px" }}>▶</span>
-                          클릭시
-목소리 확인
+                          <div style={{ color: "#5BB5A2", fontSize: "9px", letterSpacing: "0.15em", marginBottom: "4px", fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic" }}>VOICE PREVIEW</div>
+                          <div style={{ fontSize: "11px" }}>클릭하면 목소리</div>
+                          <div style={{ fontSize: "11px" }}>먼저 확인 가능</div>
+                          {/* 말풍선 꼬리 */}
                           <div
                             style={{
                               position: "absolute",
                               top: "100%",
-                              right: "16px",
+                              right: "14px",
                               width: 0,
                               height: 0,
                               borderLeft: "7px solid transparent",
                               borderRight: "7px solid transparent",
-                              borderTop: "7px solid rgba(15,15,15,0.72)",
+                              borderTop: "7px solid rgba(10,10,10,0.78)",
                             }}
                           />
                         </div>

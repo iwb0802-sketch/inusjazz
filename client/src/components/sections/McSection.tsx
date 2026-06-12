@@ -562,47 +562,36 @@ export default function McSection() {
                         <div
                           style={{
                             position: "absolute",
-                            bottom: "calc(100% + 20px)",
+                            bottom: "calc(100% + 10px)",
                             right: "-4px",
-                            background: "rgba(8,8,8,0.82)",
+                            background: "rgba(8,8,8,0.88)",
                             backdropFilter: "blur(20px)",
                             WebkitBackdropFilter: "blur(20px)",
-                            borderRadius: "10px",
-                            padding: "11px 16px",
-                            color: "rgba(255,255,255,0.88)",
+                            borderRadius: "6px",
+                            padding: "7px 12px",
                             whiteSpace: "nowrap",
-                            fontSize: "11.5px",
-                            fontWeight: 400,
-                            lineHeight: 1.75,
-                            textAlign: "center",
-                            border: "1px solid rgba(91,181,162,0.22)",
-                            boxShadow: "0 12px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(91,181,162,0.08)",
+                            border: "1px solid rgba(212,184,150,0.25)",
+                            boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
                             pointerEvents: "none",
                             zIndex: 50,
                             animation: "tooltipFadeIn 0.4s cubic-bezier(0.23,1,0.32,1) both",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
                           }}
                         >
-                          <div style={{
-                            color: "#5BB5A2",
-                            fontSize: "9px",
-                            letterSpacing: "0.22em",
-                            marginBottom: "6px",
-                            fontFamily: "'Cormorant Garamond', serif",
-                            fontStyle: "italic",
-                            opacity: 0.9,
-                          }}>VOICE PREVIEW</div>
-                          <div style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: "11.5px", color: "rgba(255,255,255,0.75)", letterSpacing: "0.02em" }}>클릭하면 목소리를</div>
-                          <div style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: "11.5px", color: "rgba(255,255,255,0.75)", letterSpacing: "0.02em" }}>미리 들을 수 있어요</div>
+                          <span style={{ color: "#d4b896", fontSize: "10px" }}>▶</span>
+                          <span style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: "11px", color: "rgba(255,255,255,0.80)", letterSpacing: "0.02em" }}>클릭하면 목소리를 들을 수 있어요</span>
                           {/* 말풍선 꼬리 */}
                           <div style={{
                             position: "absolute",
                             top: "100%",
-                            right: "18px",
+                            right: "16px",
                             width: 0,
                             height: 0,
-                            borderLeft: "6px solid transparent",
-                            borderRight: "6px solid transparent",
-                            borderTop: "6px solid rgba(8,8,8,0.82)",
+                            borderLeft: "5px solid transparent",
+                            borderRight: "5px solid transparent",
+                            borderTop: "5px solid rgba(8,8,8,0.88)",
                           }} />
                         </div>
                       )}

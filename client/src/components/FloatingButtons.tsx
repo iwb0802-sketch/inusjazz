@@ -102,18 +102,19 @@ export default function FloatingButtons() {
       {/* 한 줄: 영상보기 | SNS 아이콘 | 카톡상담 - 가운데 정렬 */}
       <div className="flex justify-center items-stretch px-4 pb-6 gap-2">
 
-        {/* 왼쪽: 실황영상보기 */}
-        <a
-          href="https://m.blog.naver.com/PostList.naver?blogId=inusmusics&categoryNo=36&proxyReferer=&noTrackingCode=true"
-          target="_blank"
-          rel="noopener noreferrer"
+        {/* 왼쪽: 사회자 선택하기 */}
+        <button
+          onClick={() => {
+            const el = document.getElementById('mc');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
           className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-3 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 text-white/80 hover:bg-[#161616] hover:border-[#d4b896]/60 transition-all duration-300 shadow-lg shadow-black/40 group shrink-0`}
         >
           <Play className="w-4 h-4 text-[#d4b896] group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
           <span className="text-xs tracking-wide" style={{ fontFamily: "'Noto Serif KR', serif" }}>
-            실황영상보기
+            사회자 선택하기
           </span>
-        </a>
+        </button>
 
         {/* 가운데: SNS 아이콘 */}
         <div className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-0 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 shadow-lg shadow-black/40 shrink-0`}>

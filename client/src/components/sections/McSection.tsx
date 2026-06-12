@@ -528,33 +528,35 @@ export default function McSection() {
                         <div
                           style={{
                             position: "absolute",
-                            bottom: "calc(100% + 10px)",
-                            right: "0",
-                            background: "rgba(255,255,255,0.92)",
-                            backdropFilter: "blur(8px)",
-                            borderRadius: "8px",
-                            padding: "6px 10px",
-                            fontSize: "10px",
-                            color: "#111",
+                            bottom: "calc(100% + 16px)",
+                            right: "-4px",
+                            background: "linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(245,239,230,0.96) 100%)",
+                            backdropFilter: "blur(12px)",
+                            borderRadius: "10px",
+                            padding: "8px 14px",
+                            fontSize: "11px",
+                            color: "#1a1207",
                             fontWeight: 600,
                             whiteSpace: "nowrap",
                             fontFamily: "'Noto Sans KR', sans-serif",
-                            boxShadow: "0 2px 12px rgba(0,0,0,0.2)",
+                            boxShadow: "0 4px 20px rgba(0,0,0,0.25), 0 0 0 1px rgba(214,177,107,0.3)",
                             pointerEvents: "none",
                             zIndex: 50,
+                            letterSpacing: "0.02em",
                           }}
                         >
-                          클릭시 목소리 먼저 확인 가능
+                          <span style={{ color: "#5BB5A2", marginRight: "4px" }}>▶</span>
+                          클릭시 목소리 먼저 확인
                           <div
                             style={{
                               position: "absolute",
                               top: "100%",
-                              right: "12px",
+                              right: "16px",
                               width: 0,
                               height: 0,
-                              borderLeft: "6px solid transparent",
-                              borderRight: "6px solid transparent",
-                              borderTop: "6px solid rgba(255,255,255,0.92)",
+                              borderLeft: "7px solid transparent",
+                              borderRight: "7px solid transparent",
+                              borderTop: "7px solid rgba(245,239,230,0.96)",
                             }}
                           />
                         </div>

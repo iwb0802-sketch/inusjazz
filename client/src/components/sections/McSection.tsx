@@ -468,7 +468,19 @@ export default function McSection() {
             {filteredMcs.map((mc, mcIndex) => (
               <div
                 key={mc.name}
-                className="group relative bg-[#161616] border rounded-sm transition-all duration-500 border-white/5 hover:border-[#5BB5A2]/40 hover:shadow-lg hover:shadow-[#5BB5A2]/5 cursor-pointer flex flex-col"
+                className="group relative bg-[#161616] rounded-sm transition-all duration-500 cursor-pointer flex flex-col hover:-translate-y-1"
+                style={{
+                  border: "1px solid rgba(212,184,150,0.18)",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(212,184,150,0.50)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 36px rgba(0,0,0,0.55), 0 0 18px rgba(212,184,150,0.07)";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(212,184,150,0.18)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.4)";
+                }}
                 onClick={() => {
                   const profileMap: Record<string, string> = {
                     "이우영": "/profile-wooyoung.html",
@@ -497,12 +509,34 @@ export default function McSection() {
 
 
 
-                  <div className="absolute top-4 left-4 flex items-start justify-start gap-2">
-                    <span className={`inline-block px-3 py-1.5 bg-[#1a1a1a]/80 backdrop-blur-sm border text-[10px] sm:text-xs tracking-[0.2em] uppercase ${mc.tier === "PREMIUM" ? "border-[#d4b896]/50 text-[#d4b896]" : "border-[#5BB5A2]/40 text-[#5BB5A2]"}`}
-                      style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                    >
-                      {mc.tier}
-                    </span>
+                  <div className="absolute top-3 left-3">
+                    {mc.tier === "PREMIUM" ? (
+                      <span
+                        className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] tracking-[0.25em] uppercase"
+                        style={{
+                          fontFamily: "'Cormorant Garamond', serif",
+                          background: "linear-gradient(135deg, rgba(212,184,150,0.95) 0%, rgba(190,155,110,0.95) 100%)",
+                          color: "#1a1a1a",
+                          fontWeight: 700,
+                          boxShadow: "0 2px 12px rgba(212,184,150,0.35)",
+                        }}
+                      >
+                        ✦ PREMIUM
+                      </span>
+                    ) : (
+                      <span
+                        className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] tracking-[0.25em] uppercase"
+                        style={{
+                          fontFamily: "'Cormorant Garamond', serif",
+                          background: "rgba(11,11,11,0.80)",
+                          border: "1px solid rgba(212,184,150,0.45)",
+                          color: "#d4b896",
+                          backdropFilter: "blur(8px)",
+                        }}
+                      >
+                        BEST
+                      </span>
+                    )}
                   </div>
 
 
@@ -676,22 +710,29 @@ export default function McSection() {
                       if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
                       else setSelectedMc(mc);
                     }}
-                    className="mt-auto relative flex items-center justify-center gap-1.5 w-full py-2.5 text-xs tracking-wider font-medium overflow-hidden group transition-all duration-300"
+                    className="mt-auto relative flex items-center justify-center gap-2 w-full py-3 overflow-hidden group transition-all duration-300 hover:-translate-y-0.5"
                     style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: "11px",
-                      letterSpacing: "0.2em",
-                      background: "linear-gradient(135deg, rgba(214,177,107,0.15) 0%, rgba(214,177,107,0.05) 100%)",
-                      border: "1px solid rgba(214,177,107,0.5)",
-                      color: "#d6b16b",
+                      fontFamily: "'Noto Sans KR', sans-serif",
+                      fontSize: "12px",
+                      letterSpacing: "0.05em",
+                      fontWeight: 500,
+                      background: "linear-gradient(135deg, rgba(212,184,150,0.12) 0%, rgba(212,184,150,0.04) 100%)",
+                      border: "1px solid rgba(212,184,150,0.40)",
+                      color: "#d4b896",
+                    }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, rgba(212,184,150,0.28) 0%, rgba(212,184,150,0.12) 100%)";
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(212,184,150,0.70)";
+                      (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 16px rgba(212,184,150,0.15)";
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, rgba(212,184,150,0.12) 0%, rgba(212,184,150,0.04) 100%)";
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(212,184,150,0.40)";
+                      (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
                     }}
                   >
-                    <span
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      style={{ background: "linear-gradient(135deg, rgba(214,177,107,0.3) 0%, rgba(214,177,107,0.1) 100%)" }}
-                    />
-                    <span className="relative">PROFILE</span>
-                    <svg className="relative" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <span className="relative">프로필 보기</span>
+                    <svg className="relative transition-transform duration-300 group-hover:translate-x-0.5" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                   </button>

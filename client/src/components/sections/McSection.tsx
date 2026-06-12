@@ -483,7 +483,7 @@ export default function McSection() {
                 }}
               >
                 {/* Profile Image */}
-                <div className="relative aspect-[3/4] overflow-hidden">
+                <div className="relative overflow-hidden" style={{ height: "260px" }}>
                   <img
                     src={mc.image}
                     alt={mc.name}
@@ -491,18 +491,7 @@ export default function McSection() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#161616] via-[#161616]/30 to-transparent" />
 
-                  <div className="absolute top-3 right-3 flex items-start justify-end gap-2">
-                    {mc.styles.slice(0, 3).map((style) => (
-                      <span
-                        key={style}
-                        className="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-[#f5f1e8] backdrop-blur-lg border border-[#d4b896]/40 text-[11px] sm:text-[12px] font-bold text-[#8b7355] rounded-full shadow-md shadow-black/10 hover:shadow-lg hover:shadow-[#d4b896]/20 transition-all duration-300 hover:bg-[#faf8f3]"
-                        style={{ fontFamily: "'Montserrat', sans-serif", letterSpacing: "0.02em" }}
-                        title={style}
-                      >
-                        {style.charAt(0)}
-                      </span>
-                    ))}
-                  </div>
+
 
                   <div className="absolute top-4 left-4 flex items-start justify-start gap-2">
                     <span className={`inline-block px-3 py-1.5 bg-[#1a1a1a]/80 backdrop-blur-sm border text-[10px] sm:text-xs tracking-[0.2em] uppercase ${mc.tier === "PREMIUM" ? "border-[#d4b896]/50 text-[#d4b896]" : "border-[#5BB5A2]/40 text-[#5BB5A2]"}`}
@@ -524,12 +513,12 @@ export default function McSection() {
                 </div>
 
                 {/* Info */}
-                <div className="p-3 sm:p-4">
+                <div className="p-3 sm:p-4 flex flex-col" style={{ minHeight: "160px" }}>
                   <p className="text-white/60 text-xs sm:text-sm leading-relaxed mb-3">
                     {mc.highlight}
                   </p>
 
-                  <div className="space-y-1.5 mb-4">
+                  <div className="space-y-1.5 mb-4 flex-grow">
                     {mc.tags.slice(0, 2).map((tag, j) => (
                       <div key={j} className="flex items-center gap-2 text-white/50 text-xs">
                         <span className="w-0.5 h-0.5 rounded-full bg-[#5BB5A2] flex-shrink-0" />

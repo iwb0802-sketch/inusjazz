@@ -5,7 +5,7 @@
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import useEmblaCarousel from "embla-carousel-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, X, ExternalLink } from "lucide-react";
 
 const MCS = [
@@ -20,6 +20,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223996383838",
     styles: ["품격형", "아나운서형"],
     youtubeId: "YmqVrha13G0",
+    audioFile: "/audio/mc-minsu.mp3",
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/DyhPmZzlNmUwZcsY.png",
   },
   {
@@ -33,6 +34,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223235771542",
     styles: ["품격형", "아나운서형"],
     youtubeId: "iKi77thkR4s",
+    audioFile: "/audio/mc-seungbeom.mp3",
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/SPAinOSuRkaiNJTx.png",
   },
   {
@@ -46,6 +48,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",
     styles: ["품격형", "밝은형", "감동형"],
     youtubeId: "ali34pV7ALk",
+    audioFile: null,
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/ppTgmcIFaCtGyINq.png",
   },
   {
@@ -59,6 +62,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223822182933",
     styles: ["품격형", "감동형"],
     youtubeId: "zx_iAhMkMns",
+    audioFile: null,
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/RWSmnUABYYeEBdIF.png",
   },
   {
@@ -72,6 +76,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/220767962639",
     styles: ["품격형", "밝은형", "감동형", "아나운서형"],
     youtubeId: "prhKZqfMjfM",
+    audioFile: null,
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/COZSQEgdKVpfNtAZ.png",
   },
   {
@@ -85,6 +90,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/221025505211",
     styles: ["품격형", "아나운서형"],
     youtubeId: "4Quvg9TIGAk",
+    audioFile: null,
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/BNPzIkSNQIGLZEfs.png",
   },
   {
@@ -98,6 +104,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",
     styles: ["품격형", "감동형"],
     youtubeId: "U5cJiiF-WcY",
+    audioFile: null,
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/BzyEbfDYgsDXpYvx.png",
   },
 ];
@@ -367,7 +374,31 @@ export default function McSection() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedMc, setSelectedMc] = useState<MC | null>(null);
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
-  const [playingAudio, setPlayingAudio] = useState<string | null>(null); // 현재 재생 중인 사회자 이름
+  const [playingAudio, setPlayingAudio] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const toggleAudio = useCallback((mc: MC) => {
+    const src = mc.audioFile;
+    if (!src) return;
+
+    if (playingAudio === mc.name) {
+      // 같은 사회자 → 정지
+      audioRef.current?.pause();
+      if (audioRef.current) audioRef.current.currentTime = 0;
+      setPlayingAudio(null);
+    } else {
+      // 다른 사회자 or 새로 재생
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      const audio = new Audio(src);
+      audio.play().catch(() => {});
+      audio.onended = () => setPlayingAudio(null);
+      audioRef.current = audio;
+      setPlayingAudio(mc.name);
+    }
+  }, [playingAudio]);
 
   const handleFilterChange = useCallback((filter: string) => {
     if (filter === activeFilter) return;
@@ -541,12 +572,12 @@ export default function McSection() {
 
 
 
-                  {/* 소리 재생 버튼 - youtubeId 있는 경우만 표시 */}
-                  {mc.youtubeId && (
+                  {/* 소리 재생 버튼 - audioFile 있는 경우만 표시 */}
+                  {mc.audioFile && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        setPlayingAudio(playingAudio === mc.name ? null : mc.name);
+                        toggleAudio(mc);
                       }}
                       className="absolute top-3 right-3 z-20 flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300"
                       style={{
@@ -617,24 +648,7 @@ export default function McSection() {
                     </button>
                   )}
 
-                  {/* 오디오 iframe - 화면 밖에 배치하여 소리 재생 */}
-                  {mc.youtubeId && playingAudio === mc.name && (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${mc.youtubeId}?autoplay=1&mute=0&rel=0&playsinline=1`}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
-                      style={{
-                        position: "fixed",
-                        top: "-9999px",
-                        left: "-9999px",
-                        width: "320px",
-                        height: "180px",
-                        opacity: 0,
-                        pointerEvents: "none",
-                        zIndex: -1,
-                      }}
-                      title="오디오 재생"
-                    />
-                  )}
+
 
                   <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
                     {/* 스타일 태그 - 한 줄 고정 */}

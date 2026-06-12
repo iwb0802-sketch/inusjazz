@@ -61,10 +61,10 @@ const InstagramIcon = () => (
 
 const snsLinks = [
   {
-    label: "네이버블로그",
-    href: "https://blog.naver.com/inusmusics",
-    icon: NaverBlogIcon,
-    isLucide: false,
+    label: "홈페이지",
+    href: "http://inusmusic.com/",
+    icon: Globe,
+    isLucide: true,
   },
   {
     label: "인스타그램",

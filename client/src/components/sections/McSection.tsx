@@ -484,13 +484,16 @@ export default function McSection() {
                 }}
               >
                 {/* Profile Image */}
-                <div className="relative overflow-hidden" style={{ height: "320px" }}>
-                  <img
-                    src={mc.image}
-                    alt={mc.name}
-                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#161616] via-[#161616]/30 to-transparent" />
+                <div className="relative" style={{ height: "320px", overflow: "visible" }}>
+                  {/* 이미지 클립 컨테이너 */}
+                  <div className="absolute inset-0 overflow-hidden rounded-t-sm">
+                    <img
+                      src={mc.image}
+                      alt={mc.name}
+                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#161616] via-[#161616]/30 to-transparent" />
+                  </div>
 
 
 

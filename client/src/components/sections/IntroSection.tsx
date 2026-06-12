@@ -1,5 +1,5 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Calendar, FileText, Users } from "lucide-react";
+import { Calendar, FileText, Users, ShieldCheck, ScrollText, Zap } from "lucide-react";
 import CountUpNumber from "@/components/CountUpNumber";
 
 export default function IntroSection() {
@@ -9,7 +9,9 @@ export default function IntroSection() {
   const anim4 = useScrollAnimation();
 
   return (
-    <section id="intro" className="bg-[#0d0d0d] py-24 sm:py-32 lg:py-40">
+    <section id="intro" className="bg-[#0d0d0d] py-24 sm:py-32 lg:py-40 relative">
+      {/* 상단 Hero → Intro 전환 그라데이션 */}
+      <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none" style={{ background: "linear-gradient(to bottom, #050505 0%, transparent 100%)" }} />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
         {/* Top badge */}
         <div ref={anim1.ref} className={`fade-up ${anim1.isVisible ? "visible" : ""}`}>
@@ -41,71 +43,83 @@ export default function IntroSection() {
         <div ref={anim3.ref} className={`fade-up ${anim3.isVisible ? "visible" : ""}`}>
           <div className="mt-16 sm:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
             {/* SINCE 2015 */}
-            <div className="relative border border-white/10 rounded-sm px-6 py-8 sm:py-10 hover:border-[#5BB5A2]/30 transition-all duration-500 group">
-              <div className="flex justify-center mb-5">
-                <div className="w-12 h-12 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center group-hover:bg-[#5BB5A2]/20 transition-colors duration-500">
-                  <Calendar size={22} className="text-[#5BB5A2]" />
+            <div className="relative rounded-sm px-6 py-10 sm:py-12 hover:border-[#d4b896]/30 transition-all duration-500 group overflow-hidden"
+              style={{ background: "linear-gradient(145deg, rgba(212,184,150,0.06) 0%, rgba(212,184,150,0.02) 100%)", border: "1px solid rgba(212,184,150,0.12)" }}>
+              <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(212,184,150,0.4), transparent)" }} />
+              <div className="flex justify-center mb-6">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "rgba(212,184,150,0.10)", border: "1px solid rgba(212,184,150,0.20)" }}>
+                  <Calendar size={24} className="text-[#d4b896]" />
                 </div>
               </div>
               <p
-                className="text-[#5BB5A2] text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight"
+                className="text-[#d4b896] text-4xl sm:text-5xl font-bold tracking-tight"
                 style={{ fontFamily: "'Cormorant Garamond', serif" }}
               >
-                SINCE 2015
+                2015
               </p>
+              <div className="w-8 h-px bg-[#d4b896]/25 mx-auto my-3" />
+              <p className="text-white/35 text-xs tracking-[0.2em] uppercase mb-2" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Since</p>
               <p
-                className="text-white text-base sm:text-lg font-semibold mt-3"
+                className="text-white text-sm sm:text-base font-semibold"
                 style={{ fontFamily: "'Noto Serif KR', serif" }}
               >
-                10년 이상 축적된 웨딩 진행 경험
+                10년 이상 웨딩 진행 경험
               </p>
             </div>
 
             {/* 본식 후기 1,000건 */}
-            <div className="relative border border-white/10 rounded-sm px-6 py-8 sm:py-10 hover:border-[#5BB5A2]/30 transition-all duration-500 group">
-              <div className="flex justify-center mb-5">
-                <div className="w-12 h-12 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center group-hover:bg-[#5BB5A2]/20 transition-colors duration-500">
-                  <FileText size={22} className="text-[#5BB5A2]" />
+            <div className="relative rounded-sm px-6 py-10 sm:py-12 hover:border-[#d4b896]/30 transition-all duration-500 group overflow-hidden"
+              style={{ background: "linear-gradient(145deg, rgba(212,184,150,0.06) 0%, rgba(212,184,150,0.02) 100%)", border: "1px solid rgba(212,184,150,0.12)" }}>
+              <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(212,184,150,0.4), transparent)" }} />
+              <div className="flex justify-center mb-6">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "rgba(212,184,150,0.10)", border: "1px solid rgba(212,184,150,0.20)" }}>
+                  <FileText size={24} className="text-[#d4b896]" />
                 </div>
               </div>
-              <p className="text-[#5BB5A2] text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+              <p className="text-[#d4b896] text-4xl sm:text-5xl font-bold tracking-tight" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
                 <CountUpNumber
                   targetNumber={1000}
                   duration={2000}
-                  className="text-[#5BB5A2]"
+                  className="text-[#d4b896]"
                   style={{ fontFamily: "'Cormorant Garamond', serif" }}
                 />
-                <span className="text-lg sm:text-xl lg:text-2xl text-white/60 ml-1">건 이상</span>
+                <span className="text-xl text-white/40 ml-1">+</span>
               </p>
+              <div className="w-8 h-px bg-[#d4b896]/25 mx-auto my-3" />
+              <p className="text-white/35 text-xs tracking-[0.2em] uppercase mb-2" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Reviews</p>
               <p
-                className="text-white text-base sm:text-lg font-semibold mt-3"
+                className="text-white text-sm sm:text-base font-semibold"
                 style={{ fontFamily: "'Noto Serif KR', serif" }}
               >
-                실제 고객이 남긴 본식 후기
+                실제 고객 본식 후기
               </p>
             </div>
 
             {/* 40,000쌍 이상 */}
-            <div className="relative border border-white/10 rounded-sm px-6 py-8 sm:py-10 hover:border-[#5BB5A2]/30 transition-all duration-500 group">
-              <div className="flex justify-center mb-5">
-                <div className="w-12 h-12 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center group-hover:bg-[#5BB5A2]/20 transition-colors duration-500">
-                  <Users size={22} className="text-[#5BB5A2]" />
+            <div className="relative rounded-sm px-6 py-10 sm:py-12 hover:border-[#d4b896]/30 transition-all duration-500 group overflow-hidden"
+              style={{ background: "linear-gradient(145deg, rgba(212,184,150,0.06) 0%, rgba(212,184,150,0.02) 100%)", border: "1px solid rgba(212,184,150,0.12)" }}>
+              <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(212,184,150,0.4), transparent)" }} />
+              <div className="flex justify-center mb-6">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "rgba(212,184,150,0.10)", border: "1px solid rgba(212,184,150,0.20)" }}>
+                  <Users size={24} className="text-[#d4b896]" />
                 </div>
               </div>
-              <p className="text-[#5BB5A2] text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+              <p className="text-[#d4b896] text-4xl sm:text-5xl font-bold tracking-tight" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
                 <CountUpNumber
                   targetNumber={40000}
                   duration={2000}
-                  className="text-[#5BB5A2]"
+                  className="text-[#d4b896]"
                   style={{ fontFamily: "'Cormorant Garamond', serif" }}
                 />
-                <span className="text-lg sm:text-xl lg:text-2xl text-white/60 ml-1">쌍 이상</span>
+                <span className="text-xl text-white/40 ml-1">+</span>
               </p>
+              <div className="w-8 h-px bg-[#d4b896]/25 mx-auto my-3" />
+              <p className="text-white/35 text-xs tracking-[0.2em] uppercase mb-2" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Couples</p>
               <p
-                className="text-white text-base sm:text-lg font-semibold mt-3"
+                className="text-white text-sm sm:text-base font-semibold"
                 style={{ fontFamily: "'Noto Serif KR', serif" }}
               >
-                오랜 시간 축적된 운영 노하우
+                함께한 소중한 예식
               </p>
             </div>
           </div>
@@ -125,18 +139,26 @@ export default function IntroSection() {
           </p>
 
           {/* Trust badges */}
-          <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
             {[
-              { label: "No-show 걱정 없는", sub: "철저한 인력 관리" },
-              { label: "전속 계약 시스템으로", sub: "100% 책임 진행" },
-              { label: "돌발 상황에도", sub: "완벽 대응" },
-            ].map((item, i) => (
+              { Icon: ShieldCheck, label: "No-show 걱정 없는", sub: "철저한 인력 관리 시스템", color: "#d4b896" },
+              { Icon: ScrollText, label: "전속 계약 시스템으로", sub: "100% 책임 진행 보장", color: "#d4b896" },
+              { Icon: Zap, label: "돌발 상황에도", sub: "즉각적인 완벽 대응", color: "#d4b896" },
+            ].map(({ Icon, label, sub, color }, i) => (
               <div
                 key={i}
-                className="border border-white/10 rounded-sm px-8 py-7 hover:border-[#5BB5A2]/30 transition-colors duration-500"
+                className="group relative overflow-hidden rounded-sm px-6 py-6 sm:py-8 transition-all duration-500 hover:-translate-y-0.5"
+                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
               >
-                <p className="text-white text-base sm:text-lg font-semibold">{item.label}</p>
-                <p className="text-white/60 text-sm sm:text-base mt-2">{item.sub}</p>
+                <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(to right, transparent, ${color}55, transparent)` }} />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: "linear-gradient(145deg, rgba(212,184,150,0.05) 0%, transparent 100%)" }} />
+                <div className="flex justify-center mb-4">
+                  <div className="w-11 h-11 rounded-full flex items-center justify-center" style={{ background: "rgba(212,184,150,0.10)", border: "1px solid rgba(212,184,150,0.20)" }}>
+                    <Icon size={20} style={{ color }} />
+                  </div>
+                </div>
+                <p className="text-white text-sm sm:text-base font-semibold leading-snug" style={{ fontFamily: "'Noto Serif KR', serif" }}>{label}</p>
+                <p className="text-white/50 text-xs sm:text-sm mt-2">{sub}</p>
               </div>
             ))}
           </div>

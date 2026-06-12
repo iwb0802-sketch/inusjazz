@@ -36,6 +36,9 @@ export default function RecommendSection() {
 
   return (
     <section className="bg-[#0d0d0d] py-24 sm:py-32 lg:py-36 relative overflow-hidden">
+
+      {/* 하단 페이드아웃 */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none" style={{ background: "linear-gradient(to bottom, transparent 0%, #0d0d0d 100%)" }} />
       {/* Subtle background accent */}
       <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#5BB5A2] blur-[200px]" />
@@ -60,24 +63,42 @@ export default function RecommendSection() {
 
         {/* 2x2 Card Grid */}
         <div ref={anim2.ref} className={`fade-up ${anim2.isVisible ? "visible" : ""}`}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             {RECOMMEND_ITEMS.map((item, i) => (
               <div
                 key={i}
-                className="group border border-white/10 rounded-sm p-6 sm:p-8 hover:border-[#5BB5A2]/40 transition-all duration-500"
+                className="group relative overflow-hidden rounded-sm p-6 sm:p-8 transition-all duration-500 hover:-translate-y-0.5"
+                style={{
+                  background: "linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
               >
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center group-hover:bg-[#5BB5A2]/20 transition-colors duration-500">
-                    <item.icon size={18} className="text-[#5BB5A2]" />
+                {/* 상단 라인 강조 */}
+                <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: "linear-gradient(to right, transparent, rgba(91,181,162,0.6), transparent)" }} />
+                {/* hover 배경 */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: "linear-gradient(145deg, rgba(91,181,162,0.05) 0%, transparent 100%)" }} />
+
+                <div className="relative flex items-start gap-5">
+                  {/* 아이콘 번호 배지 */}
+                  <div className="flex-shrink-0 flex flex-col items-center gap-2">
+                    <div className="w-11 h-11 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110"
+                      style={{ background: "rgba(91,181,162,0.1)", border: "1px solid rgba(91,181,162,0.2)" }}>
+                      <item.icon size={19} className="text-[#5BB5A2]" />
+                    </div>
+                    <span className="text-[#5BB5A2]/40 text-[10px] tracking-widest" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                      0{i + 1}
+                    </span>
                   </div>
-                  <div>
+                  <div className="pt-1">
                     <h3
                       className="text-white text-sm sm:text-base font-semibold leading-snug"
                       style={{ fontFamily: "'Noto Serif KR', serif" }}
                     >
                       {item.title}
                     </h3>
-                    <p className="text-white/50 text-xs sm:text-sm mt-1.5 leading-relaxed">
+                    <p className="text-white/45 text-xs sm:text-sm mt-2 leading-relaxed">
                       {item.sub}
                     </p>
                   </div>

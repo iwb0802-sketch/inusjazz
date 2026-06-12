@@ -468,7 +468,7 @@ export default function McSection() {
             {filteredMcs.map((mc, mcIndex) => (
               <div
                 key={mc.name}
-                className="group relative bg-[#161616] border rounded-sm overflow-hidden transition-all duration-500 border-white/5 hover:border-[#5BB5A2]/40 hover:shadow-lg hover:shadow-[#5BB5A2]/5 cursor-pointer flex flex-col"
+                className="group relative bg-[#161616] border rounded-sm transition-all duration-500 border-white/5 hover:border-[#5BB5A2]/40 hover:shadow-lg hover:shadow-[#5BB5A2]/5 cursor-pointer flex flex-col"
                 onClick={() => {
                   const profileMap: Record<string, string> = {
                     "이우영": "/profile-wooyoung.html",
@@ -502,46 +502,7 @@ export default function McSection() {
                     </span>
                   </div>
 
-                  {/* 첫 번째 카드에만 말풍선 툴팁 */}
-                  {mc.youtubeId && mcIndex === 0 && playingAudio === null && (
-                    <div
-                      className="absolute z-20 pointer-events-none"
-                      style={{
-                        top: "-52px",
-                        right: "0px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          background: "rgba(255,255,255,0.88)",
-                          backdropFilter: "blur(8px)",
-                          borderRadius: "10px",
-                          padding: "7px 11px",
-                          fontSize: "10px",
-                          color: "#1a1a1a",
-                          fontWeight: 600,
-                          whiteSpace: "nowrap",
-                          fontFamily: "'Noto Sans KR', sans-serif",
-                          boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
-                        }}
-                      >
-                        클릭하면 목소리 확인 가능
-                      </div>
-                      {/* 말풍선 꼬리 */}
-                      <div
-                        style={{
-                          position: "absolute",
-                          bottom: "-7px",
-                          right: "14px",
-                          width: 0,
-                          height: 0,
-                          borderLeft: "7px solid transparent",
-                          borderRight: "7px solid transparent",
-                          borderTop: "7px solid rgba(255,255,255,0.88)",
-                        }}
-                      />
-                    </div>
-                  )}
+
 
                   {/* 소리 재생 버튼 - youtubeId 있는 경우만 표시 */}
                   {mc.youtubeId && (
@@ -550,14 +511,51 @@ export default function McSection() {
                         e.stopPropagation();
                         setPlayingAudio(playingAudio === mc.name ? null : mc.name);
                       }}
-                      className="absolute top-3 right-3 z-10 flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300"
+                      className="absolute top-3 right-3 z-20 flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300"
                       style={{
+                        overflow: "visible",
                         background: playingAudio === mc.name ? "rgba(91,181,162,0.9)" : "rgba(11,11,11,0.75)",
                         border: playingAudio === mc.name ? "1px solid #5BB5A2" : "1px solid rgba(255,255,255,0.2)",
                         backdropFilter: "blur(8px)",
                       }}
                       title="목소리 듣기"
                     >
+                      {/* 첫 번째 카드 + 재생 안 한 말풍선 툴팁 */}
+                      {mcIndex === 0 && playingAudio !== mc.name && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            bottom: "calc(100% + 10px)",
+                            right: "0",
+                            background: "rgba(255,255,255,0.92)",
+                            backdropFilter: "blur(8px)",
+                            borderRadius: "8px",
+                            padding: "6px 10px",
+                            fontSize: "10px",
+                            color: "#111",
+                            fontWeight: 600,
+                            whiteSpace: "nowrap",
+                            fontFamily: "'Noto Sans KR', sans-serif",
+                            boxShadow: "0 2px 12px rgba(0,0,0,0.2)",
+                            pointerEvents: "none",
+                            zIndex: 50,
+                          }}
+                        >
+                          클릭시 목소리 먼저 확인 가능
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "100%",
+                              right: "12px",
+                              width: 0,
+                              height: 0,
+                              borderLeft: "6px solid transparent",
+                              borderRight: "6px solid transparent",
+                              borderTop: "6px solid rgba(255,255,255,0.92)",
+                            }}
+                          />
+                        </div>
+                      )}
                       {playingAudio === mc.name ? (
                         /* 파동 애니메이션 */
                         <div className="flex items-end gap-[2px] h-4">

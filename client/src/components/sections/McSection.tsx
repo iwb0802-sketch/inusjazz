@@ -3,9 +3,9 @@
  * Design: Dark background, large profile photos with slide navigation
  * Uses Embla Carousel (already in dependencies)
  */
-import React, { useCallback, useEffect, useState } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import useEmblaCarousel from "embla-carousel-react";
+import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, X, ExternalLink } from "lucide-react";
 
 const MCS = [
@@ -466,48 +466,6 @@ export default function McSection() {
           {/* Grid Layout */}
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {filteredMcs.map((mc, mcIndex) => (
-              <React.Fragment key={mc.name}>
-              {/* 첫 번째 카드 툴팁 - 카드 위에 절대 위치로 표시 */}
-              {mcIndex === 0 && mc.youtubeId && playingAudio !== mc.name && (
-                <div
-                  className="absolute pointer-events-none"
-                  style={{ bottom: "calc(100% + 8px)", right: "0", zIndex: 60 }}
-                >
-                  <div
-                    style={{
-                      background: "rgba(10,10,10,0.82)",
-                      backdropFilter: "blur(16px)",
-                      WebkitBackdropFilter: "blur(16px)",
-                      borderRadius: "12px",
-                      padding: "10px 14px",
-                      color: "rgba(255,255,255,0.9)",
-                      whiteSpace: "nowrap",
-                      fontFamily: "'Noto Serif KR', serif",
-                      fontSize: "11px",
-                      fontWeight: 500,
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      boxShadow: "0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(91,181,162,0.25)",
-                    }}
-                  >
-                    <div style={{ color: "#5BB5A2", fontSize: "9px", letterSpacing: "0.15em", marginBottom: "4px", fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic" }}>VOICE PREVIEW</div>
-                    <div>클릭하면 목소리</div>
-                    <div>먼저 확인 가능</div>
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "100%",
-                        right: "20px",
-                        width: 0,
-                        height: 0,
-                        borderLeft: "7px solid transparent",
-                        borderRight: "7px solid transparent",
-                        borderTop: "7px solid rgba(10,10,10,0.82)",
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
               <div
                 key={mc.name}
                 className="group relative bg-[#161616] border rounded-sm transition-all duration-500 border-white/5 hover:border-[#5BB5A2]/40 hover:shadow-lg hover:shadow-[#5BB5A2]/5 cursor-pointer flex flex-col"
@@ -565,7 +523,48 @@ export default function McSection() {
                       }}
                       title="목소리 듣기"
                     >
-
+                      {/* 첫 번째 카드 말풍선 툴팁 - 카드 위로 완전히 올려서 표시 */}
+                      {mcIndex === 0 && playingAudio !== mc.name && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            bottom: "calc(100% + 12px)",
+                            right: "0px",
+                            background: "rgba(10,10,10,0.78)",
+                            backdropFilter: "blur(16px)",
+                            WebkitBackdropFilter: "blur(16px)",
+                            borderRadius: "12px",
+                            padding: "10px 14px",
+                            color: "rgba(255,255,255,0.9)",
+                            whiteSpace: "nowrap",
+                            fontFamily: "'Noto Serif KR', serif",
+                            fontSize: "11px",
+                            fontWeight: 500,
+                            lineHeight: 1.6,
+                            textAlign: "center",
+                            boxShadow: "0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(91,181,162,0.25)",
+                            pointerEvents: "none",
+                            zIndex: 50,
+                          }}
+                        >
+                          <div style={{ color: "#5BB5A2", fontSize: "9px", letterSpacing: "0.15em", marginBottom: "4px", fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic" }}>VOICE PREVIEW</div>
+                          <div style={{ fontSize: "11px" }}>클릭하면 목소리</div>
+                          <div style={{ fontSize: "11px" }}>먼저 확인 가능</div>
+                          {/* 말풍선 꼬리 */}
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "100%",
+                              right: "14px",
+                              width: 0,
+                              height: 0,
+                              borderLeft: "7px solid transparent",
+                              borderRight: "7px solid transparent",
+                              borderTop: "7px solid rgba(10,10,10,0.78)",
+                            }}
+                          />
+                        </div>
+                      )}
                       {playingAudio === mc.name ? (
                         /* 파동 애니메이션 */
                         <div className="flex items-end gap-[2px] h-4">
@@ -691,7 +690,6 @@ export default function McSection() {
                   </button>
                 </div>
               </div>
-              </React.Fragment>
             ))}
           </div>
         </div>

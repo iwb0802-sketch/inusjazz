@@ -523,46 +523,53 @@ export default function McSection() {
                       }}
                       title="목소리 듣기"
                     >
-                      {/* 첫 번째 카드 말풍선 툴팁 - 카드 위로 완전히 올려서 표시 */}
+                      {/* 첫 번째 카드 툴팁 */}
                       {mcIndex === 0 && playingAudio !== mc.name && (
                         <div
                           style={{
                             position: "absolute",
-                            bottom: "calc(100% + 12px)",
-                            right: "0px",
-                            background: "rgba(10,10,10,0.78)",
-                            backdropFilter: "blur(16px)",
-                            WebkitBackdropFilter: "blur(16px)",
-                            borderRadius: "12px",
-                            padding: "10px 14px",
-                            color: "rgba(255,255,255,0.9)",
+                            bottom: "calc(100% + 20px)",
+                            right: "-4px",
+                            background: "rgba(8,8,8,0.82)",
+                            backdropFilter: "blur(20px)",
+                            WebkitBackdropFilter: "blur(20px)",
+                            borderRadius: "10px",
+                            padding: "11px 16px",
+                            color: "rgba(255,255,255,0.88)",
                             whiteSpace: "nowrap",
-                            fontFamily: "'Noto Serif KR', serif",
-                            fontSize: "11px",
-                            fontWeight: 500,
-                            lineHeight: 1.6,
+                            fontSize: "11.5px",
+                            fontWeight: 400,
+                            lineHeight: 1.75,
                             textAlign: "center",
-                            boxShadow: "0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(91,181,162,0.25)",
+                            border: "1px solid rgba(91,181,162,0.22)",
+                            boxShadow: "0 12px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(91,181,162,0.08)",
                             pointerEvents: "none",
                             zIndex: 50,
+                            animation: "tooltipFadeIn 0.4s cubic-bezier(0.23,1,0.32,1) both",
                           }}
                         >
-                          <div style={{ color: "#5BB5A2", fontSize: "9px", letterSpacing: "0.15em", marginBottom: "4px", fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic" }}>VOICE PREVIEW</div>
-                          <div style={{ fontSize: "11px" }}>클릭하면 목소리</div>
-                          <div style={{ fontSize: "11px" }}>먼저 확인 가능</div>
+                          <div style={{
+                            color: "#5BB5A2",
+                            fontSize: "9px",
+                            letterSpacing: "0.22em",
+                            marginBottom: "6px",
+                            fontFamily: "'Cormorant Garamond', serif",
+                            fontStyle: "italic",
+                            opacity: 0.9,
+                          }}>VOICE PREVIEW</div>
+                          <div style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: "11.5px", color: "rgba(255,255,255,0.75)", letterSpacing: "0.02em" }}>클릭하면 목소리를</div>
+                          <div style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: "11.5px", color: "rgba(255,255,255,0.75)", letterSpacing: "0.02em" }}>미리 들을 수 있어요</div>
                           {/* 말풍선 꼬리 */}
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: "100%",
-                              right: "14px",
-                              width: 0,
-                              height: 0,
-                              borderLeft: "7px solid transparent",
-                              borderRight: "7px solid transparent",
-                              borderTop: "7px solid rgba(10,10,10,0.78)",
-                            }}
-                          />
+                          <div style={{
+                            position: "absolute",
+                            top: "100%",
+                            right: "18px",
+                            width: 0,
+                            height: 0,
+                            borderLeft: "6px solid transparent",
+                            borderRight: "6px solid transparent",
+                            borderTop: "6px solid rgba(8,8,8,0.82)",
+                          }} />
                         </div>
                       )}
                       {playingAudio === mc.name ? (

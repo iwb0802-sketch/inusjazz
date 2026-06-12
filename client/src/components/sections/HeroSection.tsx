@@ -82,14 +82,15 @@ export default function HeroSection() {
             loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <a
-            href="https://pf.kakao.com/_wxovaM/chat"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => {
+              const el = document.getElementById('mc');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
             className="px-8 py-4 bg-[#5BB5A2] text-white text-sm sm:text-base tracking-wider hover:bg-[#4da393] transition-all duration-300 rounded-sm"
           >
-            무료 상담 시작하기
-          </a>
+            사회자 선택하기
+          </button>
           <a
             href="#intro"
             className="px-8 py-4 border border-white/30 text-white text-sm sm:text-base tracking-wider hover:bg-white/10 transition-all duration-300 rounded-sm"

@@ -468,7 +468,19 @@ export default function McSection() {
               <div
                 key={mc.name}
                 className="group relative bg-[#161616] border rounded-sm overflow-hidden transition-all duration-500 border-white/5 hover:border-[#5BB5A2]/40 hover:shadow-lg hover:shadow-[#5BB5A2]/5 cursor-pointer"
-                onClick={() => setSelectedMc(mc)}
+                onClick={() => {
+                  const profileMap: Record<string, string> = {
+                    "이우영": "/profile-wooyoung.html",
+                    "김선혁": "/profile-sunhyuk.html",
+                    "고승범": "/profile-seungbeom.html",
+                    "장윤태": "/profile-yuntae.html",
+                    "이도영": "/profile-idoyoung.html",
+                    "석재선": "/profile-jaesun.html",
+                    "김민수": "/profile-minsu.html",
+                  };
+                  if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
+                  else setSelectedMc(mc);
+                }}
               >
                 {/* Profile Image */}
                 <div className="relative aspect-[3/4] overflow-hidden">

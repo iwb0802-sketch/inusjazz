@@ -502,18 +502,21 @@ export default function McSection() {
                   </div>
 
                   <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
-                    {/* 스타일 태그 */}
-                    <div className="flex flex-wrap gap-1 mb-2">
+                    {/* 스타일 태그 - 한 줄 고정 */}
+                    <div className="flex flex-nowrap gap-1 mb-2 overflow-hidden">
                       {mc.styles.slice(0, 3).map((style) => (
                         <span
                           key={style}
-                          className="inline-flex items-center px-2 py-0.5 text-[10px] tracking-wide"
+                          className="inline-flex items-center flex-shrink-0 px-1.5 py-0.5"
                           style={{
                             fontFamily: "'Noto Sans KR', sans-serif",
-                            background: "rgba(11,11,11,0.7)",
+                            fontSize: "9px",
+                            letterSpacing: "0.02em",
+                            background: "rgba(11,11,11,0.75)",
                             border: "1px solid rgba(214,177,107,0.4)",
                             color: "#d4b896",
                             backdropFilter: "blur(4px)",
+                            whiteSpace: "nowrap",
                           }}
                         >
                           {style}

@@ -19,7 +19,7 @@ const MCS = [
     highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223996383838",
     styles: ["품격형", "아나운서형"],
-    youtubeId: "",
+    youtubeId: "YmqVrha13G0",
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/DyhPmZzlNmUwZcsY.png",
   },
   {
@@ -32,7 +32,7 @@ const MCS = [
     highlight: "자연스럽고 세련된 진행 스타일이 특징입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223235771542",
     styles: ["품격형", "아나운서형"],
-    youtubeId: "",
+    youtubeId: "iKi77thkR4s",
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/SPAinOSuRkaiNJTx.png",
   },
   {
@@ -97,7 +97,7 @@ const MCS = [
     highlight: "안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",
     styles: ["품격형", "감동형"],
-    youtubeId: "",
+    youtubeId: "U5cJiiF-WcY",
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/BzyEbfDYgsDXpYvx.png",
   },
 ];
@@ -539,13 +539,21 @@ export default function McSection() {
                     </button>
                   )}
 
-                  {/* 숨겨진 유튜브 오디오 iframe */}
+                  {/* 오디오 iframe - 화면 밖에 배치하여 소리 재생 */}
                   {mc.youtubeId && playingAudio === mc.name && (
                     <iframe
-                      src={`https://www.youtube.com/embed/${mc.youtubeId}?autoplay=1&mute=0&rel=0&playsinline=1&enablejsapi=1`}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media"
-                      className="absolute"
-                      style={{ width: 1, height: 1, opacity: 0, pointerEvents: "none", top: 0, left: 0 }}
+                      src={`https://www.youtube.com/embed/${mc.youtubeId}?autoplay=1&mute=0&rel=0&playsinline=1`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+                      style={{
+                        position: "fixed",
+                        top: "-9999px",
+                        left: "-9999px",
+                        width: "320px",
+                        height: "180px",
+                        opacity: 0,
+                        pointerEvents: "none",
+                        zIndex: -1,
+                      }}
                       title="오디오 재생"
                     />
                   )}

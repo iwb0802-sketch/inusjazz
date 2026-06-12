@@ -465,7 +465,7 @@ export default function McSection() {
 
           {/* Grid Layout */}
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {filteredMcs.map((mc) => (
+            {filteredMcs.map((mc, mcIndex) => (
               <div
                 key={mc.name}
                 className="group relative bg-[#161616] border rounded-sm overflow-hidden transition-all duration-500 border-white/5 hover:border-[#5BB5A2]/40 hover:shadow-lg hover:shadow-[#5BB5A2]/5 cursor-pointer flex flex-col"
@@ -501,6 +501,47 @@ export default function McSection() {
                       {mc.tier}
                     </span>
                   </div>
+
+                  {/* 첫 번째 카드에만 말풍선 툴팁 */}
+                  {mc.youtubeId && mcIndex === 0 && playingAudio === null && (
+                    <div
+                      className="absolute z-20 pointer-events-none"
+                      style={{
+                        top: "-52px",
+                        right: "0px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          background: "rgba(255,255,255,0.88)",
+                          backdropFilter: "blur(8px)",
+                          borderRadius: "10px",
+                          padding: "7px 11px",
+                          fontSize: "10px",
+                          color: "#1a1a1a",
+                          fontWeight: 600,
+                          whiteSpace: "nowrap",
+                          fontFamily: "'Noto Sans KR', sans-serif",
+                          boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
+                        }}
+                      >
+                        클릭하면 목소리 확인 가능
+                      </div>
+                      {/* 말풍선 꼬리 */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: "-7px",
+                          right: "14px",
+                          width: 0,
+                          height: 0,
+                          borderLeft: "7px solid transparent",
+                          borderRight: "7px solid transparent",
+                          borderTop: "7px solid rgba(255,255,255,0.88)",
+                        }}
+                      />
+                    </div>
+                  )}
 
                   {/* 소리 재생 버튼 - youtubeId 있는 경우만 표시 */}
                   {mc.youtubeId && (

@@ -467,7 +467,7 @@ export default function McSection() {
             {filteredMcs.map((mc) => (
               <div
                 key={mc.name}
-                className="group relative bg-[#161616] border rounded-sm overflow-hidden transition-all duration-500 border-white/5 hover:border-[#5BB5A2]/40 hover:shadow-lg hover:shadow-[#5BB5A2]/5 cursor-pointer"
+                className="group relative bg-[#161616] border rounded-sm overflow-hidden transition-all duration-500 border-white/5 hover:border-[#5BB5A2]/40 hover:shadow-lg hover:shadow-[#5BB5A2]/5 cursor-pointer flex flex-col"
                 onClick={() => {
                   const profileMap: Record<string, string> = {
                     "이우영": "/profile-wooyoung.html",
@@ -513,12 +513,12 @@ export default function McSection() {
                 </div>
 
                 {/* Info */}
-                <div className="p-3 sm:p-4 flex flex-col" style={{ minHeight: "160px" }}>
+                <div className="p-3 sm:p-4 flex flex-col flex-1">
                   <p className="text-white/60 text-xs sm:text-sm leading-relaxed mb-3">
                     {mc.highlight}
                   </p>
 
-                  <div className="space-y-1.5 mb-4 flex-grow">
+                  <div className="space-y-1.5 mb-4 flex-1">
                     {mc.tags.slice(0, 2).map((tag, j) => (
                       <div key={j} className="flex items-center gap-2 text-white/50 text-xs">
                         <span className="w-0.5 h-0.5 rounded-full bg-[#5BB5A2] flex-shrink-0" />
@@ -543,7 +543,7 @@ export default function McSection() {
                       if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
                       else setSelectedMc(mc);
                     }}
-                    className="relative flex items-center justify-center gap-1.5 w-full py-2.5 text-xs tracking-wider font-medium overflow-hidden group transition-all duration-300"
+                    className="mt-auto relative flex items-center justify-center gap-1.5 w-full py-2.5 text-xs tracking-wider font-medium overflow-hidden group transition-all duration-300"
                     style={{
                       fontFamily: "'Cormorant Garamond', serif",
                       fontSize: "11px",

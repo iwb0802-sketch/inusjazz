@@ -1,6 +1,6 @@
 /*
  * ReviewSection — 고객님들의 생생한 후기
- * Design: Dark bg (#1a1a1a), mint/gold accents
+ * Design: Dark bg (#1a1a1a), gold accents throughout
  * Auto-sliding image carousel with smooth transitions
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
@@ -16,6 +16,8 @@ const REVIEW_IMAGES = [
   { src: "/images/review6_4590abae.jpg", alt: "고객 후기 6" },
   { src: "/images/review7_e35c2a63.jpg", alt: "고객 후기 7" },
 ];
+
+const GOLD = "#d4b896";
 
 export default function ReviewSection() {
   const anim1 = useScrollAnimation();
@@ -70,14 +72,12 @@ export default function ReviewSection() {
 
   return (
     <section id="review" className="relative bg-[#1a1a1a] py-24 sm:py-32 lg:py-40 overflow-hidden">
-
-
-      {/* Subtle background pattern */}
+      {/* Subtle background pattern — gold only */}
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 20% 50%, #5BB5A2 0%, transparent 60%), radial-gradient(circle at 80% 50%, #d4b896 0%, transparent 60%)",
+            "radial-gradient(circle at 20% 50%, #d4b896 0%, transparent 60%), radial-gradient(circle at 80% 50%, #c9a87a 0%, transparent 60%)",
         }}
       />
 
@@ -87,9 +87,13 @@ export default function ReviewSection() {
           ref={anim1.ref}
           className={`text-center mb-14 sm:mb-16 fade-up ${anim1.isVisible ? "visible" : ""}`}
         >
-          {/* Icon badge */}
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#5BB5A2]/10 border border-[#5BB5A2]/20 mb-5">
-            <MessageSquare size={20} className="text-[#5BB5A2]" />
+          {/* Icon badge — gold */}
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full mb-5"
+            style={{
+              background: "rgba(212,184,150,0.10)",
+              border: "1px solid rgba(212,184,150,0.25)",
+            }}>
+            <MessageSquare size={20} style={{ color: GOLD }} />
           </div>
 
           <span
@@ -102,7 +106,7 @@ export default function ReviewSection() {
             className="text-white text-2xl sm:text-3xl md:text-4xl"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            고객님들의 <span className="text-[#5BB5A2]">생생한 후기</span>
+            고객님들의 <span style={{ color: GOLD }}>생생한 후기</span>
           </h2>
           <p className="mt-4 text-white/50 text-sm sm:text-base max-w-sm mx-auto leading-relaxed">
             실제 예식을 진행하신 신랑, 신부님의 카카오톡 후기입니다
@@ -131,11 +135,28 @@ export default function ReviewSection() {
           >
             {/* Main carousel area */}
             <div className="relative flex items-center justify-center">
-              {/* Left arrow */}
+              {/* Left arrow — gold hover */}
               <button
                 onClick={prev}
                 aria-label="이전 후기"
-                className="absolute left-0 sm:-left-2 lg:-left-14 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/8 backdrop-blur-sm border border-white/15 flex items-center justify-center text-white/60 hover:bg-[#5BB5A2]/25 hover:text-[#5BB5A2] hover:border-[#5BB5A2]/50 hover:shadow-[0_0_16px_rgba(91,181,162,0.3)] transition-all duration-300"
+                className="absolute left-0 sm:-left-2 lg:-left-14 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full backdrop-blur-sm flex items-center justify-center transition-all duration-300"
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  color: "rgba(255,255,255,0.55)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(212,184,150,0.20)";
+                  (e.currentTarget as HTMLButtonElement).style.border = "1px solid rgba(212,184,150,0.50)";
+                  (e.currentTarget as HTMLButtonElement).style.color = GOLD;
+                  (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 16px rgba(212,184,150,0.25)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.05)";
+                  (e.currentTarget as HTMLButtonElement).style.border = "1px solid rgba(255,255,255,0.12)";
+                  (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.55)";
+                  (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
+                }}
               >
                 <ChevronLeft size={20} />
               </button>
@@ -149,14 +170,14 @@ export default function ReviewSection() {
                       <div
                         className="relative rounded-xl overflow-hidden bg-[#222]"
                         style={{
-                          border: "1px solid rgba(91,181,162,0.35)",
-                          boxShadow: "0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(91,181,162,0.1), inset 0 1px 0 rgba(255,255,255,0.05)",
+                          border: "1px solid rgba(212,184,150,0.35)",
+                          boxShadow: "0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,184,150,0.08), inset 0 1px 0 rgba(255,255,255,0.05)",
                         }}
                       >
-                        {/* Top highlight line */}
+                        {/* Top highlight line — gold */}
                         <div
                           className="absolute top-0 left-0 right-0 h-[2px] z-10"
-                          style={{ background: "linear-gradient(90deg, transparent, #5BB5A2, transparent)" }}
+                          style={{ background: "linear-gradient(90deg, transparent, #d4b896, transparent)" }}
                         />
                         <img
                           src={REVIEW_IMAGES[current].src}
@@ -195,22 +216,22 @@ export default function ReviewSection() {
                     </div>
                   </div>
 
-                  {/* Center (active) */}
+                  {/* Center (active) — gold border + top line */}
                   <div
                     className="w-[300px] lg:w-[370px] shrink-0 transition-all duration-500 ease-in-out z-10"
                   >
                     <div
                       className="relative rounded-xl overflow-hidden bg-[#222]"
                       style={{
-                        border: "1px solid rgba(91,181,162,0.4)",
+                        border: "1px solid rgba(212,184,150,0.40)",
                         boxShadow:
-                          "0 20px 60px rgba(0,0,0,0.7), 0 0 30px rgba(91,181,162,0.12), 0 0 0 1px rgba(91,181,162,0.08), inset 0 1px 0 rgba(255,255,255,0.06)",
+                          "0 20px 60px rgba(0,0,0,0.7), 0 0 30px rgba(212,184,150,0.12), 0 0 0 1px rgba(212,184,150,0.08), inset 0 1px 0 rgba(255,255,255,0.06)",
                       }}
                     >
-                      {/* Top highlight line */}
+                      {/* Top highlight line — gold only */}
                       <div
                         className="absolute top-0 left-0 right-0 h-[2px] z-10"
-                        style={{ background: "linear-gradient(90deg, transparent 5%, #5BB5A2 40%, #d4b896 60%, transparent 95%)" }}
+                        style={{ background: "linear-gradient(90deg, transparent 5%, #d4b896 40%, #c9a87a 60%, transparent 95%)" }}
                       />
                       <img
                         src={REVIEW_IMAGES[current].src}
@@ -247,17 +268,34 @@ export default function ReviewSection() {
                 </div>
               </div>
 
-              {/* Right arrow */}
+              {/* Right arrow — gold hover */}
               <button
                 onClick={next}
                 aria-label="다음 후기"
-                className="absolute right-0 sm:-right-2 lg:-right-14 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/8 backdrop-blur-sm border border-white/15 flex items-center justify-center text-white/60 hover:bg-[#5BB5A2]/25 hover:text-[#5BB5A2] hover:border-[#5BB5A2]/50 hover:shadow-[0_0_16px_rgba(91,181,162,0.3)] transition-all duration-300"
+                className="absolute right-0 sm:-right-2 lg:-right-14 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full backdrop-blur-sm flex items-center justify-center transition-all duration-300"
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  color: "rgba(255,255,255,0.55)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(212,184,150,0.20)";
+                  (e.currentTarget as HTMLButtonElement).style.border = "1px solid rgba(212,184,150,0.50)";
+                  (e.currentTarget as HTMLButtonElement).style.color = GOLD;
+                  (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 16px rgba(212,184,150,0.25)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.05)";
+                  (e.currentTarget as HTMLButtonElement).style.border = "1px solid rgba(255,255,255,0.12)";
+                  (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.55)";
+                  (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
+                }}
               >
                 <ChevronRight size={20} />
               </button>
             </div>
 
-            {/* Dots indicator */}
+            {/* Dots indicator — gold active */}
             <div className="flex items-center justify-center gap-2 mt-10">
               {REVIEW_IMAGES.map((_, i) => (
                 <button
@@ -269,9 +307,9 @@ export default function ReviewSection() {
                     width: i === current ? "28px" : "8px",
                     height: "8px",
                     background: i === current
-                      ? "linear-gradient(90deg, #5BB5A2, #d4b896)"
+                      ? "linear-gradient(90deg, #d4b896, #c9a87a)"
                       : "rgba(255,255,255,0.18)",
-                    boxShadow: i === current ? "0 0 8px rgba(91,181,162,0.5)" : "none",
+                    boxShadow: i === current ? "0 0 8px rgba(212,184,150,0.5)" : "none",
                   }}
                 />
               ))}
@@ -286,23 +324,23 @@ export default function ReviewSection() {
             </p>
           </div>
 
-          {/* CTA button */}
+          {/* CTA button — gold */}
           <div className="mt-14 flex flex-col items-center gap-3">
             <a
               href="http://musicin.godohosting.com/bbs/board.php?bo_table=forum"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 text-white text-sm tracking-wider transition-all duration-300 rounded-sm"
+              className="inline-flex items-center gap-2.5 px-7 py-3.5 text-[#1a1a1a] text-sm tracking-wider transition-all duration-300 rounded-sm font-medium"
               style={{
-                background: "linear-gradient(135deg, #5BB5A2, #4da393)",
-                boxShadow: "0 4px 20px rgba(91,181,162,0.35)",
+                background: "linear-gradient(135deg, #d4b896, #c9a87a)",
+                boxShadow: "0 4px 20px rgba(212,184,150,0.35)",
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 28px rgba(91,181,162,0.5)";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 28px rgba(212,184,150,0.55)";
                 (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-1px)";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(91,181,162,0.35)";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(212,184,150,0.35)";
                 (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
               }}
             >

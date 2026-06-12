@@ -29,7 +29,7 @@ export default function ServiceSection() {
             className="mt-4 text-[#1a1a1a] text-2xl sm:text-3xl md:text-4xl"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            추가 <span className="text-[#5BB5A2]">옵션 서비스</span>
+            추가 <span className="text-[#d4b896]">옵션 서비스</span>
           </h2>
         </div>
 
@@ -40,12 +40,26 @@ export default function ServiceSection() {
               const Icon = item.icon;
               const content = (
                 <>
-                  <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-[#d4b896]/10 flex items-center justify-center group-hover:bg-[#d4b896]/20 transition-colors duration-300">
-                    <Icon size={18} className="text-[#d4b896]" />
+                  {/* 상단 골드 라인 */}
+                  <div
+                    className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-400"
+                    style={{ background: "linear-gradient(90deg, transparent, #d4b896, transparent)" }}
+                  />
+                  <div className="w-10 h-10 mx-auto mb-3 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                    style={{
+                      background: "linear-gradient(145deg, rgba(212,184,150,0.15), rgba(212,184,150,0.06))",
+                      border: "1px solid rgba(212,184,150,0.25)",
+                    }}>
+                    <Icon size={18} style={{ color: "#d4b896" }} />
                   </div>
                   <p className="text-[#333] text-sm">{item.label}</p>
                 </>
               );
+
+              const cardStyle = {
+                border: "1px solid rgba(212,184,150,0.22)",
+                boxShadow: "0 2px 10px rgba(212,184,150,0.06)",
+              };
 
               if (item.href) {
                 return (
@@ -54,7 +68,16 @@ export default function ServiceSection() {
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group bg-white border border-[#e8e4df] rounded-sm p-5 text-center hover:border-[#d4b896]/40 hover:shadow-md transition-all duration-400"
+                    className="group relative overflow-hidden bg-white rounded-sm p-5 text-center transition-all duration-400 hover:-translate-y-0.5"
+                    style={cardStyle}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLAnchorElement).style.border = "1px solid rgba(212,184,150,0.50)";
+                      (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 8px 28px rgba(212,184,150,0.22)";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLAnchorElement).style.border = "1px solid rgba(212,184,150,0.22)";
+                      (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 2px 10px rgba(212,184,150,0.06)";
+                    }}
                   >
                     {content}
                   </a>
@@ -64,7 +87,8 @@ export default function ServiceSection() {
               return (
                 <div
                   key={i}
-                  className="group bg-white border border-[#e8e4df] rounded-sm p-5 text-center hover:border-[#d4b896]/40 hover:shadow-md transition-all duration-400"
+                  className="group relative overflow-hidden bg-white rounded-sm p-5 text-center transition-all duration-400 hover:-translate-y-0.5"
+                  style={cardStyle}
                 >
                   {content}
                 </div>

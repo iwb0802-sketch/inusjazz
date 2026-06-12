@@ -1,7 +1,7 @@
 /**
  * ProcessSection - 웨딩 사회자 서비스 프로세스 7단계
  * Design: Dark background, 3 grouped phase cards
- * Brand: Mint (#5BB5A2) + Gold (#d4b896)
+ * Brand: Gold (#d4b896) primary accent
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import {
@@ -17,12 +17,13 @@ import {
   PartyPopper,
 } from "lucide-react";
 
+const GOLD = "#d4b896";
+
 const PHASES = [
   {
     phase: "PHASE 1",
     title: "예약 준비",
     icon: ClipboardList,
-    color: "#5BB5A2",
     steps: [
       {
         num: "01",
@@ -42,7 +43,6 @@ const PHASES = [
     phase: "PHASE 2",
     title: "대본 제작",
     icon: Pencil,
-    color: "#d4b896",
     steps: [
       {
         num: "03",
@@ -68,7 +68,6 @@ const PHASES = [
     phase: "PHASE 3",
     title: "당일 진행",
     icon: PartyPopper,
-    color: "#5BB5A2",
     steps: [
       {
         num: "06",
@@ -105,7 +104,7 @@ export default function ProcessSection() {
             className="mt-4 text-white text-2xl sm:text-3xl md:text-4xl"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            체계적인 <span className="text-[#5BB5A2]">7단계</span> 맞춤 진행
+            체계적인 <span style={{ color: GOLD }}>7단계</span> 맞춤 진행
           </h2>
           <p className="mt-4 text-white/50 text-sm sm:text-base">
             예약부터 당일 진행까지, 빈틈없는 프로세스로 완성도를 높입니다
@@ -122,24 +121,42 @@ export default function ProcessSection() {
             return (
               <div
                 key={pi}
-                className="group bg-[#141414] border border-white/8 rounded-sm overflow-hidden hover:border-white/15 transition-all duration-500"
+                className="group bg-[#141414] rounded-sm overflow-hidden transition-all duration-500"
+                style={{
+                  border: "1px solid rgba(212,184,150,0.18)",
+                  boxShadow: "0 2px 16px rgba(0,0,0,0.4)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.border = "1px solid rgba(212,184,150,0.45)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(212,184,150,0.10)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.border = "1px solid rgba(212,184,150,0.18)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 16px rgba(0,0,0,0.4)";
+                }}
               >
                 {/* Phase Header */}
                 <div
-                  className="px-6 py-5 border-b border-white/5"
-                  style={{ background: `linear-gradient(135deg, ${phase.color}08, transparent)` }}
+                  className="px-6 py-5 border-b"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(212,184,150,0.08), transparent)",
+                    borderColor: "rgba(212,184,150,0.12)",
+                  }}
                 >
                   <div className="flex items-center gap-3">
                     <div
                       className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: `${phase.color}15`, border: `1px solid ${phase.color}30` }}
+                      style={{
+                        backgroundColor: "rgba(212,184,150,0.15)",
+                        border: "1px solid rgba(212,184,150,0.35)",
+                      }}
                     >
-                      <PhaseIcon size={18} style={{ color: phase.color }} />
+                      <PhaseIcon size={18} style={{ color: GOLD }} />
                     </div>
                     <div>
                       <span
                         className="text-[10px] tracking-[0.2em] uppercase block"
-                        style={{ color: phase.color, fontFamily: "'Cormorant Garamond', serif" }}
+                        style={{ color: GOLD, fontFamily: "'Cormorant Garamond', serif" }}
                       >
                         {phase.phase}
                       </span>
@@ -156,13 +173,12 @@ export default function ProcessSection() {
                 {/* Steps */}
                 <div className="px-6 py-5 space-y-4">
                   {phase.steps.map((step, si) => {
-                    const StepIcon = step.icon;
                     return (
                       <div key={si} className="flex items-start gap-3">
                         <div className="flex-shrink-0 mt-0.5">
                           <span
-                            className="text-[#d4b896]/60 text-xs font-semibold"
-                            style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                            className="font-semibold text-xs"
+                            style={{ color: GOLD, fontFamily: "'Cormorant Garamond', serif" }}
                           >
                             {step.num}
                           </span>
@@ -191,7 +207,7 @@ export default function ProcessSection() {
               <div className="flex items-center gap-2">
                 <div
                   className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: phase.color }}
+                  style={{ backgroundColor: GOLD }}
                 />
                 <span className="text-white/50 text-xs sm:text-sm">{phase.title}</span>
               </div>

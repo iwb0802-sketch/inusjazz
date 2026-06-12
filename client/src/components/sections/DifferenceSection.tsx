@@ -30,8 +30,6 @@ export default function DifferenceSection() {
 
   return (
     <section className="relative bg-[#f8f6f3] py-24 sm:py-32 lg:py-40 overflow-hidden">
-
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div ref={anim1.ref} className={`text-center mb-16 sm:mb-20 fade-up ${anim1.isVisible ? "visible" : ""}`}>
@@ -45,19 +43,19 @@ export default function DifferenceSection() {
             className="mt-4 text-[#1a1a1a] text-2xl sm:text-3xl md:text-4xl"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            합리적인 선택, <span className="text-[#5BB5A2]">확실한 차이</span>
+            합리적인 선택, <span className="text-[#d4b896]">확실한 차이</span>
           </h2>
         </div>
 
         {/* Content: Image + Cards */}
         <div ref={anim2.ref} className={`fade-up ${anim2.isVisible ? "visible" : ""}`}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-stretch">
             {/* Image */}
-            <div className="relative rounded-sm overflow-hidden aspect-[4/3]">
+            <div className="relative rounded-sm overflow-hidden min-h-[340px] lg:min-h-0">
               <img
                 src={HALL_IMG}
                 alt="프리미엄 웨딩 무대"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover absolute inset-0"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
             </div>
@@ -68,26 +66,33 @@ export default function DifferenceSection() {
                 <div
                   key={i}
                   className="group relative overflow-hidden bg-white rounded-sm p-6 sm:p-8 hover:shadow-xl transition-all duration-500 hover:-translate-y-0.5"
-                  style={{ border: "1px solid #e8e4df" }}
+                  style={{
+                    border: "1px solid rgba(212,184,150,0.22)",
+                    boxShadow: "0 2px 12px rgba(212,184,150,0.08)",
+                  }}
                 >
                   {/* 왼쪽 컬러 라인 */}
                   <div className="absolute left-0 top-0 bottom-0 w-0.5 transition-all duration-500 group-hover:w-1"
-                    style={{ background: "linear-gradient(to bottom, #5BB5A2, #d4b896)" }} />
+                    style={{ background: "linear-gradient(to bottom, #d4b896, #c9a87a)" }} />
                   {/* hover 배경 */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{ background: "linear-gradient(135deg, rgba(91,181,162,0.04) 0%, transparent 60%)" }} />
+                    style={{ background: "linear-gradient(135deg, rgba(212,184,150,0.06) 0%, transparent 60%)" }} />
 
                   <div className="relative flex items-start gap-5">
-                    {/* 번호 */}
+                    {/* 아이콘 원 — 골드 */}
                     <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110"
-                      style={{ background: "linear-gradient(145deg, rgba(91,181,162,0.12), rgba(212,184,150,0.08))", border: "1px solid rgba(91,181,162,0.2)" }}>
-                      <item.icon size={20} className="text-[#5BB5A2]" />
+                      style={{
+                        background: "linear-gradient(145deg, rgba(212,184,150,0.18), rgba(212,184,150,0.08))",
+                        border: "1px solid rgba(212,184,150,0.35)",
+                      }}>
+                      <item.icon size={20} style={{ color: "#d4b896" }} />
                     </div>
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        {/* 번호 — 더 크고 강조 */}
                         <span
-                          className="text-[#d4b896] text-sm font-light"
-                          style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                          className="text-[#d4b896] font-semibold leading-none"
+                          style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.35rem" }}
                         >
                           {item.num}
                         </span>

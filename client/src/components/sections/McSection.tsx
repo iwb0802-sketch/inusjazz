@@ -48,7 +48,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",
     styles: ["품격형", "밝은형", "감동형"],
     youtubeId: "ali34pV7ALk",
-    audioFile: null,
+    audioFile: "/audio/mc-idoyoung.mp3",
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/ppTgmcIFaCtGyINq.png",
   },
   {
@@ -62,7 +62,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/223822182933",
     styles: ["품격형", "감동형"],
     youtubeId: "zx_iAhMkMns",
-    audioFile: null,
+    audioFile: "/audio/mc-jaesun.mp3",
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/RWSmnUABYYeEBdIF.png",
   },
   {

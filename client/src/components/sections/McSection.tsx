@@ -367,6 +367,7 @@ export default function McSection() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedMc, setSelectedMc] = useState<MC | null>(null);
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
+  const [playingAudio, setPlayingAudio] = useState<string | null>(null); // 현재 재생 중인 사회자 이름
 
   const handleFilterChange = useCallback((filter: string) => {
     if (filter === activeFilter) return;
@@ -500,6 +501,54 @@ export default function McSection() {
                       {mc.tier}
                     </span>
                   </div>
+
+                  {/* 소리 재생 버튼 - youtubeId 있는 경우만 표시 */}
+                  {mc.youtubeId && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPlayingAudio(playingAudio === mc.name ? null : mc.name);
+                      }}
+                      className="absolute top-3 right-3 z-10 flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300"
+                      style={{
+                        background: playingAudio === mc.name ? "rgba(91,181,162,0.9)" : "rgba(11,11,11,0.75)",
+                        border: playingAudio === mc.name ? "1px solid #5BB5A2" : "1px solid rgba(255,255,255,0.2)",
+                        backdropFilter: "blur(8px)",
+                      }}
+                      title="목소리 듣기"
+                    >
+                      {playingAudio === mc.name ? (
+                        /* 파동 애니메이션 */
+                        <div className="flex items-end gap-[2px] h-4">
+                          {[1,2,3,4].map((i) => (
+                            <div
+                              key={i}
+                              className="w-[3px] rounded-full bg-white"
+                              style={{
+                                animation: `wave ${0.4 + i * 0.1}s ease-in-out infinite alternate`,
+                                height: `${8 + i * 3}px`,
+                              }}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-white/80 ml-0.5">
+                          <polygon points="5 3 19 12 5 21 5 3" />
+                        </svg>
+                      )}
+                    </button>
+                  )}
+
+                  {/* 숨겨진 유튜브 오디오 iframe */}
+                  {mc.youtubeId && playingAudio === mc.name && (
+                    <iframe
+                      src={`https://www.youtube.com/embed/${mc.youtubeId}?autoplay=1&mute=0&rel=0&playsinline=1&enablejsapi=1`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media"
+                      className="absolute"
+                      style={{ width: 1, height: 1, opacity: 0, pointerEvents: "none", top: 0, left: 0 }}
+                      title="오디오 재생"
+                    />
+                  )}
 
                   <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
                     {/* 스타일 태그 - 한 줄 고정 */}

@@ -236,3 +236,8 @@ html {
     opacity: 0.9;
   }
 }
+
+@keyframes wave {
+  0% { transform: scaleY(0.4); }
+  100% { transform: scaleY(1.2); }
+}

@@ -528,25 +528,29 @@ export default function McSection() {
                         <div
                           style={{
                             position: "absolute",
-                            bottom: "calc(100% + 16px)",
+                            bottom: "calc(100% + 14px)",
                             right: "-4px",
-                            background: "linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(245,239,230,0.96) 100%)",
-                            backdropFilter: "blur(12px)",
+                            background: "rgba(15,15,15,0.72)",
+                            backdropFilter: "blur(14px)",
                             borderRadius: "10px",
-                            padding: "8px 14px",
-                            fontSize: "11px",
-                            color: "#1a1207",
-                            fontWeight: 600,
-                            whiteSpace: "nowrap",
+                            padding: "10px 12px",
+                            fontSize: "10px",
+                            color: "rgba(255,255,255,0.92)",
+                            fontWeight: 500,
+                            whiteSpace: "pre-line",
+                            textAlign: "center",
+                            width: "80px",
+                            lineHeight: 1.5,
                             fontFamily: "'Noto Sans KR', sans-serif",
-                            boxShadow: "0 4px 20px rgba(0,0,0,0.25), 0 0 0 1px rgba(214,177,107,0.3)",
+                            boxShadow: "0 4px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1)",
                             pointerEvents: "none",
                             zIndex: 50,
-                            letterSpacing: "0.02em",
+                            letterSpacing: "0.01em",
                           }}
                         >
-                          <span style={{ color: "#5BB5A2", marginRight: "4px" }}>▶</span>
-                          클릭시 목소리 먼저 확인
+                          <span style={{ color: "#5BB5A2", display: "block", marginBottom: "3px", fontSize: "13px" }}>▶</span>
+                          클릭시
+목소리 확인
                           <div
                             style={{
                               position: "absolute",
@@ -556,7 +560,7 @@ export default function McSection() {
                               height: 0,
                               borderLeft: "7px solid transparent",
                               borderRight: "7px solid transparent",
-                              borderTop: "7px solid rgba(245,239,230,0.96)",
+                              borderTop: "7px solid rgba(15,15,15,0.72)",
                             }}
                           />
                         </div>

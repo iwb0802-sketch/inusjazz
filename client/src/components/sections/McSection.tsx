@@ -483,7 +483,7 @@ export default function McSection() {
                 }}
               >
                 {/* Profile Image */}
-                <div className="relative overflow-hidden" style={{ height: "260px" }}>
+                <div className="relative overflow-hidden" style={{ height: "320px" }}>
                   <img
                     src={mc.image}
                     alt={mc.name}
@@ -501,14 +501,32 @@ export default function McSection() {
                     </span>
                   </div>
 
-                  <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+                    {/* 스타일 태그 */}
+                    <div className="flex flex-wrap gap-1 mb-2">
+                      {mc.styles.slice(0, 3).map((style) => (
+                        <span
+                          key={style}
+                          className="inline-flex items-center px-2 py-0.5 text-[10px] tracking-wide"
+                          style={{
+                            fontFamily: "'Noto Sans KR', sans-serif",
+                            background: "rgba(11,11,11,0.7)",
+                            border: "1px solid rgba(214,177,107,0.4)",
+                            color: "#d4b896",
+                            backdropFilter: "blur(4px)",
+                          }}
+                        >
+                          {style}
+                        </span>
+                      ))}
+                    </div>
                     <h3
                       className="text-white text-lg sm:text-xl font-bold"
                       style={{ fontFamily: "'Noto Serif KR', serif" }}
                     >
                       {mc.name}
                     </h3>
-                    <p className="text-white/50 text-xs sm:text-sm mt-1">{mc.desc}</p>
+                    <p className="text-white/50 text-xs sm:text-sm mt-0.5">{mc.desc}</p>
                   </div>
                 </div>
 

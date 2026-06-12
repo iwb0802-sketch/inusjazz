@@ -21,7 +21,7 @@ import ServiceSection from "@/components/sections/ServiceSection";
 import EventSection from "@/components/sections/EventSection";
 import CtaSection from "@/components/sections/CtaSection";
 import Footer from "@/components/Footer";
-import BottomCTA from "@/components/BottomCTA";
+import FloatingButtons from "@/components/FloatingButtons";
 import InusCardPopup from "@/components/InusCardPopup";
 
 
@@ -47,7 +47,7 @@ export default function Home() {
       <ServiceSection />
       <CtaSection />
       <Footer />
-      <BottomCTA />
+      <FloatingButtons />
     </div>
   );
 }

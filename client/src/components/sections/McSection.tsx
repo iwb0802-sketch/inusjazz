@@ -112,7 +112,7 @@ const MCS = [
     role: "",
     tier: "BEST",
     desc: "5년+ 경력",
-    image: "",
+    image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FPcvLRqLzT-JnfPrulzmCo%2Fmc-gilsangwoo.jpg",
     tags: ["웨딩 사회 경력 5년+", "품격과 유쾌함을 동시에"],
     highlight: "센스와 위트를 겸비한 진행력이 강점인 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/220802942529",

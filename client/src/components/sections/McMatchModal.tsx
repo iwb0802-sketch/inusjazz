@@ -364,8 +364,8 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
 
   return (
     <div
-      className="fixed inset-0 z-[250] flex items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(10px)" }}
+      className="fixed inset-0 z-[250] overflow-y-auto flex flex-col items-center py-6 px-4"
+      style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(10px)", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       onClick={onClose}
     >
       <div
@@ -375,10 +375,7 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
           border: "1px solid rgba(214,177,107,0.2)",
           borderRadius: "12px",
           animation: "fadeInUp 0.35s cubic-bezier(0.23,1,0.32,1)",
-          maxHeight: "90vh",
-          overflowY: "auto",
           overflowX: "hidden",
-          WebkitOverflowScrolling: "touch",
         }}
         onClick={(e) => e.stopPropagation()}
       >

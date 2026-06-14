@@ -2,8 +2,9 @@
  * McMatchModal - 내 결혼식에 어울리는 사회자 추천
  * 5단계 질문 → 스타일 매칭 → 사회자 추천
  */
-import { useEffect, useState } from "react";
-import { X, ChevronRight, RotateCcw, ExternalLink } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { X, ChevronRight, RotateCcw, ExternalLink, Copy, Instagram } from "lucide-react";
+import html2canvas from "html2canvas";
 
 const MCS = [
   {
@@ -248,6 +249,9 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
   const [results, setResults] = useState<typeof MCS>([]);
   const [reason, setReason] = useState("");
   const [resultVisible, setResultVisible] = useState(false);
+  const [toast, setToast] = useState("");
+  const [savingImg, setSavingImg] = useState(false);
+  const resultCardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isOpen) {
@@ -312,6 +316,45 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
       setResults([]);
       setReason("");
     }, 200);
+  };
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2500);
+  };
+
+  const handleKakaoShare = async () => {
+    const top = results[0];
+    const text = `💍 내 결혼식에 어울리는 사회자 추천 결과\n\n1순위: ${top?.name} 사회자\n\n${reason}\n\n▶ 이너스뮤직 사회자 보러가기\nhttps://inusmusic.com`;
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast("📋 카카오톡에 붙여넣기 하세요!");
+    } catch {
+      showToast("복사 실패 — 직접 복사해주세요");
+    }
+  };
+
+  const handleInstaShare = async () => {
+    if (!resultCardRef.current) return;
+    setSavingImg(true);
+    try {
+      const canvas = await html2canvas(resultCardRef.current, {
+        backgroundColor: "#0d0d0d",
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+      });
+      const url = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.download = "이너스뮤직_사회자추천.png";
+      link.href = url;
+      link.click();
+      showToast("📸 이미지 저장 완료! 인스타에 올려보세요");
+    } catch {
+      showToast("이미지 저장 실패");
+    } finally {
+      setSavingImg(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -484,122 +527,155 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
               transition: "opacity 0.4s, transform 0.4s",
             }}
           >
-            <div className="text-center mb-6">
-              <p
-                className="text-[10px] tracking-[0.3em] uppercase mb-2"
-                style={{ fontFamily: "'Cormorant Garamond', serif", color: "#d6b16b" }}
-              >
-                RESULT
-              </p>
-              <h4
-                className="text-white text-xl font-bold"
-                style={{ fontFamily: "'Noto Serif KR', serif" }}
-              >
-                이런 사회자가 잘 맞을 것 같아요
-              </h4>
-              {reason && (
+            {/* 캡처 대상 카드 */}
+            <div ref={resultCardRef} style={{ background: "#0d0d0d", padding: "4px" }}>
+              <div className="text-center mb-6">
                 <p
-                  className="mt-3 mx-auto text-sm leading-relaxed px-4 py-3 rounded-lg"
-                  style={{
-                    fontFamily: "'Noto Sans KR', sans-serif",
-                    color: "rgba(214,177,107,0.9)",
-                    background: "rgba(214,177,107,0.08)",
-                    border: "1px solid rgba(214,177,107,0.2)",
-                    maxWidth: "360px",
-                  }}
+                  className="text-[10px] tracking-[0.3em] uppercase mb-2"
+                  style={{ fontFamily: "'Cormorant Garamond', serif", color: "#d6b16b" }}
                 >
-                  {reason}
+                  RESULT
                 </p>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-3">
-              {results.map((mc, i) => (
-                <div
-                  key={mc.name}
-                  className="flex items-center gap-4 p-4 rounded-lg"
-                  style={{
-                    background: i === 0
-                      ? "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.06) 100%)"
-                      : "rgba(255,255,255,0.03)",
-                    border: i === 0
-                      ? "1px solid rgba(214,177,107,0.4)"
-                      : "1px solid rgba(255,255,255,0.07)",
-                    animation: `fadeInUp ${0.3 + i * 0.12}s cubic-bezier(0.23,1,0.32,1) both`,
-                  }}
+                <h4
+                  className="text-white text-xl font-bold"
+                  style={{ fontFamily: "'Noto Serif KR', serif" }}
                 >
-                  {/* 순위 */}
+                  이런 사회자가 잘 맞을 것 같아요
+                </h4>
+                {reason && (
+                  <p
+                    className="mt-3 mx-auto text-sm leading-relaxed px-4 py-3 rounded-lg"
+                    style={{
+                      fontFamily: "'Noto Sans KR', sans-serif",
+                      color: "rgba(214,177,107,0.9)",
+                      background: "rgba(214,177,107,0.08)",
+                      border: "1px solid rgba(214,177,107,0.2)",
+                      maxWidth: "360px",
+                    }}
+                  >
+                    {reason}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-3">
+                {results.map((mc, i) => (
                   <div
-                    className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                    key={mc.name}
+                    className="flex items-center gap-4 p-4 rounded-lg"
                     style={{
                       background: i === 0
-                        ? "linear-gradient(135deg, #d6b16b, #c9a55a)"
-                        : "rgba(255,255,255,0.08)",
-                      color: i === 0 ? "#0d0d0d" : "rgba(255,255,255,0.4)",
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: "13px",
+                        ? "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.06) 100%)"
+                        : "rgba(255,255,255,0.03)",
+                      border: i === 0
+                        ? "1px solid rgba(214,177,107,0.4)"
+                        : "1px solid rgba(255,255,255,0.07)",
+                      animation: `fadeInUp ${0.3 + i * 0.12}s cubic-bezier(0.23,1,0.32,1) both`,
                     }}
                   >
-                    {i + 1}
-                  </div>
-
-                  {/* 프로필 이미지 */}
-                  <div
-                    className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0"
-                    style={{ border: i === 0 ? "2px solid rgba(214,177,107,0.5)" : "2px solid rgba(255,255,255,0.1)" }}
-                  >
-                    <img src={mc.image} alt={mc.name} className="w-full h-full object-cover object-top" />
-                  </div>
-
-                  {/* 정보 */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span
-                        className="text-white font-bold"
-                        style={{ fontFamily: "'Noto Serif KR', serif", fontSize: "15px" }}
-                      >
-                        {mc.name}
-                      </span>
-                      {mc.tier === "PREMIUM" && (
-                        <span
-                          className="text-[9px] px-1.5 py-0.5 tracking-widest"
-                          style={{
-                            fontFamily: "'Cormorant Garamond', serif",
-                            background: "linear-gradient(135deg, rgba(212,184,150,0.9), rgba(190,155,110,0.9))",
-                            color: "#1a1a1a",
-                            fontWeight: 700,
-                          }}
-                        >
-                          PREMIUM
-                        </span>
-                      )}
-                    </div>
-                    <p
-                      className="text-white/40 text-xs truncate"
-                      style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+                    {/* 순위 */}
+                    <div
+                      className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                      style={{
+                        background: i === 0
+                          ? "linear-gradient(135deg, #d6b16b, #c9a55a)"
+                          : "rgba(255,255,255,0.08)",
+                        color: i === 0 ? "#0d0d0d" : "rgba(255,255,255,0.4)",
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: "13px",
+                      }}
                     >
-                      {mc.highlight}
-                    </p>
-                  </div>
+                      {i + 1}
+                    </div>
 
-                  {/* 프로필 버튼 */}
-                  <button
-                    onClick={() => { onClose(); onOpenProfile(mc.profileKey); }}
-                    className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200 hover:scale-110"
-                    style={{
-                      background: "rgba(214,177,107,0.12)",
-                      border: "1px solid rgba(214,177,107,0.3)",
-                      color: "#d6b16b",
-                    }}
-                  >
-                    <ExternalLink size={13} />
-                  </button>
-                </div>
-              ))}
+                    {/* 프로필 이미지 */}
+                    <div
+                      className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0"
+                      style={{ border: i === 0 ? "2px solid rgba(214,177,107,0.5)" : "2px solid rgba(255,255,255,0.1)" }}
+                    >
+                      <img src={mc.image} alt={mc.name} className="w-full h-full object-cover object-top" />
+                    </div>
+
+                    {/* 정보 */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span
+                          className="text-white font-bold"
+                          style={{ fontFamily: "'Noto Serif KR', serif", fontSize: "15px" }}
+                        >
+                          {mc.name}
+                        </span>
+                        {mc.tier === "PREMIUM" && (
+                          <span
+                            className="text-[9px] px-1.5 py-0.5 tracking-widest"
+                            style={{
+                              fontFamily: "'Cormorant Garamond', serif",
+                              background: "linear-gradient(135deg, rgba(212,184,150,0.9), rgba(190,155,110,0.9))",
+                              color: "#1a1a1a",
+                              fontWeight: 700,
+                            }}
+                          >
+                            PREMIUM
+                          </span>
+                        )}
+                      </div>
+                      <p
+                        className="text-white/40 text-xs truncate"
+                        style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+                      >
+                        {mc.highlight}
+                      </p>
+                    </div>
+
+                    {/* 프로필 버튼 */}
+                    <button
+                      onClick={() => { onClose(); onOpenProfile(mc.profileKey); }}
+                      className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200 hover:scale-110"
+                      style={{
+                        background: "rgba(214,177,107,0.12)",
+                        border: "1px solid rgba(214,177,107,0.3)",
+                        color: "#d6b16b",
+                      }}
+                    >
+                      <ExternalLink size={13} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 공유 버튼 */}
+            <div className="flex gap-2 mt-5">
+              <button
+                onClick={handleKakaoShare}
+                className="flex items-center justify-center gap-2 flex-1 py-3 rounded-lg text-sm font-semibold transition-all duration-200 hover:opacity-90"
+                style={{
+                  fontFamily: "'Noto Sans KR', sans-serif",
+                  background: "#FEE500",
+                  color: "#3C1E1E",
+                }}
+              >
+                <Copy size={13} />
+                카카오톡 공유
+              </button>
+              <button
+                onClick={handleInstaShare}
+                disabled={savingImg}
+                className="flex items-center justify-center gap-2 flex-1 py-3 rounded-lg text-sm font-semibold transition-all duration-200 hover:opacity-90"
+                style={{
+                  fontFamily: "'Noto Sans KR', sans-serif",
+                  background: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)",
+                  color: "#fff",
+                  opacity: savingImg ? 0.7 : 1,
+                }}
+              >
+                <Instagram size={13} />
+                {savingImg ? "저장 중..." : "인스타 이미지 저장"}
+              </button>
             </div>
 
             {/* 하단 버튼들 */}
-            <div className="flex gap-3 mt-6">
+            <div className="flex gap-3 mt-3">
               <button
                 onClick={handleReset}
                 className="flex items-center justify-center gap-2 flex-1 py-3 rounded-lg text-sm transition-all duration-200 hover:opacity-80"
@@ -627,6 +703,23 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
                 💬 카카오 상담하기
               </a>
             </div>
+          </div>
+        )}
+
+        {/* 토스트 알림 */}
+        {toast && (
+          <div
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-full text-sm font-semibold z-[300] pointer-events-none"
+            style={{
+              fontFamily: "'Noto Sans KR', sans-serif",
+              background: "rgba(214,177,107,0.95)",
+              color: "#0d0d0d",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              animation: "fadeInUp 0.3s ease",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {toast}
           </div>
         )}
 

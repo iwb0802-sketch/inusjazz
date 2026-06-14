@@ -6,8 +6,8 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import McVoicePreviewModal from "./McVoicePreviewModal";
 import { ChevronLeft, ChevronRight, X, ExternalLink } from "lucide-react";
+import McMatchModal from "./McMatchModal";
 
 const MCS = [
   {
@@ -389,7 +389,7 @@ export default function McSection() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedMc, setSelectedMc] = useState<MC | null>(null);
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
-  const [voicePreviewOpen, setVoicePreviewOpen] = useState(false);
+  const [matchOpen, setMatchOpen] = useState(false);
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -508,32 +508,36 @@ export default function McSection() {
                 {STYLE_DESCRIPTIONS[activeFilter] || ""}
               </p>
             </div>
-          </div>
 
-          {/* 입장 멘트 미리듣기 CTA 버튼 */}
-          <div className="flex justify-center mt-8 mb-2">
-            <button
-              onClick={() => setVoicePreviewOpen(true)}
-              style={{
-                display: "flex", alignItems: "center", gap: "10px",
-                padding: "14px 28px",
-                background: "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.08) 100%)",
-                border: "1px solid rgba(214,177,107,0.4)",
-                color: "#d6b16b", cursor: "pointer", fontSize: "14px", fontWeight: 700,
-                fontFamily: "'Noto Sans KR', sans-serif", letterSpacing: "0.06em",
-                transition: "all 0.3s",
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.2) 0%, rgba(91,181,162,0.15) 100%)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "#d6b16b"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.08) 100%)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(214,177,107,0.4)"; }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                <line x1="12" y1="19" x2="12" y2="23"/>
-                <line x1="8" y1="23" x2="16" y2="23"/>
-              </svg>
-              내 결혼식 입장 멘트 미리듣기
-            </button>
+            {/* 사회자 추천 버튼 */}
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={() => setMatchOpen(true)}
+                style={{
+                  display: "flex", alignItems: "center", gap: "10px",
+                  padding: "14px 32px",
+                  background: "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.08) 100%)",
+                  border: "1px solid rgba(214,177,107,0.4)",
+                  color: "#d6b16b", cursor: "pointer", fontSize: "14px", fontWeight: 700,
+                  fontFamily: "'Noto Sans KR', sans-serif", letterSpacing: "0.06em",
+                  transition: "all 0.3s",
+                  borderRadius: "4px",
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.2) 0%, rgba(91,181,162,0.15) 100%)";
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = "#d6b16b";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.08) 100%)";
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(214,177,107,0.4)";
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                </svg>
+                내 결혼식에 어울리는 사회자 찾기
+              </button>
+            </div>
           </div>
 
           {/* Grid Layout */}
@@ -804,8 +808,28 @@ export default function McSection() {
               </div>
             ))}
           </div>
+
         </div>
       </section>
+
+      {/* 사회자 매칭 모달 */}
+      <McMatchModal
+        isOpen={matchOpen}
+        onClose={() => setMatchOpen(false)}
+        onOpenProfile={(key) => {
+          const profileMap: Record<string, string> = {
+            "이우영": "/profile-wooyoung.html",
+            "김선혁": "/profile-sunhyuk.html",
+            "고승범": "/profile-seungbeom.html",
+            "장윤태": "/profile-yuntae.html",
+            "이도영": "/profile-idoyoung.html",
+            "석재선": "/profile-jaesun.html",
+            "김민수": "/profile-minsu.html",
+            "길상우": "/profile-gilsangwoo.html",
+          };
+          if (profileMap[key]) setIframeUrl(profileMap[key]);
+        }}
+      />
 
       {/* 프로필 모달 */}
       {selectedMc && (
@@ -821,11 +845,7 @@ export default function McSection() {
         <IframeModal url={iframeUrl} onClose={() => setIframeUrl(null)} />
       )}
 
-      {/* 입장 멘트 미리듣기 모달 */}
-      <McVoicePreviewModal
-        isOpen={voicePreviewOpen}
-        onClose={() => setVoicePreviewOpen(false)}
-      />
+
     </>
   );
 }

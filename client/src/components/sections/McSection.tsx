@@ -107,6 +107,20 @@ const MCS = [
     audioFile: "/audio/mc-yuntae.mp3",
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/BzyEbfDYgsDXpYvx.png",
   },
+  {
+    name: "길상우",
+    role: "",
+    tier: "BEST",
+    desc: "5년+ 경력",
+    image: "",
+    tags: ["웨딩 사회 경력 5년+", "품격과 유쾌함을 동시에"],
+    highlight: "센스와 위트를 겸비한 진행력이 강점인 사회자입니다.",
+    profileUrl: "https://blog.naver.com/inusmusics/220802942529",
+    styles: ["품격형", "밝은형"],
+    youtubeId: "0Ske676aw84",
+    audioFile: "",
+    profileCardImg: "",
+  },
 ];
 
 const STYLE_FILTERS = ["전체", "품격형", "밝은형", "감동형", "아나운서형"];
@@ -523,6 +537,7 @@ export default function McSection() {
                     "김민수": "/profile-minsu.html",
                   };
                   if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
+                  else if (mc.profileUrl) window.open(mc.profileUrl, "_blank");
                   else setSelectedMc(mc);
                 }}
               >
@@ -530,11 +545,28 @@ export default function McSection() {
                 <div className="relative" style={{ height: "320px", overflow: "visible" }}>
                   {/* 이미지 클립 컨테이너 */}
                   <div className="absolute inset-0 overflow-hidden rounded-t-sm">
-                    <img
-                      src={mc.image}
-                      alt={mc.name}
-                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                    />
+                    {mc.image ? (
+                      <img
+                        src={mc.image}
+                        alt={mc.name}
+                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full flex flex-col items-center justify-center"
+                        style={{ background: "linear-gradient(160deg, #1a1a1a 0%, #111 100%)" }}
+                      >
+                        <div
+                          className="w-20 h-20 rounded-full flex items-center justify-center mb-3"
+                          style={{ background: "rgba(212,184,150,0.1)", border: "1px solid rgba(212,184,150,0.25)" }}
+                        >
+                          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(212,184,150,0.5)" strokeWidth="1.5">
+                            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                          </svg>
+                        </div>
+                        <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "11px", letterSpacing: "0.25em", color: "rgba(212,184,150,0.4)" }}>PROFILE</span>
+                      </div>
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#161616] via-[#161616]/30 to-transparent" />
                   </div>
 
@@ -711,6 +743,7 @@ export default function McSection() {
                         "김민수": "/profile-minsu.html",
                       };
                       if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
+                      else if (mc.profileUrl) window.open(mc.profileUrl, "_blank");
                       else setSelectedMc(mc);
                     }}
                     className="mt-auto relative flex items-center justify-center gap-2 w-full py-3 overflow-hidden group transition-all duration-300 hover:-translate-y-0.5"

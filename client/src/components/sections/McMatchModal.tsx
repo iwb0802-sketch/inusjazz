@@ -1,6 +1,6 @@
 /**
  * McMatchModal - 내 결혼식에 어울리는 사회자 추천
- * 3단계 질문 → 스타일 매칭 → 사회자 추천
+ * 5단계 질문 → 스타일 매칭 → 사회자 추천
  */
 import { useEffect, useState } from "react";
 import { X, ChevronRight, RotateCcw, ExternalLink } from "lucide-react";
@@ -13,7 +13,8 @@ const MCS = [
     image: "/images/mc-profile-1_33531819.jpg",
     highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223996383838",
-    styles: ["품격형", "아나운서형"],
+    // 태그: 품격, 야외/하우스 적응력, 합리적예산, 깔끔한진행
+    tags: ["품격", "깔끔", "중간규모", "합리적", "프리미엄"],
     profileKey: "김민수",
   },
   {
@@ -23,7 +24,7 @@ const MCS = [
     image: "/images/mc-profile-4_a9e52880.jpg",
     highlight: "자연스럽고 세련된 진행 스타일이 특징입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223235771542",
-    styles: ["품격형", "아나운서형"],
+    tags: ["품격", "깔끔", "소규모", "합리적", "중간예산"],
     profileKey: "고승범",
   },
   {
@@ -33,7 +34,7 @@ const MCS = [
     image: "/images/mc-profile-2_f194877b.jpg",
     highlight: "따뜻하고 안정적인 진행으로 신랑신부님의 이야기를 감동적으로 전달합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",
-    styles: ["품격형", "밝은형", "감동형"],
+    tags: ["감동", "웃음", "전규모", "합리적", "중간예산", "야외"],
     profileKey: "이도영",
   },
   {
@@ -43,7 +44,7 @@ const MCS = [
     image: "/images/mc-profile-3_33ff7a32.jpg",
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223822182933",
-    styles: ["품격형", "감동형"],
+    tags: ["품격", "감동", "깔끔", "소규모", "중간규모", "합리적", "중간예산"],
     profileKey: "석재선",
   },
   {
@@ -53,7 +54,7 @@ const MCS = [
     image: "/images/mc-lee-wooyoung-new_fa27e84d.webp",
     highlight: "편안한 아나운서 톤과 안정적인 진행력으로 위트 있고 깔끔한 예식을 완성합니다.",
     profileUrl: "/profile-wooyoung.html",
-    styles: ["품격형", "밝은형", "감동형", "아나운서형"],
+    tags: ["품격", "깔끔", "감동", "전규모", "프리미엄", "중간예산"],
     profileKey: "이우영",
   },
   {
@@ -63,7 +64,7 @@ const MCS = [
     image: "/images/host_sunhyuk_1ed704ab.jpg",
     highlight: "깔끔하고 안정감 있는 진행력과 탁월한 상황 대처 능력을 갖춘 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/221025505211",
-    styles: ["품격형", "아나운서형"],
+    tags: ["깔끔", "품격", "대규모", "중간예산", "프리미엄"],
     profileKey: "김선혁",
   },
   {
@@ -73,7 +74,7 @@ const MCS = [
     image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/YIRjIXsBhCqAiMgE.jpg",
     highlight: "안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",
-    styles: ["품격형", "감동형"],
+    tags: ["품격", "감동", "대규모", "중간규모", "프리미엄"],
     profileKey: "장윤태",
   },
   {
@@ -83,7 +84,7 @@ const MCS = [
     image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FPcvLRqLzT-JnfPrulzmCo%2Fmc-gilsangwoo.jpg",
     highlight: "센스와 위트를 겸비한 진행력이 강점인 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/220802942529",
-    styles: ["품격형", "밝은형"],
+    tags: ["웃음", "야외", "하우스", "소규모", "중간규모", "합리적", "중간예산"],
     profileKey: "길상우",
   },
 ];
@@ -94,9 +95,10 @@ const QUESTIONS = [
     question: "어떤 예식장에서 결혼하세요?",
     sub: "예식 공간의 분위기에 맞는 사회자를 찾아드릴게요",
     options: [
-      { label: "호텔 / 채플", value: "A" },
-      { label: "고급 웨딩홀", value: "B" },
-      { label: "일반 웨딩홀", value: "C" },
+      { label: "호텔 / 채플", value: "hotel" },
+      { label: "고급 웨딩홀", value: "premium_hall" },
+      { label: "일반 웨딩홀", value: "normal_hall" },
+      { label: "하우스웨딩 / 야외", value: "outdoor" },
     ],
   },
   {
@@ -104,9 +106,9 @@ const QUESTIONS = [
     question: "하객이 몇 분 정도 오세요?",
     sub: "예식 규모에 따라 진행 스타일이 달라져요",
     options: [
-      { label: "100명 이하 소규모", value: "A" },
-      { label: "100~200명", value: "B" },
-      { label: "200명 이상 대규모", value: "C" },
+      { label: "100명 이하 소규모", value: "small" },
+      { label: "100~200명", value: "medium" },
+      { label: "200명 이상 대규모", value: "large" },
     ],
   },
   {
@@ -114,55 +116,123 @@ const QUESTIONS = [
     question: "어떤 분위기의 예식을 원하세요?",
     sub: "신랑신부님이 그리는 결혼식 감성을 알려주세요",
     options: [
-      { label: "품격 있고 격식 있게", value: "A" },
-      { label: "따뜻하고 감동적으로", value: "B" },
-      { label: "밝고 화기애애하게", value: "C" },
+      { label: "품격 있고 격식 있게", value: "formal" },
+      { label: "따뜻하고 감동적으로", value: "emotional" },
+      { label: "밝고 화기애애하게", value: "joyful" },
+    ],
+  },
+  {
+    id: "budget",
+    question: "사회자 예산은 어느 정도 생각하세요?",
+    sub: "예산에 맞는 최적의 사회자를 추천해드릴게요",
+    options: [
+      { label: "합리적인 가격으로", value: "budget" },
+      { label: "중간 정도", value: "mid" },
+      { label: "특별한 날, 프리미엄으로", value: "premium" },
+    ],
+  },
+  {
+    id: "priority",
+    question: "사회자에게 가장 중요하게 생각하는 건요?",
+    sub: "핵심 가치를 알려주시면 더 정확하게 매칭해드려요",
+    options: [
+      { label: "하객과 함께하는 웃음과 즐거움", value: "fun" },
+      { label: "신랑신부의 감동과 눈물", value: "emotion" },
+      { label: "흔들림 없는 깔끔한 진행", value: "clean" },
     ],
   },
 ];
 
-// 조합 키: 예식장(A호텔/B고급홀/C일반홀) - 하객수(A소규모/B중간/C대규모) - 분위기(A품격/B감동/C밝음)
-// 8명 전원이 1위로 고르게 나오도록 수동 배분
-const MATCH_TABLE: Record<string, { names: string[]; reason: string }> = {
-  "A-A-A": { names: ["이우영", "고승범", "석재선"], reason: "호텔 소규모 예식에서 품격 있는 아나운서형 진행이 잘 어울립니다." },
-  "A-A-B": { names: ["석재선", "이도영", "이우영"], reason: "소규모 채플 예식에서 차분하고 감동적인 진행이 빛을 발합니다." },
-  "A-A-C": { names: ["길상우", "이도영", "고승범"], reason: "호텔 소규모라도 밝고 유쾌한 분위기를 원하신다면 위트 있는 진행이 포인트입니다." },
-  "A-B-A": { names: ["고승범", "이우영", "김민수"], reason: "호텔 예식의 세련된 분위기에 맞는 안정적이고 품격 있는 진행을 추천드립니다." },
-  "A-B-B": { names: ["이도영", "석재선", "장윤태"], reason: "중간 규모 호텔 예식에서 신랑신부의 이야기를 따뜻하게 전달하는 사회자입니다." },
-  "A-B-C": { names: ["길상우", "이도영", "고승범"], reason: "호텔 예식이지만 하객들과 함께 즐기는 화기애애한 분위기를 만들어드립니다." },
-  "A-C-A": { names: ["장윤태", "이우영", "김선혁"], reason: "대규모 호텔 예식에서 흔들림 없는 안정적 진행력이 가장 중요합니다." },
-  "A-C-B": { names: ["이도영", "장윤태", "석재선"], reason: "많은 하객 앞에서도 신랑신부의 감동을 놓치지 않는 진행을 추천드립니다." },
-  "A-C-C": { names: ["김선혁", "길상우", "장윤태"], reason: "대형 호텔 예식에서 넓은 공간을 장악하며 활기차게 이끌어가는 사회자입니다." },
+// 답변 기반 점수 계산으로 사회자 매칭
+// 각 사회자에게 답변별 가중치 점수 부여 → 상위 3명 추천
+function calcRecommendations(answers: { id: string; value: string }[]): { mcs: typeof MCS; reason: string } {
+  const venue = answers.find((a) => a.id === "venue")?.value ?? "";
+  const guests = answers.find((a) => a.id === "guests")?.value ?? "";
+  const mood = answers.find((a) => a.id === "mood")?.value ?? "";
+  const budget = answers.find((a) => a.id === "budget")?.value ?? "";
+  const priority = answers.find((a) => a.id === "priority")?.value ?? "";
 
-  "B-A-A": { names: ["김민수", "고승범", "석재선"], reason: "고급 웨딩홀 소규모 예식에서 맞춤 대본으로 품격 있는 진행을 완성합니다." },
-  "B-A-B": { names: ["이도영", "김민수", "석재선"], reason: "소규모이기에 더 따뜻하고 밀도 있는 감동을 전달할 수 있는 사회자입니다." },
-  "B-A-C": { names: ["길상우", "김민수", "이도영"], reason: "소규모 웨딩홀에서 하객과 가까이 호흡하며 유쾌한 분위기를 만듭니다." },
-  "B-B-A": { names: ["장윤태", "고승범", "김민수"], reason: "고급 웨딩홀의 격식에 젠틀하고 안정적인 진행이 잘 맞습니다." },
-  "B-B-B": { names: ["이도영", "장윤태", "석재선"], reason: "중간 규모 고급홀에서 신랑신부 이야기를 중심으로 감동을 쌓아가는 진행입니다." },
-  "B-B-C": { names: ["길상우", "이도영", "김선혁"], reason: "고급 웨딩홀에서도 하객들이 적극 참여하는 활기찬 예식을 원하시는 분께 추천드립니다." },
-  "B-C-A": { names: ["김선혁", "장윤태", "이우영"], reason: "대규모 고급홀에서 탁월한 상황 대처와 안정적 진행력이 필요합니다." },
-  "B-C-B": { names: ["장윤태", "이도영", "김선혁"], reason: "많은 하객 앞에서도 감동의 흐름을 유지하는 검증된 진행을 추천드립니다." },
-  "B-C-C": { names: ["김선혁", "길상우", "장윤태"], reason: "대규모 고급홀에서 넓은 공간을 장악하며 하객 참여를 이끌어내는 사회자입니다." },
+  // 사회자별 점수 계산
+  const scores: Record<string, number> = {};
+  MCS.forEach((mc) => { scores[mc.name] = 0; });
 
-  "C-A-A": { names: ["고승범", "김민수", "석재선"], reason: "일반 웨딩홀 소규모 예식에서 깔끔하고 세련된 품격 진행을 원하시는 분께 맞습니다." },
-  "C-A-B": { names: ["이도영", "고승범", "길상우"], reason: "친밀한 분위기의 소규모 예식에서 따뜻한 이야기 중심으로 감동을 전달합니다." },
-  "C-A-C": { names: ["길상우", "김민수", "이도영"], reason: "소규모 예식에서 하객 한 분 한 분과 교감하며 즐거운 분위기를 만드는 사회자입니다." },
-  "C-B-A": { names: ["김민수", "석재선", "고승범"], reason: "일반 웨딩홀에서도 격식 있고 완성도 높은 예식을 원하신다면 이 사회자가 딱입니다." },
-  "C-B-B": { names: ["이도영", "길상우", "김민수"], reason: "중간 규모 웨딩홀에서 신랑신부의 스토리를 따뜻하게 풀어내는 진행입니다." },
-  "C-B-C": { names: ["길상우", "이도영", "김선혁"], reason: "일반 웨딩홀에서 하객들이 함께 즐기는 활기찬 분위기를 만들어드립니다." },
-  "C-C-A": { names: ["김선혁", "김민수", "고승범"], reason: "대규모 일반 웨딩홀에서 안정적이고 흔들림 없는 품격 진행이 강점입니다." },
-  "C-C-B": { names: ["이도영", "김선혁", "길상우"], reason: "많은 하객 앞에서도 감동의 순간을 놓치지 않는 진행력을 추천드립니다." },
-  "C-C-C": { names: ["길상우", "김선혁", "이도영"], reason: "대규모 예식에서 넓은 공간을 가득 채우는 유쾌하고 활기찬 진행입니다." },
-};
+  // 예식장 점수
+  const venueMap: Record<string, string[]> = {
+    hotel: ["이우영", "고승범", "김민수", "장윤태", "김선혁"],
+    premium_hall: ["장윤태", "김선혁", "이우영", "김민수", "석재선"],
+    normal_hall: ["이도영", "길상우", "고승범", "석재선", "김민수"],
+    outdoor: ["길상우", "이도영", "고승범", "석재선", "이우영"],
+  };
+  venueMap[venue]?.forEach((name, i) => { scores[name] += 5 - i; });
 
-function calcRecommendations(answers: Answer[]): { mcs: typeof MCS; reason: string } {
-  const key = answers.map((a) => a.value).join("-");
-  const entry = MATCH_TABLE[key] ?? { names: ["이도영", "길상우", "김민수"], reason: "답변을 바탕으로 가장 잘 어울리는 사회자를 추천드립니다." };
-  const mcs = entry.names
-    .map((name) => MCS.find((mc) => mc.name === name))
-    .filter(Boolean) as typeof MCS;
-  return { mcs, reason: entry.reason };
+  // 하객수 점수
+  const guestsMap: Record<string, string[]> = {
+    small: ["길상우", "고승범", "석재선", "이도영", "김민수"],
+    medium: ["이도영", "장윤태", "김민수", "길상우", "석재선"],
+    large: ["이우영", "김선혁", "장윤태", "이도영", "길상우"],
+  };
+  guestsMap[guests]?.forEach((name, i) => { scores[name] += 5 - i; });
+
+  // 분위기 점수
+  const moodMap: Record<string, string[]> = {
+    formal: ["이우영", "고승범", "장윤태", "김선혁", "김민수"],
+    emotional: ["이도영", "석재선", "장윤태", "고승범", "길상우"],
+    joyful: ["길상우", "이도영", "김선혁", "김민수", "고승범"],
+  };
+  moodMap[mood]?.forEach((name, i) => { scores[name] += 5 - i; });
+
+  // 예산 점수
+  const budgetMap: Record<string, string[]> = {
+    budget: ["고승범", "이도영", "길상우", "김민수", "석재선"],
+    mid: ["석재선", "김선혁", "이도영", "길상우", "고승범"],
+    premium: ["이우영", "장윤태", "김선혁", "김민수", "석재선"],
+  };
+  budgetMap[budget]?.forEach((name, i) => { scores[name] += 5 - i; });
+
+  // 우선순위 점수
+  const priorityMap: Record<string, string[]> = {
+    fun: ["길상우", "이도영", "김선혁", "고승범", "김민수"],
+    emotion: ["이도영", "석재선", "장윤태", "이우영", "고승범"],
+    clean: ["이우영", "김민수", "고승범", "김선혁", "장윤태"],
+  };
+  priorityMap[priority]?.forEach((name, i) => { scores[name] += 5 - i; });
+
+  // 점수 순 정렬
+  const sorted = MCS.slice().sort((a, b) => scores[b.name] - scores[a.name]);
+  const top3 = sorted.slice(0, 3);
+
+  // 추천 이유 생성
+  const reasonMap: Record<string, Record<string, string>> = {
+    outdoor: {
+      fun: "야외/하우스웨딩에서 하객과 자유롭게 호흡하며 유쾌한 분위기를 만드는 사회자를 추천드려요.",
+      emotion: "야외의 자연스러운 분위기 속에서 신랑신부의 감동 스토리를 따뜻하게 전달할 사회자예요.",
+      clean: "야외 예식의 변수에도 흔들림 없이 깔끔하게 진행하는 사회자를 추천드립니다.",
+    },
+    hotel: {
+      fun: "호텔의 품격을 유지하면서도 하객들이 즐길 수 있는 위트 있는 진행을 선보입니다.",
+      emotion: "호텔 예식의 격식 속에서 신랑신부의 이야기를 감동적으로 풀어내는 사회자예요.",
+      clean: "호텔 예식에 걸맞은 안정적이고 세련된 진행으로 완성도를 높여드립니다.",
+    },
+    premium_hall: {
+      fun: "고급 웨딩홀에서도 하객들이 함께 즐기는 활기찬 분위기를 만들어드립니다.",
+      emotion: "고급홀의 아름다운 공간에서 신랑신부만의 감동 스토리가 빛나도록 진행합니다.",
+      clean: "고급 웨딩홀에 어울리는 품격 있고 흔들림 없는 완벽한 진행을 보장합니다.",
+    },
+    normal_hall: {
+      fun: "친근한 웨딩홀에서 하객 한 분 한 분과 교감하며 즐거운 예식을 만들어드려요.",
+      emotion: "편안한 공간에서 신랑신부의 진심 어린 이야기가 하객에게 고스란히 전달됩니다.",
+      clean: "일반 웨딩홀에서도 완성도 높은 깔끔한 진행으로 기억에 남는 예식을 완성합니다.",
+    },
+  };
+
+  const venueKey = venue in reasonMap ? venue : "normal_hall";
+  const priorityKey = priority in (reasonMap[venueKey] ?? {}) ? priority : "clean";
+  const reason = reasonMap[venueKey]?.[priorityKey] ?? "답변을 바탕으로 가장 잘 어울리는 사회자를 추천드립니다.";
+
+  return { mcs: top3, reason };
 }
+
+type Answer = { id: string; value: string };
 
 interface Props {
   isOpen: boolean;
@@ -171,8 +241,8 @@ interface Props {
 }
 
 export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) {
-  const [step, setStep] = useState(0); // 0~2: 질문, 3: 결과
-  const [answers, setAnswers] = useState<{ value: string }[]>([]);
+  const [step, setStep] = useState(0); // 0~4: 질문, 5: 결과
+  const [answers, setAnswers] = useState<Answer[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
   const [animating, setAnimating] = useState(false);
   const [results, setResults] = useState<typeof MCS>([]);
@@ -212,7 +282,7 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
     if (selected === null) return;
     const q = QUESTIONS[step];
     const ans = q.options[selected];
-    const newAnswers = [...answers, { value: ans.value }];
+    const newAnswers = [...answers, { id: q.id, value: ans.value }];
 
     setAnimating(true);
     setTimeout(() => {
@@ -223,11 +293,10 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
         setStep(step + 1);
         setAnimating(false);
       } else {
-        // 결과 계산
         const { mcs: recs, reason: rec } = calcRecommendations(newAnswers);
         setResults(recs);
         setReason(rec);
-        setStep(3);
+        setStep(QUESTIONS.length);
         setAnimating(false);
         setTimeout(() => setResultVisible(true), 100);
       }
@@ -247,7 +316,8 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
 
   if (!isOpen) return null;
 
-  const progress = step >= 3 ? 100 : Math.round((step / QUESTIONS.length) * 100);
+  const totalSteps = QUESTIONS.length;
+  const progress = step >= totalSteps ? 100 : Math.round((step / totalSteps) * 100);
 
   return (
     <div
@@ -307,7 +377,7 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
         </div>
 
         {/* 질문 영역 */}
-        {step < 3 && (
+        {step < totalSteps && (
           <div
             className="px-6 py-8"
             style={{
@@ -321,7 +391,7 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
               className="text-xs mb-3"
               style={{ fontFamily: "'Noto Sans KR', sans-serif", color: "rgba(214,177,107,0.6)", letterSpacing: "0.1em" }}
             >
-              {step + 1} / {QUESTIONS.length}
+              {step + 1} / {totalSteps}
             </p>
 
             <h4
@@ -398,14 +468,14 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
                 boxShadow: selected !== null ? "0 4px 20px rgba(214,177,107,0.3)" : "none",
               }}
             >
-              {step < QUESTIONS.length - 1 ? "다음" : "결과 보기"}
+              {step < totalSteps - 1 ? "다음" : "결과 보기"}
               <ChevronRight size={16} />
             </button>
           </div>
         )}
 
         {/* 결과 영역 */}
-        {step === 3 && (
+        {step === totalSteps && (
           <div
             className="px-6 py-8"
             style={{

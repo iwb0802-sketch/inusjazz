@@ -123,49 +123,45 @@ const QUESTIONS = [
 
 // 조합 키: 예식장(A호텔/B고급홀/C일반홀) - 하객수(A소규모/B중간/C대규모) - 분위기(A품격/B감동/C밝음)
 // 8명 전원이 1위로 고르게 나오도록 수동 배분
-const MATCH_TABLE: Record<string, string[]> = {
-  // 호텔/채플
-  "A-A-A": ["이우영", "고승범", "석재선"],      // 호텔+소규모+품격 → 경력 많은 아나운서형
-  "A-A-B": ["석재선", "이도영", "이우영"],      // 호텔+소규모+감동 → 차분하고 감동형
-  "A-A-C": ["길상우", "이도영", "고승범"],      // 호텔+소규모+밝음 → 위트있는 진행
-  "A-B-A": ["고승범", "이우영", "김민수"],      // 호텔+중간+품격 → 세련된 아나운서형
-  "A-B-B": ["이도영", "석재선", "장윤태"],      // 호텔+중간+감동 → 스토리텔링 강점
-  "A-B-C": ["길상우", "이도영", "고승범"],      // 호텔+중간+밝음 → 센스있는 진행
-  "A-C-A": ["장윤태", "이우영", "김선혁"],      // 호텔+대규모+품격 → 대형 예식 경험
-  "A-C-B": ["이도영", "장윤태", "석재선"],      // 호텔+대규모+감동 → 감동 전달력
-  "A-C-C": ["김선혁", "길상우", "장윤태"],      // 호텔+대규모+밝음 → 상황 대처 능력
+const MATCH_TABLE: Record<string, { names: string[]; reason: string }> = {
+  "A-A-A": { names: ["이우영", "고승범", "석재선"], reason: "호텔 소규모 예식에서 품격 있는 아나운서형 진행이 잘 어울립니다." },
+  "A-A-B": { names: ["석재선", "이도영", "이우영"], reason: "소규모 채플 예식에서 차분하고 감동적인 진행이 빛을 발합니다." },
+  "A-A-C": { names: ["길상우", "이도영", "고승범"], reason: "호텔 소규모라도 밝고 유쾌한 분위기를 원하신다면 위트 있는 진행이 포인트입니다." },
+  "A-B-A": { names: ["고승범", "이우영", "김민수"], reason: "호텔 예식의 세련된 분위기에 맞는 안정적이고 품격 있는 진행을 추천드립니다." },
+  "A-B-B": { names: ["이도영", "석재선", "장윤태"], reason: "중간 규모 호텔 예식에서 신랑신부의 이야기를 따뜻하게 전달하는 사회자입니다." },
+  "A-B-C": { names: ["길상우", "이도영", "고승범"], reason: "호텔 예식이지만 하객들과 함께 즐기는 화기애애한 분위기를 만들어드립니다." },
+  "A-C-A": { names: ["장윤태", "이우영", "김선혁"], reason: "대규모 호텔 예식에서 흔들림 없는 안정적 진행력이 가장 중요합니다." },
+  "A-C-B": { names: ["이도영", "장윤태", "석재선"], reason: "많은 하객 앞에서도 신랑신부의 감동을 놓치지 않는 진행을 추천드립니다." },
+  "A-C-C": { names: ["김선혁", "길상우", "장윤태"], reason: "대형 호텔 예식에서 넓은 공간을 장악하며 활기차게 이끌어가는 사회자입니다." },
 
-  // 고급 웨딩홀
-  "B-A-A": ["김민수", "고승범", "석재선"],      // 고급홀+소규모+품격 → 맞춤 대본
-  "B-A-B": ["이도영", "김민수", "석재선"],      // 고급홀+소규모+감동 → 따뜻한 진행
-  "B-A-C": ["길상우", "김민수", "이도영"],      // 고급홀+소규모+밝음 → 유쾌하고 친근
-  "B-B-A": ["장윤태", "고승범", "김민수"],      // 고급홀+중간+품격 → 젠틀한 진행
-  "B-B-B": ["이도영", "장윤태", "석재선"],      // 고급홀+중간+감동 → 스토리 중심
-  "B-B-C": ["길상우", "이도영", "김선혁"],      // 고급홀+중간+밝음 → 하객 참여형
-  "B-C-A": ["김선혁", "장윤태", "이우영"],      // 고급홀+대규모+품격 → 안정적 대형 진행
-  "B-C-B": ["장윤태", "이도영", "김선혁"],      // 고급홀+대규모+감동 → 감동과 안정
-  "B-C-C": ["김선혁", "길상우", "장윤태"],      // 고급홀+대규모+밝음 → 활기찬 대형 진행
+  "B-A-A": { names: ["김민수", "고승범", "석재선"], reason: "고급 웨딩홀 소규모 예식에서 맞춤 대본으로 품격 있는 진행을 완성합니다." },
+  "B-A-B": { names: ["이도영", "김민수", "석재선"], reason: "소규모이기에 더 따뜻하고 밀도 있는 감동을 전달할 수 있는 사회자입니다." },
+  "B-A-C": { names: ["길상우", "김민수", "이도영"], reason: "소규모 웨딩홀에서 하객과 가까이 호흡하며 유쾌한 분위기를 만듭니다." },
+  "B-B-A": { names: ["장윤태", "고승범", "김민수"], reason: "고급 웨딩홀의 격식에 젠틀하고 안정적인 진행이 잘 맞습니다." },
+  "B-B-B": { names: ["이도영", "장윤태", "석재선"], reason: "중간 규모 고급홀에서 신랑신부 이야기를 중심으로 감동을 쌓아가는 진행입니다." },
+  "B-B-C": { names: ["길상우", "이도영", "김선혁"], reason: "고급 웨딩홀에서도 하객들이 적극 참여하는 활기찬 예식을 원하시는 분께 추천드립니다." },
+  "B-C-A": { names: ["김선혁", "장윤태", "이우영"], reason: "대규모 고급홀에서 탁월한 상황 대처와 안정적 진행력이 필요합니다." },
+  "B-C-B": { names: ["장윤태", "이도영", "김선혁"], reason: "많은 하객 앞에서도 감동의 흐름을 유지하는 검증된 진행을 추천드립니다." },
+  "B-C-C": { names: ["김선혁", "길상우", "장윤태"], reason: "대규모 고급홀에서 넓은 공간을 장악하며 하객 참여를 이끌어내는 사회자입니다." },
 
-  // 일반 웨딩홀
-  "C-A-A": ["고승범", "김민수", "석재선"],      // 일반홀+소규모+품격 → 깔끔한 진행
-  "C-A-B": ["이도영", "고승범", "길상우"],      // 일반홀+소규모+감동 → 친밀한 감동
-  "C-A-C": ["길상우", "김민수", "이도영"],      // 일반홀+소규모+밝음 → 가장 화기애애
-  "C-B-A": ["김민수", "석재선", "고승범"],      // 일반홀+중간+품격 → 안정적 맞춤형
-  "C-B-B": ["이도영", "길상우", "김민수"],      // 일반홀+중간+감동 → 따뜻한 스토리
-  "C-B-C": ["길상우", "이도영", "김선혁"],      // 일반홀+중간+밝음 → 유쾌한 하객 소통
-  "C-C-A": ["김선혁", "김민수", "고승범"],      // 일반홀+대규모+품격 → 대형 안정 진행
-  "C-C-B": ["이도영", "김선혁", "길상우"],      // 일반홀+대규모+감동 → 넓은 공간 감동
-  "C-C-C": ["길상우", "김선혁", "이도영"],      // 일반홀+대규모+밝음 → 대형 유쾌 진행
+  "C-A-A": { names: ["고승범", "김민수", "석재선"], reason: "일반 웨딩홀 소규모 예식에서 깔끔하고 세련된 품격 진행을 원하시는 분께 맞습니다." },
+  "C-A-B": { names: ["이도영", "고승범", "길상우"], reason: "친밀한 분위기의 소규모 예식에서 따뜻한 이야기 중심으로 감동을 전달합니다." },
+  "C-A-C": { names: ["길상우", "김민수", "이도영"], reason: "소규모 예식에서 하객 한 분 한 분과 교감하며 즐거운 분위기를 만드는 사회자입니다." },
+  "C-B-A": { names: ["김민수", "석재선", "고승범"], reason: "일반 웨딩홀에서도 격식 있고 완성도 높은 예식을 원하신다면 이 사회자가 딱입니다." },
+  "C-B-B": { names: ["이도영", "길상우", "김민수"], reason: "중간 규모 웨딩홀에서 신랑신부의 스토리를 따뜻하게 풀어내는 진행입니다." },
+  "C-B-C": { names: ["길상우", "이도영", "김선혁"], reason: "일반 웨딩홀에서 하객들이 함께 즐기는 활기찬 분위기를 만들어드립니다." },
+  "C-C-A": { names: ["김선혁", "김민수", "고승범"], reason: "대규모 일반 웨딩홀에서 안정적이고 흔들림 없는 품격 진행이 강점입니다." },
+  "C-C-B": { names: ["이도영", "김선혁", "길상우"], reason: "많은 하객 앞에서도 감동의 순간을 놓치지 않는 진행력을 추천드립니다." },
+  "C-C-C": { names: ["길상우", "김선혁", "이도영"], reason: "대규모 예식에서 넓은 공간을 가득 채우는 유쾌하고 활기찬 진행입니다." },
 };
 
-type Answer = { value: string };
-
-function calcRecommendations(answers: Answer[]): typeof MCS {
+function calcRecommendations(answers: Answer[]): { mcs: typeof MCS; reason: string } {
   const key = answers.map((a) => a.value).join("-");
-  const names = MATCH_TABLE[key] ?? ["이도영", "길상우", "김민수"];
-  return names
+  const entry = MATCH_TABLE[key] ?? { names: ["이도영", "길상우", "김민수"], reason: "답변을 바탕으로 가장 잘 어울리는 사회자를 추천드립니다." };
+  const mcs = entry.names
     .map((name) => MCS.find((mc) => mc.name === name))
     .filter(Boolean) as typeof MCS;
+  return { mcs, reason: entry.reason };
 }
 
 interface Props {
@@ -180,6 +176,7 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
   const [selected, setSelected] = useState<number | null>(null);
   const [animating, setAnimating] = useState(false);
   const [results, setResults] = useState<typeof MCS>([]);
+  const [reason, setReason] = useState("");
   const [resultVisible, setResultVisible] = useState(false);
 
   useEffect(() => {
@@ -189,6 +186,7 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
         setAnswers([]);
         setSelected(null);
         setResults([]);
+        setReason("");
         setResultVisible(false);
       }, 300);
     }
@@ -226,8 +224,9 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
         setAnimating(false);
       } else {
         // 결과 계산
-        const recs = calcRecommendations(newAnswers);
+        const { mcs: recs, reason: rec } = calcRecommendations(newAnswers);
         setResults(recs);
+        setReason(rec);
         setStep(3);
         setAnimating(false);
         setTimeout(() => setResultVisible(true), 100);
@@ -242,6 +241,7 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
       setAnswers([]);
       setSelected(null);
       setResults([]);
+      setReason("");
     }, 200);
   };
 
@@ -427,12 +427,20 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
               >
                 이런 사회자가 잘 맞을 것 같아요
               </h4>
-              <p
-                className="mt-2 text-white/40 text-sm"
-                style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
-              >
-                답변을 분석해 추천드린 사회자입니다
-              </p>
+              {reason && (
+                <p
+                  className="mt-3 mx-auto text-sm leading-relaxed px-4 py-3 rounded-lg"
+                  style={{
+                    fontFamily: "'Noto Sans KR', sans-serif",
+                    color: "rgba(214,177,107,0.9)",
+                    background: "rgba(214,177,107,0.08)",
+                    border: "1px solid rgba(214,177,107,0.2)",
+                    maxWidth: "360px",
+                  }}
+                >
+                  {reason}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-3">

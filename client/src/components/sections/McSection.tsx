@@ -6,6 +6,7 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import McVoicePreviewModal from "./McVoicePreviewModal";
 import { ChevronLeft, ChevronRight, X, ExternalLink } from "lucide-react";
 
 const MCS = [
@@ -388,6 +389,7 @@ export default function McSection() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedMc, setSelectedMc] = useState<MC | null>(null);
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
+  const [voicePreviewOpen, setVoicePreviewOpen] = useState(false);
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -506,6 +508,32 @@ export default function McSection() {
                 {STYLE_DESCRIPTIONS[activeFilter] || ""}
               </p>
             </div>
+          </div>
+
+          {/* 입장 멘트 미리듣기 CTA 버튼 */}
+          <div className="flex justify-center mt-8 mb-2">
+            <button
+              onClick={() => setVoicePreviewOpen(true)}
+              style={{
+                display: "flex", alignItems: "center", gap: "10px",
+                padding: "14px 28px",
+                background: "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.08) 100%)",
+                border: "1px solid rgba(214,177,107,0.4)",
+                color: "#d6b16b", cursor: "pointer", fontSize: "14px", fontWeight: 700,
+                fontFamily: "'Noto Sans KR', sans-serif", letterSpacing: "0.06em",
+                transition: "all 0.3s",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.2) 0%, rgba(91,181,162,0.15) 100%)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "#d6b16b"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.08) 100%)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(214,177,107,0.4)"; }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+              내 결혼식 입장 멘트 미리듣기
+            </button>
           </div>
 
           {/* Grid Layout */}
@@ -792,6 +820,12 @@ export default function McSection() {
       {iframeUrl && (
         <IframeModal url={iframeUrl} onClose={() => setIframeUrl(null)} />
       )}
+
+      {/* 입장 멘트 미리듣기 모달 */}
+      <McVoicePreviewModal
+        isOpen={voicePreviewOpen}
+        onClose={() => setVoicePreviewOpen(false)}
+      />
     </>
   );
 }

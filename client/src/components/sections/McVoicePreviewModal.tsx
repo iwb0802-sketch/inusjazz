@@ -64,21 +64,57 @@ export default function McVoicePreviewModal({ isOpen, onClose }: McVoicePreviewM
     setPreviewingMc(mc.name);
   };
 
+  const getScript = (style: string, groom: string, bride: string) => {
+    switch (style) {
+      case "감동형":
+        return `지금부터 두 분의 아름다운 예식을 시작하겠습니다. 신랑 ${groom} 님께서는 이 자리에서 가장 사랑하는 분을 만나기 위해 먼저 입장해 주시겠습니다. 신랑 ${groom} 님 입장입니다. 이제 오늘의 주인공, 신부 ${bride} 님께서 입장하시겠습니다. 모든 분들의 마음 속에 영원히 기억될 아름다운 순간입니다. 신부 ${bride} 님 입장입니다.`;
+      case "밝은형":
+        return `안녕하세요! 오늘 이 아름다운 자리에 와주신 모든 분들께 진심으로 감사드립니다. 자, 이제 오늘의 주인공 신랑 ${groom} 님께서 입장하십니다! 힘차고 따뜻한 박수로 맞이해 주세요! 신랑 ${groom} 님 입장! 자, 잠시 후 오늘의 가장 아름다운 순간이 펼쳐집니다. 신부 ${bride} 님께서 입장하십니다! 신부 ${bride} 님 입장!`;
+      default:
+        return `오늘 귀한 시간을 내어주신 모든 분들께 깊은 감사를 드립니다. 신랑 ${groom} 님의 입장을 안내해 드리겠습니다. 신랑 ${groom} 님, 입장해 주십시오. 이어서 신부 ${bride} 님의 입장이 있겠습니다. 신부 ${bride} 님, 행복한 걸음으로 입장해 주십시오.`;
+    }
+  };
+
+  const VOICE_MAP: Record<string, string> = {
+    "김민수": "JWuOh2mTRrGyGGPaD7WM",
+    "고승범": "wg42EEjzSm99URqmlk1i",
+    "이도영": "0A9yP2iWCjvoeUUQTyTK",
+    "석재선": "Sqe8LWJ3mfDSe8s9PFkP",
+    "이우영": "RamwLTJJSRWZIyoWej6F",
+    "김선혁": "KSEIJT8t4VqiJgJAWKPi",
+    "장윤태": "GQ8Ij9Yf59rv168AxSFB",
+    "길상우": "OO3VnWQQL5x3ySM9jNb5",
+  };
+
   const handleGenerate = async () => {
     if (!selectedMc) return;
     setStep("generating");
     setError(null);
     try {
-      const res = await fetch("/api/tts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          groomName,
-          brideName,
-          mcName: selectedMc,
-          style: selectedStyle,
-        }),
-      });
+      const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY;
+      const voiceId = VOICE_MAP[selectedMc];
+      const script = getScript(selectedStyle, groomName, brideName);
+
+      const res = await fetch(
+        `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+        {
+          method: "POST",
+          headers: {
+            "xi-api-key": apiKey,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: script,
+            model_id: "eleven_multilingual_v2",
+            voice_settings: {
+              stability: 0.5,
+              similarity_boost: 0.8,
+              style: 0.3,
+              use_speaker_boost: true,
+            },
+          }),
+        }
+      );
       if (!res.ok) throw new Error("생성 실패");
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);

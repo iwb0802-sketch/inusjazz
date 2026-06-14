@@ -742,7 +742,6 @@ export default function McSection() {
                         "김민수": "/profile-minsu.html",
                       };
                       if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
-                      else if (mc.profileUrl) window.open(mc.profileUrl, "_blank");
                       else setSelectedMc(mc);
                     }}
                     className="mt-auto relative flex items-center justify-center gap-2 w-full py-3 overflow-hidden group transition-all duration-300 hover:-translate-y-0.5"

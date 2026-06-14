@@ -76,7 +76,7 @@ export default function McVoicePreviewModal({ isOpen, onClose }: McVoicePreviewM
   };
 
   const VOICE_MAP: Record<string, string> = {
-    "김민수": "JWuOh2mTRrGyGGPaD7WM",
+    "김민수": "pHipxpbWHTdurpQ4CBAX",
     "고승범": "wg42EEjzSm99URqmlk1i",
     "이도영": "0A9yP2iWCjvoeUUQTyTK",
     "석재선": "Sqe8LWJ3mfDSe8s9PFkP",

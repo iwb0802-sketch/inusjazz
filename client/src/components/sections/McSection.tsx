@@ -119,7 +119,7 @@ const MCS = [
     styles: ["품격형", "밝은형"],
     youtubeId: "0Ske676aw84",
     audioFile: "",
-    profileCardImg: "",
+    profileCardImg: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FQxXzn6GslDFTyH_mp_7s7%2F2_NLo2VM.png",
   },
 ];
 
@@ -537,7 +537,6 @@ export default function McSection() {
                     "김민수": "/profile-minsu.html",
                   };
                   if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
-                  else if (mc.profileUrl) window.open(mc.profileUrl, "_blank");
                   else setSelectedMc(mc);
                 }}
               >

@@ -369,14 +369,16 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg overflow-hidden"
+        className="relative w-full max-w-lg"
         style={{
           background: "linear-gradient(160deg, #141414 0%, #0d0d0d 100%)",
           border: "1px solid rgba(214,177,107,0.2)",
           borderRadius: "12px",
           animation: "fadeInUp 0.35s cubic-bezier(0.23,1,0.32,1)",
-          maxHeight: "92vh",
+          maxHeight: "90vh",
           overflowY: "auto",
+          overflowX: "hidden",
+          WebkitOverflowScrolling: "touch",
         }}
         onClick={(e) => e.stopPropagation()}
       >

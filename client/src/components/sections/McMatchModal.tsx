@@ -628,7 +628,7 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
 
                     {/* 프로필 버튼 */}
                     <button
-                      onClick={() => { onClose(); onOpenProfile(mc.profileKey); }}
+                      onClick={() => { onOpenProfile(mc.profileKey); }}
                       className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200 hover:scale-110"
                       style={{
                         background: "rgba(214,177,107,0.12)",

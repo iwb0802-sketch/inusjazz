@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npx pnpm install && npx vite build",
+  "buildCommand": "npx pnpm install --no-frozen-lockfile && npx vite build",
   "outputDirectory": "dist/public",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }

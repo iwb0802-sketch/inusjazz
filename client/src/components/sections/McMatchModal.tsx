@@ -251,6 +251,7 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
   const [resultVisible, setResultVisible] = useState(false);
   const [toast, setToast] = useState("");
   const [savingImg, setSavingImg] = useState(false);
+  const [previewImgUrl, setPreviewImgUrl] = useState<string | null>(null);
   const resultCardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -324,8 +325,11 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
   };
 
   const handleKakaoShare = async () => {
-    const top = results[0];
-    const text = `💍 내 결혼식에 어울리는 사회자 추천 결과\n\n1순위: ${top?.name} 사회자\n\n${reason}\n\n▶ 이너스뮤직 사회자 보러가기\nhttps://inusmusic.com`;
+    const rankText = results
+      .slice(0, 3)
+      .map((mc, i) => `${i + 1}순위: ${mc.name} 사회자`)
+      .join("\n");
+    const text = `💍 내 결혼식에 어울리는 사회자 추천 결과\n\n${rankText}\n\n${reason}\n\n▶ 이너스뮤직 사회자 보러가기\nhttps://inusmusic.com`;
     try {
       await navigator.clipboard.writeText(text);
       showToast("📋 카카오톡에 붙여넣기 하세요!");
@@ -820,7 +824,7 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
             <div className="flex gap-2 mt-5">
               <button
                 onClick={handleKakaoShare}
-                className="flex items-center justify-center gap-2 flex-1 py-3 rounded-lg text-sm font-semibold transition-all duration-200 hover:opacity-90"
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-lg text-sm font-semibold transition-all duration-200 hover:opacity-90"
                 style={{
                   fontFamily: "'Noto Sans KR', sans-serif",
                   background: "#FEE500",
@@ -829,20 +833,6 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
               >
                 <Copy size={13} />
                 카카오톡 공유
-              </button>
-              <button
-                onClick={handleInstaShare}
-                disabled={savingImg}
-                className="flex items-center justify-center gap-2 flex-1 py-3 rounded-lg text-sm font-semibold transition-all duration-200 hover:opacity-90"
-                style={{
-                  fontFamily: "'Noto Sans KR', sans-serif",
-                  background: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)",
-                  color: "#fff",
-                  opacity: savingImg ? 0.7 : 1,
-                }}
-              >
-                <Instagram size={13} />
-                {savingImg ? "저장 중..." : "인스타 이미지 저장"}
               </button>
             </div>
 

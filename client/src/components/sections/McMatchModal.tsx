@@ -335,24 +335,167 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
   };
 
   const handleInstaShare = async () => {
-    if (!resultCardRef.current) return;
+    if (!results || results.length === 0) return;
     setSavingImg(true);
     try {
-      // 캡처 전 img 태그 숨기기 (CORS 문제 완전 회피)
-      const imgs = resultCardRef.current.querySelectorAll<HTMLImageElement>("img");
-      imgs.forEach(img => { img.style.visibility = "hidden"; });
+      const W = 640, PADDING = 36;
+      const ROW_H = 90;
+      const HEADER_H = 160;
+      const REASON_H = 80;
+      const FOOTER_H = 60;
+      const H = HEADER_H + REASON_H + ROW_H * results.length + FOOTER_H + PADDING * 2;
 
-      const canvas = await html2canvas(resultCardRef.current, {
-        backgroundColor: "#0d0d0d",
-        scale: 2,
-        useCORS: false,
-        allowTaint: false,
-        logging: false,
-        ignoreElements: (el) => el.tagName === "IMG",
-      });
+      const canvas = document.createElement("canvas");
+      canvas.width = W;
+      canvas.height = H;
+      const ctx = canvas.getContext("2d")!;
 
-      // 복원
-      imgs.forEach(img => { img.style.visibility = ""; });
+      // 배경
+      ctx.fillStyle = "#0d0d0d";
+      ctx.fillRect(0, 0, W, H);
+
+      // 상단 골드 라인
+      ctx.fillStyle = "#d4b896";
+      ctx.fillRect(PADDING, 28, W - PADDING * 2, 1);
+
+      // 헤더 텍스트
+      ctx.fillStyle = "#d4b896";
+      ctx.font = "13px 'Arial'";
+      ctx.textAlign = "center";
+      ctx.fillText("RESULT · INUS MUSIC", W / 2, 52);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 22px 'Arial'";
+      ctx.fillText("이런 사회자가 잘 맞을 것 같아요", W / 2, 90);
+
+      // 이유 텍스트
+      if (reason) {
+        ctx.fillStyle = "rgba(214,177,107,0.85)";
+        ctx.font = "13px 'Arial'";
+        const maxW = W - PADDING * 2 - 20;
+        // 줄바꿈 처리
+        const words = reason.split(" ");
+        let line = "", y = 125;
+        for (const word of words) {
+          const test = line + word + " ";
+          if (ctx.measureText(test).width > maxW && line) {
+            ctx.fillText(line.trim(), W / 2, y);
+            line = word + " ";
+            y += 20;
+          } else { line = test; }
+        }
+        ctx.fillText(line.trim(), W / 2, y);
+      }
+
+      // 구분선
+      ctx.fillStyle = "rgba(255,255,255,0.08)";
+      ctx.fillRect(PADDING, HEADER_H + REASON_H - 10, W - PADDING * 2, 1);
+
+      // 사회자 이미지 fetch → blob → ImageBitmap
+      const loadImg = async (src: string): Promise<HTMLImageElement | null> => {
+        try {
+          // 상대경로는 절대경로로
+          const url = src.startsWith("http") ? src : window.location.origin + src;
+          const res = await fetch(url, { mode: "cors", cache: "no-cache" });
+          const blob = await res.blob();
+          const objectUrl = URL.createObjectURL(blob);
+          return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => { URL.revokeObjectURL(objectUrl); resolve(img); };
+            img.onerror = () => { URL.revokeObjectURL(objectUrl); resolve(null); };
+            img.src = objectUrl;
+          });
+        } catch { return null; }
+      };
+
+      // 각 사회자 행 그리기
+      for (let i = 0; i < results.length; i++) {
+        const mc = results[i];
+        const y = HEADER_H + REASON_H + i * ROW_H;
+        const isFirst = i === 0;
+
+        // 행 배경
+        if (isFirst) {
+          const grad = ctx.createLinearGradient(PADDING, y, W - PADDING, y);
+          grad.addColorStop(0, "rgba(214,177,107,0.12)");
+          grad.addColorStop(1, "rgba(91,181,162,0.06)");
+          ctx.fillStyle = grad;
+        } else {
+          ctx.fillStyle = "rgba(255,255,255,0.03)";
+        }
+        ctx.beginPath();
+        ctx.roundRect(PADDING, y + 6, W - PADDING * 2, ROW_H - 10, 10);
+        ctx.fill();
+
+        // 테두리
+        ctx.strokeStyle = isFirst ? "rgba(214,177,107,0.4)" : "rgba(255,255,255,0.07)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // 순위 원
+        const cx = PADDING + 22, cy = y + ROW_H / 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+        ctx.fillStyle = isFirst ? "#d4b896" : "rgba(255,255,255,0.08)";
+        ctx.fill();
+        ctx.fillStyle = isFirst ? "#0d0d0d" : "rgba(255,255,255,0.4)";
+        ctx.font = "bold 13px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(String(i + 1), cx, cy + 5);
+
+        // 프로필 이미지
+        const imgX = PADDING + 46, imgY = cy - 22, imgSize = 44;
+        const imgEl = await loadImg(mc.image);
+        if (imgEl) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(imgX + imgSize / 2, imgY + imgSize / 2, imgSize / 2, 0, Math.PI * 2);
+          ctx.clip();
+          // 이미지 비율 유지하며 중앙 크롭
+          const scale = Math.max(imgSize / imgEl.width, imgSize / imgEl.height);
+          const sw = imgSize / scale, sh = imgSize / scale;
+          const sx = (imgEl.width - sw) / 2, sy = (imgEl.height - sh) / 2;
+          ctx.drawImage(imgEl, sx, sy, sw, sh, imgX, imgY, imgSize, imgSize);
+          ctx.restore();
+          // 원형 테두리
+          ctx.beginPath();
+          ctx.arc(imgX + imgSize / 2, imgY + imgSize / 2, imgSize / 2, 0, Math.PI * 2);
+          ctx.strokeStyle = isFirst ? "rgba(214,177,107,0.5)" : "rgba(255,255,255,0.1)";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        } else {
+          // 이미지 없으면 원형 placeholder
+          ctx.beginPath();
+          ctx.arc(imgX + imgSize / 2, imgY + imgSize / 2, imgSize / 2, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255,255,255,0.08)";
+          ctx.fill();
+        }
+
+        // 이름
+        const textX = imgX + imgSize + 12;
+        ctx.textAlign = "left";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = `bold 16px Arial`;
+        ctx.fillText(mc.name, textX, cy - 4);
+
+        // tier 배지
+        ctx.fillStyle = isFirst ? "rgba(214,177,107,0.15)" : "rgba(255,255,255,0.06)";
+        ctx.beginPath();
+        ctx.roundRect(textX, cy + 6, 52, 16, 4);
+        ctx.fill();
+        ctx.fillStyle = isFirst ? "#d4b896" : "rgba(255,255,255,0.3)";
+        ctx.font = "10px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(mc.tier + " · " + mc.desc, textX + 26, cy + 17);
+      }
+
+      // 하단 워터마크
+      ctx.fillStyle = "rgba(255,255,255,0.2)";
+      ctx.font = "11px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText("inusmusic.com  ·  이너스뮤직", W / 2, H - 22);
+      ctx.fillStyle = "#d4b896";
+      ctx.fillRect(PADDING, H - 32, W - PADDING * 2, 1);
 
       // 저장
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -365,21 +508,15 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
             showToast("📸 이미지를 길게 눌러 저장하세요!");
           } else {
             const a = document.createElement("a");
-            a.href = url;
-            a.download = "이너스뮤직_사회자추천.png";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            a.href = url; a.download = "이너스뮤직_사회자추천.png";
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
             showToast("📸 저장 완료!");
           }
           setTimeout(() => URL.revokeObjectURL(url), 15000);
         } else {
           const a = document.createElement("a");
-          a.href = url;
-          a.download = "이너스뮤직_사회자추천.png";
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
+          a.href = url; a.download = "이너스뮤직_사회자추천.png";
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
           setTimeout(() => URL.revokeObjectURL(url), 1000);
           showToast("📸 이미지 저장 완료! 인스타에 올려보세요");
         }

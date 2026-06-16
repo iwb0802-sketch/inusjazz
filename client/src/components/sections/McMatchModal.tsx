@@ -344,14 +344,48 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
         useCORS: true,
         allowTaint: true,
       });
-      const url = canvas.toDataURL("image/png");
-      const link = document.createElement("a");
-      link.download = "이너스뮤직_사회자추천.png";
-      link.href = url;
-      link.click();
-      showToast("📸 이미지 저장 완료! 인스타에 올려보세요");
+
+      // iOS Safari / 모바일 대응: Blob + createObjectURL 방식
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        // 모바일: 새 탭에서 이미지 열기 (길게 눌러서 저장)
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+          const newTab = window.open(url, "_blank");
+          if (newTab) {
+            showToast("📸 이미지를 길게 눌러 저장하세요!");
+          } else {
+            // 팝업 차단된 경우 data URL로 폴백
+            const dataUrl = canvas.toDataURL("image/png");
+            const link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = "이너스뮤직_사회자추천.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("📸 이미지 저장 완료!");
+          }
+          setTimeout(() => URL.revokeObjectURL(url), 10000);
+        }, "image/png");
+      } else {
+        // PC: Blob + Object URL 다운로드
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "이너스뮤직_사회자추천.png";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+          showToast("📸 이미지 저장 완료! 인스타에 올려보세요");
+        }, "image/png");
+      }
     } catch {
-      showToast("이미지 저장 실패");
+      showToast("이미지 저장 실패 — 스크린샷을 이용해주세요");
     } finally {
       setSavingImg(false);
     }

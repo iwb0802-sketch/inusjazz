@@ -334,64 +334,38 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
     }
   };
 
-  // 이미지 URL → base64 변환 (CORS 우회용)
-  const toBase64 = (url: string): Promise<string> =>
-    new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => {
-        const c = document.createElement("canvas");
-        c.width = img.naturalWidth;
-        c.height = img.naturalHeight;
-        c.getContext("2d")!.drawImage(img, 0, 0);
-        try { resolve(c.toDataURL("image/jpeg", 0.9)); }
-        catch { resolve(url); } // CORS 실패 시 원본 유지
-      };
-      img.onerror = () => resolve(url);
-      img.src = url + (url.includes("?") ? "&" : "?") + "_t=" + Date.now();
-    });
-
   const handleInstaShare = async () => {
     if (!resultCardRef.current) return;
     setSavingImg(true);
     try {
-      // 1) 캡처 영역 내 모든 img를 base64로 교체 (CORS 이미지 대응)
+      // 캡처 전 img 태그 숨기기 (CORS 문제 완전 회피)
       const imgs = resultCardRef.current.querySelectorAll<HTMLImageElement>("img");
-      const origSrcs: string[] = [];
-      await Promise.all(
-        Array.from(imgs).map(async (img, i) => {
-          origSrcs[i] = img.src;
-          img.src = await toBase64(img.src);
-        })
-      );
+      imgs.forEach(img => { img.style.visibility = "hidden"; });
 
-      // 2) 캡처
       const canvas = await html2canvas(resultCardRef.current, {
         backgroundColor: "#0d0d0d",
         scale: 2,
-        useCORS: false,   // base64로 교체했으므로 불필요
+        useCORS: false,
         allowTaint: false,
         logging: false,
+        ignoreElements: (el) => el.tagName === "IMG",
       });
 
-      // 3) 원본 src 복원
-      Array.from(imgs).forEach((img, i) => { img.src = origSrcs[i]; });
+      // 복원
+      imgs.forEach(img => { img.style.visibility = ""; });
 
-      // 4) 저장
+      // 저장
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
       canvas.toBlob((blob) => {
         if (!blob) { showToast("이미지 생성 실패"); return; }
         const url = URL.createObjectURL(blob);
-
         if (isMobile) {
           const newTab = window.open(url, "_blank");
           if (newTab) {
             showToast("📸 이미지를 길게 눌러 저장하세요!");
           } else {
-            // 팝업 차단 시 data URL 폴백
             const a = document.createElement("a");
-            a.href = canvas.toDataURL("image/png");
+            a.href = url;
             a.download = "이너스뮤직_사회자추천.png";
             document.body.appendChild(a);
             a.click();

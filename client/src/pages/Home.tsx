@@ -23,6 +23,7 @@ import EventSection from "@/components/sections/EventSection";
 import CtaSection from "@/components/sections/CtaSection";
 import Footer from "@/components/Footer";
 import FloatingButtons from "@/components/FloatingButtons";
+import QuickNav from "@/components/QuickNav";
 import InusCardPopup from "@/components/InusCardPopup";
 
 
@@ -50,6 +51,7 @@ export default function Home() {
       <CtaSection />
       <Footer />
       <FloatingButtons />
+      <QuickNav />
     </div>
   );
 }

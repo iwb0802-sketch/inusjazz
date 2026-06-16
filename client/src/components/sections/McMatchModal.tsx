@@ -334,57 +334,85 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
     }
   };
 
+  // 이미지 URL → base64 변환 (CORS 우회용)
+  const toBase64 = (url: string): Promise<string> =>
+    new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        const c = document.createElement("canvas");
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        c.getContext("2d")!.drawImage(img, 0, 0);
+        try { resolve(c.toDataURL("image/jpeg", 0.9)); }
+        catch { resolve(url); } // CORS 실패 시 원본 유지
+      };
+      img.onerror = () => resolve(url);
+      img.src = url + (url.includes("?") ? "&" : "?") + "_t=" + Date.now();
+    });
+
   const handleInstaShare = async () => {
     if (!resultCardRef.current) return;
     setSavingImg(true);
     try {
+      // 1) 캡처 영역 내 모든 img를 base64로 교체 (CORS 이미지 대응)
+      const imgs = resultCardRef.current.querySelectorAll<HTMLImageElement>("img");
+      const origSrcs: string[] = [];
+      await Promise.all(
+        Array.from(imgs).map(async (img, i) => {
+          origSrcs[i] = img.src;
+          img.src = await toBase64(img.src);
+        })
+      );
+
+      // 2) 캡처
       const canvas = await html2canvas(resultCardRef.current, {
         backgroundColor: "#0d0d0d",
         scale: 2,
-        useCORS: true,
-        allowTaint: true,
+        useCORS: false,   // base64로 교체했으므로 불필요
+        allowTaint: false,
+        logging: false,
       });
 
-      // iOS Safari / 모바일 대응: Blob + createObjectURL 방식
+      // 3) 원본 src 복원
+      Array.from(imgs).forEach((img, i) => { img.src = origSrcs[i]; });
+
+      // 4) 저장
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-      if (isMobile) {
-        // 모바일: 새 탭에서 이미지 열기 (길게 눌러서 저장)
-        canvas.toBlob((blob) => {
-          if (!blob) return;
-          const url = URL.createObjectURL(blob);
+      canvas.toBlob((blob) => {
+        if (!blob) { showToast("이미지 생성 실패"); return; }
+        const url = URL.createObjectURL(blob);
+
+        if (isMobile) {
           const newTab = window.open(url, "_blank");
           if (newTab) {
             showToast("📸 이미지를 길게 눌러 저장하세요!");
           } else {
-            // 팝업 차단된 경우 data URL로 폴백
-            const dataUrl = canvas.toDataURL("image/png");
-            const link = document.createElement("a");
-            link.href = dataUrl;
-            link.download = "이너스뮤직_사회자추천.png";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("📸 이미지 저장 완료!");
+            // 팝업 차단 시 data URL 폴백
+            const a = document.createElement("a");
+            a.href = canvas.toDataURL("image/png");
+            a.download = "이너스뮤직_사회자추천.png";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast("📸 저장 완료!");
           }
-          setTimeout(() => URL.revokeObjectURL(url), 10000);
-        }, "image/png");
-      } else {
-        // PC: Blob + Object URL 다운로드
-        canvas.toBlob((blob) => {
-          if (!blob) return;
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = "이너스뮤직_사회자추천.png";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+          setTimeout(() => URL.revokeObjectURL(url), 15000);
+        } else {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "이너스뮤직_사회자추천.png";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
           setTimeout(() => URL.revokeObjectURL(url), 1000);
           showToast("📸 이미지 저장 완료! 인스타에 올려보세요");
-        }, "image/png");
-      }
-    } catch {
+        }
+      }, "image/png");
+
+    } catch (e) {
+      console.error("캡처 실패:", e);
       showToast("이미지 저장 실패 — 스크린샷을 이용해주세요");
     } finally {
       setSavingImg(false);

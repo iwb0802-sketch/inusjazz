@@ -127,7 +127,7 @@ const MCS = [
     role: "",
     tier: "PREMIUM",
     desc: "10년+ 경력",
-    image: "/images/mc-yuna-placeholder.jpg",
+    image: "/images/mc-yuna.jpg",
     tags: ["웨딩 사회 경력10년+", "누적진행 700건+"],
     highlight: "세련된 진행과 따뜻한 톤으로 순간의 가치를 빛내는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/224327229799",

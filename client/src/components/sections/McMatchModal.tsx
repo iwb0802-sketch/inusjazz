@@ -88,6 +88,16 @@ const MCS = [
     tags: ["웃음", "야외", "하우스", "소규모", "중간규모", "합리적", "중간예산"],
     profileKey: "길상우",
   },
+  {
+    name: "최윤아",
+    tier: "PREMIUM",
+    desc: "10년+ 경력",
+    image: "/images/mc-yuna-placeholder.jpg",
+    highlight: "세련된 진행과 따뜻한 톤으로 순간의 가치를 빛내는 사회자입니다.",
+    profileUrl: "https://blog.naver.com/inusmusics/224327229799",
+    tags: ["호텔", "채플", "고급웨딩홀", "대규모", "품격", "감동", "프리미엄"],
+    profileKey: "최윤아",
+  },
 ];
 
 const QUESTIONS = [
@@ -159,8 +169,8 @@ function calcRecommendations(answers: { id: string; value: string }[]): { mcs: t
 
   // 예식장 점수
   const venueMap: Record<string, string[]> = {
-    hotel: ["이우영", "고승범", "김민수", "장윤태", "김선혁"],
-    premium_hall: ["장윤태", "김선혁", "이우영", "김민수", "석재선"],
+    hotel: ["이우영", "최윤아", "고승범", "김민수", "장윤태"],
+    premium_hall: ["장윤태", "최윤아", "김선혁", "이우영", "김민수"],
     normal_hall: ["이도영", "길상우", "고승범", "석재선", "김민수"],
     outdoor: ["길상우", "이도영", "고승범", "석재선", "이우영"],
   };
@@ -170,13 +180,13 @@ function calcRecommendations(answers: { id: string; value: string }[]): { mcs: t
   const guestsMap: Record<string, string[]> = {
     small: ["길상우", "고승범", "석재선", "이도영", "김민수"],
     medium: ["이도영", "장윤태", "김민수", "길상우", "석재선"],
-    large: ["이우영", "김선혁", "장윤태", "이도영", "길상우"],
+    large: ["이우영", "최윤아", "김선혁", "장윤태", "이도영"],
   };
   guestsMap[guests]?.forEach((name, i) => { scores[name] += 5 - i; });
 
   // 분위기 점수
   const moodMap: Record<string, string[]> = {
-    formal: ["이우영", "고승범", "장윤태", "김선혁", "김민수"],
+    formal: ["이우영", "최윤아", "고승범", "장윤태", "김선혁"],
     emotional: ["이도영", "석재선", "장윤태", "고승범", "길상우"],
     joyful: ["길상우", "이도영", "김선혁", "김민수", "고승범"],
   };
@@ -186,7 +196,7 @@ function calcRecommendations(answers: { id: string; value: string }[]): { mcs: t
   const budgetMap: Record<string, string[]> = {
     budget: ["고승범", "이도영", "길상우", "김민수", "석재선"],
     mid: ["석재선", "김선혁", "이도영", "길상우", "고승범"],
-    premium: ["이우영", "장윤태", "김선혁", "김민수", "석재선"],
+    premium: ["이우영", "최윤아", "장윤태", "김선혁", "김민수"],
   };
   budgetMap[budget]?.forEach((name, i) => { scores[name] += 5 - i; });
 
@@ -194,7 +204,7 @@ function calcRecommendations(answers: { id: string; value: string }[]): { mcs: t
   const priorityMap: Record<string, string[]> = {
     fun: ["길상우", "이도영", "김선혁", "고승범", "김민수"],
     emotion: ["이도영", "석재선", "장윤태", "이우영", "고승범"],
-    clean: ["이우영", "김민수", "고승범", "김선혁", "장윤태"],
+    clean: ["이우영", "최윤아", "김민수", "고승범", "김선혁"],
   };
   priorityMap[priority]?.forEach((name, i) => { scores[name] += 5 - i; });
 

@@ -133,7 +133,7 @@ const MCS = [
     profileUrl: "https://blog.naver.com/inusmusics/224327229799",
     styles: ["품격형", "아나운서형"],
     youtubeId: "wuwAiKu9HbU",
-    audioFile: "",
+    audioFile: "/audio/mc-yoona.mp3",
     profileCardImg: "",
   },
 ];

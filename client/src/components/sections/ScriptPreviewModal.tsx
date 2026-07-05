@@ -181,7 +181,7 @@ export default function ScriptPreviewModal({ isOpen, onClose }: Props) {
                 style={{ color: GOLD }}
               >
                 <Lock size={12} />
-                <span>전체 대본은 예식 당일, 두 분만을 위해 공개됩니다</span>
+                <span>전체 대본은 두 분만을 위해 공개됩니다</span>
               </div>
             </div>
           </div>

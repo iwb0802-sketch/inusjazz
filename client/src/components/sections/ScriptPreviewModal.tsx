@@ -189,6 +189,17 @@ export default function ScriptPreviewModal({ isOpen, onClose }: Props) {
           <p className="text-white/30 text-[11px] sm:text-xs mt-6 text-center leading-relaxed">
             질문지 답변을 바탕으로 두 분의 스토리가 담긴 완성 대본이 제작됩니다
           </p>
+
+          <div
+            className="mt-5 p-4 sm:p-5 rounded-lg text-center"
+            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
+          >
+            <p className="text-white/50 text-xs sm:text-sm leading-relaxed">
+              스토리를 언급하는 것이 부담스러우신 신랑신부님도 계시죠.{" "}
+              <br className="hidden sm:block" />
+              미리 말씀만 주시면, 담백하고 정중한 톤으로 대본을 만들어드립니다.
+            </p>
+          </div>
         </div>
       </div>
     </div>

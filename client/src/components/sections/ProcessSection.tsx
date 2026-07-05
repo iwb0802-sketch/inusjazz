@@ -4,6 +4,7 @@
  * Brand: Gold (#d4b896) primary accent
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useState } from "react";
 import {
   CalendarCheck,
   FileText,
@@ -15,7 +16,9 @@ import {
   ClipboardList,
   Pencil,
   PartyPopper,
+  Sparkles,
 } from "lucide-react";
+import ScriptPreviewModal from "./ScriptPreviewModal";
 
 const GOLD = "#d4b896";
 
@@ -88,6 +91,7 @@ const PHASES = [
 export default function ProcessSection() {
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   return (
     <section id="process" className="bg-[#0d0d0d] py-24 sm:py-32 lg:py-40">
@@ -219,7 +223,33 @@ export default function ProcessSection() {
             </div>
           ))}
         </div>
+
+        {/* 대본 제작 과정 맛보기 버튼 */}
+        <div className="mt-10 sm:mt-14 flex justify-center">
+          <button
+            onClick={() => setIsPreviewOpen(true)}
+            className="group inline-flex items-center gap-2 px-5 sm:px-6 py-3 rounded-full text-xs sm:text-sm font-medium transition-all duration-300"
+            style={{
+              background: "rgba(212,184,150,0.08)",
+              border: "1px solid rgba(212,184,150,0.35)",
+              color: GOLD,
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(212,184,150,0.15)";
+              (e.currentTarget as HTMLButtonElement).style.border = "1px solid rgba(212,184,150,0.6)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(212,184,150,0.08)";
+              (e.currentTarget as HTMLButtonElement).style.border = "1px solid rgba(212,184,150,0.35)";
+            }}
+          >
+            <Sparkles size={15} />
+            대본 제작 과정 맛보기
+          </button>
+        </div>
       </div>
+
+      <ScriptPreviewModal isOpen={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} />
     </section>
   );
 }

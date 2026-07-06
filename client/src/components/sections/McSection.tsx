@@ -6,7 +6,7 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, X, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, ExternalLink, ChevronDown } from "lucide-react";
 import McMatchModal from "./McMatchModal";
 
 const MCS = [
@@ -259,6 +259,9 @@ if (typeof window !== "undefined") {
 
 // 프로필 모달 컴포넌트
 function ProfileModal({ mc, onClose, onOpenIframe }: { mc: MC; onClose: () => void; onOpenIframe: (url: string) => void }) {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [showScrollHint, setShowScrollHint] = useState(true);
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -268,6 +271,25 @@ function ProfileModal({ mc, onClose, onOpenIframe }: { mc: MC; onClose: () => vo
       window.removeEventListener("keydown", handleKey);
     };
   }, [onClose]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const checkScroll = () => {
+      const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
+      const scrollable = el.scrollHeight > el.clientHeight + 24;
+      setShowScrollHint(scrollable && !atBottom);
+    };
+
+    checkScroll();
+    el.addEventListener("scroll", checkScroll);
+    const timer = setTimeout(checkScroll, 200);
+    return () => {
+      el.removeEventListener("scroll", checkScroll);
+      clearTimeout(timer);
+    };
+  }, [mc]);
 
   const tierColor = mc.tier === "PREMIUM"
     ? { border: "border-[#d4b896]/60", text: "text-[#d4b896]", bg: "bg-[#d4b896]/10" }
@@ -300,7 +322,7 @@ function ProfileModal({ mc, onClose, onOpenIframe }: { mc: MC; onClose: () => vo
         </button>
 
         {/* 스크롤 영역 */}
-        <div className="overflow-y-auto" style={{ maxHeight: "calc(92vh - 80px)" }}>
+        <div ref={scrollRef} className="overflow-y-auto relative" style={{ maxHeight: "calc(92vh - 80px)" }}>
           {/* 위: 영상 or 프로필 카드 이미지 */}
           <div className="w-full">
             {mc.youtubeId ? (
@@ -334,6 +356,27 @@ function ProfileModal({ mc, onClose, onOpenIframe }: { mc: MC; onClose: () => vo
             </div>
           )}
         </div>
+
+        {/* 스크롤 유도 힌트 */}
+        {showScrollHint && (
+          <div
+            className="absolute left-0 right-0 flex justify-center pointer-events-none"
+            style={{
+              bottom: "80px",
+              background: "linear-gradient(to top, rgba(13,13,13,0.9) 20%, rgba(13,13,13,0))",
+              paddingTop: "28px",
+              paddingBottom: "10px",
+            }}
+          >
+            <div
+              className="flex items-center gap-1 text-[11px] sm:text-xs"
+              style={{ color: "#d6b16b", animation: "mcScrollBounce 1.4s ease-in-out infinite" }}
+            >
+              <span>스크롤해서 더보기</span>
+              <ChevronDown size={14} />
+            </div>
+          </div>
+        )}
 
         {/* 하단 고정 버튼 영역 */}
         <div className="px-4 py-3 flex flex-row gap-2" style={{ borderTop: "1px solid rgba(214,177,107,0.2)", background: "rgba(0,0,0,0.6)", flexShrink: 0 }}>
@@ -386,6 +429,12 @@ function ProfileModal({ mc, onClose, onOpenIframe }: { mc: MC; onClose: () => vo
           </a>
         </div>
       </div>
+      <style>{`
+        @keyframes mcScrollBounce {
+          0%, 100% { transform: translateY(0); opacity: 0.6; }
+          50% { transform: translateY(4px); opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }

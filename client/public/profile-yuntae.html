@@ -100,7 +100,13 @@
     .scroll-hint span { font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:0.3em; color:var(--gold); text-transform:uppercase; }
     .scroll-hint svg { width:16px; height:16px; color:var(--gold); }
     @keyframes scrollHintBounce { 0%,100% { transform:translateY(0); opacity:0.55; } 50% { transform:translateY(6px); opacity:1; } }
-    @media (max-width:900px) { .scroll-hint { bottom:16px; } }
+    .scroll-hint-mobile { display:none; align-items:center; gap:6px; margin-top:18px; justify-content:center; animation:scrollHintBounce 1.6s ease-in-out infinite; }
+    .scroll-hint-mobile span { font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:0.3em; color:var(--gold); text-transform:uppercase; }
+    .scroll-hint-mobile svg { width:14px; height:14px; color:var(--gold); }
+    @media (max-width:900px) {
+      .scroll-hint { display:none; }
+      .scroll-hint-mobile { display:flex; }
+    }
   </style>
 </head>
 <body>
@@ -121,6 +127,10 @@
       <div class="hero-btns">
         <a href="https://pf.kakao.com/_wxovaM/chat" class="btn-mint" target="_blank">💬 카카오 상담하기</a>
         <a href="https://blog.naver.com/inusmusics/223246261228" class="btn-outline" target="_blank">사회자 프로필 자세히 보기</a>
+      </div>
+      <div class="scroll-hint-mobile">
+        <span>SCROLL</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
       </div>
     </div>
     <div class="hero-photo-wrap">

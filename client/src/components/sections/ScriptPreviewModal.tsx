@@ -2,7 +2,8 @@
  * ScriptPreviewModal - 대본 제작 과정 맛보기
  * 프리미엄 제작 프로세스 + 일반 대본 vs 이너스 맞춤 대본 비교 (일부만 공개, 나머지는 블러 처리)
  */
-import { X, FileEdit, Users, Sparkles, CheckCircle2, Lock } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { X, FileEdit, Users, Sparkles, CheckCircle2, Lock, ChevronDown } from "lucide-react";
 
 const GOLD = "#d6b16b";
 
@@ -39,6 +40,30 @@ const STEPS = [
 ];
 
 export default function ScriptPreviewModal({ isOpen, onClose }: Props) {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [showScrollHint, setShowScrollHint] = useState(true);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setShowScrollHint(true);
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const checkScroll = () => {
+      const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
+      const scrollable = el.scrollHeight > el.clientHeight + 24;
+      setShowScrollHint(scrollable && !atBottom);
+    };
+
+    checkScroll();
+    el.addEventListener("scroll", checkScroll);
+    const timer = setTimeout(checkScroll, 200);
+    return () => {
+      el.removeEventListener("scroll", checkScroll);
+      clearTimeout(timer);
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -48,19 +73,20 @@ export default function ScriptPreviewModal({ isOpen, onClose }: Props) {
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl"
+        className="relative w-full max-w-2xl flex flex-col"
         style={{
           background: "linear-gradient(160deg, #141414 0%, #0d0d0d 100%)",
           border: "1px solid rgba(214,177,107,0.2)",
           borderRadius: "12px",
           animation: "fadeInUp 0.35s cubic-bezier(0.23,1,0.32,1)",
+          maxHeight: "85vh",
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}
         <div
-          className="flex items-center justify-between px-5 sm:px-7 py-4 sm:py-5 sticky top-0 z-10"
-          style={{ borderBottom: "1px solid rgba(214,177,107,0.12)", background: "#141414" }}
+          className="flex items-center justify-between px-5 sm:px-7 py-4 sm:py-5 flex-shrink-0"
+          style={{ borderBottom: "1px solid rgba(214,177,107,0.12)", background: "#141414", borderRadius: "12px 12px 0 0" }}
         >
           <div>
             <p
@@ -85,7 +111,7 @@ export default function ScriptPreviewModal({ isOpen, onClose }: Props) {
           </button>
         </div>
 
-        <div className="px-5 sm:px-7 py-6 sm:py-8">
+        <div ref={scrollRef} className="px-5 sm:px-7 py-6 sm:py-8 overflow-y-auto" style={{ WebkitOverflowScrolling: "touch" }}>
           {/* 프로세스 */}
           <p
             className="text-white/50 text-xs sm:text-sm mb-5 leading-relaxed"
@@ -201,7 +227,34 @@ export default function ScriptPreviewModal({ isOpen, onClose }: Props) {
             </p>
           </div>
         </div>
+
+        {/* 스크롤 유도 힌트 */}
+        {showScrollHint && (
+          <div
+            className="absolute left-0 right-0 bottom-0 flex justify-center pointer-events-none"
+            style={{
+              borderRadius: "0 0 12px 12px",
+              background: "linear-gradient(to top, #0d0d0d 20%, rgba(13,13,13,0))",
+              paddingTop: "28px",
+              paddingBottom: "10px",
+            }}
+          >
+            <div
+              className="flex items-center gap-1 text-[11px] sm:text-xs"
+              style={{ color: GOLD, animation: "scriptScrollBounce 1.4s ease-in-out infinite" }}
+            >
+              <span>스크롤해서 더보기</span>
+              <ChevronDown size={14} />
+            </div>
+          </div>
+        )}
       </div>
+      <style>{`
+        @keyframes scriptScrollBounce {
+          0%, 100% { transform: translateY(0); opacity: 0.6; }
+          50% { transform: translateY(4px); opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }

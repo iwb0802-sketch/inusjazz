@@ -130,9 +130,10 @@ export default function AiConsultWidget({ bottomOffset = 92, showAfterScroll = f
         >
           {/* 헤더 */}
           <div
-            className="flex items-center gap-2 px-4 py-3 flex-shrink-0"
+            className="flex items-center justify-between gap-2 px-4 py-3 flex-shrink-0"
             style={{ borderBottom: `1px solid ${C.border}`, background: `linear-gradient(135deg, rgba(201,169,110,0.12), rgba(91,181,162,0.08))` }}
           >
+            <div className="flex items-center gap-2">
             <Sparkles size={16} style={{ color: C.gold }} />
             <div>
               <p className="text-sm font-semibold" style={{ color: C.textMain, fontFamily: "'Noto Serif KR', serif" }}>
@@ -142,6 +143,16 @@ export default function AiConsultWidget({ bottomOffset = 92, showAfterScroll = f
                 궁금한 점을 물어보세요
               </p>
             </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="닫기"
+              className="flex items-center justify-center rounded-full flex-shrink-0"
+              style={{ width: 28, height: 28, color: C.textSub }}
+            >
+              <X size={18} />
+            </button>
           </div>
 
           {/* 메시지 목록 */}

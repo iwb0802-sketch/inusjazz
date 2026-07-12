@@ -21,7 +21,7 @@ type ChatMessage = { role: "user" | "assistant"; content: string };
 const GREETING: ChatMessage = {
   role: "assistant",
   content:
-    "안녕하세요! 이너스뮤직 웨딩연주(재즈) AI 상담원입니다 :) 재즈 연주 편성, 가격, 예약 절차 등 궁금하신 점을 편하게 물어봐주세요.",
+    "안녕하세요! 이너스뮤직 사회자(웨딩 MC) AI 상담원입니다 :) 사회자 선택, 가격, 예약 절차 등 궁금하신 점을 편하게 물어봐주세요.",
 };
 
 const QUICK_QUESTIONS = ["견적 문의", "편성 추천", "예약 절차", "이벤트 혜택"];
@@ -136,7 +136,7 @@ export default function AiConsultWidget({ bottomOffset = 92, showAfterScroll = f
             <Sparkles size={16} style={{ color: C.gold }} />
             <div>
               <p className="text-sm font-semibold" style={{ color: C.textMain, fontFamily: "'Noto Serif KR', serif" }}>
-                웨딩연주(재즈) AI 상담
+                사회자(웨딩 MC) AI 상담
               </p>
               <p className="text-[11px]" style={{ color: C.textSub }}>
                 궁금한 점을 물어보세요

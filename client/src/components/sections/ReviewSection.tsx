@@ -108,8 +108,16 @@ export default function ReviewSection() {
           >
             고객님들의 <span style={{ color: GOLD }}>생생한 후기</span>
           </h2>
-          <p className="mt-4 text-white/50 text-sm sm:text-base max-w-sm mx-auto leading-relaxed">
-            실제 예식을 진행하신 신랑, 신부님의 카카오톡 후기입니다
+          <div className="flex items-center justify-center gap-2 mt-3">
+            <span
+              className="inline-flex items-center px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold tracking-wide"
+              style={{ background: "rgba(212,184,150,0.12)", border: "1px solid rgba(212,184,150,0.4)", color: GOLD }}
+            >
+              1000+ 후기
+            </span>
+          </div>
+          <p className="mt-4 text-white/50 text-sm sm:text-base max-w-sm mx-auto leading-relaxed break-keep">
+            실제 예식을 진행하신 신랑, 신부님의<br className="hidden sm:block" /> 카카오톡, 문자 후기입니다
           </p>
 
           {/* Decorative divider */}
@@ -348,7 +356,7 @@ export default function ReviewSection() {
               <ExternalLink size={15} />
             </a>
             <p className="text-white/25 text-xs tracking-wider">
-              카카오톡으로 직접 받은 후기만 게재합니다
+              카카오톡, 문자로 직접 받은 후기만 게재합니다
             </p>
           </div>
         </div>

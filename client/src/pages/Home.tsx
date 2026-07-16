@@ -6,7 +6,6 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/sections/HeroSection";
 import IntroSection from "@/components/sections/IntroSection";
-import BalanceGameSection from "@/components/sections/BalanceGameSection";
 import RecommendSection from "@/components/sections/RecommendSection";
 import DifferenceSection from "@/components/sections/DifferenceSection";
 import VenueSection from "@/components/sections/VenueSection";
@@ -36,7 +35,6 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <IntroSection />
-      <BalanceGameSection />
       <VenueSection />
       <LiveBookingSection />
       <RecommendSection />

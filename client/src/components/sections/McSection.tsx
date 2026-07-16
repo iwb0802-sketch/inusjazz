@@ -31,7 +31,7 @@ const MCS = [
     tier: "BEST",
     desc: "5년+ 경력",
     image: "/images/mc-profile-4_a9e52880.jpg",
-    reviewKeywords: ["자연스러운 진행", "세련된 톤"], // TODO: 사용자 제공 실제 키워드로 교체 예정
+    reviewKeywords: ["세심한준비와멘트진행", "친절하고깔끔한진행", "몰입도높은진행", "정돈된목소리톤", "자연스럽고매끄러운진행", "센스있는분위기리드"],
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500건+"],
     highlight: "자연스럽고 세련된 진행 스타일이 특징입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223235771542",

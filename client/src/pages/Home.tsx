@@ -9,6 +9,7 @@ import IntroSection from "@/components/sections/IntroSection";
 import RecommendSection from "@/components/sections/RecommendSection";
 import DifferenceSection from "@/components/sections/DifferenceSection";
 import VenueSection from "@/components/sections/VenueSection";
+import LiveBookingSection from "@/components/sections/LiveBookingSection";
 import PackageSection from "@/components/sections/PackageSection";
 import PricingSection from "@/components/sections/PricingSection";
 import ProcessSection from "@/components/sections/ProcessSection";
@@ -35,6 +36,7 @@ export default function Home() {
       <HeroSection />
       <IntroSection />
       <VenueSection />
+      <LiveBookingSection />
       <RecommendSection />
       <DifferenceSection />
       <PackageSection />

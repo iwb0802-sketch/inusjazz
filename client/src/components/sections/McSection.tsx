@@ -16,6 +16,7 @@ const MCS = [
     tier: "BEST",
     desc: "5년+ 경력",
     image: "/images/mc-profile-1_33531819.jpg",
+    reviewKeywords: ["안정적인 진행", "맞춤 대본"], // TODO: 사용자 제공 실제 키워드로 교체 예정
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500회 이상"],
     highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223996383838",
@@ -30,6 +31,7 @@ const MCS = [
     tier: "BEST",
     desc: "5년+ 경력",
     image: "/images/mc-profile-4_a9e52880.jpg",
+    reviewKeywords: ["자연스러운 진행", "세련된 톤"], // TODO: 사용자 제공 실제 키워드로 교체 예정
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500건+"],
     highlight: "자연스럽고 세련된 진행 스타일이 특징입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223235771542",
@@ -44,6 +46,7 @@ const MCS = [
     tier: "BEST",
     desc: "4년+ 경력",
     image: "/images/mc-profile-2_f194877b.jpg",
+    reviewKeywords: ["감동적인 진행", "따뜻한 톤"], // TODO: 사용자 제공 실제 키워드로 교체 예정
     tags: ["웨딩 사회 경력 4년+", "누적 진행 400회 이상"],
     highlight: "따뜻하고 안정적인 진행으로 신랑신부님의 이야기를 감동적으로 전달합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",
@@ -58,6 +61,7 @@ const MCS = [
     tier: "BEST",
     desc: "5년+ 경력",
     image: "/images/mc-profile-3_33ff7a32.jpg",
+    reviewKeywords: ["차분한 진행", "품격 있는 예식"], // TODO: 사용자 제공 실제 키워드로 교체 예정
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500회 이상"],
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223822182933",
@@ -72,6 +76,7 @@ const MCS = [
     tier: "PREMIUM",
     desc: "10년+ 경력",
     image: "/images/mc-lee-wooyoung-new_fa27e84d.webp",
+    reviewKeywords: ["편안한 아나운서 톤", "위트 있는 진행"], // TODO: 사용자 제공 실제 키워드로 교체 예정
     tags: ["웨딩 사회 경력 10년+", "누적 진행 1000회 이상"],
     highlight: "편안한 아나운서 톤과 안정적인 진행력으로 위트 있고 깔끔한 예식을 완성하는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/220767962639",
@@ -86,6 +91,7 @@ const MCS = [
     tier: "BEST",
     desc: "5년+ 경력",
     image: "/images/host_sunhyuk_1ed704ab.jpg",
+    reviewKeywords: ["깔끔한 진행", "탁월한 상황 대처"], // TODO: 사용자 제공 실제 키워드로 교체 예정
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500회 이상"],
     highlight: "깔끔하고 안정감 있는 진행력을 기반으로 다년간의 연극 경험에서 비롯된 탁월한 상황 대처 능력을 갖춘 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/221025505211",
@@ -100,6 +106,7 @@ const MCS = [
     tier: "PREMIUM",
     desc: "10년+ 경력",
     image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/YIRjIXsBhCqAiMgE.jpg",
+    reviewKeywords: ["안정적인 진행", "젠틀한 톤"], // TODO: 사용자 제공 실제 키워드로 교체 예정
     tags: ["웨딩 사회 경력 10년+", "누적 진행 1000회 이상"],
     highlight: "안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",
@@ -114,6 +121,7 @@ const MCS = [
     tier: "BEST",
     desc: "5년+ 경력",
     image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FPcvLRqLzT-JnfPrulzmCo%2Fmc-gilsangwoo.jpg",
+    reviewKeywords: ["센스있는 위트", "유쾌한 진행"], // TODO: 사용자 제공 실제 키워드로 교체 예정
     tags: ["웨딩 사회 경력 5년+", "품격과 유쾌함을 동시에"],
     highlight: "센스와 위트를 겸비한 진행력이 강점인 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/220802942529",
@@ -128,6 +136,7 @@ const MCS = [
     tier: "PREMIUM",
     desc: "10년+ 경력",
     image: "/images/mc-yuna.jpg",
+    reviewKeywords: ["세련된 진행", "따뜻한 톤"], // TODO: 사용자 제공 실제 키워드로 교체 예정
     tags: ["웨딩 사회 경력10년+", "누적진행 700건+"],
     highlight: "세련된 진행과 따뜻한 톤으로 순간의 가치를 빛내는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/224327229799",
@@ -375,6 +384,24 @@ function ProfileModal({ mc, onClose, onOpenIframe }: { mc: MC; onClose: () => vo
               <span>스크롤해서 더보기</span>
               <ChevronDown size={14} />
             </div>
+          </div>
+        )}
+
+        {/* 리뷰 키워드 배지 - 항상 노출되는 고정 영역 */}
+        {mc.reviewKeywords && mc.reviewKeywords.length > 0 && (
+          <div
+            className="px-4 py-3 flex flex-wrap items-center justify-center gap-2"
+            style={{ borderTop: "1px solid rgba(214,177,107,0.12)", background: "rgba(214,177,107,0.04)", flexShrink: 0 }}
+          >
+            {mc.reviewKeywords.map((kw, i) => (
+              <span
+                key={i}
+                className="text-[11px] sm:text-xs font-medium px-2.5 py-1 rounded-full"
+                style={{ color: "#d6b16b", background: "rgba(214,177,107,0.1)", border: "1px solid rgba(214,177,107,0.3)" }}
+              >
+                #{kw}
+              </span>
+            ))}
           </div>
         )}
 

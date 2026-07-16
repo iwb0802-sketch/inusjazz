@@ -29,8 +29,8 @@ export default function VenueSection() {
         <style>{`
           @keyframes mc-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
           @keyframes mc-marquee2 { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
-          .mc-marquee-track { display: flex; width: max-content; animation: mc-marquee 120s linear infinite; }
-          .mc-marquee-track2 { display: flex; width: max-content; animation: mc-marquee2 120s linear infinite; }
+          .mc-marquee-track { display: flex; width: max-content; animation: mc-marquee 220s linear infinite; }
+          .mc-marquee-track2 { display: flex; width: max-content; animation: mc-marquee2 220s linear infinite; }
           .mc-marquee-track:hover, .mc-marquee-track2:hover { animation-play-state: paused; }
         `}</style>
 

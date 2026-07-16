@@ -136,7 +136,7 @@ const MCS = [
     tier: "PREMIUM",
     desc: "10년+ 경력",
     image: "/images/mc-yuna.jpg",
-    reviewKeywords: ["세련된 진행", "따뜻한 톤"], // TODO: 사용자 제공 실제 키워드로 교체 예정
+    reviewKeywords: ["정확한전달력", "깔끔한진행톤", "호텔웨딩분위기맞춤", "센스있는진행", "안정적인진행", "부드러운목소리"],
     tags: ["웨딩 사회 경력10년+", "누적진행 700건+"],
     highlight: "세련된 진행과 따뜻한 톤으로 순간의 가치를 빛내는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/224327229799",

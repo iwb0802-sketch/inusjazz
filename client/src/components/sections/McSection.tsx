@@ -16,7 +16,7 @@ const MCS = [
     tier: "BEST",
     desc: "5년+ 경력",
     image: "/images/mc-profile-1_33531819.jpg",
-    reviewKeywords: ["안정적인 진행", "맞춤 대본"], // TODO: 사용자 제공 실제 키워드로 교체 예정
+    reviewKeywords: ["깔끔한진행", "원하는분위기맞춤진행", "안정감있는진행", "돌발상황대응력", "자연스러운분위기리드", "몰입도높은진행"],
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500회 이상"],
     highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223996383838",

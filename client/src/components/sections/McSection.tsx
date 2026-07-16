@@ -46,7 +46,7 @@ const MCS = [
     tier: "BEST",
     desc: "4년+ 경력",
     image: "/images/mc-profile-2_f194877b.jpg",
-    reviewKeywords: ["감동적인 진행", "따뜻한 톤"], // TODO: 사용자 제공 실제 키워드로 교체 예정
+    reviewKeywords: ["부드러운분위기리드", "위트있는진행", "유연하고친근한진행", "정돈된목소리톤", "프로페셔널한진행", "깔끔하고매끄러운진행"],
     tags: ["웨딩 사회 경력 4년+", "누적 진행 400회 이상"],
     highlight: "따뜻하고 안정적인 진행으로 신랑신부님의 이야기를 감동적으로 전달합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",

@@ -76,7 +76,7 @@ const MCS = [
     tier: "PREMIUM",
     desc: "10년+ 경력",
     image: "/images/mc-lee-wooyoung-new_fa27e84d.webp",
-    reviewKeywords: ["편안한 아나운서 톤", "위트 있는 진행"], // TODO: 사용자 제공 실제 키워드로 교체 예정
+    reviewKeywords: ["유쾌한분위기리드", "깔끔한진행톤", "원하는분위기맞춤진행", "밝고편안한예식분위기", "돌발상황대응력", "안정감있는진행"],
     tags: ["웨딩 사회 경력 10년+", "누적 진행 1000회 이상"],
     highlight: "편안한 아나운서 톤과 안정적인 진행력으로 위트 있고 깔끔한 예식을 완성하는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/220767962639",

@@ -102,12 +102,12 @@ export default function LiveBookingSection() {
         <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 z-10" style={{ background: "linear-gradient(to right, #0d0d0d, transparent)" }} />
         <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 z-10" style={{ background: "linear-gradient(to left, #0d0d0d, transparent)" }} />
 
-        <div className="flex mb-3" style={{ animation: "liveBookingScrollLeft 240s linear infinite" }}>
+        <div className="flex mb-3" style={{ animation: "liveBookingScrollLeft 130s linear infinite" }}>
           {row1.map((d, i) => (
             <DepositCard key={`r1-${i}`} d={d} />
           ))}
         </div>
-        <div className="flex" style={{ animation: "liveBookingScrollRight 240s linear infinite" }}>
+        <div className="flex" style={{ animation: "liveBookingScrollRight 130s linear infinite" }}>
           {row2.map((d, i) => (
             <DepositCard key={`r2-${i}`} d={d} />
           ))}

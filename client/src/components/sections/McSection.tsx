@@ -91,7 +91,7 @@ const MCS = [
     tier: "BEST",
     desc: "5년+ 경력",
     image: "/images/host_sunhyuk_1ed704ab.jpg",
-    reviewKeywords: ["깔끔한 진행", "탁월한 상황 대처"], // TODO: 사용자 제공 실제 키워드로 교체 예정
+    reviewKeywords: ["젠틀하고깔끔한진행", "정확한딕션과전달력", "프로페셔널한진행", "정돈된목소리톤", "세심한예식준비", "센스있는분위기리드"],
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500회 이상"],
     highlight: "깔끔하고 안정감 있는 진행력을 기반으로 다년간의 연극 경험에서 비롯된 탁월한 상황 대처 능력을 갖춘 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/221025505211",

@@ -106,7 +106,7 @@ const MCS = [
     tier: "PREMIUM",
     desc: "10년+ 경력",
     image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/YIRjIXsBhCqAiMgE.jpg",
-    reviewKeywords: ["안정적인 진행", "젠틀한 톤"], // TODO: 사용자 제공 실제 키워드로 교체 예정
+    reviewKeywords: ["프로페셔널한진행", "자연스럽고매끄러운진행", "센스있는분위기리드", "세심한멘트진행", "안정감있는진행톤", "몰입도높은진행"],
     tags: ["웨딩 사회 경력 10년+", "누적 진행 1000회 이상"],
     highlight: "안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",

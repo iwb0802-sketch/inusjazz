@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { X, ChevronRight, RotateCcw, ExternalLink, Copy, Instagram } from "lucide-react";
 import html2canvas from "html2canvas";
 
-const MCS = [
+export const MCS = [
   {
     name: "김민수",
     tier: "BEST",

@@ -72,17 +72,18 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
         {!heartLocked && (
           <motion.div
             className="absolute top-11 right-4 pointer-events-none flex flex-col items-center"
-            animate={{ y: [0, -6, 0], opacity: [0.6, 1, 0.6] }}
+            animate={{
+              y: [0, -6, 0],
+              filter: [
+                "drop-shadow(0 0 2px rgba(255,226,122,0.4))",
+                "drop-shadow(0 0 9px rgba(255,226,122,1))",
+                "drop-shadow(0 0 2px rgba(255,226,122,0.4))",
+              ],
+            }}
             transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
           >
-            <ArrowUp
-              size={26}
-              strokeWidth={3.2}
-              className="text-[#ffe27a] drop-shadow-[0_0_6px_rgba(255,226,122,0.95)]"
-            />
-            <span className="text-[10px] font-bold text-[#ffe27a] drop-shadow-[0_0_4px_rgba(255,226,122,0.95)] tracking-wide -mt-0.5">
-              Click
-            </span>
+            <ArrowUp size={26} strokeWidth={3.2} className="text-white" />
+            <span className="text-[10px] font-bold text-white tracking-wide -mt-0.5">Click</span>
           </motion.div>
         )}
 

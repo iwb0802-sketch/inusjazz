@@ -20,7 +20,7 @@ export const CONTESTANTS: Contestant[] = [
     desc: "5년+ 경력",
     image: "/images/mc-profile-1_33531819.jpg",
     highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",
-    profileUrl: "https://blog.naver.com/inusmusics/223996383838",
+    profileUrl: "https://www.inusmusic.com/profile-minsu.html",
     audioFile: "/audio/mc-minsu.mp3",
   },
   {
@@ -29,7 +29,7 @@ export const CONTESTANTS: Contestant[] = [
     desc: "5년+ 경력",
     image: "/images/mc-profile-4_a9e52880.jpg",
     highlight: "자연스럽고 세련된 진행 스타일이 특징입니다.",
-    profileUrl: "https://blog.naver.com/inusmusics/223235771542",
+    profileUrl: "https://www.inusmusic.com/profile-seungbeom.html",
     audioFile: "/audio/mc-seungbeom.mp3",
   },
   {
@@ -38,7 +38,7 @@ export const CONTESTANTS: Contestant[] = [
     desc: "4년+ 경력",
     image: "/images/mc-profile-2_f194877b.jpg",
     highlight: "따뜻하고 안정적인 진행으로 신랑신부님의 이야기를 감동적으로 전달합니다.",
-    profileUrl: "https://blog.naver.com/inusmusics/223845891681",
+    profileUrl: "https://www.inusmusic.com/profile-idoyoung.html",
     audioFile: "/audio/mc-idoyoung.mp3",
   },
   {
@@ -47,7 +47,7 @@ export const CONTESTANTS: Contestant[] = [
     desc: "5년+ 경력",
     image: "/images/mc-profile-3_33ff7a32.jpg",
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",
-    profileUrl: "https://blog.naver.com/inusmusics/223822182933",
+    profileUrl: "https://www.inusmusic.com/profile-jaesun.html",
     audioFile: "/audio/mc-jaesun.mp3",
   },
   {
@@ -56,7 +56,7 @@ export const CONTESTANTS: Contestant[] = [
     desc: "10년+ 경력",
     image: "/images/mc-lee-wooyoung-new_fa27e84d.webp",
     highlight: "편안한 아나운서 톤과 안정적인 진행력으로 위트 있고 깔끔한 예식을 완성하는 사회자입니다.",
-    profileUrl: "https://blog.naver.com/inusmusics/220767962639",
+    profileUrl: "https://www.inusmusic.com/profile-wooyoung.html",
     audioFile: "/audio/mc-wooyoung.mp3",
   },
   {
@@ -65,7 +65,7 @@ export const CONTESTANTS: Contestant[] = [
     desc: "5년+ 경력",
     image: "/images/host_sunhyuk_1ed704ab.jpg",
     highlight: "깔끔하고 안정감 있는 진행력을 기반으로 탁월한 상황 대처 능력을 갖춘 사회자입니다.",
-    profileUrl: "https://blog.naver.com/inusmusics/221025505211",
+    profileUrl: "https://www.inusmusic.com/profile-sunhyuk.html",
     audioFile: "/audio/mc-sunhyuk.mp3",
   },
   {
@@ -74,7 +74,7 @@ export const CONTESTANTS: Contestant[] = [
     desc: "10년+ 경력",
     image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/YIRjIXsBhCqAiMgE.jpg",
     highlight: "안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.",
-    profileUrl: "https://blog.naver.com/inusmusics/223246261228",
+    profileUrl: "https://www.inusmusic.com/profile-yuntae.html",
     audioFile: "/audio/mc-yuntae.mp3",
   },
   {
@@ -83,7 +83,7 @@ export const CONTESTANTS: Contestant[] = [
     desc: "5년+ 경력",
     image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FPcvLRqLzT-JnfPrulzmCo%2Fmc-gilsangwoo.jpg",
     highlight: "센스와 위트를 겸비한 진행력이 강점인 사회자입니다.",
-    profileUrl: "https://blog.naver.com/inusmusics/220802942529",
+    profileUrl: "https://www.inusmusic.com/profile-gilsangwoo.html",
     audioFile: "/audio/mc-gilsangwoo.mp3",
   },
   {
@@ -92,7 +92,7 @@ export const CONTESTANTS: Contestant[] = [
     desc: "10년+ 경력",
     image: "/images/mc-yuna.jpg",
     highlight: "세련된 진행과 따뜻한 톤으로 순간의 가치를 빛내는 사회자입니다.",
-    profileUrl: "https://blog.naver.com/inusmusics/224327229799",
+    profileUrl: "https://www.inusmusic.com/profile-yuna.html",
     audioFile: "/audio/mc-yoona.mp3",
   },
 ];

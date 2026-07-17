@@ -133,7 +133,7 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
             disabled={disabled}
             className="flex-1 py-2.5 rounded-full bg-[#5BB5A2] text-black text-sm font-medium tracking-wide hover:bg-[#6fc5b2] transition-colors disabled:opacity-40"
           >
-            이 분으로 선택
+            사회자 선택
           </button>
           <a
             href={contestant.profileUrl}

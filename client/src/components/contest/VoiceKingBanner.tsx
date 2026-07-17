@@ -1,15 +1,18 @@
 /**
  * 이달의 목소리왕 배너 - 저번달 확정 챔피언 + 이번달 실시간 순위
  */
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Crown, TrendingUp, ExternalLink } from "lucide-react";
 import { getContestant, LAST_MONTH_CHAMPION, currentMonthLabel } from "./contestData";
+import ProfileModal from "./ProfileModal";
 
 interface VoiceKingBannerProps {
   monthHearts: Record<string, number>;
 }
 
 export default function VoiceKingBanner({ monthHearts }: VoiceKingBannerProps) {
+  const [showProfile, setShowProfile] = useState(false);
   const ranking = Object.entries(monthHearts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3);
@@ -39,16 +42,18 @@ export default function VoiceKingBanner({ monthHearts }: VoiceKingBannerProps) {
           <p className="text-xs text-[#d4b896]/70">누적 {LAST_MONTH_CHAMPION.hearts.toLocaleString()} 하트</p>
         </div>
         {lastChampion && (
-          <a
-            href={lastChampion.profileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={() => setShowProfile(true)}
             className="flex items-center gap-1 text-[10px] text-[#d4b896]/80 border border-[#d4b896]/40 rounded-full px-2.5 py-1.5 hover:bg-[#d4b896]/10 hover:text-[#d4b896] transition-colors shrink-0"
           >
             <ExternalLink size={11} /> 프로필 보기
-          </a>
+          </button>
         )}
       </div>
+      {showProfile && lastChampion && (
+        <ProfileModal url={lastChampion.profileUrl} onClose={() => setShowProfile(false)} />
+      )}
 
       {/* 이번달 실시간 */}
       <div className="rounded-2xl border border-[#5BB5A2]/25 bg-black/30 px-5 py-4">

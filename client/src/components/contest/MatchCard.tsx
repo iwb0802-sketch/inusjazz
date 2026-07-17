@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Play, Pause, ArrowUp } from "lucide-react";
 import HeartButton from "./HeartButton";
+import ProfileModal from "./ProfileModal";
 import type { Contestant } from "./contestData";
 
 interface MatchCardProps {
@@ -19,6 +20,7 @@ let activeAudio: HTMLAudioElement | null = null;
 
 export default function MatchCard({ contestant, hearts, side, onSelectWinner, onHeart, disabled, heartLocked }: MatchCardProps) {
   const [playing, setPlaying] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -135,18 +137,22 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
           >
             사회자 선택
           </button>
-          <a
-            href={contestant.profileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowProfile(true);
+            }}
             className="p-2.5 rounded-full border border-white/15 text-white/50 hover:text-white/90 hover:border-white/40 transition-colors"
             aria-label="프로필 보기"
-            onClick={(e) => e.stopPropagation()}
           >
             <ExternalLink size={14} />
-          </a>
+          </button>
         </div>
       </div>
+      {showProfile && (
+        <ProfileModal url={contestant.profileUrl} onClose={() => setShowProfile(false)} />
+      )}
     </motion.div>
   );
 }

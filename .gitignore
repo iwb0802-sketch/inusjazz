@@ -114,3 +114,8 @@ client/public/__manus__/version.json
 .vercel
 .env.vercel
 .env*
+
+# INUS MC CUE MATCH - 로컬 테스트 전용, 승인 전까지 커밋 금지
+client/src/data/mcGameData.ts
+client/src/lib/mcGameAnalytics.ts
+client/src/pages/McGame.tsx

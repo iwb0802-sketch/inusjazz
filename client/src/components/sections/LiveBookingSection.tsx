@@ -86,10 +86,11 @@ export default function LiveBookingSection() {
             LIVE BOOKING
           </span>
           <h2
-            className="mt-4 text-white text-2xl sm:text-3xl md:text-4xl"
+            className="mt-4 text-white text-2xl sm:text-3xl md:text-4xl break-keep"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            지금도 <span style={{ color: GOLD }}>예약이 이어지고</span> 있습니다
+            지금도 <span style={{ color: GOLD }}>예약이 이어지고</span>
+            <br className="sm:hidden" /> 있습니다
           </h2>
           <p className="mt-4 text-white/50 text-sm sm:text-base">
             실제 예약금 입금 확인 내역입니다

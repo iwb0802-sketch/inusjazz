@@ -6,11 +6,13 @@ import AiConsultWidget from "./components/AiConsultWidget";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import McGame from "./pages/McGame";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/mc-game"} component={McGame} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

@@ -119,3 +119,4 @@ client/public/__manus__/version.json
 client/src/data/mcGameData.ts
 client/src/lib/mcGameAnalytics.ts
 client/src/pages/McGame.tsx
+client/public/audio/mc-game-tick.mp3

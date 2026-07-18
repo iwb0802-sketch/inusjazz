@@ -162,7 +162,7 @@ export default function Contest() {
     >
       <a
         href="/"
-        className="fixed top-4 left-4 z-40 flex items-center gap-1.5 text-xs text-white/50 hover:text-white/90 transition-colors bg-black/40 px-3 py-2 rounded-full backdrop-blur-sm"
+        className="fixed top-4 left-4 z-40 flex items-center gap-1.5 text-xs font-semibold text-white/90 hover:text-white transition-colors bg-black/60 px-3 py-2 rounded-full backdrop-blur-sm border border-white/15"
       >
         <ArrowLeft size={13} /> 메인으로
       </a>

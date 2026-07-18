@@ -625,7 +625,7 @@ export default function McSection() {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                   <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                 </svg>
-                내 결혼식에 어울리는 사회자 찾기
+                내 조건에 어울리는 사회자 찾기
               </button>
             </div>
           </div>

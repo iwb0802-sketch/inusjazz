@@ -587,7 +587,7 @@ export default function McMatchModal({ isOpen, onClose, onOpenProfile }: Props) 
               className="text-white text-base font-bold mt-0.5"
               style={{ fontFamily: "'Noto Serif KR', serif" }}
             >
-              내 결혼식에 어울리는 사회자 찾기
+              내 조건에 어울리는 사회자 찾기
             </h3>
           </div>
           <button

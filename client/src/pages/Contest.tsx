@@ -188,7 +188,7 @@ export default function Contest() {
                 transition={{ delay: 0.36, duration: 0.5 }}
                 className="text-sm text-white/55 leading-relaxed max-w-sm mx-auto mb-9"
               >
-                신부님들이 직접 뽑는, 가장 매력적인 목소리.
+                신랑신부님들이 직접 뽑는, 가장 매력적인 목소리.
                 <br />
                 이너스뮤직 사회자들의 1:1 매치를 직접 감상하고
                 <br />

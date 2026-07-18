@@ -13,6 +13,8 @@ import {
   addHeart,
   getAllTimeHearts,
   getMonthHearts,
+  fetchHeartsFromServer,
+  currentMonthLabel,
 } from "@/components/contest/contestData";
 import { buildRound, roundLabel, type RoundSetup } from "@/components/contest/bracketEngine";
 import MatchCard from "@/components/contest/MatchCard";
@@ -31,6 +33,12 @@ export default function Contest() {
   const [sessionHearts, setSessionHearts] = useState(0);
   const [allTime, setAllTime] = useState<Record<string, number>>({});
   const [monthHearts, setMonthHearts] = useState<Record<string, number>>({});
+  const [monthLabel, setMonthLabel] = useState(currentMonthLabel());
+  const [lastMonthChampion, setLastMonthChampion] = useState<{
+    name: string;
+    hearts: number;
+    monthLabel: string;
+  } | null>(null);
   const [heartedThisGame, setHeartedThisGame] = useState<Set<string>>(new Set());
   const [muted, setMuted] = useState(isSoundMuted());
 
@@ -44,6 +52,7 @@ export default function Contest() {
 
 
   const refreshHearts = useCallback(() => {
+    // 로컬 값으로 즉시 표시 (optimistic), 서버 응답 오면 아래에서 실제값으로 덮어씀
     setAllTime(getAllTimeHearts());
     setMonthHearts(getMonthHearts());
   }, []);
@@ -51,6 +60,17 @@ export default function Contest() {
   useEffect(() => {
     refreshHearts();
   }, [refreshHearts]);
+
+  // 서버(Railway DB 연동 후) 전체 방문자 공유 집계로 동기화. 서버 미연결 시 로컬 값 유지.
+  useEffect(() => {
+    fetchHeartsFromServer().then((data) => {
+      if (!data) return;
+      setAllTime(data.allTime);
+      setMonthHearts(data.month);
+      setMonthLabel(data.currentMonthLabel);
+      setLastMonthChampion(data.lastMonthChampion);
+    });
+  }, []);
 
   const giveHeart = useCallback(
     (name: string, amount = 1) => {
@@ -313,7 +333,7 @@ export default function Contest() {
         </div>
 
         <div className="mb-10">
-          <VoiceKingBanner monthHearts={monthHearts} />
+          <VoiceKingBanner monthHearts={monthHearts} monthLabel={monthLabel} lastMonthChampion={lastMonthChampion} />
         </div>
 
         <AnimatePresence mode="wait">

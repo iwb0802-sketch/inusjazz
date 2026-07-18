@@ -98,8 +98,10 @@ export const CONTESTANTS: Contestant[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// localStorage 기반 하트 저장 (데모/임시 페이지 - 서버 저장 아님)
+// 하트 저장: localStorage(기기별, 즉시 반영용) + 서버 API(/api/hearts, 전체 방문자 공유 집계)
+// 서버(Railway Postgres) 연결 전/장애 시에는 localStorage로 자연스럽게 폴백됨.
 // ---------------------------------------------------------------------------
+import { monthStamp as sharedMonthStamp, monthLabel as sharedMonthLabel } from "../../../../shared/contestMonth";
 
 const ALL_TIME_KEY = "inus_contest_hearts_alltime_v1";
 const MONTH_KEY = "inus_contest_hearts_month_v1";
@@ -108,8 +110,7 @@ const MONTH_STAMP_KEY = "inus_contest_month_stamp_v1";
 type HeartMap = Record<string, number>;
 
 function currentMonthStamp(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${d.getMonth() + 1}`;
+  return sharedMonthStamp();
 }
 
 function readMap(key: string): HeartMap {
@@ -129,7 +130,7 @@ function writeMap(key: string, map: HeartMap) {
   }
 }
 
-/** 이번 달이 바뀌었으면 이번달 하트만 초기화 (전체 누적은 유지) */
+/** 이번 달이 바뀌었으면 이번달 하트만 초기화 (전체 누적은 유지) - 로컬 폴백용 */
 function ensureMonthFresh() {
   const stamp = localStorage.getItem(MONTH_STAMP_KEY);
   const now = currentMonthStamp();
@@ -139,6 +140,7 @@ function ensureMonthFresh() {
   }
 }
 
+/** 기기 로컬 값 (서버 응답 오기 전 즉시 UI 표시용 optimistic 데이터) */
 export function getAllTimeHearts(): HeartMap {
   return readMap(ALL_TIME_KEY);
 }
@@ -148,7 +150,7 @@ export function getMonthHearts(): HeartMap {
   return readMap(MONTH_KEY);
 }
 
-/** 하트 +n 적립 (전체 누적 + 이번달 누적 동시 반영) */
+/** 하트 +n 적립: 로컬은 즉시 반영(optimistic), 서버에도 비동기로 동시 전송 (전체 방문자 공유 집계) */
 export function addHeart(name: string, amount = 1): { allTime: HeartMap; month: HeartMap } {
   ensureMonthFresh();
   const allTime = readMap(ALL_TIME_KEY);
@@ -157,20 +159,48 @@ export function addHeart(name: string, amount = 1): { allTime: HeartMap; month: 
   month[name] = (month[name] || 0) + amount;
   writeMap(ALL_TIME_KEY, allTime);
   writeMap(MONTH_KEY, month);
+
+  // 서버 반영은 실패해도 로컬 UX에 영향 없도록 fire-and-forget
+  fetch("/api/hearts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, amount }),
+  }).catch(() => {
+    // 서버 미연결(DB 세팅 전) 또는 네트워크 오류 - 로컬 값으로 계속 동작
+  });
+
   return { allTime, month };
+}
+
+/**
+ * 서버(Railway DB 연동 후)에서 전체 방문자 공유 집계를 가져와 로컬 값을 덮어씀.
+ * 서버 미연결 시 null 반환 → 호출부는 로컬 값을 그대로 사용하면 됨.
+ */
+export async function fetchHeartsFromServer(): Promise<{
+  month: HeartMap;
+  allTime: HeartMap;
+  currentMonthLabel: string;
+  lastMonthChampion: { name: string; hearts: number; monthLabel: string } | null;
+} | null> {
+  try {
+    const res = await fetch("/api/hearts");
+    if (!res.ok) return null;
+    const data = await res.json();
+    // 서버 값으로 로컬 캐시도 동기화 (다음 즉시 로딩 시 최신값 사용)
+    writeMap(ALL_TIME_KEY, data.allTime ?? {});
+    writeMap(MONTH_KEY, data.month ?? {});
+    localStorage.setItem(MONTH_STAMP_KEY, currentMonthStamp());
+    return data;
+  } catch {
+    return null;
+  }
 }
 
 export function getContestant(name: string): Contestant | undefined {
   return CONTESTANTS.find((c) => c.name === name);
 }
 
-// 지난달 확정 보이스 크라운 (데모용 placeholder 데이터)
-export const LAST_MONTH_CHAMPION = {
-  name: "이우영",
-  hearts: 358,
-  monthLabel: "6월",
-};
-
+/** 이번 달 라벨 - 실제 날짜 기준 자동 계산 (더 이상 하드코딩 아님) */
 export function currentMonthLabel(): string {
-  return "7월";
+  return sharedMonthLabel(currentMonthStamp());
 }

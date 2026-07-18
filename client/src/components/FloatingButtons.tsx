@@ -117,7 +117,7 @@ export default function FloatingButtons() {
       }`}
     >
       {/* 한 줄: 영상보기 | SNS 아이콘 | 카톡상담 - 가운데 정렬 */}
-      <div className="flex justify-center items-stretch px-4 pb-6 gap-2">
+      <div className="flex justify-center items-end px-4 pb-6 gap-2">
 
         {/* 왼쪽: 사회자 선택하기 (탭하면 V.O.V까지 펼쳐짐) */}
         <div ref={menuRef} className="relative flex flex-col gap-1 shrink-0">
@@ -128,7 +128,7 @@ export default function FloatingButtons() {
                 const el = document.getElementById('vote-on-voice');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-2.5 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 text-[#d4b896] hover:bg-[#161616] hover:border-[#d4b896]/60 transition-all duration-300 shadow-lg shadow-black/40 group animate-in fade-in slide-in-from-bottom-2`}
+              className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-2.5 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 text-[#d4b896] hover:bg-[#161616] hover:border-[#d4b896]/60 transition-all duration-300 shadow-lg shadow-black/40 group`}
             >
               <Crown className="w-4 h-4 text-[#d4b896] group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
               <span className="text-xs tracking-wide font-medium" style={{ fontFamily: "'Noto Serif KR', serif" }}>

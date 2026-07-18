@@ -14,7 +14,7 @@ import PackageSection from "@/components/sections/PackageSection";
 import PricingSection from "@/components/sections/PricingSection";
 import ProcessSection from "@/components/sections/ProcessSection";
 import McSection from "@/components/sections/McSection";
-import VideoSection from "@/components/sections/VideoSection";
+import VoteOnVoiceSection from "@/components/sections/VoteOnVoiceSection";
 import VideoGuideSection from "@/components/sections/VideoGuideSection";
 import ReviewSection from "@/components/sections/ReviewSection";
 import QnaSection from "@/components/sections/QnaSection";
@@ -43,7 +43,7 @@ export default function Home() {
       <ProcessSection />
       <ReviewSection />
       <McSection />
-      <VideoSection />
+      <VoteOnVoiceSection />
       <VideoGuideSection />
       <BookingSection />
       <PricingSection />

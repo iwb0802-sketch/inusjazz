@@ -48,13 +48,24 @@ export default function VoteOnVoiceSection() {
 
         <a
           href="/contest"
-          className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm font-semibold transition-transform hover:scale-105"
-          style={{ background: GOLD, color: "#0d0d0d" }}
+          className="relative inline-flex items-center gap-2 px-9 py-[18px] rounded-full text-base font-bold transition-transform hover:scale-105"
+          style={{
+            background: `linear-gradient(135deg, ${GOLD} 0%, #e8cd9e 50%, ${GOLD} 100%)`,
+            color: "#0d0d0d",
+            animation: "voteGlowPulse 2.2s ease-in-out infinite",
+          }}
         >
           VOTE ON VOICE 투표하러 가기
-          <ChevronRight size={16} />
+          <ChevronRight size={18} />
         </a>
       </div>
+
+      <style>{`
+        @keyframes voteGlowPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(212,184,150,0.55), 0 4px 20px rgba(212,184,150,0.35); }
+          50% { box-shadow: 0 0 0 14px rgba(212,184,150,0), 0 4px 28px rgba(212,184,150,0.55); }
+        }
+      `}</style>
     </section>
   );
 }

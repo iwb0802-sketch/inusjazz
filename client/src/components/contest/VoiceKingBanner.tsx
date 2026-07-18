@@ -3,9 +3,10 @@
  */
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Crown, TrendingUp, ExternalLink } from "lucide-react";
+import { Crown, TrendingUp, ExternalLink, Play } from "lucide-react";
 import { getContestant } from "./contestData";
 import ProfileModal from "./ProfileModal";
+import VideoModal from "./VideoModal";
 
 interface LastMonthChampion {
   name: string;
@@ -21,6 +22,7 @@ interface VoiceKingBannerProps {
 
 export default function VoiceKingBanner({ monthHearts, monthLabel, lastMonthChampion }: VoiceKingBannerProps) {
   const [showProfile, setShowProfile] = useState(false);
+  const [videoTarget, setVideoTarget] = useState<string | null>(null);
   const ranking = Object.entries(monthHearts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5);
@@ -81,6 +83,13 @@ export default function VoiceKingBanner({ monthHearts, monthLabel, lastMonthCham
       {showProfile && lastChampion && (
         <ProfileModal url={lastChampion.profileUrl} onClose={() => setShowProfile(false)} />
       )}
+      {videoTarget && getContestant(videoTarget)?.videoId && (
+        <VideoModal
+          videoId={getContestant(videoTarget)!.videoId}
+          name={videoTarget}
+          onClose={() => setVideoTarget(null)}
+        />
+      )}
 
       {/* 이번달 실시간 */}
       <div className="rounded-2xl border border-[#5BB5A2]/25 bg-black/30 px-5 py-4">
@@ -95,36 +104,49 @@ export default function VoiceKingBanner({ monthHearts, monthLabel, lastMonthCham
             {ranking.map(([name, hearts], i) => {
               const rank = rankNumbers[i];
               const isTied = ranking.filter((_, j) => rankNumbers[j] === rank).length > 1;
+              const contestant = getContestant(name);
               return (
               <motion.div
                 key={name}
                 layout
-                className="flex items-center justify-between text-sm"
+                className="flex items-center justify-between text-sm gap-2"
               >
-                <span className="flex items-center gap-2 text-white/85">
+                <span className="flex items-center gap-2 text-white/85 min-w-0">
                   <span
-                    className={`w-5 h-5 flex items-center justify-center rounded-full text-[10px] font-bold ${
+                    className={`w-5 h-5 flex items-center justify-center rounded-full text-[10px] font-bold shrink-0 ${
                       rank === 1 ? "bg-[#5BB5A2] text-black" : "bg-white/10 text-white/60"
                     }`}
                   >
                     {rank}
                   </span>
-                  {name}
+                  <span className="truncate">{name}</span>
                   {rank === 1 && (
-                    <span className="text-[10px] text-[#5BB5A2]">{isTied ? "공동 1위" : "현재 1위"}</span>
+                    <span className="text-[10px] text-[#5BB5A2] shrink-0">{isTied ? "공동 1위" : "현재 1위"}</span>
                   )}
                   {rank !== 1 && isTied && (
-                    <span className="text-[10px] text-white/40">공동 {rank}위</span>
+                    <span className="text-[10px] text-white/40 shrink-0">공동 {rank}위</span>
                   )}
                 </span>
-                <motion.span
-                  key={hearts}
-                  initial={{ scale: 1.3, color: "#5BB5A2" }}
-                  animate={{ scale: 1, color: "#ffffffcc" }}
-                  className="tabular-nums font-medium"
-                >
-                  {hearts.toLocaleString()}♥
-                </motion.span>
+                <span className="flex items-center gap-2 shrink-0">
+                  <motion.span
+                    key={hearts}
+                    initial={{ scale: 1.3, color: "#5BB5A2" }}
+                    animate={{ scale: 1, color: "#ffffffcc" }}
+                    className="tabular-nums font-medium"
+                  >
+                    {hearts.toLocaleString()}♥
+                  </motion.span>
+                  {contestant?.videoId && (
+                    <button
+                      type="button"
+                      onClick={() => setVideoTarget(name)}
+                      aria-label={`${name} 사회자 영상 재생`}
+                      className="w-6 h-6 flex items-center justify-center rounded-full bg-[#5BB5A2]/15 text-[#5BB5A2] hover:bg-[#5BB5A2]/30 transition-colors"
+                    >
+                      <Play size={11} fill="currentColor" />
+                    </button>
+                  )}
+                </span>
               </motion.div>
               );
             })}

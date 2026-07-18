@@ -11,6 +11,7 @@ export interface Contestant {
   highlight: string;
   profileUrl: string;
   audioFile: string;
+  videoId: string;
 }
 
 export const CONTESTANTS: Contestant[] = [
@@ -22,6 +23,7 @@ export const CONTESTANTS: Contestant[] = [
     highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",
     profileUrl: "https://www.inusmusic.com/profile-minsu.html",
     audioFile: "/audio/mc-minsu.mp3",
+    videoId: "YmqVrha13G0",
   },
   {
     name: "고승범",
@@ -31,6 +33,7 @@ export const CONTESTANTS: Contestant[] = [
     highlight: "자연스럽고 세련된 진행 스타일이 특징입니다.",
     profileUrl: "https://www.inusmusic.com/profile-seungbeom.html",
     audioFile: "/audio/mc-seungbeom.mp3",
+    videoId: "iKi77thkR4s",
   },
   {
     name: "이도영",
@@ -40,6 +43,7 @@ export const CONTESTANTS: Contestant[] = [
     highlight: "따뜻하고 안정적인 진행으로 신랑신부님의 이야기를 감동적으로 전달합니다.",
     profileUrl: "https://www.inusmusic.com/profile-idoyoung.html",
     audioFile: "/audio/mc-idoyoung.mp3",
+    videoId: "ali34pV7ALk",
   },
   {
     name: "석재선",
@@ -49,6 +53,7 @@ export const CONTESTANTS: Contestant[] = [
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",
     profileUrl: "https://www.inusmusic.com/profile-jaesun.html",
     audioFile: "/audio/mc-jaesun.mp3",
+    videoId: "zx_iAhMkMns",
   },
   {
     name: "이우영",
@@ -58,6 +63,7 @@ export const CONTESTANTS: Contestant[] = [
     highlight: "편안한 아나운서 톤과 안정적인 진행력으로 위트 있고 깔끔한 예식을 완성하는 사회자입니다.",
     profileUrl: "https://www.inusmusic.com/profile-wooyoung.html",
     audioFile: "/audio/mc-wooyoung.mp3",
+    videoId: "prhKZqfMjfM",
   },
   {
     name: "김선혁",
@@ -67,6 +73,7 @@ export const CONTESTANTS: Contestant[] = [
     highlight: "깔끔하고 안정감 있는 진행력을 기반으로 탁월한 상황 대처 능력을 갖춘 사회자입니다.",
     profileUrl: "https://www.inusmusic.com/profile-sunhyuk.html",
     audioFile: "/audio/mc-sunhyuk.mp3",
+    videoId: "4Quvg9TIGAk",
   },
   {
     name: "장윤태",
@@ -76,6 +83,7 @@ export const CONTESTANTS: Contestant[] = [
     highlight: "안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.",
     profileUrl: "https://www.inusmusic.com/profile-yuntae.html",
     audioFile: "/audio/mc-yuntae.mp3",
+    videoId: "U5cJiiF-WcY",
   },
   {
     name: "길상우",
@@ -85,6 +93,7 @@ export const CONTESTANTS: Contestant[] = [
     highlight: "센스와 위트를 겸비한 진행력이 강점인 사회자입니다.",
     profileUrl: "https://www.inusmusic.com/profile-gilsangwoo.html",
     audioFile: "/audio/mc-gilsangwoo.mp3",
+    videoId: "0Ske676aw84",
   },
   {
     name: "최윤아",
@@ -94,6 +103,7 @@ export const CONTESTANTS: Contestant[] = [
     highlight: "세련된 진행과 따뜻한 톤으로 순간의 가치를 빛내는 사회자입니다.",
     profileUrl: "https://www.inusmusic.com/profile-yuna.html",
     audioFile: "/audio/mc-yoona.mp3",
+    videoId: "wuwAiKu9HbU",
   },
 ];
 

@@ -14,7 +14,7 @@ export default function VoteOnVoiceSection() {
   const monthLabel = currentMonthLabel();
 
   return (
-    <section className="relative overflow-hidden py-20 sm:py-28" style={{ background: "#0d0d0d" }}>
+    <section id="vote-on-voice" className="relative overflow-hidden py-20 sm:py-28" style={{ background: "#0d0d0d" }}>
       <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, rgba(212,184,150,0.06) 0%, transparent 65%)" }} />
 
       <div

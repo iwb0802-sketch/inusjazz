@@ -4,7 +4,7 @@
  * 히어로 섹션을 지나 스크롤하면 나타남
  */
 import React, { useState, useEffect } from "react";
-import { MessageCircle, Play, Globe } from "lucide-react";
+import { MessageCircle, Play, Globe, Crown } from "lucide-react";
 
 // 네이버 블로그 아이콘 (SVG) - 초록색 stroke 윤곽선
 const NaverBlogIcon = () => (
@@ -102,19 +102,33 @@ export default function FloatingButtons() {
       {/* 한 줄: 영상보기 | SNS 아이콘 | 카톡상담 - 가운데 정렬 */}
       <div className="flex justify-center items-stretch px-4 pb-6 gap-2">
 
-        {/* 왼쪽: 사회자 선택하기 */}
-        <button
-          onClick={() => {
-            const el = document.getElementById('mc');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
-          className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-3 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 text-white/80 hover:bg-[#161616] hover:border-[#d4b896]/60 transition-all duration-300 shadow-lg shadow-black/40 group shrink-0`}
-        >
-          <Play className="w-4 h-4 text-[#d4b896] group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
-          <span className="text-xs tracking-wide" style={{ fontFamily: "'Noto Serif KR', serif" }}>
-            사회자 선택하기
-          </span>
-        </button>
+        {/* 왼쪽: 사회자 선택하기 + V.O.V (세로 스택) */}
+        <div className="flex flex-col gap-1 shrink-0">
+          <button
+            onClick={() => {
+              const el = document.getElementById('mc');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-2.5 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 text-white/80 hover:bg-[#161616] hover:border-[#d4b896]/60 transition-all duration-300 shadow-lg shadow-black/40 group`}
+          >
+            <Play className="w-4 h-4 text-[#d4b896] group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
+            <span className="text-xs tracking-wide" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+              사회자 선택하기
+            </span>
+          </button>
+          <button
+            onClick={() => {
+              const el = document.getElementById('vote-on-voice');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-2.5 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 text-[#d4b896] hover:bg-[#161616] hover:border-[#d4b896]/60 transition-all duration-300 shadow-lg shadow-black/40 group`}
+          >
+            <Crown className="w-4 h-4 text-[#d4b896] group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
+            <span className="text-xs tracking-wide font-medium" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+              V.O.V
+            </span>
+          </button>
+        </div>
 
         {/* 가운데: SNS 아이콘 */}
         <div className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-0 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 shadow-lg shadow-black/40 shrink-0`}>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Crown } from "lucide-react";
 
 const HERO_BG = "/images/hero-v2-option2.webp";
 const HERO_BG_MOBILE = "/images/hero-mobile-v3.webp";
@@ -90,6 +90,18 @@ export default function HeroSection() {
             className="px-8 py-4 bg-[#5BB5A2] text-white text-sm sm:text-base tracking-wider hover:bg-[#4da393] transition-all duration-300 rounded-sm"
           >
             사회자 선택하기
+          </button>
+          <button
+            onClick={() => {
+              const el = document.getElementById('vote-on-voice');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            aria-label="VOTE ON VOICE 이동"
+            className="flex items-center justify-center gap-2 px-6 py-4 border rounded-sm text-sm sm:text-base tracking-wider transition-all duration-300"
+            style={{ borderColor: "rgba(212,184,150,0.5)", color: "#d4b896", background: "rgba(212,184,150,0.08)" }}
+          >
+            <Crown size={16} />
+            V.O.V
           </button>
           <a
             href="#intro"

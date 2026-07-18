@@ -1,5 +1,5 @@
 /**
- * 보이스 크라운 콘테스트 - 데이터 & localStorage 헬퍼
+ * VOTE ON VOICE 콘테스트 - 데이터 & localStorage 헬퍼
  * 임시 데모 페이지 (/contest) 전용
  */
 

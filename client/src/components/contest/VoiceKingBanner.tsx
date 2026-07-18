@@ -1,5 +1,5 @@
 /**
- * 이달의 보이스 크라운 배너 - 저번달 확정 챔피언 + 이번달 실시간 순위
+ * 이달의 VOTE ON VOICE 배너 - 저번달 확정 챔피언 + 이번달 실시간 순위
  */
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -54,7 +54,7 @@ export default function VoiceKingBanner({ monthHearts, monthLabel, lastMonthCham
             </div>
             <div className="flex-1">
               <p className="text-[11px] font-semibold tracking-[0.15em] text-[#d4b896] uppercase" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
-                {lastMonthChampion.monthLabel} 확정 보이스 크라운
+                {lastMonthChampion.monthLabel} 확정 VOTE ON VOICE
               </p>
               <p className="flex items-center gap-1.5 mt-1">
                 <Crown size={18} className="text-[#d4b896]" />
@@ -77,7 +77,7 @@ export default function VoiceKingBanner({ monthHearts, monthLabel, lastMonthCham
             )}
           </>
         ) : (
-          <p className="text-sm text-white/50">지난달 보이스 크라운 집계 중입니다.</p>
+          <p className="text-sm text-white/50">지난달 VOTE ON VOICE 집계 중입니다.</p>
         )}
       </div>
       {showProfile && lastChampion && (

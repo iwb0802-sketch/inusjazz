@@ -1,6 +1,6 @@
 /**
- * 보이스 크라운 콘테스트 - 임시 데모 페이지 (/contest)
- * 사회자 1:1 토너먼트 + 하트(투표) 시스템 + 이달의 보이스 크라운
+ * VOTE ON VOICE 콘테스트 - 임시 데모 페이지 (/contest)
+ * 사회자 1:1 토너먼트 + 하트(투표) 시스템 + 이달의 VOTE ON VOICE
  * 주의: 아직 메인 내비게이션에 연결되지 않은 임시 프로토타입입니다.
  * 하트 데이터는 브라우저 localStorage에만 저장됩니다 (서버 공유 없음).
  */
@@ -220,9 +220,9 @@ export default function Contest() {
                 className="text-5xl sm:text-6xl mb-1 leading-tight tracking-wide"
                 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
               >
-                INUS
+                VOTE ON
                 <br />
-                VOICE CROWN
+                VOICE
               </motion.h1>
               <p
                 className="text-[11px] tracking-[0.4em] text-white/40 uppercase mb-5"
@@ -272,7 +272,7 @@ export default function Contest() {
                 {[
                   { icon: Play, label: "1:1 매치", desc: "실제 음성으로 대결" },
                   { icon: Heart, label: "하트 투표", desc: "마음에 드는 목소리 선택" },
-                  { icon: Sparkles, label: "이달의 크라운", desc: "월간 보이스 크라운 선정" },
+                  { icon: Sparkles, label: "이달의 VOV", desc: "월간 VOTE ON VOICE 선정" },
                 ].map((item) => (
                   <div
                     key={item.label}
@@ -305,7 +305,7 @@ export default function Contest() {
                 transition={{ delay: 0.6, duration: 0.5 }}
                 className="text-[10px] text-white/30 mt-5 tracking-wide"
               >
-                지난달 보이스 크라운이 된 사회자는 이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.(이벤트 중복적용가능)
+                지난달 VOTE ON VOICE가 된 사회자는 이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.(이벤트 중복적용가능)
               </motion.p>
             </div>
           </motion.div>
@@ -316,17 +316,17 @@ export default function Contest() {
       <div className="max-w-3xl mx-auto px-4 pt-20">
         {/* 헤더 */}
         <div className="text-center mb-8">
-          <p className="text-[10px] tracking-[0.25em] text-[#d4b896] uppercase mb-3">INUSMUSIC VOICE CROWN</p>
+          <p className="text-[10px] tracking-[0.25em] text-[#d4b896] uppercase mb-3">INUSMUSIC VOTE ON VOICE</p>
           <h1
             className="text-3xl sm:text-5xl mb-3 leading-tight tracking-wide"
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
           >
-            INUS VOICE CROWN
+            VOTE ON VOICE
           </h1>
           <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto break-keep">
-            신랑신부님들이 직접 추천하는 보이스 크라운 콘테스트.
+            신랑신부님들이 직접 추천하는 VOTE ON VOICE 콘테스트.
             <br />
-            지난달 보이스 크라운이 된 사회자는
+            지난달 VOTE ON VOICE가 된 사회자는
             <br className="sm:hidden" />
             {" "}이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.(이벤트 중복적용가능)
           </p>

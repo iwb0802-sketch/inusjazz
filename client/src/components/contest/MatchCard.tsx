@@ -22,6 +22,7 @@ let activeAudio: HTMLAudioElement | null = null;
 
 export default function MatchCard({ contestant, hearts, side, onSelectWinner, onHeart, disabled, heartLocked, blind }: MatchCardProps) {
   const [playing, setPlaying] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -31,24 +32,50 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
     };
   }, []);
 
+  const ensureAudio = () => {
+    if (audioRef.current) return audioRef.current;
+    const audio = new Audio(contestant.audioFile);
+    audio.preload = "auto";
+    // 재생 상태는 오디오 엘리먼트의 실제 이벤트를 그대로 반영 (버튼 상태와 실제 재생이 어긋나는 문제 방지)
+    audio.addEventListener("playing", () => {
+      setLoading(false);
+      setPlaying(true);
+    });
+    audio.addEventListener("waiting", () => setLoading(true));
+    audio.addEventListener("pause", () => setPlaying(false));
+    audio.addEventListener("ended", () => setPlaying(false));
+    audio.addEventListener("error", () => {
+      setLoading(false);
+      setPlaying(false);
+    });
+    audioRef.current = audio;
+    return audio;
+  };
+
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!audioRef.current) {
-      audioRef.current = new Audio(contestant.audioFile);
-      audioRef.current.addEventListener("ended", () => setPlaying(false));
-    }
-    if (playing) {
-      audioRef.current.pause();
+    const audio = ensureAudio();
+
+    if (!audio.paused) {
+      audio.pause();
+      audio.currentTime = 0;
       setPlaying(false);
       return;
     }
-    if (activeAudio && activeAudio !== audioRef.current) {
+
+    if (activeAudio && activeAudio !== audio) {
       activeAudio.pause();
+      activeAudio.currentTime = 0;
     }
-    activeAudio = audioRef.current;
-    audioRef.current.currentTime = 0;
-    audioRef.current.play().catch(() => {});
-    setPlaying(true);
+    activeAudio = audio;
+    setLoading(true);
+    audio.currentTime = 0;
+    audio
+      .play()
+      .catch(() => {
+        setLoading(false);
+        setPlaying(false);
+      });
   };
 
   return (
@@ -116,14 +143,21 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
             transition={{ duration: 1, repeat: playing ? Infinity : 0 }}
             className="flex items-center justify-center w-14 h-14 rounded-full bg-black/50 border border-white/40 backdrop-blur-sm hover:bg-black/65 transition-colors"
           >
-            {playing ? (
+            {loading ? (
+              <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+            ) : playing ? (
               <Pause size={22} className="text-white fill-white" />
             ) : (
               <Play size={22} className="text-white fill-white ml-0.5" />
             )}
           </motion.span>
         </button>
-        {playing && (
+        {loading && (
+          <span className="absolute bottom-16 left-1/2 -translate-x-1/2 text-[10px] text-white/70 bg-black/40 px-2 py-0.5 rounded-full">
+            불러오는 중...
+          </span>
+        )}
+        {playing && !loading && (
           <span className="absolute bottom-16 left-1/2 -translate-x-1/2 text-[10px] text-white/70 bg-black/40 px-2 py-0.5 rounded-full">
             목소리 재생중...
           </span>

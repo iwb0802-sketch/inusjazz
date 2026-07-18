@@ -3,8 +3,8 @@
  * 한 줄: [ ▶ 실황영상보기 ] [ 인스타·블로그·유튜브 pill ] [ 💬 카톡상담하기 ]
  * 히어로 섹션을 지나 스크롤하면 나타남
  */
-import React, { useState, useEffect } from "react";
-import { MessageCircle, Play, Globe, Crown } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { MessageCircle, Play, Globe, Crown, ChevronUp, X } from "lucide-react";
 
 // 네이버 블로그 아이콘 (SVG) - 초록색 stroke 윤곽선
 const NaverBlogIcon = () => (
@@ -82,6 +82,8 @@ const snsLinks = [
 
 export default function FloatingButtons() {
   const [visible, setVisible] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -93,6 +95,21 @@ export default function FloatingButtons() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleOutside = (e: MouseEvent | TouchEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("touchstart", handleOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener("touchstart", handleOutside);
+    };
+  }, [menuOpen]);
+
   return (
     <div
       className={`fixed bottom-0 left-0 right-0 z-50 transition-all duration-500 pointer-events-none ${
@@ -102,12 +119,32 @@ export default function FloatingButtons() {
       {/* 한 줄: 영상보기 | SNS 아이콘 | 카톡상담 - 가운데 정렬 */}
       <div className="flex justify-center items-stretch px-4 pb-6 gap-2">
 
-        {/* 왼쪽: 사회자 선택하기 + V.O.V (세로 스택) */}
-        <div className="flex flex-col gap-1 shrink-0">
+        {/* 왼쪽: 사회자 선택하기 (탭하면 V.O.V까지 펼쳐짐) */}
+        <div ref={menuRef} className="relative flex flex-col gap-1 shrink-0">
+          {menuOpen && (
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                const el = document.getElementById('vote-on-voice');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-2.5 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 text-[#d4b896] hover:bg-[#161616] hover:border-[#d4b896]/60 transition-all duration-300 shadow-lg shadow-black/40 group animate-in fade-in slide-in-from-bottom-2`}
+            >
+              <Crown className="w-4 h-4 text-[#d4b896] group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
+              <span className="text-xs tracking-wide font-medium" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+                V.O.V
+              </span>
+            </button>
+          )}
           <button
             onClick={() => {
-              const el = document.getElementById('mc');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
+              if (!menuOpen) {
+                setMenuOpen(true);
+              } else {
+                setMenuOpen(false);
+                const el = document.getElementById('mc');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }
             }}
             className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-2.5 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 text-white/80 hover:bg-[#161616] hover:border-[#d4b896]/60 transition-all duration-300 shadow-lg shadow-black/40 group`}
           >
@@ -115,18 +152,10 @@ export default function FloatingButtons() {
             <span className="text-xs tracking-wide" style={{ fontFamily: "'Noto Serif KR', serif" }}>
               사회자 선택하기
             </span>
-          </button>
-          <button
-            onClick={() => {
-              const el = document.getElementById('vote-on-voice');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-2.5 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 text-[#d4b896] hover:bg-[#161616] hover:border-[#d4b896]/60 transition-all duration-300 shadow-lg shadow-black/40 group`}
-          >
-            <Crown className="w-4 h-4 text-[#d4b896] group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
-            <span className="text-xs tracking-wide font-medium" style={{ fontFamily: "'Noto Serif KR', serif" }}>
-              V.O.V
-            </span>
+            <ChevronUp
+              className={`w-3.5 h-3.5 text-[#d4b896]/70 transition-transform duration-300 ${menuOpen ? 'rotate-180' : ''}`}
+              strokeWidth={2}
+            />
           </button>
         </div>
 

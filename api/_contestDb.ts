@@ -8,7 +8,7 @@ import pg from "pg";
 const { Pool } = pg;
 type Pool = pg.Pool;
 type PoolClient = pg.PoolClient;
-import { monthStamp, nextMonthStamp, prevMonthStamp } from "../shared/contestMonth";
+import { monthStamp, nextMonthStamp, prevMonthStamp } from "../shared/contestMonth.js";
 
 let pool: Pool | null = null;
 

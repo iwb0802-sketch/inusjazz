@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getPool, ensureSchema, rolloverIfNeeded } from "./_contestDb";
-import { monthStamp, yearOf } from "../shared/contestMonth";
+import { getPool, ensureSchema, rolloverIfNeeded } from "./_contestDb.js";
+import { monthStamp, yearOf } from "../shared/contestMonth.js";
 
 export const config = {
   runtime: "nodejs",

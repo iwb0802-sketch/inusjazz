@@ -168,9 +168,9 @@ export function getContestant(name: string): Contestant | undefined {
 export const LAST_MONTH_CHAMPION = {
   name: "이우영",
   hearts: 358,
-  monthLabel: "7월",
+  monthLabel: "6월",
 };
 
 export function currentMonthLabel(): string {
-  return "8월";
+  return "7월";
 }

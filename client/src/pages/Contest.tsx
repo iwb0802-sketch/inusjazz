@@ -285,7 +285,7 @@ export default function Contest() {
                 transition={{ delay: 0.6, duration: 0.5 }}
                 className="text-[10px] text-white/30 mt-5 tracking-wide"
               >
-                이번달 보이스 크라운에게는 지정 문의 시 1만원 할인 혜택이 주어집니다.
+                지난달 보이스 크라운이 된 사회자는 이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.
               </motion.p>
             </div>
           </motion.div>
@@ -298,17 +298,15 @@ export default function Contest() {
         <div className="text-center mb-8">
           <p className="text-[10px] tracking-[0.25em] text-[#d4b896] uppercase mb-3">INUSMUSIC VOICE CROWN</p>
           <h1
-            className="text-3xl sm:text-5xl font-semibold mb-3 leading-tight"
-            style={{ fontFamily: "'Noto Serif KR', serif" }}
+            className="text-3xl sm:text-5xl mb-3 leading-tight tracking-wide"
+            style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
           >
-            이너스 보이스 크라운
-            <br className="sm:hidden" />
-            <span className="sm:ml-2">콘테스트</span>
+            INUS VOICE CROWN
           </h1>
           <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto">
-            신부님들이 직접 추천하는 보이스 크라운 콘테스트.
+            신랑신부님들이 직접 추천하는 보이스 크라운 콘테스트.
             <br />
-            이번달 보이스 크라운이 된 사회자는 한달간 지정 문의 시 1만원 할인 혜택이 주어집니다.
+            지난달 보이스 크라운이 된 사회자는 이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.
           </p>
         </div>
 

@@ -15,7 +15,7 @@ export default function VoiceKingBanner({ monthHearts }: VoiceKingBannerProps) {
   const [showProfile, setShowProfile] = useState(false);
   const ranking = Object.entries(monthHearts)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 3);
+    .slice(0, 5);
 
   const leader = ranking[0];
   const lastChampion = getContestant(LAST_MONTH_CHAMPION.name);

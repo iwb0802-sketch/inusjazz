@@ -1,5 +1,5 @@
 /**
- * 목소리왕 콘테스트 - 데이터 & localStorage 헬퍼
+ * 보이스 크라운 콘테스트 - 데이터 & localStorage 헬퍼
  * 임시 데모 페이지 (/contest) 전용
  */
 
@@ -164,7 +164,7 @@ export function getContestant(name: string): Contestant | undefined {
   return CONTESTANTS.find((c) => c.name === name);
 }
 
-// 지난달 확정 목소리왕 (데모용 placeholder 데이터)
+// 지난달 확정 보이스 크라운 (데모용 placeholder 데이터)
 export const LAST_MONTH_CHAMPION = {
   name: "이우영",
   hearts: 358,

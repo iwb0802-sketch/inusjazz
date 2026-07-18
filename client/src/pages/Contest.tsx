@@ -1,6 +1,6 @@
 /**
- * 목소리왕 콘테스트 - 임시 데모 페이지 (/contest)
- * 사회자 1:1 토너먼트 + 하트(투표) 시스템 + 이달의 목소리왕
+ * 보이스 크라운 콘테스트 - 임시 데모 페이지 (/contest)
+ * 사회자 1:1 토너먼트 + 하트(투표) 시스템 + 이달의 보이스 크라운
  * 주의: 아직 메인 내비게이션에 연결되지 않은 임시 프로토타입입니다.
  * 하트 데이터는 브라우저 localStorage에만 저장됩니다 (서버 공유 없음).
  */
@@ -153,7 +153,7 @@ export default function Contest() {
                 className="mb-6 flex items-center justify-center gap-2"
               >
                 <span className="h-px w-8 bg-[#d4b896]/40" />
-                <p className="text-[10px] tracking-[0.3em] text-[#d4b896] uppercase">INUSMUSIC VOICE KING</p>
+                <p className="text-[10px] tracking-[0.3em] text-[#d4b896] uppercase">INUSMUSIC VOICE CROWN</p>
                 <span className="h-px w-8 bg-[#d4b896]/40" />
               </motion.div>
 
@@ -177,7 +177,7 @@ export default function Contest() {
                 className="text-4xl sm:text-5xl font-semibold mb-4 leading-tight"
                 style={{ fontFamily: "'Noto Serif KR', serif" }}
               >
-                이너스 목소리왕
+                이너스 보이스 크라운
                 <br />
                 콘테스트
               </motion.h1>
@@ -204,7 +204,7 @@ export default function Contest() {
                 {[
                   { icon: Play, label: "1:1 매치", desc: "실제 음성으로 대결" },
                   { icon: Heart, label: "하트 투표", desc: "마음에 드는 목소리 선택" },
-                  { icon: Sparkles, label: "이달의 왕", desc: "월간 목소리왕 선정" },
+                  { icon: Sparkles, label: "이달의 크라운", desc: "월간 보이스 크라운 선정" },
                 ].map((item) => (
                   <div
                     key={item.label}
@@ -237,7 +237,7 @@ export default function Contest() {
                 transition={{ delay: 0.6, duration: 0.5 }}
                 className="text-[10px] text-white/30 mt-5 tracking-wide"
               >
-                이번달 목소리왕에게는 지정 문의 시 1만원 할인 혜택이 주어집니다.
+                이번달 보이스 크라운에게는 지정 문의 시 1만원 할인 혜택이 주어집니다.
               </motion.p>
             </div>
           </motion.div>
@@ -248,19 +248,19 @@ export default function Contest() {
       <div className="max-w-3xl mx-auto px-4 pt-20">
         {/* 헤더 */}
         <div className="text-center mb-8">
-          <p className="text-[10px] tracking-[0.25em] text-[#d4b896] uppercase mb-3">INUSMUSIC VOICE KING</p>
+          <p className="text-[10px] tracking-[0.25em] text-[#d4b896] uppercase mb-3">INUSMUSIC VOICE CROWN</p>
           <h1
             className="text-3xl sm:text-5xl font-semibold mb-3 leading-tight"
             style={{ fontFamily: "'Noto Serif KR', serif" }}
           >
-            이너스 목소리왕
+            이너스 보이스 크라운
             <br className="sm:hidden" />
             <span className="sm:ml-2">콘테스트</span>
           </h1>
           <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto">
-            신부님들이 직접 추천하는 목소리왕 콘테스트.
+            신부님들이 직접 추천하는 보이스 크라운 콘테스트.
             <br />
-            이번달 목소리왕이 된 사회자는 한달간 지정 문의 시 1만원 할인 혜택이 주어집니다.
+            이번달 보이스 크라운이 된 사회자는 한달간 지정 문의 시 1만원 할인 혜택이 주어집니다.
           </p>
         </div>
 

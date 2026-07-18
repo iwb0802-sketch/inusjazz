@@ -1,5 +1,5 @@
 /**
- * 이달의 목소리왕 배너 - 저번달 확정 챔피언 + 이번달 실시간 순위
+ * 이달의 보이스 크라운 배너 - 저번달 확정 챔피언 + 이번달 실시간 순위
  */
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -31,7 +31,7 @@ export default function VoiceKingBanner({ monthHearts }: VoiceKingBannerProps) {
         </div>
         <div className="flex-1">
           <p className="text-[10px] tracking-[0.15em] text-[#d4b896]/70 uppercase" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
-            {LAST_MONTH_CHAMPION.monthLabel} 확정 목소리왕
+            {LAST_MONTH_CHAMPION.monthLabel} 확정 보이스 크라운
           </p>
           <p className="flex items-center gap-1.5 text-lg text-white" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
             <Crown size={16} className="text-[#d4b896]" />

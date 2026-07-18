@@ -457,17 +457,28 @@ export default function Contest() {
                       </p>
                       <ul className="space-y-1.5">
                         {[
-                          "숨고 상담후기 작성 시 2만원 할인",
-                          "결혼식 준비에 필요한 체크리스트 & 웨딩가이드(예식주간과 당일 안내 꿀팁) 자료 제공",
-                          "이너스뮤직 365일 이벤트 자세히 보기 →",
-                          "지인할인 적용 (코드번호 부여받을 시 1만원 할인)",
-                          "MR 제공",
-                          "MR 편집 & AR 편집",
-                          "모바일청첩장 무료 제공 (예약고객에 한함)",
+                          { text: "숨고 상담후기 작성 시 2만원 할인" },
+                          { text: "결혼식 준비에 필요한 체크리스트 & 웨딩가이드(예식주간과 당일 안내 꿀팁) 자료 제공" },
+                          { text: "이너스뮤직 365일 이벤트 자세히 보기 →", href: "https://blog.naver.com/inusmusics/220652958346" },
+                          { text: "지인할인 적용 (코드번호 부여받을 시 1만원 할인)" },
+                          { text: "MR 제공" },
+                          { text: "MR 편집 & AR 편집" },
+                          { text: "모바일청첩장 무료 제공 (예약고객에 한함)" },
                         ].map((item) => (
-                          <li key={item} className="flex items-start gap-2 text-[13px] text-white/80 leading-relaxed break-keep">
+                          <li key={item.text} className="flex items-start gap-2 text-[13px] text-white/80 leading-relaxed break-keep">
                             <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
-                            {item}
+                            {item.href ? (
+                              <a
+                                href={item.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[#f4e2b8] hover:text-[#ffe9b8] underline underline-offset-2 decoration-[#f4e2b8]/40 transition-colors"
+                              >
+                                {item.text}
+                              </a>
+                            ) : (
+                              item.text
+                            )}
                           </li>
                         ))}
                       </ul>

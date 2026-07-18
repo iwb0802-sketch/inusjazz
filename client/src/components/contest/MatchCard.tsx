@@ -145,7 +145,7 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
         {/* 목소리 미리듣기 재생 버튼 */}
         <button
           onClick={togglePlay}
-          className="absolute inset-0 m-auto flex items-center justify-center"
+          className="absolute inset-0 m-auto flex items-center justify-center z-10 pointer-events-auto"
           style={{ width: "fit-content", height: "fit-content", top: "40%" }}
           aria-label="목소리 미리듣기"
         >
@@ -174,7 +174,7 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
           </span>
         )}
 
-        <div className="absolute bottom-0 left-0 right-0 p-4">
+        <div className="absolute bottom-0 left-0 right-0 p-4 pointer-events-none">
           {blind ? (
             <h3
               className="text-2xl text-white/70 font-semibold tracking-widest"

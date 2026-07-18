@@ -198,6 +198,25 @@ export default function Contest() {
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                className="flex items-center justify-center gap-3 sm:gap-5 mb-9 text-white/45"
+              >
+                <span className="text-[11px] tracking-wide whitespace-nowrap">
+                  Since <span className="text-[#d4b896] font-medium">2015</span>
+                </span>
+                <span className="w-px h-3 bg-white/15" />
+                <span className="text-[11px] tracking-wide whitespace-nowrap">
+                  누적 <span className="text-[#d4b896] font-medium">4만쌍+</span> 진행
+                </span>
+                <span className="w-px h-3 bg-white/15" />
+                <span className="text-[11px] tracking-wide whitespace-nowrap">
+                  후기 <span className="text-[#d4b896] font-medium">1,500건+</span>
+                </span>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.44, duration: 0.5 }}
                 className="grid grid-cols-3 gap-2 mb-10 text-left"
               >

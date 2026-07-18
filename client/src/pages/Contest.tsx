@@ -6,7 +6,7 @@
  */
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play } from "lucide-react";
+import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX } from "lucide-react";
 import {
   CONTESTANTS,
   getContestant,
@@ -17,6 +17,7 @@ import {
 import { buildRound, roundLabel, type RoundSetup } from "@/components/contest/bracketEngine";
 import MatchCard from "@/components/contest/MatchCard";
 import VoiceKingBanner from "@/components/contest/VoiceKingBanner";
+import { playBgm, stopBgm, setSoundMuted, isSoundMuted, playSfx } from "@/components/contest/soundEffects";
 
 type Phase = "intro" | "match" | "champion";
 
@@ -31,6 +32,21 @@ export default function Contest() {
   const [allTime, setAllTime] = useState<Record<string, number>>({});
   const [monthHearts, setMonthHearts] = useState<Record<string, number>>({});
   const [heartedThisGame, setHeartedThisGame] = useState<Set<string>>(new Set());
+  const [muted, setMuted] = useState(isSoundMuted());
+
+  const toggleMute = useCallback(() => {
+    setMuted((prev) => {
+      const next = !prev;
+      setSoundMuted(next);
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      stopBgm();
+    };
+  }, []);
 
   const refreshHearts = useCallback(() => {
     setAllTime(getAllTimeHearts());
@@ -56,6 +72,7 @@ export default function Contest() {
       if (heartedThisGame.has(name)) return;
       setHeartedThisGame((prev) => new Set(prev).add(name));
       giveHeart(name, 1);
+      playSfx("heart");
     },
     [heartedThisGame, giveHeart],
   );
@@ -81,12 +98,14 @@ export default function Contest() {
     setHeartedThisGame(new Set());
     setRoundIndex(1);
     startRound(names, 1);
+    playBgm();
   }, [startRound]);
 
   const selectWinner = useCallback(
     (winner: string) => {
       if (!roundSetup) return;
       giveHeart(winner, 1);
+      playSfx("select");
       const nextWinners = [...winnersAcc, winner];
       const isLastMatch = matchIdx + 1 >= roundSetup.matches.length;
       if (!isLastMatch) {
@@ -98,6 +117,7 @@ export default function Contest() {
       if (nextWinners.length === 1) {
         setChampion(nextWinners[0]);
         setPhase("champion");
+        playSfx("champion");
       } else {
         const nextIdx = roundIndex + 1;
         setRoundIndex(nextIdx);
@@ -127,6 +147,15 @@ export default function Contest() {
       >
         <ArrowLeft size={13} /> 메인으로
       </a>
+
+      <button
+        type="button"
+        onClick={toggleMute}
+        aria-label={muted ? "소리 켜기" : "소리 끄기"}
+        className="fixed top-4 right-4 z-40 flex items-center justify-center w-9 h-9 text-white/60 hover:text-white/90 transition-colors bg-black/40 rounded-full backdrop-blur-sm"
+      >
+        {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+      </button>
 
       <AnimatePresence mode="wait">
         {phase === "intro" && (

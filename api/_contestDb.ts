@@ -4,7 +4,9 @@
  *
  * 필요 환경변수: DATABASE_URL (Railway Postgres 연결 문자열)
  */
-import { Pool, type PoolClient } from "pg";
+import pg from "pg";
+import type { PoolClient } from "pg";
+const { Pool } = pg;
 import { monthStamp, nextMonthStamp, prevMonthStamp } from "../shared/contestMonth";
 
 let pool: Pool | null = null;

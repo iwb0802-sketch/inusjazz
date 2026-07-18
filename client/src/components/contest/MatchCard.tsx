@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Play, Pause, ArrowUp } from "lucide-react";
+import { ExternalLink, Play, Pause, ArrowUp, HelpCircle } from "lucide-react";
 import HeartButton from "./HeartButton";
 import ProfileModal from "./ProfileModal";
 import type { Contestant } from "./contestData";
@@ -13,12 +13,14 @@ interface MatchCardProps {
   onHeart: () => void;
   disabled?: boolean;
   heartLocked?: boolean;
+  /** 블라인드 모드: 이름/사진/프로필 등 신상 정보를 전부 가리고 음성 재생만 노출 */
+  blind?: boolean;
 }
 
 // 카드 간 오디오는 하나만 재생되도록 전역으로 공유
 let activeAudio: HTMLAudioElement | null = null;
 
-export default function MatchCard({ contestant, hearts, side, onSelectWinner, onHeart, disabled, heartLocked }: MatchCardProps) {
+export default function MatchCard({ contestant, hearts, side, onSelectWinner, onHeart, disabled, heartLocked, blind }: MatchCardProps) {
   const [playing, setPlaying] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -57,15 +59,28 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
       className="flex flex-col rounded-2xl overflow-hidden border border-white/10 bg-[#111]/70 backdrop-blur-sm"
     >
       <div className="relative aspect-[4/5] overflow-hidden">
-        <img src={contestant.image} alt={contestant.name} className="w-full h-full object-cover object-top" />
+        {blind ? (
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1c1c1c] to-[#0a0a0a]">
+            <HelpCircle size={44} className="text-white/15" strokeWidth={1.4} />
+          </div>
+        ) : (
+          <img src={contestant.image} alt={contestant.name} className="w-full h-full object-cover object-top" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
-        <span
-          className={`absolute top-3 left-3 text-[10px] tracking-wider px-2 py-1 rounded-full font-medium ${
-            contestant.tier === "PREMIUM" ? "bg-[#d4b896] text-black" : "bg-[#5BB5A2] text-black"
-          }`}
-        >
-          {contestant.tier}
-        </span>
+        {!blind && (
+          <span
+            className={`absolute top-3 left-3 text-[10px] tracking-wider px-2 py-1 rounded-full font-medium ${
+              contestant.tier === "PREMIUM" ? "bg-[#d4b896] text-black" : "bg-[#5BB5A2] text-black"
+            }`}
+          >
+            {contestant.tier}
+          </span>
+        )}
+        {blind && (
+          <span className="absolute top-3 left-3 text-[10px] tracking-wider px-2 py-1 rounded-full font-medium bg-white/10 text-white/60">
+            BLIND
+          </span>
+        )}
         <div className="absolute top-3 right-3">
           <HeartButton count={hearts} onHeart={onHeart} locked={heartLocked} />
         </div>
@@ -115,20 +130,33 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
         )}
 
         <div className="absolute bottom-0 left-0 right-0 p-4">
-          <h3
-            className="text-2xl text-white font-semibold"
-            style={{ fontFamily: "'Noto Serif KR', serif" }}
-          >
-            {contestant.name}
-          </h3>
-          <p className="text-xs text-white/60 mt-0.5">{contestant.desc}</p>
+          {blind ? (
+            <h3
+              className="text-2xl text-white/70 font-semibold tracking-widest"
+              style={{ fontFamily: "'Noto Serif KR', serif" }}
+            >
+              {side === "left" ? "사회자 A" : "사회자 B"}
+            </h3>
+          ) : (
+            <>
+              <h3
+                className="text-2xl text-white font-semibold"
+                style={{ fontFamily: "'Noto Serif KR', serif" }}
+              >
+                {contestant.name}
+              </h3>
+              <p className="text-xs text-white/60 mt-0.5">{contestant.desc}</p>
+            </>
+          )}
         </div>
       </div>
 
       <div className="p-4 flex flex-col gap-3 flex-1">
-        <p className="text-xs text-white/55 leading-relaxed line-clamp-2" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
-          {contestant.highlight}
-        </p>
+        {!blind && (
+          <p className="text-xs text-white/55 leading-relaxed line-clamp-2" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
+            {contestant.highlight}
+          </p>
+        )}
         <div className="flex items-center gap-2 mt-auto">
           <button
             onClick={onSelectWinner}
@@ -137,20 +165,22 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
           >
             사회자 선택
           </button>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowProfile(true);
-            }}
-            className="p-2.5 rounded-full border border-white/15 text-white/50 hover:text-white/90 hover:border-white/40 transition-colors"
-            aria-label="프로필 보기"
-          >
-            <ExternalLink size={14} />
-          </button>
+          {!blind && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowProfile(true);
+              }}
+              className="p-2.5 rounded-full border border-white/15 text-white/50 hover:text-white/90 hover:border-white/40 transition-colors"
+              aria-label="프로필 보기"
+            >
+              <ExternalLink size={14} />
+            </button>
+          )}
         </div>
       </div>
-      {showProfile && (
+      {showProfile && !blind && (
         <ProfileModal url={contestant.profileUrl} onClose={() => setShowProfile(false)} />
       )}
     </motion.div>

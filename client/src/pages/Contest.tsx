@@ -41,6 +41,7 @@ export default function Contest() {
   } | null>(null);
   const [heartedThisGame, setHeartedThisGame] = useState<Set<string>>(new Set());
   const [muted, setMuted] = useState(isSoundMuted());
+  const [isBlind, setIsBlind] = useState(false);
 
   const toggleMute = useCallback(() => {
     setMuted((prev) => {
@@ -106,14 +107,18 @@ export default function Contest() {
     [giveHeart],
   );
 
-  const beginTournament = useCallback(() => {
-    const names = CONTESTANTS.map((c) => c.name);
-    setChampion(null);
-    setSessionHearts(0);
-    setHeartedThisGame(new Set());
-    setRoundIndex(1);
-    startRound(names, 1);
-  }, [startRound]);
+  const beginTournament = useCallback(
+    (blind: boolean = false) => {
+      const names = CONTESTANTS.map((c) => c.name);
+      setIsBlind(blind);
+      setChampion(null);
+      setSessionHearts(0);
+      setHeartedThisGame(new Set());
+      setRoundIndex(1);
+      startRound(names, 1);
+    },
+    [startRound],
+  );
 
   const selectWinner = useCallback(
     (winner: string) => {
@@ -285,19 +290,32 @@ export default function Contest() {
                 ))}
               </motion.div>
 
-              <motion.button
+              <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.52, duration: 0.5 }}
-                onClick={beginTournament}
-                className="w-full sm:w-auto sm:px-14 py-3.5 rounded-full text-black text-sm font-semibold tracking-wide transition-transform hover:scale-[1.03] active:scale-[0.98]"
-                style={{
-                  background: "linear-gradient(135deg, #e8cfa0, #d4b896)",
-                  boxShadow: "0 8px 30px rgba(212,184,150,0.25)",
-                }}
+                className="flex flex-col sm:flex-row items-center justify-center gap-3"
               >
-                콘테스트 시작하기
-              </motion.button>
+                <button
+                  onClick={() => beginTournament(false)}
+                  className="w-full sm:w-auto sm:px-10 py-3.5 rounded-full text-black text-sm font-semibold tracking-wide transition-transform hover:scale-[1.03] active:scale-[0.98]"
+                  style={{
+                    background: "linear-gradient(135deg, #e8cfa0, #d4b896)",
+                    boxShadow: "0 8px 30px rgba(212,184,150,0.25)",
+                  }}
+                >
+                  일반 모드
+                </button>
+                <button
+                  onClick={() => beginTournament(true)}
+                  className="w-full sm:w-auto sm:px-10 py-3.5 rounded-full text-white text-sm font-semibold tracking-wide border border-white/25 bg-white/[0.04] transition-transform hover:scale-[1.03] hover:border-white/45 active:scale-[0.98]"
+                >
+                  블라인드 모드
+                </button>
+              </motion.div>
+              <p className="text-[10px] text-white/35 mt-3 tracking-wide">
+                블라인드 모드는 이름·사진 없이 목소리만 듣고 선택해요
+              </p>
 
               <motion.p
                 initial={{ opacity: 0 }}
@@ -332,9 +350,11 @@ export default function Contest() {
           </p>
         </div>
 
-        <div className="mb-10">
-          <VoiceKingBanner monthHearts={monthHearts} monthLabel={monthLabel} lastMonthChampion={lastMonthChampion} />
-        </div>
+        {!isBlind && (
+          <div className="mb-10">
+            <VoiceKingBanner monthHearts={monthHearts} monthLabel={monthLabel} lastMonthChampion={lastMonthChampion} />
+          </div>
+        )}
 
         <AnimatePresence mode="wait">
           {phase === "match" && contestantA && contestantB && roundSetup && (
@@ -353,6 +373,7 @@ export default function Contest() {
                   onSelectWinner={() => selectWinner(contestantA.name)}
                   onHeart={() => manualHeart(contestantA.name)}
                   heartLocked={heartedThisGame.has(contestantA.name)}
+                  blind={isBlind}
                 />
                 <MatchCard
                   contestant={contestantB}
@@ -361,6 +382,7 @@ export default function Contest() {
                   onSelectWinner={() => selectWinner(contestantB.name)}
                   onHeart={() => manualHeart(contestantB.name)}
                   heartLocked={heartedThisGame.has(contestantB.name)}
+                  blind={isBlind}
                 />
                 <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-bold text-[#d4b896] bg-[#0d0d0d] border border-[#d4b896]/40 rounded-full w-9 h-9 flex items-center justify-center">
                   VS
@@ -403,7 +425,7 @@ export default function Contest() {
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
                 <button
-                  onClick={beginTournament}
+                  onClick={() => beginTournament(isBlind)}
                   className="flex items-center gap-1.5 px-6 py-2.5 rounded-full border border-white/20 text-white/80 text-sm hover:border-white/40 transition-colors"
                 >
                   <RotateCcw size={14} /> 다시 도전하기

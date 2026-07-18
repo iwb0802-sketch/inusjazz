@@ -61,7 +61,7 @@ export default function VideoGuideSection() {
           </div>
 
           <h2
-            className="text-white text-2xl sm:text-3xl md:text-4xl leading-tight mb-5"
+            className="text-white text-2xl sm:text-3xl md:text-4xl leading-tight mb-5 break-keep"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
             연출 없는 <span className="text-[#5BB5A2]">실제 본식</span> 영상으로
@@ -69,10 +69,14 @@ export default function VideoGuideSection() {
             사회자를 선택하세요
           </h2>
 
-          <p className="text-white/50 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+          <p className="text-white/50 text-sm sm:text-base max-w-lg mx-auto leading-relaxed break-keep">
             등급별 사회자의 실제 진행 영상을 확인하고
-            <br className="sm:hidden" />
-            {" "}나에게 맞는 사회자를 직접 선택하세요
+            <br />
+            나에게 맞는 사회자를 직접 선택하세요
+            <br />
+            <span className="text-white/40 text-xs sm:text-sm">
+              (보석같은 실력있는 사회자들이 많습니다. 꼭 한번 살펴보세요.)
+            </span>
           </p>
         </div>
 

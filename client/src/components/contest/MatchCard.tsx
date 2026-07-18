@@ -27,10 +27,12 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
   // 인스타그램 등 인앱 브라우저는 new Audio()로 만든, DOM에 붙지 않은 오디오 엘리먼트의 재생을
   // 조용히 막는 경우가 있어 실제 <audio> 태그를 DOM에 렌더링해서 사용한다.
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const loadingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
       audioRef.current?.pause();
+      if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
     };
   }, []);
 
@@ -38,6 +40,10 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
     e.stopPropagation();
     const audio = audioRef.current;
     if (!audio) return;
+
+    // 로딩 중 중복 탭 방지: load()를 다시 호출하면 진행 중이던 play() 요청이
+    // 취소되면서(AbortError) "여러 번 눌러야 재생되는" 증상이 발생하므로 무시한다.
+    if (loading) return;
 
     if (!audio.paused) {
       audio.pause();
@@ -52,8 +58,11 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
     }
     activeAudio = audio;
     setLoading(true);
-    // 인앱 브라우저 호환을 위해 재생 직전 명시적으로 load() 후 play() 호출
-    audio.load();
+    if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
+    // 네트워크 문제 등으로 재생이 끝내 시작되지 않을 경우 로딩 상태에 갇히지 않도록 안전장치
+    loadingTimeoutRef.current = setTimeout(() => {
+      setLoading(false);
+    }, 8000);
     audio
       .play()
       .catch(() => {
@@ -118,7 +127,7 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
         <audio
           ref={audioRef}
           src={contestant.audioFile}
-          preload="none"
+          preload="auto"
           playsInline
           onPlaying={() => {
             setLoading(false);

@@ -303,10 +303,12 @@ export default function Contest() {
           >
             INUS VOICE CROWN
           </h1>
-          <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto">
+          <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto break-keep">
             신랑신부님들이 직접 추천하는 보이스 크라운 콘테스트.
             <br />
-            지난달 보이스 크라운이 된 사회자는 이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.
+            지난달 보이스 크라운이 된 사회자는
+            <br className="sm:hidden" />
+            {" "}이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.
           </p>
         </div>
 
@@ -344,11 +346,14 @@ export default function Contest() {
                   VS
                 </span>
               </div>
-              <p className="text-center text-xs text-white/40 mt-4 leading-relaxed">
-                선택 시 해당 사회자에게 자동으로 하트가 하나씩 주어집니다.
-                <br />
-                (선택 못받은 사회자에게도 하트를 선물해 보세요 <span className="text-[#ff5c7a]">♥</span>)
-              </p>
+              <div className="text-center mt-5 px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 max-w-sm mx-auto">
+                <p className="text-[13px] text-white/70 leading-relaxed break-keep">
+                  선택 시 해당 사회자에게 자동으로 하트가 하나씩 주어집니다.
+                </p>
+                <p className="text-[13px] text-[#ff9db0] leading-relaxed break-keep mt-1">
+                  선택 못받은 사회자에게도 하트를 선물해 보세요 <span className="text-[#ff5c7a] font-semibold">♥</span>
+                </p>
+              </div>
             </motion.div>
           )}
 

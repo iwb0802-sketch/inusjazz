@@ -30,16 +30,18 @@ export default function VoiceKingBanner({ monthHearts }: VoiceKingBannerProps) {
           )}
         </div>
         <div className="flex-1">
-          <p className="text-[10px] tracking-[0.15em] text-[#d4b896]/70 uppercase" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
+          <p className="text-[11px] font-semibold tracking-[0.15em] text-[#d4b896] uppercase" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
             {LAST_MONTH_CHAMPION.monthLabel} 확정 보이스 크라운
           </p>
-          <p className="flex items-center gap-1.5 text-lg text-white" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-            <Crown size={16} className="text-[#d4b896]" />
-            <span className="font-semibold" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+          <p className="flex items-center gap-1.5 mt-1">
+            <Crown size={18} className="text-[#d4b896]" />
+            <span className="text-xl font-bold text-white tracking-wide" style={{ fontFamily: "'Noto Serif KR', serif" }}>
               {LAST_MONTH_CHAMPION.name}
             </span>
           </p>
-          <p className="text-xs text-[#d4b896]/70">누적 {LAST_MONTH_CHAMPION.hearts.toLocaleString()} 하트</p>
+          <p className="text-[13px] font-medium text-[#d4b896] mt-1">
+            누적 <span className="font-bold">{LAST_MONTH_CHAMPION.hearts.toLocaleString()}</span> 하트
+          </p>
         </div>
         {lastChampion && (
           <button

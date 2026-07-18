@@ -6,7 +6,7 @@
  */
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Crown, RotateCcw, MessageCircle, ArrowLeft } from "lucide-react";
+import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play } from "lucide-react";
 import {
   CONTESTANTS,
   getContestant,
@@ -18,10 +18,10 @@ import { buildRound, roundLabel, type RoundSetup } from "@/components/contest/br
 import MatchCard from "@/components/contest/MatchCard";
 import VoiceKingBanner from "@/components/contest/VoiceKingBanner";
 
-type Phase = "match" | "champion";
+type Phase = "intro" | "match" | "champion";
 
 export default function Contest() {
-  const [phase, setPhase] = useState<Phase>("match");
+  const [phase, setPhase] = useState<Phase>("intro");
   const [roundIndex, setRoundIndex] = useState(1);
   const [roundSetup, setRoundSetup] = useState<RoundSetup | null>(null);
   const [matchIdx, setMatchIdx] = useState(0);
@@ -40,12 +40,6 @@ export default function Contest() {
   useEffect(() => {
     refreshHearts();
   }, [refreshHearts]);
-
-  // 접속 시 바로 토너먼트 시작 (인트로 화면 없이 즉시 대결 화면으로)
-  useEffect(() => {
-    beginTournament();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const giveHeart = useCallback(
     (name: string, amount = 1) => {
@@ -134,6 +128,123 @@ export default function Contest() {
         <ArrowLeft size={13} /> 메인으로
       </a>
 
+      <AnimatePresence mode="wait">
+        {phase === "intro" && (
+          <motion.div
+            key="intro"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="min-h-screen w-full flex items-center justify-center px-5 relative overflow-hidden"
+          >
+            {/* 배경 장식 */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 15%, rgba(212,184,150,0.14) 0%, transparent 55%), radial-gradient(circle at 85% 85%, rgba(91,181,162,0.10) 0%, transparent 50%)",
+              }}
+            />
+            <div className="relative max-w-md w-full text-center py-16">
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.5 }}
+                className="mb-6 flex items-center justify-center gap-2"
+              >
+                <span className="h-px w-8 bg-[#d4b896]/40" />
+                <p className="text-[10px] tracking-[0.3em] text-[#d4b896] uppercase">INUSMUSIC VOICE KING</p>
+                <span className="h-px w-8 bg-[#d4b896]/40" />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                className="mx-auto mb-6 w-16 h-16 rounded-full flex items-center justify-center"
+                style={{
+                  background: "linear-gradient(145deg, rgba(212,184,150,0.18), rgba(212,184,150,0.02))",
+                  border: "1px solid rgba(212,184,150,0.35)",
+                }}
+              >
+                <Crown className="text-[#d4b896]" size={26} />
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.28, duration: 0.5 }}
+                className="text-4xl sm:text-5xl font-semibold mb-4 leading-tight"
+                style={{ fontFamily: "'Noto Serif KR', serif" }}
+              >
+                이너스 목소리왕
+                <br />
+                콘테스트
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.36, duration: 0.5 }}
+                className="text-sm text-white/55 leading-relaxed max-w-sm mx-auto mb-9"
+              >
+                신부님들이 직접 뽑는, 가장 매력적인 목소리.
+                <br />
+                이너스뮤직 사회자들의 1:1 매치를 직접 감상하고
+                <br />
+                가장 마음에 드는 목소리에 하트를 선물해 주세요.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.44, duration: 0.5 }}
+                className="grid grid-cols-3 gap-2 mb-10 text-left"
+              >
+                {[
+                  { icon: Play, label: "1:1 매치", desc: "실제 음성으로 대결" },
+                  { icon: Heart, label: "하트 투표", desc: "마음에 드는 목소리 선택" },
+                  { icon: Sparkles, label: "이달의 왕", desc: "월간 목소리왕 선정" },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-4 flex flex-col items-center text-center gap-1.5"
+                  >
+                    <item.icon size={16} className="text-[#d4b896]" />
+                    <span className="text-[11px] font-medium text-white/85">{item.label}</span>
+                    <span className="text-[10px] text-white/40 leading-snug">{item.desc}</span>
+                  </div>
+                ))}
+              </motion.div>
+
+              <motion.button
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.52, duration: 0.5 }}
+                onClick={beginTournament}
+                className="w-full sm:w-auto sm:px-14 py-3.5 rounded-full text-black text-sm font-semibold tracking-wide transition-transform hover:scale-[1.03] active:scale-[0.98]"
+                style={{
+                  background: "linear-gradient(135deg, #e8cfa0, #d4b896)",
+                  boxShadow: "0 8px 30px rgba(212,184,150,0.25)",
+                }}
+              >
+                콘테스트 시작하기
+              </motion.button>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+                className="text-[10px] text-white/30 mt-5 tracking-wide"
+              >
+                이번달 목소리왕에게는 지정 문의 시 1만원 할인 혜택이 주어집니다.
+              </motion.p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {phase !== "intro" && (
       <div className="max-w-3xl mx-auto px-4 pt-20">
         {/* 헤더 */}
         <div className="text-center mb-8">
@@ -236,6 +347,7 @@ export default function Contest() {
           )}
         </AnimatePresence>
       </div>
+      )}
     </div>
   );
 }

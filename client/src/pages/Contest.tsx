@@ -153,7 +153,7 @@ export default function Contest() {
                 className="mb-6 flex items-center justify-center gap-2"
               >
                 <span className="h-px w-8 bg-[#d4b896]/40" />
-                <p className="text-[10px] tracking-[0.3em] text-[#d4b896] uppercase">INUSMUSIC VOICE CROWN</p>
+                <p className="text-[10px] tracking-[0.3em] text-[#d4b896] uppercase">Wedding MC Contest</p>
                 <span className="h-px w-8 bg-[#d4b896]/40" />
               </motion.div>
 
@@ -174,13 +174,19 @@ export default function Contest() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.28, duration: 0.5 }}
-                className="text-4xl sm:text-5xl font-semibold mb-4 leading-tight"
-                style={{ fontFamily: "'Noto Serif KR', serif" }}
+                className="text-5xl sm:text-6xl mb-1 leading-tight tracking-wide"
+                style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
               >
-                이너스 보이스 크라운
+                INUS
                 <br />
-                콘테스트
+                VOICE CROWN
               </motion.h1>
+              <p
+                className="text-[11px] tracking-[0.4em] text-white/40 uppercase mb-5"
+                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              >
+                Contest
+              </p>
 
               <motion.p
                 initial={{ opacity: 0, y: 12 }}

@@ -17,6 +17,17 @@ export default function VoiceKingBanner({ monthHearts }: VoiceKingBannerProps) {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5);
 
+  // 동점자는 공동 순위로 처리 (예: 1,1,3,4...)
+  const rankNumbers: number[] = [];
+  ranking.forEach(([, hearts], i) => {
+    if (i === 0) {
+      rankNumbers.push(1);
+    } else {
+      const prevHearts = ranking[i - 1][1];
+      rankNumbers.push(hearts === prevHearts ? rankNumbers[i - 1] : i + 1);
+    }
+  });
+
   const leader = ranking[0];
   const lastChampion = getContestant(LAST_MONTH_CHAMPION.name);
 
@@ -67,7 +78,10 @@ export default function VoiceKingBanner({ monthHearts }: VoiceKingBannerProps) {
           <p className="text-sm text-white/50">아직 하트가 없어요. 지금 투표에 참여해보세요!</p>
         ) : (
           <div className="space-y-1.5">
-            {ranking.map(([name, hearts], i) => (
+            {ranking.map(([name, hearts], i) => {
+              const rank = rankNumbers[i];
+              const isTied = ranking.filter((_, j) => rankNumbers[j] === rank).length > 1;
+              return (
               <motion.div
                 key={name}
                 layout
@@ -76,13 +90,18 @@ export default function VoiceKingBanner({ monthHearts }: VoiceKingBannerProps) {
                 <span className="flex items-center gap-2 text-white/85">
                   <span
                     className={`w-5 h-5 flex items-center justify-center rounded-full text-[10px] font-bold ${
-                      i === 0 ? "bg-[#5BB5A2] text-black" : "bg-white/10 text-white/60"
+                      rank === 1 ? "bg-[#5BB5A2] text-black" : "bg-white/10 text-white/60"
                     }`}
                   >
-                    {i + 1}
+                    {rank}
                   </span>
                   {name}
-                  {i === 0 && <span className="text-[10px] text-[#5BB5A2]">현재 1위</span>}
+                  {rank === 1 && (
+                    <span className="text-[10px] text-[#5BB5A2]">{isTied ? "공동 1위" : "현재 1위"}</span>
+                  )}
+                  {rank !== 1 && isTied && (
+                    <span className="text-[10px] text-white/40">공동 {rank}위</span>
+                  )}
                 </span>
                 <motion.span
                   key={hearts}
@@ -93,7 +112,8 @@ export default function VoiceKingBanner({ monthHearts }: VoiceKingBannerProps) {
                   {hearts.toLocaleString()}♥
                 </motion.span>
               </motion.div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

@@ -82,7 +82,7 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
           </span>
         )}
         <div className="absolute top-3 right-3">
-          <HeartButton count={hearts} onHeart={onHeart} locked={heartLocked} />
+          <HeartButton count={hearts} onHeart={onHeart} locked={heartLocked} hideCount={blind} />
         </div>
 
         {/* 하트 버튼 클릭 유도 - 반짝이는 화살표 표시 */}

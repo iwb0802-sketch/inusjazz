@@ -16,9 +16,10 @@ interface HeartButtonProps {
   size?: "sm" | "lg";
   active?: boolean;
   locked?: boolean;
+  hideCount?: boolean;
 }
 
-export default function HeartButton({ count, onHeart, size = "sm", active, locked }: HeartButtonProps) {
+export default function HeartButton({ count, onHeart, size = "sm", active, locked, hideCount }: HeartButtonProps) {
   const [floaters, setFloaters] = useState<FloatingHeart[]>([]);
   const [pop, setPop] = useState(false);
   const idRef = useRef(0);
@@ -63,7 +64,7 @@ export default function HeartButton({ count, onHeart, size = "sm", active, locke
         />
       </motion.span>
       <span className="text-xs font-medium tabular-nums" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
-        {count.toLocaleString()}
+        {hideCount ? "♥" : count.toLocaleString()}
       </span>
 
       <AnimatePresence>

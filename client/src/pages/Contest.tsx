@@ -17,7 +17,7 @@ import {
 import { buildRound, roundLabel, type RoundSetup } from "@/components/contest/bracketEngine";
 import MatchCard from "@/components/contest/MatchCard";
 import VoiceKingBanner from "@/components/contest/VoiceKingBanner";
-import { playBgm, stopBgm, setSoundMuted, isSoundMuted, playSfx } from "@/components/contest/soundEffects";
+import { setSoundMuted, isSoundMuted, playSfx } from "@/components/contest/soundEffects";
 
 type Phase = "intro" | "match" | "champion";
 
@@ -42,11 +42,6 @@ export default function Contest() {
     });
   }, []);
 
-  useEffect(() => {
-    return () => {
-      stopBgm();
-    };
-  }, []);
 
   const refreshHearts = useCallback(() => {
     setAllTime(getAllTimeHearts());
@@ -98,7 +93,6 @@ export default function Contest() {
     setHeartedThisGame(new Set());
     setRoundIndex(1);
     startRound(names, 1);
-    playBgm();
   }, [startRound]);
 
   const selectWinner = useCallback(

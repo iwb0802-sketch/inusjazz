@@ -57,7 +57,7 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
       className="flex flex-col rounded-2xl overflow-hidden border border-white/10 bg-[#111]/70 backdrop-blur-sm"
     >
       <div className="relative aspect-[4/5] overflow-hidden">
-        <img src={contestant.image} alt={contestant.name} className="w-full h-full object-cover" />
+        <img src={contestant.image} alt={contestant.name} className="w-full h-full object-cover object-top" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
         <span
           className={`absolute top-3 left-3 text-[10px] tracking-wider px-2 py-1 rounded-full font-medium ${

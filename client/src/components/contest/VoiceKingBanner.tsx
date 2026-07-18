@@ -37,7 +37,7 @@ export default function VoiceKingBanner({ monthHearts }: VoiceKingBannerProps) {
       <div className="rounded-2xl border border-[#d4b896]/25 bg-black/30 px-5 py-4 flex items-center gap-4">
         <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 ring-2 ring-[#d4b896]/50">
           {lastChampion && (
-            <img src={lastChampion.image} alt={lastChampion.name} className="w-full h-full object-cover" />
+            <img src={lastChampion.image} alt={lastChampion.name} className="w-full h-full object-cover object-top" />
           )}
         </div>
         <div className="flex-1">

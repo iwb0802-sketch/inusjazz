@@ -368,14 +368,14 @@ export default function Contest() {
               <Crown className="mx-auto mb-3 text-[#d4b896]" size={32} />
               <p className="text-[10px] tracking-[0.2em] text-[#d4b896] uppercase mb-4">이번 회차 챔피언</p>
               <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 ring-4 ring-[#d4b896]/50">
-                <img src={championData.image} alt={championData.name} className="w-full h-full object-cover" />
+                <img src={championData.image} alt={championData.name} className="w-full h-full object-cover object-top" />
               </div>
               <h2 className="text-3xl font-semibold mb-2" style={{ fontFamily: "'Noto Serif KR', serif" }}>
                 {championData.name}
               </h2>
               <p className="text-sm text-white/55 max-w-sm mx-auto mb-6">{championData.highlight}</p>
               <p className="text-xs text-white/40 mb-8">
-                이번 회차에서 총 <span className="text-[#5BB5A2] font-medium">{sessionHearts}개</span>의 하트가
+                현재까지 총 <span className="text-[#5BB5A2] font-medium">{sessionHearts}개</span>의 하트가
                 적립되었습니다.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">

@@ -128,7 +128,7 @@ export default function FloatingButtons() {
                 const el = document.getElementById('vote-on-voice');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} absolute bottom-full left-0 mb-1 flex items-center gap-2 px-4 py-2.5 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 text-[#d4b896] hover:bg-[#161616] hover:border-[#d4b896]/60 transition-all duration-300 shadow-lg shadow-black/40 group whitespace-nowrap`}
+              className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} absolute bottom-full left-0 right-0 mb-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0d0d0d]/95 backdrop-blur-sm border border-[#d4b896]/30 text-[#d4b896] hover:bg-[#161616] hover:border-[#d4b896]/60 transition-all duration-300 shadow-lg shadow-black/40 group whitespace-nowrap`}
             >
               <Crown className="w-4 h-4 text-[#d4b896] group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
               <span className="text-xs tracking-wide font-medium" style={{ fontFamily: "'Noto Serif KR', serif" }}>

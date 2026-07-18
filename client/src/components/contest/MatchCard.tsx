@@ -142,27 +142,29 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
           }}
         />
 
-        {/* 목소리 미리듣기 재생 버튼 */}
-        <button
-          onClick={togglePlay}
-          className="absolute left-1/2 flex items-center justify-center z-10 pointer-events-auto"
-          style={{ top: "38%", transform: "translate(-50%, -50%)" }}
-          aria-label="목소리 미리듣기"
-        >
-          <motion.span
-            animate={playing ? { scale: [1, 1.12, 1] } : { scale: 1 }}
-            transition={{ duration: 1, repeat: playing ? Infinity : 0 }}
-            className="flex items-center justify-center w-14 h-14 rounded-full bg-black/50 border border-white/40 backdrop-blur-sm hover:bg-black/65 transition-colors"
+        {/* 목소리 미리듣기 재생 버튼 - 블라인드 모드는 기존처럼 이미지 중앙(얼굴 없음), 일반 모드는 이름 옆 */}
+        {blind && (
+          <button
+            onClick={togglePlay}
+            className="absolute left-1/2 flex items-center justify-center z-10 pointer-events-auto"
+            style={{ top: "38%", transform: "translate(-50%, -50%)" }}
+            aria-label="목소리 미리듣기"
           >
-            {loading ? (
-              <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-            ) : playing ? (
-              <Pause size={22} className="text-white fill-white" />
-            ) : (
-              <Play size={22} className="text-white fill-white ml-0.5" />
-            )}
-          </motion.span>
-        </button>
+            <motion.span
+              animate={playing ? { scale: [1, 1.12, 1] } : { scale: 1 }}
+              transition={{ duration: 1, repeat: playing ? Infinity : 0 }}
+              className="flex items-center justify-center w-14 h-14 rounded-full bg-black/50 border border-white/40 backdrop-blur-sm hover:bg-black/65 transition-colors"
+            >
+              {loading ? (
+                <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+              ) : playing ? (
+                <Pause size={22} className="text-white fill-white" />
+              ) : (
+                <Play size={22} className="text-white fill-white ml-0.5" />
+              )}
+            </motion.span>
+          </button>
+        )}
         {loading && (
           <span className="absolute bottom-16 left-1/2 -translate-x-1/2 text-[10px] text-white/70 bg-black/40 px-2 py-0.5 rounded-full">
             불러오는 중...
@@ -174,23 +176,44 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
           </span>
         )}
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 pointer-events-none">
+        <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
           {blind ? (
             <h3
-              className="text-2xl text-white/70 font-semibold tracking-widest"
+              className="text-2xl text-white/70 font-semibold tracking-widest pointer-events-none"
               style={{ fontFamily: "'Noto Serif KR', serif" }}
             >
               {side === "left" ? "사회자 A" : "사회자 B"}
             </h3>
           ) : (
             <>
-              <h3
-                className="text-2xl text-white font-semibold"
-                style={{ fontFamily: "'Noto Serif KR', serif" }}
+              <div className="min-w-0 pointer-events-none">
+                <h3
+                  className="text-2xl text-white font-semibold truncate"
+                  style={{ fontFamily: "'Noto Serif KR', serif" }}
+                >
+                  {contestant.name}
+                </h3>
+                <p className="text-xs text-white/60 mt-0.5 truncate">{contestant.desc}</p>
+              </div>
+              <button
+                onClick={togglePlay}
+                className="flex-shrink-0 flex items-center justify-center pointer-events-auto"
+                aria-label="목소리 미리듣기"
               >
-                {contestant.name}
-              </h3>
-              <p className="text-xs text-white/60 mt-0.5">{contestant.desc}</p>
+                <motion.span
+                  animate={playing ? { scale: [1, 1.12, 1] } : { scale: 1 }}
+                  transition={{ duration: 1, repeat: playing ? Infinity : 0 }}
+                  className="flex items-center justify-center w-12 h-12 rounded-full bg-black/55 border border-white/40 backdrop-blur-sm hover:bg-black/70 transition-colors"
+                >
+                  {loading ? (
+                    <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                  ) : playing ? (
+                    <Pause size={18} className="text-white fill-white" />
+                  ) : (
+                    <Play size={18} className="text-white fill-white ml-0.5" />
+                  )}
+                </motion.span>
+              </button>
             </>
           )}
         </div>

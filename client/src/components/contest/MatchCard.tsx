@@ -126,7 +126,7 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
 
         <audio
           ref={audioRef}
-          src={contestant.audioFile}
+          src={blind ? contestant.audioFileBlind ?? contestant.audioFile : contestant.audioFile}
           preload="auto"
           playsInline
           onPlaying={() => {

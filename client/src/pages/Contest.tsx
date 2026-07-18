@@ -395,8 +395,11 @@ export default function Contest() {
               </h2>
               <p className="text-sm text-white/55 max-w-sm mx-auto mb-6">{championData.highlight}</p>
               <p className="text-xs text-white/40 mb-8">
-                현재까지 총 <span className="text-[#5BB5A2] font-medium">{sessionHearts}개</span>의 하트가
-                적립되었습니다.
+                {championData.name} 사회자는 이번 달 현재까지 총{" "}
+                <span className="text-[#5BB5A2] font-medium">
+                  {(monthHearts[championData.name] || 0).toLocaleString()}개
+                </span>
+                의 하트를 받았습니다.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
                 <button

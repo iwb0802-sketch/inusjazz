@@ -285,7 +285,7 @@ export default function Contest() {
                 transition={{ delay: 0.6, duration: 0.5 }}
                 className="text-[10px] text-white/30 mt-5 tracking-wide"
               >
-                지난달 보이스 크라운이 된 사회자는 이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.
+                지난달 보이스 크라운이 된 사회자는 이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.(이벤트 중복적용가능)
               </motion.p>
             </div>
           </motion.div>
@@ -308,7 +308,7 @@ export default function Contest() {
             <br />
             지난달 보이스 크라운이 된 사회자는
             <br className="sm:hidden" />
-            {" "}이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.
+            {" "}이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.(이벤트 중복적용가능)
           </p>
         </div>
 

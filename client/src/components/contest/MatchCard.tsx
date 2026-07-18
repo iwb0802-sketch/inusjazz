@@ -24,6 +24,8 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  // 인스타그램 등 인앱 브라우저는 new Audio()로 만든, DOM에 붙지 않은 오디오 엘리먼트의 재생을
+  // 조용히 막는 경우가 있어 실제 <audio> 태그를 DOM에 렌더링해서 사용한다.
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -32,29 +34,10 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
     };
   }, []);
 
-  const ensureAudio = () => {
-    if (audioRef.current) return audioRef.current;
-    const audio = new Audio(contestant.audioFile);
-    audio.preload = "auto";
-    // 재생 상태는 오디오 엘리먼트의 실제 이벤트를 그대로 반영 (버튼 상태와 실제 재생이 어긋나는 문제 방지)
-    audio.addEventListener("playing", () => {
-      setLoading(false);
-      setPlaying(true);
-    });
-    audio.addEventListener("waiting", () => setLoading(true));
-    audio.addEventListener("pause", () => setPlaying(false));
-    audio.addEventListener("ended", () => setPlaying(false));
-    audio.addEventListener("error", () => {
-      setLoading(false);
-      setPlaying(false);
-    });
-    audioRef.current = audio;
-    return audio;
-  };
-
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const audio = ensureAudio();
+    const audio = audioRef.current;
+    if (!audio) return;
 
     if (!audio.paused) {
       audio.pause();
@@ -69,7 +52,8 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
     }
     activeAudio = audio;
     setLoading(true);
-    audio.currentTime = 0;
+    // 인앱 브라우저 호환을 위해 재생 직전 명시적으로 load() 후 play() 호출
+    audio.load();
     audio
       .play()
       .catch(() => {
@@ -130,6 +114,24 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
             <span className="text-[10px] font-bold text-white tracking-wide -mt-0.5">Click</span>
           </motion.div>
         )}
+
+        <audio
+          ref={audioRef}
+          src={contestant.audioFile}
+          preload="none"
+          playsInline
+          onPlaying={() => {
+            setLoading(false);
+            setPlaying(true);
+          }}
+          onWaiting={() => setLoading(true)}
+          onPause={() => setPlaying(false)}
+          onEnded={() => setPlaying(false)}
+          onError={() => {
+            setLoading(false);
+            setPlaying(false);
+          }}
+        />
 
         {/* 목소리 미리듣기 재생 버튼 */}
         <button

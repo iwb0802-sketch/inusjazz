@@ -423,6 +423,81 @@ export default function Contest() {
                 </span>
                 의 하트를 받았습니다.
               </p>
+
+              {/* 예약 혜택 프리미엄 카드 */}
+              <div className="relative max-w-lg mx-auto mb-9 text-left">
+                <div
+                  className="absolute -inset-[1.5px] rounded-2xl opacity-90"
+                  style={{
+                    background: "linear-gradient(135deg, #f4e2b8, #d4b896, #8a6d3b, #f4e2b8)",
+                  }}
+                />
+                <div className="relative rounded-2xl bg-[#14110b] px-5 py-6 sm:px-7 sm:py-7 overflow-hidden">
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-60"
+                    style={{
+                      background:
+                        "radial-gradient(circle at 15% 0%, rgba(244,226,184,0.16) 0%, transparent 55%), radial-gradient(circle at 100% 100%, rgba(212,184,150,0.12) 0%, transparent 50%)",
+                    }}
+                  />
+                  <div className="relative">
+                    <div className="flex items-center justify-center gap-2 mb-5">
+                      <span className="h-px w-6 bg-[#f4e2b8]/50" />
+                      <Sparkles size={13} className="text-[#f4e2b8]" />
+                      <p className="text-[10px] tracking-[0.25em] text-[#f4e2b8] uppercase font-semibold">
+                        {championData.name} 사회자 예약 시 프리미엄 혜택
+                      </p>
+                      <Sparkles size={13} className="text-[#f4e2b8]" />
+                      <span className="h-px w-6 bg-[#f4e2b8]/50" />
+                    </div>
+
+                    <div className="mb-5">
+                      <p className="text-[11px] tracking-[0.15em] text-[#f4e2b8]/90 uppercase font-semibold mb-2.5">
+                        공통 혜택
+                      </p>
+                      <ul className="space-y-1.5">
+                        {[
+                          "숨고 상담후기 작성 시 2만원 할인",
+                          "결혼식 준비에 필요한 체크리스트 & 웨딩가이드(예식주간과 당일 안내 꿀팁) 자료 제공",
+                          "이너스뮤직 365일 이벤트 자세히 보기 →",
+                          "지인할인 적용 (코드번호 부여받을 시 1만원 할인)",
+                          "MR 제공",
+                          "MR 편집 & AR 편집",
+                          "모바일청첩장 무료 제공 (예약고객에 한함)",
+                        ].map((item) => (
+                          <li key={item} className="flex items-start gap-2 text-[13px] text-white/80 leading-relaxed break-keep">
+                            <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="h-px w-full bg-gradient-to-r from-transparent via-[#f4e2b8]/25 to-transparent mb-5" />
+
+                    <div>
+                      <p className="text-[11px] tracking-[0.15em] text-[#f4e2b8]/90 uppercase font-semibold mb-2.5">
+                        Wedding MC · 결혼식 사회자 예약 시 혜택
+                      </p>
+                      <ul className="space-y-1.5">
+                        {[
+                          "두 사람의 이야기를 담은 맞춤형 대본 제작",
+                          "예식 분위기에 맞는 BGM 100여 곡 제공",
+                          "완성도 높은 혼인서약서 샘플 8종 제공",
+                          "격식과 감성을 담은 성혼선언문 샘플 8종 제공",
+                          "감동을 더하는 덕담 샘플 6종 제공",
+                        ].map((item) => (
+                          <li key={item} className="flex items-start gap-2 text-[13px] text-white/80 leading-relaxed break-keep">
+                            <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <p className="text-[11px] text-white/35 mb-2.5 tracking-wide">다시 도전할 모드를 선택해 주세요</p>
               <div className="flex flex-wrap items-center justify-center gap-3 mb-3">
                 <button

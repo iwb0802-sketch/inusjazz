@@ -145,8 +145,8 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
         {/* 목소리 미리듣기 재생 버튼 */}
         <button
           onClick={togglePlay}
-          className="absolute inset-0 m-auto flex items-center justify-center z-10 pointer-events-auto"
-          style={{ width: "fit-content", height: "fit-content", top: "40%" }}
+          className="absolute left-1/2 flex items-center justify-center z-10 pointer-events-auto"
+          style={{ top: "38%", transform: "translate(-50%, -50%)" }}
           aria-label="목소리 미리듣기"
         >
           <motion.span

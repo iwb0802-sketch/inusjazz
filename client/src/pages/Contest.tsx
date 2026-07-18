@@ -350,7 +350,7 @@ export default function Contest() {
           </p>
         </div>
 
-        {!isBlind && (
+        {!(isBlind && phase === "match") && (
           <div className="mb-10">
             <VoiceKingBanner monthHearts={monthHearts} monthLabel={monthLabel} lastMonthChampion={lastMonthChampion} />
           </div>
@@ -423,13 +423,22 @@ export default function Contest() {
                 </span>
                 의 하트를 받았습니다.
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-3">
+              <p className="text-[11px] text-white/35 mb-2.5 tracking-wide">다시 도전할 모드를 선택해 주세요</p>
+              <div className="flex flex-wrap items-center justify-center gap-3 mb-3">
                 <button
-                  onClick={() => beginTournament(isBlind)}
+                  onClick={() => beginTournament(false)}
                   className="flex items-center gap-1.5 px-6 py-2.5 rounded-full border border-white/20 text-white/80 text-sm hover:border-white/40 transition-colors"
                 >
-                  <RotateCcw size={14} /> 다시 도전하기
+                  <RotateCcw size={14} /> 일반 모드로 다시 도전
                 </button>
+                <button
+                  onClick={() => beginTournament(true)}
+                  className="flex items-center gap-1.5 px-6 py-2.5 rounded-full border border-white/20 text-white/80 text-sm hover:border-white/40 transition-colors"
+                >
+                  <RotateCcw size={14} /> 블라인드 모드로 다시 도전
+                </button>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-3">
                 <a
                   href="https://pf.kakao.com/_wxovaM/chat"
                   target="_blank"

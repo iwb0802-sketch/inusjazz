@@ -21,6 +21,7 @@ export function getPool(): Pool {
         ? false
         : { rejectUnauthorized: false },
       max: 3,
+      connectionTimeoutMillis: 8000,
     });
   }
   return pool;

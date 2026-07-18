@@ -32,8 +32,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  const pool = getPool();
-  const client = await pool.connect();
+  let client;
+  try {
+    const pool = getPool();
+    client = await pool.connect();
+  } catch (err) {
+    console.error("grandprix API DB connect error:", err);
+    res.status(500).json({ error: "DB connect failed", detail: String((err as Error)?.message || err) });
+    return;
+  }
 
   try {
     await ensureSchema(client);

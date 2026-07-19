@@ -352,11 +352,17 @@ export default function Contest() {
             VOTE ON VOICE
           </h1>
           <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto break-keep">
-            신랑신부님들이 직접 추천하는 VOTE ON VOICE 콘테스트.
+            신랑신부님들이 직접 추천하는
+            <br />
+            VOTE ON VOICE 콘테스트.
             <br />
             지난달 VOTE ON VOICE가 된 사회자는
-            <br className="sm:hidden" />
-            {" "}이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.(이벤트 중복적용가능)
+            <br />
+            이번달 한달 간 지정 예약시
+            <br />
+            1만원 할인혜택이 주어집니다.
+            <br />
+            (이벤트 중복적용가능)
           </p>
         </div>
 

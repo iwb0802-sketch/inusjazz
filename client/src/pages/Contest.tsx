@@ -426,7 +426,7 @@ export default function Contest() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
-                className="text-[11px] text-white/50 mt-5 tracking-wide break-keep"
+                className="text-[12px] text-white/60 mt-5 tracking-wide break-keep"
               >
                 지난달 VOTE ON VOICE가 된 사회자는
                 <br />
@@ -452,7 +452,7 @@ export default function Contest() {
           >
             <span style={{ color: MINT }}>V</span>OTE <span style={{ color: MINT }}>O</span>N <span style={{ color: MINT }}>V</span>OICE
           </h1>
-          <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto break-keep">
+          <p className="text-sm text-white/60 leading-relaxed max-w-md mx-auto break-keep">
             신랑신부님이 직접 듣고 선택하는
             <br />
             이너스뮤직 사회자 목소리 콘테스트.
@@ -483,7 +483,7 @@ export default function Contest() {
                 </span>
               </div>
               {isPracticeRound && (
-                <p className="text-center text-[11px] text-white/55 mb-3 -mt-1 break-keep">
+                <p className="text-center text-[12px] text-white/65 mb-3 -mt-1 break-keep">
                   오늘 투표는 이미 반영됐어요 · 지금부터는 연습 플레이예요 (전체 집계 미반영)
                 </p>
               )}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Play, Pause, ArrowUp, HelpCircle } from "lucide-react";
+import { ExternalLink, Play, Pause, HelpCircle } from "lucide-react";
 import HeartButton from "./HeartButton";
 import ProfileModal from "./ProfileModal";
 import type { Contestant } from "./contestData";
@@ -101,28 +101,23 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
             BLIND
           </span>
         )}
-        <div className="absolute top-3 right-3">
+        <motion.div
+          className="absolute top-3 right-3"
+          animate={
+            !heartLocked
+              ? {
+                  filter: [
+                    "drop-shadow(0 0 1px rgba(255,92,122,0.3))",
+                    "drop-shadow(0 0 7px rgba(255,92,122,0.85))",
+                    "drop-shadow(0 0 1px rgba(255,92,122,0.3))",
+                  ],
+                }
+              : {}
+          }
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        >
           <HeartButton count={hearts} onHeart={onHeart} locked={heartLocked} hideCount={blind} />
-        </div>
-
-        {/* 하트 버튼 클릭 유도 - 반짝이는 화살표 + 기능 설명 문구 */}
-        {!heartLocked && (
-          <motion.div
-            className="absolute top-11 right-4 pointer-events-none flex flex-col items-center"
-            animate={{
-              y: [0, -6, 0],
-              filter: [
-                "drop-shadow(0 0 2px rgba(255,226,122,0.4))",
-                "drop-shadow(0 0 9px rgba(255,226,122,1))",
-                "drop-shadow(0 0 2px rgba(255,226,122,0.4))",
-              ],
-            }}
-            transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <ArrowUp size={22} strokeWidth={3.2} className="text-white" />
-            <span className="text-[10px] font-bold text-white tracking-wide whitespace-nowrap -mt-0.5">♥ 하트 투표</span>
-          </motion.div>
-        )}
+        </motion.div>
 
         <audio
           ref={audioRef}
@@ -146,8 +141,8 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
         {blind && (
           <button
             onClick={togglePlay}
-            className="absolute left-1/2 flex flex-col items-center justify-center gap-1.5 z-10 pointer-events-auto"
-            style={{ top: "38%", transform: "translate(-50%, -50%)" }}
+            className="absolute left-1/2 flex flex-col items-center justify-center gap-3 z-10 pointer-events-auto"
+            style={{ top: "36%", transform: "translate(-50%, -50%)" }}
             aria-label="음성 듣기"
           >
             <motion.span
@@ -163,8 +158,8 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
                 <Play size={22} className="text-white fill-white ml-0.5" />
               )}
             </motion.span>
-            <span className="text-[10px] font-semibold text-white/85 tracking-wide bg-black/40 px-2 py-0.5 rounded-full">
-              ▶ 음성 듣기
+            <span className="text-[10px] font-semibold text-white/90 tracking-wide bg-black/55 px-2.5 py-1 rounded-full whitespace-nowrap">
+              음성 듣기
             </span>
           </button>
         )}

@@ -19,6 +19,13 @@ const REVIEW_IMAGES = [
 
 const GOLD = "#d4b896";
 
+// 후기 100건 이상 축적된 사회자 (블로그 후기 카테고리로 바로 연결)
+const REVIEW_KING_MCS = [
+  { name: "이우영", url: "https://blog.naver.com/PostList.naver?from=postList&blogId=inusmusics&categoryNo=80&currentPage=1" },
+  { name: "석재선", url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=137" },
+  { name: "장윤태", url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=133" },
+];
+
 export default function ReviewSection() {
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
@@ -358,6 +365,56 @@ export default function ReviewSection() {
             <p className="text-white/25 text-xs tracking-wider">
               카카오톡, 문자로 직접 받은 후기만 게재합니다
             </p>
+          </div>
+
+          {/* 리뷰 100+ 사회자 — 블로그 후기 바로가기 */}
+          <div className="mt-16 pt-14 border-t border-white/10 max-w-3xl mx-auto text-center">
+            <h3
+              className="text-white text-lg sm:text-xl mb-2"
+              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+            >
+              후기 100+ <span style={{ color: GOLD }}>사회자</span>, 블로그에서 더 보기
+            </h3>
+            <p className="text-white/40 text-xs sm:text-sm mb-8 break-keep">
+              카카오톡·문자 후기 100건 이상 축적된 사회자입니다
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {REVIEW_KING_MCS.map((mc) => (
+                <a
+                  key={mc.name}
+                  href={mc.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-between gap-3 px-5 py-4 rounded-xl transition-all duration-300"
+                  style={{
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(212,184,150,0.20)",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(212,184,150,0.08)";
+                    (e.currentTarget as HTMLAnchorElement).style.border = "1px solid rgba(212,184,150,0.45)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.03)";
+                    (e.currentTarget as HTMLAnchorElement).style.border = "1px solid rgba(212,184,150,0.20)";
+                  }}
+                >
+                  <div className="flex flex-col items-start gap-1">
+                    <span className="text-white text-sm sm:text-base font-medium" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+                      {mc.name} 사회자
+                    </span>
+                    <span
+                      className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide"
+                      style={{ background: "rgba(212,184,150,0.12)", border: "1px solid rgba(212,184,150,0.4)", color: GOLD }}
+                    >
+                      100+ 후기
+                    </span>
+                  </div>
+                  <ExternalLink size={16} className="text-white/30 group-hover:text-[#d4b896] transition-colors duration-300 shrink-0" />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>

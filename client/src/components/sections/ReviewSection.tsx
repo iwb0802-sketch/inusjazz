@@ -373,7 +373,7 @@ export default function ReviewSection() {
               className="text-white text-lg sm:text-xl mb-2"
               style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
             >
-              후기 100+ <span style={{ color: GOLD }}>사회자</span>, 블로그에서 더 보기
+              후기 100+ <span style={{ color: GOLD }}>사회자</span>, 더 많은 이야기 보기
             </h3>
             <p className="text-white/40 text-xs sm:text-sm mb-8 break-keep">
               카카오톡·문자 후기 100건 이상 축적된 사회자입니다
@@ -415,6 +415,29 @@ export default function ReviewSection() {
                 </a>
               ))}
             </div>
+
+            <p className="text-white/40 text-xs sm:text-sm leading-relaxed break-keep mt-8 max-w-md mx-auto">
+              단순히 후기 개수만으로
+              <br className="sm:hidden" />
+              {" "}실력을 판단할 순 없어요.
+              <br />
+              다른 사회자들도 각자의 매력과 실력을
+              <br className="sm:hidden" />
+              {" "}갖추고 있으니,
+              <br />
+              아래 전체 사회자를
+              <br className="sm:hidden" />
+              {" "}함께 확인해보세요.
+            </p>
+
+            <a
+              href="#mc"
+              className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium transition-colors duration-300"
+              style={{ color: GOLD }}
+            >
+              전체 사회자 보기
+              <ChevronRight size={15} />
+            </a>
           </div>
         </div>
       </div>

@@ -375,10 +375,14 @@ export default function ReviewSection() {
             >
               후기 100+ <span style={{ color: GOLD }}>사회자</span>, 더 많은 이야기 보기
             </h3>
-            <p className="text-white/40 text-xs sm:text-sm mb-8 break-keep">
-              단순히 후기 100건을 넘긴 사회자를 소개하는 것으로,
+            <p className="text-white/65 text-sm sm:text-base leading-relaxed break-keep mb-8 max-w-md mx-auto">
+              단순히 후기 100건을 넘긴
               <br className="sm:hidden" />
-              {" "}다른 사회자들도 이에 못지않은 후기와 실력을 갖추고 있습니다.
+              {" "}사회자를 소개하는 것으로,
+              <br />
+              다른 사회자들도 이에 못지않은
+              <br className="sm:hidden" />
+              {" "}후기와 실력을 갖추고 있습니다.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

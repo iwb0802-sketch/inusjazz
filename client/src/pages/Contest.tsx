@@ -242,13 +242,21 @@ export default function Contest() {
                 transition={{ delay: 0.36, duration: 0.5 }}
                 className="text-sm text-white/55 leading-relaxed max-w-sm mx-auto mb-9 break-keep"
               >
-                신랑신부님들이 직접 뽑는, 가장 매력적인 목소리.
+                신랑신부님들이 직접 뽑는,
                 <br />
-                이너스뮤직 사회자들의 1:1 목소리 매치를 직접 선택하고
+                가장 매력적인 목소리.
                 <br />
-                가장 마음에 드는 목소리에 하트를 선물해 주세요.
+                이너스뮤직 사회자들의 1:1 목소리 매치를
                 <br />
-                마지막으로 선택한 목소리가, 여러분과 가장 잘 어울리는 사회자예요.
+                직접 선택하고
+                <br />
+                가장 마음에 드는 목소리에
+                <br />
+                하트를 선물해 주세요.
+                <br />
+                마지막으로 선택한 목소리가,
+                <br />
+                여러분과 가장 잘 어울리는 사회자예요.
               </motion.p>
 
               <motion.div

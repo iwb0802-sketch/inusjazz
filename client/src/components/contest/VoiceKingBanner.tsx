@@ -124,7 +124,7 @@ export default function VoiceKingBanner({ monthHearts, monthLabel, lastMonthCham
                     <span className="text-[10px] text-[#5BB5A2] shrink-0">{isTied ? "공동 1위" : "현재 1위"}</span>
                   )}
                   {rank !== 1 && isTied && (
-                    <span className="text-[10px] text-white/40 shrink-0">공동 {rank}위</span>
+                    <span className="text-[10px] text-white/55 shrink-0">공동 {rank}위</span>
                   )}
                 </span>
                 <span className="flex items-center gap-2 shrink-0">

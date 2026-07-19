@@ -111,6 +111,9 @@ export default function Contest() {
         giveHeart(setup.bye, 1);
       }
       setPhase("match");
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      }
     },
     [giveHeart],
   );
@@ -127,6 +130,8 @@ export default function Contest() {
       const withinLimit = await registerTournamentStart();
       countsTowardTotalRef.current = withinLimit;
       setIsPracticeRound(!withinLimit);
+      // startRound 내부에서 게임 화면 진입 시 스크롤을 최상단으로 이동시켜
+      // 모바일에서 인트로 화면의 스크롤 위치가 남아 게임 화면 위에 빈 공간이 생기지 않도록 함
       startRound(names, 1);
     },
     [startRound],
@@ -149,6 +154,9 @@ export default function Contest() {
         setChampion(nextWinners[0]);
         setPhase("champion");
         playSfx("champion");
+        if (typeof window !== "undefined") {
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+        }
       } else {
         const nextIdx = roundIndex + 1;
         setRoundIndex(nextIdx);
@@ -287,8 +295,8 @@ export default function Contest() {
               >
                 Contest
               </p>
-              <p className="text-[11px] text-white/45 tracking-wide mb-5 break-keep">
-                VOV(Vote On Voice)는 이너스뮤직 사회자 목소리 콘테스트예요
+              <p className="text-[12px] text-white/60 tracking-wide mb-5 break-keep">
+                VOV는 이너스뮤직 사회자들의 목소리를 직접 듣고 선택하는 콘테스트예요.
               </p>
 
               <motion.p
@@ -346,7 +354,7 @@ export default function Contest() {
                   >
                     <item.icon size={16} className="text-[#d4b896]" />
                     <span className="text-[11px] font-medium text-white/85">{item.label}</span>
-                    <span className="text-[10px] text-white/40 leading-snug">{item.desc}</span>
+                    <span className="text-[11px] text-white/55 leading-snug">{item.desc}</span>
                   </div>
                 ))}
               </motion.div>
@@ -402,12 +410,13 @@ export default function Contest() {
                 </button>
                 {showVoteInfo && (
                   <div className="mt-3 mx-auto max-w-sm rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-left">
-                    <ul className="space-y-1.5 text-[11px] text-white/55 leading-relaxed">
-                      <li>· 각 대결에서 한 명을 선택하면 하트 1개가 적립돼요.</li>
-                      <li>· 하트 수는 실시간 순위와 월간 집계에 반영돼요.</li>
-                      <li>· 월간 누적 하트 1위 사회자가 '이달의 VOV'로 선정돼요.</li>
-                      <li>· 대결 카드의 하트 버튼으로도 사회자 한 명당 1회 추가 투표할 수 있어요.</li>
-                      <li>· 하루 한 번의 플레이만 전체 공유 집계에 반영돼요. 이후 재플레이는 연습으로 즐기실 수 있어요.</li>
+                    <ul className="space-y-1.5 text-[12px] text-white/65 leading-relaxed">
+                      <li>· 대결에서 사회자를 선택하면 기본 하트 1개가 적립됩니다.</li>
+                      <li>· 카드의 하트 버튼을 누르면 사회자별 추가 하트 1개를 보낼 수 있습니다.</li>
+                      <li>· 하루 1회 플레이만 전체 집계에 반영됩니다.</li>
+                      <li>· 이후 재플레이는 연습 모드로 즐길 수 있으며 전체 집계에는 반영되지 않습니다.</li>
+                      <li>· 하트 수는 실시간 순위와 월간 집계에 반영됩니다.</li>
+                      <li>· 월간 누적 하트 1위 사회자가 '이달의 VOV'로 선정됩니다.</li>
                     </ul>
                   </div>
                 )}
@@ -417,7 +426,7 @@ export default function Contest() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
-                className="text-[10px] text-white/30 mt-5 tracking-wide break-keep"
+                className="text-[11px] text-white/50 mt-5 tracking-wide break-keep"
               >
                 지난달 VOTE ON VOICE가 된 사회자는
                 <br />
@@ -474,7 +483,7 @@ export default function Contest() {
                 </span>
               </div>
               {isPracticeRound && (
-                <p className="text-center text-[11px] text-white/40 mb-3 -mt-1 break-keep">
+                <p className="text-center text-[11px] text-white/55 mb-3 -mt-1 break-keep">
                   오늘 투표는 이미 반영됐어요 · 지금부터는 연습 플레이예요 (전체 집계 미반영)
                 </p>
               )}
@@ -528,7 +537,7 @@ export default function Contest() {
               <h2 className="text-3xl font-semibold mb-2" style={{ fontFamily: "'Noto Serif KR', serif" }}>
                 {championData.name}
               </h2>
-              <p className="text-[13px] text-white/45 mb-1.5 break-keep">
+              <p className="text-[13px] text-white/60 mb-1.5 break-keep">
                 이번 회차에서 가장 많은 선택을 받은 사회자입니다.
               </p>
               <p className="text-sm text-white/55 max-w-sm mx-auto mb-6 break-keep">{championData.highlight}</p>
@@ -543,7 +552,7 @@ export default function Contest() {
                 <MessageCircle size={16} /> {championData.name} 사회자 상담하기
               </a>
 
-              <p className="text-xs text-white/40 mb-8">
+              <p className="text-xs text-white/55 mb-8">
                 {championData.name} 사회자는 이번 달 현재까지 총{" "}
                 <span className="text-[#5BB5A2] font-medium">
                   {(monthHearts[championData.name] || 0).toLocaleString()}개
@@ -646,7 +655,7 @@ export default function Contest() {
               </div>
               )}
 
-              <p className="text-[11px] text-white/35 mb-2.5 tracking-wide">다시 도전할 모드를 선택해 주세요</p>
+              <p className="text-[11px] text-white/50 mb-2.5 tracking-wide">다시 도전할 모드를 선택해 주세요</p>
               <div className="flex flex-wrap items-center justify-center gap-3 mb-3">
                 <button
                   onClick={() => beginTournament(false)}

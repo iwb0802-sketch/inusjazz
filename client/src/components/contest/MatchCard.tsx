@@ -216,7 +216,7 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
                     <Play size={18} className="text-white fill-white ml-0.5" />
                   )}
                 </motion.span>
-                <span className="text-[9px] font-semibold text-white/80 tracking-wide whitespace-nowrap">
+                <span className="text-[10px] font-semibold text-white/85 tracking-wide whitespace-nowrap">
                   음성 듣기
                 </span>
               </button>

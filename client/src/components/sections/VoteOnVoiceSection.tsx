@@ -41,7 +41,7 @@ export default function VoteOnVoiceSection() {
         </h2>
 
         <p className="text-white/50 text-sm sm:text-base leading-relaxed mb-3 max-w-xl mx-auto break-keep">
-          INUS MUSIC 사회자들의 매력 대결, VOTE ON VOICE.
+          INUS MUSIC 사회자들의 매력 대결, <span className="whitespace-nowrap">VOTE ON VOICE.</span>
           <br />
           마음에 드는 사회자에게 하트를 투표하고,
           <br className="sm:hidden" />
@@ -56,7 +56,7 @@ export default function VoteOnVoiceSection() {
 
         <a
           href="/contest"
-          className="relative inline-flex items-center gap-2 px-9 py-[18px] rounded-full text-base font-bold transition-transform hover:scale-105"
+          className="relative inline-flex items-center gap-1.5 sm:gap-2 px-6 sm:px-9 py-4 sm:py-[18px] rounded-full text-sm sm:text-base font-bold whitespace-nowrap transition-transform hover:scale-105"
           style={{
             background: `linear-gradient(135deg, ${GOLD} 0%, #e8cd9e 50%, ${GOLD} 100%)`,
             color: "#0d0d0d",
@@ -64,7 +64,7 @@ export default function VoteOnVoiceSection() {
           }}
         >
           <span style={{ color: MINT }}>V</span>OTE <span style={{ color: MINT }}>O</span>N <span style={{ color: MINT }}>V</span>OICE 투표하러 가기
-          <ChevronRight size={18} />
+          <ChevronRight size={18} className="shrink-0" />
         </a>
 
         <p className="text-white/35 text-xs mt-3">

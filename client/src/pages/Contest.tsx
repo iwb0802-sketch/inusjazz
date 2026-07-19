@@ -6,7 +6,7 @@
  */
 import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX, UserRound, Download, Mic2, ListChecks, Music4, ShieldCheck } from "lucide-react";
+import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX, UserRound, Download, Mic2, ListChecks, Music4, ShieldCheck, Camera } from "lucide-react";
 import {
   CONTESTANTS,
   getContestant,
@@ -690,7 +690,10 @@ export default function Contest() {
                   이미지 생성이 지원되지 않는 환경이라 결과 문구를 복사했어요.
                 </p>
               )}
-              <p className="text-[11px] text-white/30 mb-8">저장이 잘 안 되면, 지금 이 화면을 캡처(스크린샷)해서 보관해주세요!</p>
+              <p className="inline-flex items-center gap-1.5 text-[12px] font-medium text-white/70 bg-white/[0.06] border border-white/10 rounded-full px-4 py-2 mb-8">
+                <Camera size={13} className="text-[#5BB5A2] shrink-0" />
+                저장이 잘 안 되면, 지금 화면을 캡처(스크린샷)해서 보관해주세요!
+              </p>
 
               <button
                 type="button"

@@ -227,11 +227,17 @@ export default function Contest() {
     const fileName = `vov-${championData.name}.png`;
     const url = URL.createObjectURL(blob);
 
-    // iOS Safari/인앱 브라우저는 a[download] 강제 다운로드를 지원하지 않고 그냥
-    // 새 탭으로 이동시켜버리는 경우가 많아, iOS에서는 처음부터 새 창(이미지 뷰어)으로
-    // 열어 길게 눌러 저장하도록 안내한다. 그 외 환경(안드로이드/데스크톱)은 즉시 다운로드를 시도한다.
+    // a[download] 강제 다운로드는 "클릭이 성공했다"는 사실만으로 done 처리되어,
+    // 실제로는 카카오톡/인스타그램/숨고 인앱 브라우저나 일부 모바일 브라우저에서
+    // 파일이 저장되지 않는데도 "저장됐어요"라고 잘못 표시되는 문제가 있었다.
+    // 모바일 환경에서는 실제 저장 여부를 코드로 확인할 방법이 없으므로,
+    // 항상 성공이 보장되는 "새 창(이미지 뷰어)으로 열기 → 길게 눌러 저장" 방식을 사용한다.
+    // 데스크톱 브라우저만 a[download] 즉시 다운로드를 시도한다 (여기서는 실패 시 예외가 던져지므로 신뢰 가능).
     const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
-    const isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes("Macintosh") && typeof document !== "undefined" && "ontouchend" in document);
+    const isTouchDevice = typeof window !== "undefined" && (("ontouchstart" in window) || navigator.maxTouchPoints > 0);
+    const isMobileUA = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+    const isInAppBrowser = /KAKAOTALK|Instagram|NAVER|Line\/|FBAN|FBAV|FB_IAB|wv\)|Whale/i.test(ua);
+    const isMobile = isMobileUA || isInAppBrowser || (ua.includes("Macintosh") && isTouchDevice);
 
     const openInNewTab = () => {
       const opened = window.open(url, "_blank");
@@ -240,7 +246,7 @@ export default function Contest() {
       setTimeout(() => URL.revokeObjectURL(url), 60_000);
     };
 
-    if (isIOS) {
+    if (isMobile) {
       openInNewTab();
       return;
     }

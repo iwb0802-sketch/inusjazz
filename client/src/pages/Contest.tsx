@@ -115,7 +115,11 @@ export default function Contest() {
         giveHeart(setup.bye, 1);
       }
       setPhase("match");
-      if (typeof window !== "undefined") {
+      // 토너먼트를 새로 시작할 때(1라운드)만 최상단으로 스크롤한다.
+      // 중간 라운드 전환(TOP5, TOP3, 결승 등)에서는 스크롤을 그대로 유지해
+      // 카드가 있던 자리에서 자연스럽게 다음 라운드로 넘어가도록 한다.
+      // (라운드 전환마다 화면이 위로 튀는 현상 방지)
+      if (idx === 1 && typeof window !== "undefined") {
         window.scrollTo({ top: 0, left: 0, behavior: "auto" });
       }
     },

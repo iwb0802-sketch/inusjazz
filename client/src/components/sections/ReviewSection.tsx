@@ -429,15 +429,6 @@ export default function ReviewSection() {
               <br className="sm:hidden" />
               {" "}함께 확인해보세요.
             </p>
-
-            <a
-              href="#mc"
-              className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium transition-colors duration-300"
-              style={{ color: GOLD }}
-            >
-              전체 사회자 보기
-              <ChevronRight size={15} />
-            </a>
           </div>
         </div>
       </div>

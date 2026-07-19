@@ -500,7 +500,7 @@ export default function Contest() {
       </AnimatePresence>
 
       {phase !== "intro" && (
-      <div className="max-w-3xl mx-auto px-4 pt-20">
+      <div className="max-w-3xl mx-auto px-4 pt-20 relative">
         {/* 헤더 */}
         <div className="text-center mb-8">
           <p className="text-[10px] tracking-[0.25em] text-[#d4b896] uppercase mb-3">INUSMUSIC VOTE ON VOICE</p>
@@ -531,9 +531,15 @@ export default function Contest() {
           </div>
         )}
 
-        <AnimatePresence mode="wait">
+        {/*
+          mode="wait"를 쓰면 매 선택마다 이전 카드가 완전히 사라진 뒤(문서 높이가 잠깐 0에 가까워짐)
+          다음 카드가 마운트되면서, 브라우저가 스크롤 위치를 위로 당겨버리는 현상이 있었다.
+          mode를 제거해 이전/다음 카드가 짧게 겹쳐서 전환되도록 하면 높이가 갑자기 줄지 않아
+          "선택 버튼 클릭 시 스크롤이 위로 올라가는" 문제가 사라진다.
+        */}
+        <AnimatePresence initial={false}>
           {phase === "match" && contestantA && contestantB && roundSetup && (
-            <motion.div key={`match-${roundIndex}-${matchIdx}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <motion.div key={`match-${roundIndex}-${matchIdx}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, position: "absolute" }} style={{ width: "100%" }}>
               <div className="flex items-center justify-between mb-4 text-xs text-white/45">
                 <span className="tracking-wide">{label}</span>
                 <span>

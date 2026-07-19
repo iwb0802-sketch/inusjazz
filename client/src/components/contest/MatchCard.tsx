@@ -105,7 +105,7 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
           <HeartButton count={hearts} onHeart={onHeart} locked={heartLocked} hideCount={blind} />
         </div>
 
-        {/* 하트 버튼 클릭 유도 - 반짝이는 화살표 표시 */}
+        {/* 하트 버튼 클릭 유도 - 반짝이는 화살표 + 기능 설명 문구 */}
         {!heartLocked && (
           <motion.div
             className="absolute top-11 right-4 pointer-events-none flex flex-col items-center"
@@ -119,8 +119,8 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
             }}
             transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
           >
-            <ArrowUp size={26} strokeWidth={3.2} className="text-white" />
-            <span className="text-[10px] font-bold text-white tracking-wide -mt-0.5">Click</span>
+            <ArrowUp size={22} strokeWidth={3.2} className="text-white" />
+            <span className="text-[10px] font-bold text-white tracking-wide whitespace-nowrap -mt-0.5">♥ 하트 투표</span>
           </motion.div>
         )}
 
@@ -146,9 +146,9 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
         {blind && (
           <button
             onClick={togglePlay}
-            className="absolute left-1/2 flex items-center justify-center z-10 pointer-events-auto"
+            className="absolute left-1/2 flex flex-col items-center justify-center gap-1.5 z-10 pointer-events-auto"
             style={{ top: "38%", transform: "translate(-50%, -50%)" }}
-            aria-label="목소리 미리듣기"
+            aria-label="음성 듣기"
           >
             <motion.span
               animate={playing ? { scale: [1, 1.12, 1] } : { scale: 1 }}
@@ -163,6 +163,9 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
                 <Play size={22} className="text-white fill-white ml-0.5" />
               )}
             </motion.span>
+            <span className="text-[10px] font-semibold text-white/85 tracking-wide bg-black/40 px-2 py-0.5 rounded-full">
+              ▶ 음성 듣기
+            </span>
           </button>
         )}
         {loading && (
@@ -197,8 +200,8 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
               </div>
               <button
                 onClick={togglePlay}
-                className="flex-shrink-0 flex items-center justify-center pointer-events-auto"
-                aria-label="목소리 미리듣기"
+                className="flex-shrink-0 flex flex-col items-center gap-1 pointer-events-auto"
+                aria-label="음성 듣기"
               >
                 <motion.span
                   animate={playing ? { scale: [1, 1.12, 1] } : { scale: 1 }}
@@ -213,6 +216,9 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
                     <Play size={18} className="text-white fill-white ml-0.5" />
                   )}
                 </motion.span>
+                <span className="text-[9px] font-semibold text-white/80 tracking-wide whitespace-nowrap">
+                  음성 듣기
+                </span>
               </button>
             </>
           )}

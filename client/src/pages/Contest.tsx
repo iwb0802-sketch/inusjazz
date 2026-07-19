@@ -44,6 +44,8 @@ export default function Contest() {
   const [heartedThisGame, setHeartedThisGame] = useState<Set<string>>(new Set());
   const [muted, setMuted] = useState(isSoundMuted());
   const [isBlind, setIsBlind] = useState(false);
+  const [showVoteInfo, setShowVoteInfo] = useState(false);
+  const [showBenefits, setShowBenefits] = useState(false);
 
   const toggleMute = useCallback(() => {
     setMuted((prev) => {
@@ -157,6 +159,46 @@ export default function Contest() {
 
   const championData = champion ? getContestant(champion) : undefined;
 
+  // 콘테스트 페이지 전용 SEO/OG 메타 태그 (SPA이므로 클라이언트에서 갱신)
+  useEffect(() => {
+    const prevTitle = document.title;
+    const title = "VOV | 웨딩 사회자 목소리 콘테스트 | 이너스뮤직";
+    const description =
+      "이너스뮤직 사회자들의 목소리를 직접 듣고, 내 결혼식에 어울리는 사회자를 선택해보세요. VOTE ON VOICE 월간 콘테스트.";
+    const ogTitle = "VOV | 내 결혼식에 어울리는 사회자 목소리 찾기";
+    const ogDescription = "이너스뮤직 사회자들의 목소리를 비교하고 마음에 드는 사회자에게 투표해보세요.";
+    const url = "https://www.inusmc.co.kr/contest";
+
+    document.title = title;
+
+    const setMeta = (selector: string, attr: string, value: string) => {
+      const el = document.head.querySelector(selector) as HTMLMetaElement | HTMLLinkElement | null;
+      if (!el) return; // 태그가 index.html에 없으면 새로 만들지 않고 스킵 (원본 구조 유지)
+      el.setAttribute(attr, value);
+    };
+
+    setMeta('meta[name="description"]', "content", description);
+    setMeta('meta[property="og:type"]', "content", "website");
+    setMeta('meta[property="og:title"]', "content", ogTitle);
+    setMeta('meta[property="og:description"]', "content", ogDescription);
+    setMeta('meta[property="og:url"]', "content", url);
+    setMeta('meta[name="twitter:title"]', "content", ogTitle);
+    setMeta('meta[name="twitter:description"]', "content", ogDescription);
+
+    let canonical = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute("href", url);
+
+    return () => {
+      // 페이지 이탈 시 기본 메타로 복원 (다음 페이지 진입 시 각자 라우트가 재설정)
+      document.title = prevTitle;
+    };
+  }, []);
+
   return (
     <div
       className="min-h-screen w-full bg-[#0d0d0d] text-white pb-24"
@@ -232,10 +274,13 @@ export default function Contest() {
                 <span style={{ color: MINT }}>V</span>OICE
               </motion.h1>
               <p
-                className="text-[11px] tracking-[0.4em] text-white/40 uppercase mb-5"
+                className="text-[11px] tracking-[0.4em] text-white/40 uppercase mb-3"
                 style={{ fontFamily: "'Cormorant Garamond', serif" }}
               >
                 Contest
+              </p>
+              <p className="text-[11px] text-white/45 tracking-wide mb-5 break-keep">
+                VOV(Vote On Voice)는 이너스뮤직 사회자 목소리 콘테스트예요
               </p>
 
               <motion.p
@@ -244,21 +289,17 @@ export default function Contest() {
                 transition={{ delay: 0.36, duration: 0.5 }}
                 className="text-sm text-white/55 leading-relaxed max-w-sm mx-auto mb-9 break-keep"
               >
-                신랑신부님들이 직접 뽑는,
+                신랑신부님이 직접 듣고 선택하는
                 <br />
-                가장 매력적인 목소리.
+                이너스뮤직 사회자 목소리 콘테스트.
                 <br />
-                이너스뮤직 사회자들의 1:1 목소리 매치를
+                내 결혼식에 어울리는 목소리를
                 <br />
-                직접 선택하고
+                직접 비교하고,
                 <br />
-                가장 마음에 드는 목소리에
+                가장 마음에 드는 사회자에게
                 <br />
-                하트를 선물해 주세요.
-                <br />
-                마지막으로 선택한 목소리가,
-                <br />
-                여러분과 가장 잘 어울리는 사회자예요.
+                하트를 보내보세요.
               </motion.p>
 
               <motion.div
@@ -302,32 +343,66 @@ export default function Contest() {
                 ))}
               </motion.div>
 
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.48, duration: 0.5 }}
+                className="text-white/70 text-[13px] font-medium tracking-wide mb-4 break-keep"
+              >
+                목소리만 듣고 내 사회자 선택하기
+              </motion.p>
+
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.52, duration: 0.5 }}
-                className="flex flex-col sm:flex-row items-center justify-center gap-3"
+                className="flex flex-col items-center justify-center gap-3"
               >
                 <button
-                  onClick={() => beginTournament(false)}
-                  className="w-full sm:w-auto sm:px-10 py-3.5 rounded-full text-black text-sm font-semibold tracking-wide transition-transform hover:scale-[1.03] active:scale-[0.98]"
+                  onClick={() => beginTournament(true)}
+                  className="w-full sm:w-auto sm:px-12 py-4 rounded-full text-black text-sm font-bold tracking-wide transition-transform hover:scale-[1.03] active:scale-[0.98]"
                   style={{
-                    background: "linear-gradient(135deg, #e8cfa0, #d4b896)",
-                    boxShadow: "0 8px 30px rgba(212,184,150,0.25)",
+                    background: `linear-gradient(135deg, ${MINT}, #7cc9b8)`,
+                    boxShadow: `0 8px 30px rgba(91,181,162,0.35)`,
                   }}
                 >
-                  일반 모드
+                  블라인드 모드로 시작하기
                 </button>
+                <p className="text-[10px] text-white/35 tracking-wide break-keep">
+                  이름과 사진 없이 목소리만 듣고 선택해요
+                </p>
                 <button
-                  onClick={() => beginTournament(true)}
-                  className="w-full sm:w-auto sm:px-10 py-3.5 rounded-full text-white text-sm font-semibold tracking-wide border border-white/25 bg-white/[0.04] transition-transform hover:scale-[1.03] hover:border-white/45 active:scale-[0.98]"
+                  onClick={() => beginTournament(false)}
+                  className="w-full sm:w-auto sm:px-10 py-3 rounded-full text-white/70 text-[13px] font-medium tracking-wide border border-white/20 bg-white/[0.03] transition-transform hover:scale-[1.02] hover:border-white/40 active:scale-[0.98] mt-1"
                 >
-                  블라인드 모드
+                  사진과 정보를 보고 선택하기
                 </button>
               </motion.div>
-              <p className="text-[10px] text-white/35 mt-3 tracking-wide break-keep">
-                블라인드 모드는 이름·사진 없이 목소리만 듣고 선택해요
-              </p>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.58, duration: 0.5 }}
+                className="mt-6"
+              >
+                <button
+                  type="button"
+                  onClick={() => setShowVoteInfo((v) => !v)}
+                  className="text-[11px] text-white/40 hover:text-white/65 tracking-wide underline underline-offset-4 decoration-white/20 transition-colors"
+                >
+                  {showVoteInfo ? "투표 안내 접기 ▲" : "투표 안내 보기 ▼"}
+                </button>
+                {showVoteInfo && (
+                  <div className="mt-3 mx-auto max-w-sm rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-left">
+                    <ul className="space-y-1.5 text-[11px] text-white/55 leading-relaxed">
+                      <li>· 각 대결에서 한 명을 선택하면 하트 1개가 적립돼요.</li>
+                      <li>· 하트 수는 실시간 순위와 월간 집계에 반영돼요.</li>
+                      <li>· 월간 누적 하트 1위 사회자가 '이달의 VOV'로 선정돼요.</li>
+                      <li>· 대결 카드의 하트 버튼으로도 사회자 한 명당 1회 추가 투표할 수 있어요.</li>
+                    </ul>
+                  </div>
+                )}
+              </motion.div>
 
               <motion.p
                 initial={{ opacity: 0 }}
@@ -335,7 +410,13 @@ export default function Contest() {
                 transition={{ delay: 0.6, duration: 0.5 }}
                 className="text-[10px] text-white/30 mt-5 tracking-wide break-keep"
               >
-                지난달 VOTE ON VOICE가 된 사회자는 이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.(이벤트 중복적용가능)
+                지난달 VOTE ON VOICE가 된 사회자는
+                <br />
+                이번 달 한 달간 지정 예약 시
+                <br />
+                1만 원 할인 혜택이 제공됩니다.
+                <br />
+                (이벤트 중복 적용 가능)
               </motion.p>
             </div>
           </motion.div>
@@ -354,17 +435,17 @@ export default function Contest() {
             <span style={{ color: MINT }}>V</span>OTE <span style={{ color: MINT }}>O</span>N <span style={{ color: MINT }}>V</span>OICE
           </h1>
           <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto break-keep">
-            신랑신부님들이 직접 추천하는
+            신랑신부님이 직접 듣고 선택하는
             <br />
-            VOTE ON VOICE 콘테스트.
+            이너스뮤직 사회자 목소리 콘테스트.
             <br />
             지난달 VOTE ON VOICE가 된 사회자는
             <br />
-            이번달 한달 간 지정 예약시
+            이번 달 한 달간 지정 예약 시
             <br />
-            1만원 할인혜택이 주어집니다.
+            1만 원 할인 혜택이 제공됩니다.
             <br />
-            (이벤트 중복적용가능)
+            (이벤트 중복 적용 가능)
           </p>
         </div>
 
@@ -433,7 +514,21 @@ export default function Contest() {
               <h2 className="text-3xl font-semibold mb-2" style={{ fontFamily: "'Noto Serif KR', serif" }}>
                 {championData.name}
               </h2>
+              <p className="text-[13px] text-white/45 mb-1.5 break-keep">
+                이번 회차에서 가장 많은 선택을 받은 사회자입니다.
+              </p>
               <p className="text-sm text-white/55 max-w-sm mx-auto mb-6 break-keep">{championData.highlight}</p>
+
+              {/* 상담 CTA - 결과 확인 직후 바로 노출 */}
+              <a
+                href="https://pf.kakao.com/_wxovaM/chat"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-8 py-3.5 rounded-full bg-[#5BB5A2] text-black text-sm font-bold hover:bg-[#6fc5b2] transition-colors shadow-[0_8px_24px_rgba(91,181,162,0.35)] mb-5"
+              >
+                <MessageCircle size={16} /> {championData.name} 사회자 상담하기
+              </a>
+
               <p className="text-xs text-white/40 mb-8">
                 {championData.name} 사회자는 이번 달 현재까지 총{" "}
                 <span className="text-[#5BB5A2] font-medium">
@@ -442,7 +537,16 @@ export default function Contest() {
                 의 하트를 받았습니다.
               </p>
 
+              <button
+                type="button"
+                onClick={() => setShowBenefits((v) => !v)}
+                className="text-[11px] text-[#d4b896]/80 hover:text-[#d4b896] tracking-wide underline underline-offset-4 decoration-[#d4b896]/30 transition-colors mb-8"
+              >
+                {showBenefits ? "▲ 프리미엄 혜택 접기" : "▼ 프리미엄 혜택 자세히 보기"}
+              </button>
+
               {/* 예약 혜택 프리미엄 카드 */}
+              {showBenefits && (
               <div className="relative max-w-lg mx-auto mb-9 text-left">
                 <div
                   className="absolute -inset-[1.5px] rounded-2xl opacity-90"
@@ -526,6 +630,7 @@ export default function Contest() {
                   </div>
                 </div>
               </div>
+              )}
 
               <p className="text-[11px] text-white/35 mb-2.5 tracking-wide">다시 도전할 모드를 선택해 주세요</p>
               <div className="flex flex-wrap items-center justify-center gap-3 mb-3">
@@ -541,16 +646,6 @@ export default function Contest() {
                 >
                   <RotateCcw size={14} /> 블라인드 모드로 다시 도전
                 </button>
-              </div>
-              <div className="flex flex-wrap items-center justify-center gap-3">
-                <a
-                  href="https://pf.kakao.com/_wxovaM/chat"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-[#5BB5A2] text-black text-sm font-medium hover:bg-[#6fc5b2] transition-colors"
-                >
-                  <MessageCircle size={14} /> {championData.name} 사회자 상담하기
-                </a>
               </div>
             </motion.div>
           )}

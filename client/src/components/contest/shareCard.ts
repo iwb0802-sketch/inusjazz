@@ -89,7 +89,10 @@ export async function buildShareCard(data: ShareCardData): Promise<Blob | null> 
     const scale = Math.max((r * 2) / img.width, (r * 2) / img.height);
     const iw = img.width * scale;
     const ih = img.height * scale;
-    ctx.drawImage(img, cx - iw / 2, cy - ih / 2 - r * 0.15, iw, ih);
+    // 인물사진은 얼굴이 상단부에 위치하는 경우가 많아 살짝 위쪽(얼굴 쪽)을 기준으로 자른다.
+    // 화면 좌표계에서 이미지를 아래로 내릴수록(y0 증가) 얼굴이 있는 상단부가 더 많이 보인다.
+    const verticalBias = Math.max(0, Math.min(ih - r * 2, ih * 0.12));
+    ctx.drawImage(img, cx - iw / 2, cy - ih / 2 + verticalBias, iw, ih);
   } else {
     ctx.fillStyle = "#1c1c1c";
     ctx.fillRect(cx - r, cy - r, r * 2, r * 2);

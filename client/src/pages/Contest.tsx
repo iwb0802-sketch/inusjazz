@@ -227,11 +227,12 @@ export default function Contest() {
     const fileName = `vov-${championData.name}.png`;
     const url = URL.createObjectURL(blob);
 
-    // a[download] 강제 다운로드는 "클릭이 성공했다"는 사실만으로 done 처리되어,
-    // 실제로는 카카오톡/인스타그램/숨고 인앱 브라우저나 일부 모바일 브라우저에서
-    // 파일이 저장되지 않는데도 "저장됐어요"라고 잘못 표시되는 문제가 있었다.
-    // 모바일 환경에서는 실제 저장 여부를 코드로 확인할 방법이 없으므로,
-    // 항상 성공이 보장되는 "새 창(이미지 뷰어)으로 열기 → 길게 눌러 저장" 방식을 사용한다.
+    // 숨고/카카오톡/인스타그램 등 인앱 브라우저는 window.open("_blank")을
+    // "이미지 생성이 끝난 뒤"(비동기 이후) 호출하면 사용자 클릭 제스처가 이미
+    // 만료된 것으로 간주해 팝업 자체를 조용히 차단해버리는 경우가 많다.
+    // (그래서 "이미지가 새 창에 열렸어요"라고만 뜨고 실제로는 아무 일도 안 일어남)
+    // 팝업 차단 여지가 전혀 없는 "현재 탭에서 이미지 주소로 바로 이동" 방식을 쓰면
+    // 별도 창 권한이 필요 없어 이런 인앱 브라우저에서도 항상 동작한다.
     // 데스크톱 브라우저만 a[download] 즉시 다운로드를 시도한다 (여기서는 실패 시 예외가 던져지므로 신뢰 가능).
     const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
     const isTouchDevice = typeof window !== "undefined" && (("ontouchstart" in window) || navigator.maxTouchPoints > 0);
@@ -239,15 +240,16 @@ export default function Contest() {
     const isInAppBrowser = /KAKAOTALK|Instagram|NAVER|Line\/|FBAN|FBAV|FB_IAB|wv\)|Whale/i.test(ua);
     const isMobile = isMobileUA || isInAppBrowser || (ua.includes("Macintosh") && isTouchDevice);
 
-    const openInNewTab = () => {
-      const opened = window.open(url, "_blank");
-      setShareStatus(opened ? "opened" : "error");
-      // 새 탭이 이미지를 불러올 시간을 준 뒤 늦게 해제 (너무 빨리 해제하면 빈 화면이 뜰 수 있음)
-      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    const openInCurrentTab = () => {
+      setShareStatus("opened");
+      // 상태 메시지가 잠깐이라도 그려지도록 한 박자 뒤에 이동 (즉시 이동하면 메시지가 안 보일 수 있음)
+      window.setTimeout(() => {
+        window.location.href = url;
+      }, 80);
     };
 
     if (isMobile) {
-      openInNewTab();
+      openInCurrentTab();
       return;
     }
 
@@ -261,8 +263,8 @@ export default function Contest() {
       setShareStatus("done");
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch {
-      // 프로그래밍 방식 다운로드가 막힌 환경 - 새 탭에서 열어 수동 저장 유도
-      openInNewTab();
+      // 프로그래밍 방식 다운로드가 막힌 환경 - 현재 탭에서 열어 수동 저장 유도
+      openInCurrentTab();
     }
   }, [championData, monthHearts, monthLabel, copyTextFallback]);
 
@@ -708,7 +710,7 @@ export default function Contest() {
               {shareStatus === "done" && <p className="text-[11px] text-[#5BB5A2] -mt-6 mb-8">이미지가 저장됐어요!</p>}
               {shareStatus === "opened" && (
                 <p className="text-[11px] text-[#5BB5A2] -mt-6 mb-8">
-                  새 창에서 이미지가 열렸어요. 이미지를 길게 눌러 "사진에 저장"을 선택해주세요!
+                  이미지 화면으로 이동해요. 이미지를 길게 눌러 "사진에 저장"을 선택한 뒤, 뒤로가기로 돌아와주세요!
                 </p>
               )}
               {shareStatus === "copied" && (

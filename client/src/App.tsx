@@ -26,7 +26,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
-          <AiConsultWidget bottomOffset={96} showAfterScroll />
+          <AiConsultWidget bottomOffset={88} showAfterScroll />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

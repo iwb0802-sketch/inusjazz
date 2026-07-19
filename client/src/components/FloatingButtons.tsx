@@ -117,7 +117,11 @@ export default function FloatingButtons() {
       }`}
     >
       {/* 한 줄: 영상보기 | SNS 아이콘 | 카톡상담 - 가운데 정렬 */}
-      <div className="flex justify-center items-stretch px-4 pb-6 gap-2">
+      {/* 인스타그램/숨고 등 인앱 브라우저 하단 UI에 버튼이 가려지는 문제 방지: safe-area-inset-bottom + 여유 패딩 */}
+      <div
+        className="flex justify-center items-stretch px-4 gap-2"
+        style={{ paddingBottom: "max(1.75rem, calc(env(safe-area-inset-bottom) + 1.25rem))" }}
+      >
 
         {/* 왼쪽: 사회자 선택하기 (탭하면 V.O.V까지 펼쳐짐, 절대 위치라 옆 버튼 높이엔 영향 없음) */}
         <div ref={menuRef} className="relative flex shrink-0">

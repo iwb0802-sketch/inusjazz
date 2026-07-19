@@ -376,7 +376,9 @@ export default function ReviewSection() {
               후기 100+ <span style={{ color: GOLD }}>사회자</span>, 더 많은 이야기 보기
             </h3>
             <p className="text-white/40 text-xs sm:text-sm mb-8 break-keep">
-              카카오톡·문자 후기 100건 이상 축적된 사회자입니다
+              단순히 후기 100건을 넘긴 사회자를 소개하는 것으로,
+              <br className="sm:hidden" />
+              {" "}다른 사회자들도 이에 못지않은 후기와 실력을 갖추고 있습니다.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -415,20 +417,6 @@ export default function ReviewSection() {
                 </a>
               ))}
             </div>
-
-            <p className="text-white/40 text-xs sm:text-sm leading-relaxed break-keep mt-8 max-w-md mx-auto">
-              단순히 후기 개수만으로
-              <br className="sm:hidden" />
-              {" "}실력을 판단할 순 없어요.
-              <br />
-              다른 사회자들도 각자의 매력과 실력을
-              <br className="sm:hidden" />
-              {" "}갖추고 있으니,
-              <br />
-              아래 전체 사회자를
-              <br className="sm:hidden" />
-              {" "}함께 확인해보세요.
-            </p>
           </div>
         </div>
       </div>

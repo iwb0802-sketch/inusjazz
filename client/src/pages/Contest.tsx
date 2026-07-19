@@ -6,7 +6,7 @@
  */
 import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX } from "lucide-react";
+import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX, UserRound, Share2, Mic2, ListChecks, Music4, ShieldCheck } from "lucide-react";
 import {
   CONTESTANTS,
   getContestant,
@@ -20,7 +20,9 @@ import {
 import { buildRound, roundLabel, type RoundSetup } from "@/components/contest/bracketEngine";
 import MatchCard from "@/components/contest/MatchCard";
 import VoiceKingBanner from "@/components/contest/VoiceKingBanner";
+import ProfileModal from "@/components/contest/ProfileModal";
 import { setSoundMuted, isSoundMuted, playSfx } from "@/components/contest/soundEffects";
+import { buildShareCard } from "@/components/contest/shareCard";
 
 const MINT = "#5BB5A2";
 
@@ -47,6 +49,8 @@ export default function Contest() {
   const [isBlind, setIsBlind] = useState(false);
   const [showVoteInfo, setShowVoteInfo] = useState(false);
   const [showBenefits, setShowBenefits] = useState(false);
+  const [showChampionProfile, setShowChampionProfile] = useState(false);
+  const [shareStatus, setShareStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   // 하루 중복 플레이 방지: 이 기기의 오늘 첫 플레이만 전체 공유 집계에 반영됨
   const countsTowardTotalRef = useRef(true);
   const [isPracticeRound, setIsPracticeRound] = useState(false);
@@ -175,6 +179,46 @@ export default function Contest() {
 
   const championData = champion ? getContestant(champion) : undefined;
 
+  const handleShareCard = useCallback(async () => {
+    if (!championData) return;
+    setShareStatus("loading");
+    try {
+      const blob = await buildShareCard({
+        championName: championData.name,
+        championImage: championData.image,
+        highlight: championData.highlight,
+        monthHearts: monthHearts[championData.name] || 0,
+        monthLabel,
+      });
+      if (!blob) {
+        setShareStatus("error");
+        return;
+      }
+      const file = new File([blob], `vov-${championData.name}.png`, { type: "image/png" });
+      const canNativeShare =
+        typeof navigator !== "undefined" && "share" in navigator && "canShare" in navigator && navigator.canShare({ files: [file] });
+      if (canNativeShare) {
+        await navigator.share({
+          files: [file],
+          title: "VOTE ON VOICE",
+          text: `이번 회차 챔피언 ${championData.name} 사회자!`,
+        });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `vov-${championData.name}.png`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+      setShareStatus("done");
+    } catch {
+      setShareStatus("error");
+    }
+  }, [championData, monthHearts, monthLabel]);
+
   // 콘테스트 페이지 전용 SEO/OG 메타 태그 (SPA이므로 클라이언트에서 갱신)
   useEffect(() => {
     const prevTitle = document.title;
@@ -235,6 +279,20 @@ export default function Contest() {
       >
         {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
       </button>
+
+      {/* 게임 화면 전용 소형 상담 CTA - 결과 화면의 메인 상담 버튼과 별개, 하단 우측에 작게 배치 (하단 좌측 AI 챗봇 위젯과 겹치지 않도록) */}
+      {phase === "match" && (
+        <a
+          href="https://pf.kakao.com/_wxovaM/chat"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="카카오 상담하기"
+          title="카카오 상담하기"
+          className="fixed bottom-5 right-4 z-40 flex items-center justify-center w-11 h-11 rounded-full bg-black/55 border border-white/15 text-[#5BB5A2] backdrop-blur-sm hover:bg-black/70 hover:border-[#5BB5A2]/40 transition-colors"
+        >
+          <MessageCircle size={18} />
+        </a>
+      )}
 
       <AnimatePresence mode="wait">
         {phase === "intro" && (
@@ -540,7 +598,31 @@ export default function Contest() {
               <p className="text-[13px] text-white/60 mb-1.5 break-keep">
                 이번 회차에서 가장 많은 선택을 받은 사회자입니다.
               </p>
-              <p className="text-sm text-white/55 max-w-sm mx-auto mb-6 break-keep">{championData.highlight}</p>
+              <p className="text-sm text-white/55 max-w-sm mx-auto mb-4 break-keep">{championData.highlight}</p>
+
+              {/* 진행 스타일 태그 - 실제 사회자 소개 문구에서 도출한 내용만 표시 */}
+              {championData.styleTags?.length > 0 && (
+                <div className="flex flex-wrap items-center justify-center gap-2 mb-6 max-w-sm mx-auto">
+                  {championData.styleTags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[11px] font-medium text-[#d4b896] bg-[#d4b896]/10 border border-[#d4b896]/25 rounded-full px-3 py-1"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* 사회자 프로필 자세히 보기 - 챔피언 소개 다음, 상담 버튼 전 단계 */}
+              <button
+                type="button"
+                onClick={() => setShowChampionProfile(true)}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-white/20 text-white/75 text-[13px] font-medium hover:border-white/40 hover:text-white transition-colors mb-5"
+              >
+                <UserRound size={14} /> {championData.name} 사회자 프로필 자세히 보기
+              </button>
+              <br />
 
               {/* 상담 CTA - 결과 확인 직후 바로 노출 */}
               <a
@@ -552,13 +634,27 @@ export default function Contest() {
                 <MessageCircle size={16} /> {championData.name} 사회자 상담하기
               </a>
 
-              <p className="text-xs text-white/55 mb-8">
+              <p className="text-xs text-white/55 mb-3">
                 {championData.name} 사회자는 이번 달 현재까지 총{" "}
                 <span className="text-[#5BB5A2] font-medium">
                   {(monthHearts[championData.name] || 0).toLocaleString()}개
                 </span>
                 의 하트를 받았습니다.
               </p>
+
+              {/* VOV 결과 공유 카드 - 세로형 이미지로 생성, 지원 시 카카오톡 등 공유 시트로 바로 전달 */}
+              <button
+                type="button"
+                onClick={handleShareCard}
+                disabled={shareStatus === "loading"}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-white/15 text-white/60 text-[12px] font-medium hover:border-[#5BB5A2]/50 hover:text-white/85 transition-colors mb-8 disabled:opacity-50"
+              >
+                <Share2 size={13} />
+                {shareStatus === "loading" ? "카드 만드는 중..." : "결과 카드 공유하기"}
+              </button>
+              {shareStatus === "error" && (
+                <p className="text-[11px] text-white/40 -mt-6 mb-8">카드 생성에 실패했어요. 잠시 후 다시 시도해주세요.</p>
+              )}
 
               <button
                 type="button"
@@ -655,6 +751,30 @@ export default function Contest() {
               </div>
               )}
 
+              {/* 이너스뮤직 웨딩 이벤트 전문성 - 결과 화면 하단, 게임 흐름과 분리 */}
+              <div className="max-w-lg mx-auto mb-9 text-left">
+                <p className="text-[11px] tracking-[0.2em] text-white/40 uppercase text-center mb-4">
+                  INUSMUSIC Wedding Event
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { icon: Mic2, title: "전문 사회자", desc: "검증된 실력의 전문 사회자가 예식을 진행합니다." },
+                    { icon: ListChecks, title: "맞춤 식순·연출", desc: "예식 분위기에 맞춘 식순과 이벤트 연출을 설계합니다." },
+                    { icon: Music4, title: "축가·이벤트 구성", desc: "축가, 이벤트 등 웨딩 행사 전반을 함께 구성합니다." },
+                    { icon: ShieldCheck, title: "현장 대응력", desc: "현장 진행은 물론 돌발상황에도 안정적으로 대응합니다." },
+                  ].map((item) => (
+                    <div
+                      key={item.title}
+                      className="rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-4 flex flex-col gap-1.5"
+                    >
+                      <item.icon size={16} className="text-[#5BB5A2]" />
+                      <span className="text-[12px] font-semibold text-white/85">{item.title}</span>
+                      <span className="text-[11px] text-white/50 leading-relaxed break-keep">{item.desc}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <p className="text-[11px] text-white/50 mb-2.5 tracking-wide">다시 도전할 모드를 선택해 주세요</p>
               <div className="flex flex-wrap items-center justify-center gap-3 mb-3">
                 <button
@@ -674,6 +794,10 @@ export default function Contest() {
           )}
         </AnimatePresence>
       </div>
+      )}
+
+      {showChampionProfile && championData && (
+        <ProfileModal url={championData.profileUrl} onClose={() => setShowChampionProfile(false)} />
       )}
     </div>
   );

@@ -13,6 +13,8 @@ export interface Contestant {
   audioFile: string;
   audioFileBlind: string;
   videoId: string;
+  /** 결과 화면 진행 스타일 태그 - 실제 highlight 문구에서 도출, 사회자별 상이 */
+  styleTags: string[];
 }
 
 export const CONTESTANTS: Contestant[] = [
@@ -26,6 +28,7 @@ export const CONTESTANTS: Contestant[] = [
     audioFile: "/audio/mc-minsu.mp3",
     audioFileBlind: "/audio/mc-minsu-blind.mp3",
     videoId: "YmqVrha13G0",
+    styleTags: ["안정적인 진행", "맞춤 대본 설계"],
   },
   {
     name: "고승범",
@@ -37,6 +40,7 @@ export const CONTESTANTS: Contestant[] = [
     audioFile: "/audio/mc-seungbeom.mp3",
     audioFileBlind: "/audio/mc-seungbeom-blind.mp3",
     videoId: "iKi77thkR4s",
+    styleTags: ["자연스러운 진행", "세련된 스타일"],
   },
   {
     name: "이도영",
@@ -48,6 +52,7 @@ export const CONTESTANTS: Contestant[] = [
     audioFile: "/audio/mc-idoyoung.mp3",
     audioFileBlind: "/audio/mc-idoyoung-blind.mp3",
     videoId: "ali34pV7ALk",
+    styleTags: ["안정적인 진행", "감동적인 멘트"],
   },
   {
     name: "석재선",
@@ -59,6 +64,7 @@ export const CONTESTANTS: Contestant[] = [
     audioFile: "/audio/mc-jaesun.mp3",
     audioFileBlind: "/audio/mc-jaesun-blind.mp3",
     videoId: "zx_iAhMkMns",
+    styleTags: ["안정적인 진행", "격식 있는 품격"],
   },
   {
     name: "이우영",
@@ -70,6 +76,7 @@ export const CONTESTANTS: Contestant[] = [
     audioFile: "/audio/mc-wooyoung.mp3",
     audioFileBlind: "/audio/mc-wooyoung-blind.mp3",
     videoId: "prhKZqfMjfM",
+    styleTags: ["안정적인 진행", "유쾌한 분위기", "깔끔한 발음"],
   },
   {
     name: "김선혁",
@@ -81,6 +88,7 @@ export const CONTESTANTS: Contestant[] = [
     audioFile: "/audio/mc-sunhyuk.mp3",
     audioFileBlind: "/audio/mc-sunhyuk-blind.mp3",
     videoId: "4Quvg9TIGAk",
+    styleTags: ["깔끔한 발음", "돌발상황 대처 능력"],
   },
   {
     name: "장윤태",
@@ -92,6 +100,7 @@ export const CONTESTANTS: Contestant[] = [
     audioFile: "/audio/mc-yuntae.mp3",
     audioFileBlind: "/audio/mc-yuntae-blind.mp3",
     videoId: "U5cJiiF-WcY",
+    styleTags: ["안정적인 진행", "젠틀한 진행"],
   },
   {
     name: "길상우",
@@ -103,6 +112,7 @@ export const CONTESTANTS: Contestant[] = [
     audioFile: "/audio/mc-gilsangwoo.mp3",
     audioFileBlind: "/audio/mc-gilsangwoo-blind.mp3",
     videoId: "0Ske676aw84",
+    styleTags: ["유쾌한 분위기", "센스있는 진행"],
   },
   {
     name: "최윤아",
@@ -114,6 +124,7 @@ export const CONTESTANTS: Contestant[] = [
     audioFile: "/audio/mc-yoona.mp3",
     audioFileBlind: "/audio/mc-yoona.mp3",
     videoId: "wuwAiKu9HbU",
+    styleTags: ["세련된 진행", "감동적인 멘트"],
   },
 ];
 

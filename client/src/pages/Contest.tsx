@@ -227,32 +227,10 @@ export default function Contest() {
     const fileName = `vov-${championData.name}.png`;
     const url = URL.createObjectURL(blob);
 
-    // 숨고/카카오톡/인스타그램 등 인앱 브라우저는 window.open("_blank")을
-    // "이미지 생성이 끝난 뒤"(비동기 이후) 호출하면 사용자 클릭 제스처가 이미
-    // 만료된 것으로 간주해 팝업 자체를 조용히 차단해버리는 경우가 많다.
-    // (그래서 "이미지가 새 창에 열렸어요"라고만 뜨고 실제로는 아무 일도 안 일어남)
-    // 팝업 차단 여지가 전혀 없는 "현재 탭에서 이미지 주소로 바로 이동" 방식을 쓰면
-    // 별도 창 권한이 필요 없어 이런 인앱 브라우저에서도 항상 동작한다.
-    // 데스크톱 브라우저만 a[download] 즉시 다운로드를 시도한다 (여기서는 실패 시 예외가 던져지므로 신뢰 가능).
-    const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
-    const isTouchDevice = typeof window !== "undefined" && (("ontouchstart" in window) || navigator.maxTouchPoints > 0);
-    const isMobileUA = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
-    const isInAppBrowser = /KAKAOTALK|Instagram|NAVER|Line\/|FBAN|FBAV|FB_IAB|wv\)|Whale/i.test(ua);
-    const isMobile = isMobileUA || isInAppBrowser || (ua.includes("Macintosh") && isTouchDevice);
-
-    const openInCurrentTab = () => {
-      setShareStatus("opened");
-      // 상태 메시지가 잠깐이라도 그려지도록 한 박자 뒤에 이동 (즉시 이동하면 메시지가 안 보일 수 있음)
-      window.setTimeout(() => {
-        window.location.href = url;
-      }, 80);
-    };
-
-    if (isMobile) {
-      openInCurrentTab();
-      return;
-    }
-
+    // 숨고/카카오톡/인스타그램 등 인앱 브라우저는 다운로드나 새 창 열기 자체를
+    // 막아버리는 경우가 있어 코드로는 100% 성공을 보장할 수 없다.
+    // 그래서 일단 표준 다운로드를 시도는 하되, 실패 여부와 상관없이 버튼 아래에
+    // "저장이 안 되면 화면을 캡처해주세요" 안내를 항상 같이 보여준다 (아래 JSX 참고).
     try {
       const a = document.createElement("a");
       a.href = url;
@@ -261,10 +239,10 @@ export default function Contest() {
       a.click();
       a.remove();
       setShareStatus("done");
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch {
-      // 프로그래밍 방식 다운로드가 막힌 환경 - 현재 탭에서 열어 수동 저장 유도
-      openInCurrentTab();
+      setShareStatus("done");
+    } finally {
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
     }
   }, [championData, monthHearts, monthLabel, copyTextFallback]);
 
@@ -702,25 +680,17 @@ export default function Contest() {
                 type="button"
                 onClick={handleSaveImage}
                 disabled={shareStatus === "loading"}
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-white/15 text-white/60 text-[12px] font-medium hover:border-[#5BB5A2]/50 hover:text-white/85 transition-colors mb-8 disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-white/15 text-white/60 text-[12px] font-medium hover:border-[#5BB5A2]/50 hover:text-white/85 transition-colors mb-2 disabled:opacity-50"
               >
                 <Download size={13} />
                 {shareStatus === "loading" ? "이미지 만드는 중..." : "이미지 저장하기"}
               </button>
-              {shareStatus === "done" && <p className="text-[11px] text-[#5BB5A2] -mt-6 mb-8">이미지가 저장됐어요!</p>}
-              {shareStatus === "opened" && (
-                <p className="text-[11px] text-[#5BB5A2] -mt-6 mb-8">
-                  이미지 화면으로 이동해요. 이미지를 길게 눌러 "사진에 저장"을 선택한 뒤, 뒤로가기로 돌아와주세요!
-                </p>
-              )}
               {shareStatus === "copied" && (
-                <p className="text-[11px] text-[#5BB5A2] -mt-6 mb-8">
-                  이미지 생성이 지원되지 않는 환경이라 결과 문구를 복사했어요. 메모장 등에 붙여넣어 확인해보세요!
+                <p className="text-[11px] text-[#5BB5A2] mb-1">
+                  이미지 생성이 지원되지 않는 환경이라 결과 문구를 복사했어요.
                 </p>
               )}
-              {shareStatus === "error" && (
-                <p className="text-[11px] text-white/40 -mt-6 mb-8">이미지 저장에 실패했어요. 잠시 후 다시 시도해주세요.</p>
-              )}
+              <p className="text-[11px] text-white/30 mb-8">저장이 잘 안 되면, 지금 이 화면을 캡처(스크린샷)해서 보관해주세요!</p>
 
               <button
                 type="button"

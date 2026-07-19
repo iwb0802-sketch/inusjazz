@@ -249,8 +249,6 @@ export default function Contest() {
                 가장 마음에 드는 목소리에 하트를 선물해 주세요.
                 <br />
                 지금 선택한 목소리가, 여러분과 가장 잘 어울리는 사회자예요.
-                <br />
-                지난달 VOTE ON VOICE 사회자는 예약 시 1만원 할인까지 받을 수 있어요.
               </motion.p>
 
               <motion.div

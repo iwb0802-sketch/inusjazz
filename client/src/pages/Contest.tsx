@@ -240,13 +240,17 @@ export default function Contest() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.36, duration: 0.5 }}
-                className="text-sm text-white/55 leading-relaxed max-w-sm mx-auto mb-9"
+                className="text-sm text-white/55 leading-relaxed max-w-sm mx-auto mb-9 break-keep"
               >
                 신랑신부님들이 직접 뽑는, 가장 매력적인 목소리.
                 <br />
-                이너스뮤직 사회자들의 1:1 매치를 직접 감상하고
+                이너스뮤직 사회자들의 1:1 목소리 매치를 직접 선택하고
                 <br />
                 가장 마음에 드는 목소리에 하트를 선물해 주세요.
+                <br />
+                지금 선택한 목소리가, 여러분과 가장 잘 어울리는 사회자예요.
+                <br />
+                지난달 VOTE ON VOICE 사회자는 예약 시 1만원 할인까지 받을 수 있어요.
               </motion.p>
 
               <motion.div
@@ -313,7 +317,7 @@ export default function Contest() {
                   블라인드 모드
                 </button>
               </motion.div>
-              <p className="text-[10px] text-white/35 mt-3 tracking-wide">
+              <p className="text-[10px] text-white/35 mt-3 tracking-wide break-keep">
                 블라인드 모드는 이름·사진 없이 목소리만 듣고 선택해요
               </p>
 
@@ -321,7 +325,7 @@ export default function Contest() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
-                className="text-[10px] text-white/30 mt-5 tracking-wide"
+                className="text-[10px] text-white/30 mt-5 tracking-wide break-keep"
               >
                 지난달 VOTE ON VOICE가 된 사회자는 이번달 한달 간 지정 예약시 1만원 할인혜택이 주어집니다.(이벤트 중복적용가능)
               </motion.p>
@@ -415,7 +419,7 @@ export default function Contest() {
               <h2 className="text-3xl font-semibold mb-2" style={{ fontFamily: "'Noto Serif KR', serif" }}>
                 {championData.name}
               </h2>
-              <p className="text-sm text-white/55 max-w-sm mx-auto mb-6">{championData.highlight}</p>
+              <p className="text-sm text-white/55 max-w-sm mx-auto mb-6 break-keep">{championData.highlight}</p>
               <p className="text-xs text-white/40 mb-8">
                 {championData.name} 사회자는 이번 달 현재까지 총{" "}
                 <span className="text-[#5BB5A2] font-medium">

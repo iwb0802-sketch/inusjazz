@@ -32,7 +32,7 @@ export default function VoteOnVoiceSection() {
         </div>
 
         <h2
-          className="text-white text-2xl sm:text-3xl md:text-4xl mb-5 leading-snug"
+          className="text-white text-2xl sm:text-3xl md:text-4xl mb-5 leading-snug break-keep"
           style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
         >
           이달의 목소리는,
@@ -40,14 +40,18 @@ export default function VoteOnVoiceSection() {
           <span style={{ color: GOLD }}>당신의 투표</span>로 결정됩니다
         </h2>
 
-        <p className="text-white/50 text-sm sm:text-base leading-relaxed mb-3 max-w-xl mx-auto">
+        <p className="text-white/50 text-sm sm:text-base leading-relaxed mb-3 max-w-xl mx-auto break-keep">
           INUS MUSIC 사회자들의 매력 대결, VOTE ON VOICE.
           <br />
-          마음에 드는 사회자에게 하트를 투표하고, 이달의 챔피언을 직접 만들어보세요.
+          마음에 드는 사회자에게 하트를 투표하고,
+          <br className="sm:hidden" />
+          {" "}이달의 챔피언을 직접 만들어보세요.
         </p>
 
-        <p className="text-sm sm:text-base leading-relaxed mb-10 max-w-xl mx-auto font-medium" style={{ color: MINT }}>
-          투표로 뽑힌 지난달의 챔피언, 예약하면 1만원 할인 혜택도 받을 수 있어요.
+        <p className="text-sm sm:text-base leading-relaxed mb-10 max-w-xl mx-auto font-medium break-keep" style={{ color: MINT }}>
+          투표로 뽑힌 지난달의 챔피언,
+          <br className="sm:hidden" />
+          {" "}예약하면 1만원 할인 혜택도 받을 수 있어요.
         </p>
 
         <a

@@ -74,8 +74,8 @@ export default function VideoGuideSection() {
             <br />
             나에게 맞는 사회자를 직접 선택하세요
             <br />
-            <span className="text-white/40 text-xs sm:text-sm">
-              (보석같은 실력있는 사회자들이 많습니다. 꼭 한번 살펴보세요.)
+            <span className="text-white/65 text-sm sm:text-base mt-1 inline-block">
+              (숨은 실력자들도 많으니 꼭 한번 살펴보세요.)
             </span>
           </p>
         </div>

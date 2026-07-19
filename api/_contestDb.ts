@@ -51,7 +51,36 @@ export async function ensureSchema(client: PoolClient) {
       contestant_name TEXT NOT NULL,
       hearts INT NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS daily_plays (
+      device_id TEXT NOT NULL,
+      play_date DATE NOT NULL,
+      play_count INT NOT NULL DEFAULT 0,
+      PRIMARY KEY (device_id, play_date)
+    );
   `);
+}
+
+/**
+ * 하루 중복 투표(어뷰징) 방지: 기기(device_id) 기준 하루 최초 플레이만
+ * 전체 공유 집계(하트)에 반영되도록, 토너먼트 시작 시 호출.
+ * 반환된 count가 limit 이하면 이번 판은 집계에 반영(withinLimit=true),
+ * 초과하면 재플레이는 "연습 모드"로 처리(집계에 반영 안 함).
+ */
+export async function registerPlayAndCheckLimit(
+  client: PoolClient,
+  deviceId: string,
+  limit = 1
+): Promise<{ count: number; withinLimit: boolean }> {
+  const res = await client.query(
+    `INSERT INTO daily_plays (device_id, play_date, play_count)
+     VALUES ($1, CURRENT_DATE, 1)
+     ON CONFLICT (device_id, play_date)
+     DO UPDATE SET play_count = daily_plays.play_count + 1
+     RETURNING play_count`,
+    [deviceId]
+  );
+  const count = res.rows[0]?.play_count ?? 1;
+  return { count, withinLimit: count <= limit };
 }
 
 /**

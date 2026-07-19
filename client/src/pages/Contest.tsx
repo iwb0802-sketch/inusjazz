@@ -4,7 +4,7 @@
  * 주의: 아직 메인 내비게이션에 연결되지 않은 임시 프로토타입입니다.
  * 하트 데이터는 브라우저 localStorage에만 저장됩니다 (서버 공유 없음).
  */
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX } from "lucide-react";
 import {
@@ -15,6 +15,7 @@ import {
   getMonthHearts,
   fetchHeartsFromServer,
   currentMonthLabel,
+  registerTournamentStart,
 } from "@/components/contest/contestData";
 import { buildRound, roundLabel, type RoundSetup } from "@/components/contest/bracketEngine";
 import MatchCard from "@/components/contest/MatchCard";
@@ -46,6 +47,9 @@ export default function Contest() {
   const [isBlind, setIsBlind] = useState(false);
   const [showVoteInfo, setShowVoteInfo] = useState(false);
   const [showBenefits, setShowBenefits] = useState(false);
+  // 하루 중복 플레이 방지: 이 기기의 오늘 첫 플레이만 전체 공유 집계에 반영됨
+  const countsTowardTotalRef = useRef(true);
+  const [isPracticeRound, setIsPracticeRound] = useState(false);
 
   const toggleMute = useCallback(() => {
     setMuted((prev) => {
@@ -79,7 +83,7 @@ export default function Contest() {
 
   const giveHeart = useCallback(
     (name: string, amount = 1) => {
-      addHeart(name, amount);
+      addHeart(name, amount, countsTowardTotalRef.current);
       refreshHearts();
       setSessionHearts((v) => v + amount);
     },
@@ -112,13 +116,17 @@ export default function Contest() {
   );
 
   const beginTournament = useCallback(
-    (blind: boolean = false) => {
+    async (blind: boolean = false) => {
       const names = CONTESTANTS.map((c) => c.name);
       setIsBlind(blind);
       setChampion(null);
       setSessionHearts(0);
       setHeartedThisGame(new Set());
       setRoundIndex(1);
+      // 이 기기의 오늘 첫 플레이인지 확인 - 맞으면 정상 집계, 아니면 연습 모드
+      const withinLimit = await registerTournamentStart();
+      countsTowardTotalRef.current = withinLimit;
+      setIsPracticeRound(!withinLimit);
       startRound(names, 1);
     },
     [startRound],
@@ -399,6 +407,7 @@ export default function Contest() {
                       <li>· 하트 수는 실시간 순위와 월간 집계에 반영돼요.</li>
                       <li>· 월간 누적 하트 1위 사회자가 '이달의 VOV'로 선정돼요.</li>
                       <li>· 대결 카드의 하트 버튼으로도 사회자 한 명당 1회 추가 투표할 수 있어요.</li>
+                      <li>· 하루 한 번의 플레이만 전체 공유 집계에 반영돼요. 이후 재플레이는 연습으로 즐기실 수 있어요.</li>
                     </ul>
                   </div>
                 )}
@@ -464,6 +473,11 @@ export default function Contest() {
                   대결 {matchIdx + 1} / {totalMatchesThisRound}
                 </span>
               </div>
+              {isPracticeRound && (
+                <p className="text-center text-[11px] text-white/40 mb-3 -mt-1 break-keep">
+                  오늘 투표는 이미 반영됐어요 · 지금부터는 연습 플레이예요 (전체 집계 미반영)
+                </p>
+              )}
               <div className="grid grid-cols-2 gap-3 sm:gap-5 relative">
                 <MatchCard
                   contestant={contestantA}

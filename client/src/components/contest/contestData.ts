@@ -126,6 +126,44 @@ import { monthStamp as sharedMonthStamp, monthLabel as sharedMonthLabel } from "
 const ALL_TIME_KEY = "inus_contest_hearts_alltime_v1";
 const MONTH_KEY = "inus_contest_hearts_month_v1";
 const MONTH_STAMP_KEY = "inus_contest_month_stamp_v1";
+const DEVICE_ID_KEY = "inus_contest_device_id_v1";
+
+/** 기기별 고유 ID (하루 중복 플레이 판별용). 브라우저 저장소 초기화 시 재발급됨. */
+export function getDeviceId(): string {
+  try {
+    let id = localStorage.getItem(DEVICE_ID_KEY);
+    if (!id) {
+      id =
+        typeof crypto !== "undefined" && "randomUUID" in crypto
+          ? crypto.randomUUID()
+          : `dev-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      localStorage.setItem(DEVICE_ID_KEY, id);
+    }
+    return id;
+  } catch {
+    return `dev-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  }
+}
+
+/**
+ * 토너먼트 시작 시 호출: 이 기기의 오늘 첫 플레이인지 서버에 확인/기록.
+ * true(withinLimit)면 이번 판 하트는 전체 공유 집계에 반영, false면 "연습 모드"(집계 미반영).
+ * 서버 미연결/오류 시에도 항상 true를 반환해 정상 플레이를 막지 않는다.
+ */
+export async function registerTournamentStart(): Promise<boolean> {
+  try {
+    const res = await fetch("/api/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ deviceId: getDeviceId() }),
+    });
+    if (!res.ok) return true;
+    const data = await res.json();
+    return data.withinLimit !== false;
+  } catch {
+    return true;
+  }
+}
 
 type HeartMap = Record<string, number>;
 
@@ -170,8 +208,18 @@ export function getMonthHearts(): HeartMap {
   return readMap(MONTH_KEY);
 }
 
-/** 하트 +n 적립: 로컬은 즉시 반영(optimistic), 서버에도 비동기로 동시 전송 (전체 방문자 공유 집계) */
-export function addHeart(name: string, amount = 1): { allTime: HeartMap; month: HeartMap } {
+/**
+ * 하트 +n 적립: 로컬은 항상 즉시 반영(optimistic, 게임 재미 유지).
+ * syncToServer가 true일 때만 전체 방문자 공유 집계(서버)에도 반영됨.
+ * 하루 중복 플레이 방지를 위해, 그날 두 번째 이후 재플레이는 syncToServer=false로 호출되어
+ * "연습 모드"로 처리 (로컬 화면엔 그대로 보이지만 서버 공유 순위엔 반영 안 됨,
+ * 다음 서버 동기화 시 실제 공유 값으로 자동 보정됨).
+ */
+export function addHeart(
+  name: string,
+  amount = 1,
+  syncToServer = true
+): { allTime: HeartMap; month: HeartMap } {
   ensureMonthFresh();
   const allTime = readMap(ALL_TIME_KEY);
   const month = readMap(MONTH_KEY);
@@ -180,14 +228,16 @@ export function addHeart(name: string, amount = 1): { allTime: HeartMap; month: 
   writeMap(ALL_TIME_KEY, allTime);
   writeMap(MONTH_KEY, month);
 
-  // 서버 반영은 실패해도 로컬 UX에 영향 없도록 fire-and-forget
-  fetch("/api/hearts", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, amount }),
-  }).catch(() => {
-    // 서버 미연결(DB 세팅 전) 또는 네트워크 오류 - 로컬 값으로 계속 동작
-  });
+  if (syncToServer) {
+    // 서버 반영은 실패해도 로컬 UX에 영향 없도록 fire-and-forget
+    fetch("/api/hearts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, amount }),
+    }).catch(() => {
+      // 서버 미연결(DB 세팅 전) 또는 네트워크 오류 - 로컬 값으로 계속 동작
+    });
+  }
 
   return { allTime, month };
 }

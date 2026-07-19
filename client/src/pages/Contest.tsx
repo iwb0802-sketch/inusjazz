@@ -50,7 +50,7 @@ export default function Contest() {
   const [showVoteInfo, setShowVoteInfo] = useState(false);
   const [showBenefits, setShowBenefits] = useState(false);
   const [showChampionProfile, setShowChampionProfile] = useState(false);
-  const [shareStatus, setShareStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+  const [shareStatus, setShareStatus] = useState<"idle" | "loading" | "done" | "copied" | "error">("idle");
   // 하루 중복 플레이 방지: 이 기기의 오늘 첫 플레이만 전체 공유 집계에 반영됨
   const countsTowardTotalRef = useRef(true);
   const [isPracticeRound, setIsPracticeRound] = useState(false);
@@ -179,31 +179,78 @@ export default function Contest() {
 
   const championData = champion ? getContestant(champion) : undefined;
 
+  // 카카오톡/인스타그램 인앱 브라우저는 파일 공유(navigator.share files)나
+  // 다운로드(a[download])를 막아두는 경우가 많아, 이미지 공유가 실패하면
+  // 최소한 텍스트만이라도 공유/복사되도록 폴백한다.
+  const shareTextFallback = useCallback(
+    async (shareText: string): Promise<boolean> => {
+      try {
+        if (typeof navigator !== "undefined" && "share" in navigator) {
+          await navigator.share({ title: "VOTE ON VOICE", text: shareText });
+          return true;
+        }
+      } catch (err) {
+        // 사용자가 공유 시트를 취소한 경우는 실패로 취급하지 않음
+        if (err instanceof Error && err.name === "AbortError") return true;
+      }
+      try {
+        if (typeof navigator !== "undefined" && navigator.clipboard) {
+          await navigator.clipboard.writeText(shareText);
+          return true;
+        }
+      } catch {
+        // 클립보드 접근도 실패 - 아래에서 error 처리
+      }
+      return false;
+    },
+    [],
+  );
+
   const handleShareCard = useCallback(async () => {
     if (!championData) return;
     setShareStatus("loading");
+    const heartsCount = monthHearts[championData.name] || 0;
+    const shareText = `[VOTE ON VOICE] 이번 회차 챔피언은 ${championData.name} 사회자! ${monthLabel} 누적 하트 ${heartsCount}개 🎤\n나도 내 결혼식에 어울리는 사회자 목소리 찾아보기 → https://www.inusmc.co.kr/contest`;
+
     try {
       const blob = await buildShareCard({
         championName: championData.name,
         championImage: championData.image,
         highlight: championData.highlight,
-        monthHearts: monthHearts[championData.name] || 0,
+        monthHearts: heartsCount,
         monthLabel,
       });
+
+      // 이미지 카드 생성 자체가 실패하면 바로 텍스트 공유로 폴백
       if (!blob) {
-        setShareStatus("error");
+        const ok = await shareTextFallback(shareText);
+        setShareStatus(ok ? "copied" : "error");
         return;
       }
+
       const file = new File([blob], `vov-${championData.name}.png`, { type: "image/png" });
       const canNativeShare =
         typeof navigator !== "undefined" && "share" in navigator && "canShare" in navigator && navigator.canShare({ files: [file] });
+
       if (canNativeShare) {
-        await navigator.share({
-          files: [file],
-          title: "VOTE ON VOICE",
-          text: `이번 회차 챔피언 ${championData.name} 사회자!`,
-        });
-      } else {
+        try {
+          await navigator.share({ files: [file], title: "VOTE ON VOICE", text: shareText });
+          setShareStatus("done");
+        } catch (err) {
+          // 공유 시트를 취소한 경우는 조용히 idle로 복귀 (에러 아님)
+          if (err instanceof Error && err.name === "AbortError") {
+            setShareStatus("idle");
+            return;
+          }
+          // 파일 공유가 막힌 환경(카카오톡/인스타 인앱 등) - 텍스트로 폴백
+          const ok = await shareTextFallback(shareText);
+          setShareStatus(ok ? "copied" : "error");
+        }
+        return;
+      }
+
+      // 네이티브 파일 공유 미지원 - 다운로드를 시도하고, 그마저 안 되면 텍스트로 폴백
+      try {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -212,12 +259,16 @@ export default function Contest() {
         a.click();
         a.remove();
         URL.revokeObjectURL(url);
+        setShareStatus("done");
+      } catch {
+        const ok = await shareTextFallback(shareText);
+        setShareStatus(ok ? "copied" : "error");
       }
-      setShareStatus("done");
     } catch {
-      setShareStatus("error");
+      const ok = await shareTextFallback(shareText);
+      setShareStatus(ok ? "copied" : "error");
     }
-  }, [championData, monthHearts, monthLabel]);
+  }, [championData, monthHearts, monthLabel, shareTextFallback]);
 
   // 콘테스트 페이지 전용 SEO/OG 메타 태그 (SPA이므로 클라이언트에서 갱신)
   useEffect(() => {
@@ -658,6 +709,11 @@ export default function Contest() {
                 <Share2 size={13} />
                 {shareStatus === "loading" ? "카드 만드는 중..." : "결과 카드 공유하기"}
               </button>
+              {shareStatus === "copied" && (
+                <p className="text-[11px] text-[#5BB5A2] -mt-6 mb-8">
+                  이미지 공유가 지원되지 않는 환경이라 공유 문구를 복사했어요. 카카오톡/인스타에 붙여넣어 공유해보세요!
+                </p>
+              )}
               {shareStatus === "error" && (
                 <p className="text-[11px] text-white/40 -mt-6 mb-8">카드 생성에 실패했어요. 잠시 후 다시 시도해주세요.</p>
               )}

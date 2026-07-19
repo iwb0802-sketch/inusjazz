@@ -6,7 +6,7 @@
  */
 import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX, UserRound, Share2, Mic2, ListChecks, Music4, ShieldCheck } from "lucide-react";
+import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX, UserRound, Download, Mic2, ListChecks, Music4, ShieldCheck } from "lucide-react";
 import {
   CONTESTANTS,
   getContestant,
@@ -50,7 +50,7 @@ export default function Contest() {
   const [showVoteInfo, setShowVoteInfo] = useState(false);
   const [showBenefits, setShowBenefits] = useState(false);
   const [showChampionProfile, setShowChampionProfile] = useState(false);
-  const [shareStatus, setShareStatus] = useState<"idle" | "loading" | "done" | "copied" | "error">("idle");
+  const [shareStatus, setShareStatus] = useState<"idle" | "loading" | "done" | "opened" | "copied" | "error">("idle");
   // 하루 중복 플레이 방지: 이 기기의 오늘 첫 플레이만 전체 공유 집계에 반영됨
   const countsTowardTotalRef = useRef(true);
   const [isPracticeRound, setIsPracticeRound] = useState(false);
@@ -183,96 +183,82 @@ export default function Contest() {
 
   const championData = champion ? getContestant(champion) : undefined;
 
-  // 카카오톡/인스타그램 인앱 브라우저는 파일 공유(navigator.share files)나
-  // 다운로드(a[download])를 막아두는 경우가 많아, 이미지 공유가 실패하면
-  // 최소한 텍스트만이라도 공유/복사되도록 폴백한다.
-  const shareTextFallback = useCallback(
-    async (shareText: string): Promise<boolean> => {
-      try {
-        if (typeof navigator !== "undefined" && "share" in navigator) {
-          await navigator.share({ title: "VOTE ON VOICE", text: shareText });
-          return true;
-        }
-      } catch (err) {
-        // 사용자가 공유 시트를 취소한 경우는 실패로 취급하지 않음
-        if (err instanceof Error && err.name === "AbortError") return true;
+  // 카카오톡/인스타그램 인앱 브라우저는 파일 공유(navigator.share files)를
+  // 막아두거나 이상 동작하는 경우가 많아 "공유하기" 대신 순수 "이미지 저장(다운로드)"으로
+  // 단순화한다. 텍스트 클립보드 복사는 이미지 생성 자체가 실패했을 때만 최후 수단으로 사용.
+  const copyTextFallback = useCallback(async (shareText: string): Promise<boolean> => {
+    try {
+      if (typeof navigator !== "undefined" && navigator.clipboard) {
+        await navigator.clipboard.writeText(shareText);
+        return true;
       }
-      try {
-        if (typeof navigator !== "undefined" && navigator.clipboard) {
-          await navigator.clipboard.writeText(shareText);
-          return true;
-        }
-      } catch {
-        // 클립보드 접근도 실패 - 아래에서 error 처리
-      }
-      return false;
-    },
-    [],
-  );
+    } catch {
+      // 클립보드 접근 실패 - 아래에서 error 처리
+    }
+    return false;
+  }, []);
 
-  const handleShareCard = useCallback(async () => {
+  const handleSaveImage = useCallback(async () => {
     if (!championData) return;
     setShareStatus("loading");
     const heartsCount = monthHearts[championData.name] || 0;
     const shareText = `[VOTE ON VOICE] 이번 회차 챔피언은 ${championData.name} 사회자! ${monthLabel} 누적 하트 ${heartsCount}개 🎤\n나도 내 결혼식에 어울리는 사회자 목소리 찾아보기 → https://www.inusmc.co.kr/contest`;
 
+    let blob: Blob | null = null;
     try {
-      const blob = await buildShareCard({
+      blob = await buildShareCard({
         championName: championData.name,
         championImage: championData.image,
         highlight: championData.highlight,
         monthHearts: heartsCount,
         monthLabel,
       });
-
-      // 이미지 카드 생성 자체가 실패하면 바로 텍스트 공유로 폴백
-      if (!blob) {
-        const ok = await shareTextFallback(shareText);
-        setShareStatus(ok ? "copied" : "error");
-        return;
-      }
-
-      const file = new File([blob], `vov-${championData.name}.png`, { type: "image/png" });
-      const canNativeShare =
-        typeof navigator !== "undefined" && "share" in navigator && "canShare" in navigator && navigator.canShare({ files: [file] });
-
-      if (canNativeShare) {
-        try {
-          await navigator.share({ files: [file], title: "VOTE ON VOICE", text: shareText });
-          setShareStatus("done");
-        } catch (err) {
-          // 공유 시트를 취소한 경우는 조용히 idle로 복귀 (에러 아님)
-          if (err instanceof Error && err.name === "AbortError") {
-            setShareStatus("idle");
-            return;
-          }
-          // 파일 공유가 막힌 환경(카카오톡/인스타 인앱 등) - 텍스트로 폴백
-          const ok = await shareTextFallback(shareText);
-          setShareStatus(ok ? "copied" : "error");
-        }
-        return;
-      }
-
-      // 네이티브 파일 공유 미지원 - 다운로드를 시도하고, 그마저 안 되면 텍스트로 폴백
-      try {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `vov-${championData.name}.png`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-        setShareStatus("done");
-      } catch {
-        const ok = await shareTextFallback(shareText);
-        setShareStatus(ok ? "copied" : "error");
-      }
     } catch {
-      const ok = await shareTextFallback(shareText);
-      setShareStatus(ok ? "copied" : "error");
+      blob = null;
     }
-  }, [championData, monthHearts, monthLabel, shareTextFallback]);
+
+    // 이미지 카드 생성 자체가 실패하면(캔버스 미지원 등) 텍스트라도 복사되도록 폴백
+    if (!blob) {
+      const ok = await copyTextFallback(shareText);
+      setShareStatus(ok ? "copied" : "error");
+      return;
+    }
+
+    const fileName = `vov-${championData.name}.png`;
+    const url = URL.createObjectURL(blob);
+
+    // iOS Safari/인앱 브라우저는 a[download] 강제 다운로드를 지원하지 않고 그냥
+    // 새 탭으로 이동시켜버리는 경우가 많아, iOS에서는 처음부터 새 창(이미지 뷰어)으로
+    // 열어 길게 눌러 저장하도록 안내한다. 그 외 환경(안드로이드/데스크톱)은 즉시 다운로드를 시도한다.
+    const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes("Macintosh") && typeof document !== "undefined" && "ontouchend" in document);
+
+    const openInNewTab = () => {
+      const opened = window.open(url, "_blank");
+      setShareStatus(opened ? "opened" : "error");
+      // 새 탭이 이미지를 불러올 시간을 준 뒤 늦게 해제 (너무 빨리 해제하면 빈 화면이 뜰 수 있음)
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    };
+
+    if (isIOS) {
+      openInNewTab();
+      return;
+    }
+
+    try {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setShareStatus("done");
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch {
+      // 프로그래밍 방식 다운로드가 막힌 환경 - 새 탭에서 열어 수동 저장 유도
+      openInNewTab();
+    }
+  }, [championData, monthHearts, monthLabel, copyTextFallback]);
 
   // 콘테스트 페이지 전용 SEO/OG 메타 태그 (SPA이므로 클라이언트에서 갱신)
   useEffect(() => {
@@ -703,23 +689,29 @@ export default function Contest() {
                 의 하트를 받았습니다.
               </p>
 
-              {/* VOV 결과 공유 카드 - 세로형 이미지로 생성, 지원 시 카카오톡 등 공유 시트로 바로 전달 */}
+              {/* VOV 결과 카드 - 세로형 이미지로 생성해 기기에 바로 저장 */}
               <button
                 type="button"
-                onClick={handleShareCard}
+                onClick={handleSaveImage}
                 disabled={shareStatus === "loading"}
                 className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-white/15 text-white/60 text-[12px] font-medium hover:border-[#5BB5A2]/50 hover:text-white/85 transition-colors mb-8 disabled:opacity-50"
               >
-                <Share2 size={13} />
-                {shareStatus === "loading" ? "카드 만드는 중..." : "결과 카드 공유하기"}
+                <Download size={13} />
+                {shareStatus === "loading" ? "이미지 만드는 중..." : "이미지 저장하기"}
               </button>
+              {shareStatus === "done" && <p className="text-[11px] text-[#5BB5A2] -mt-6 mb-8">이미지가 저장됐어요!</p>}
+              {shareStatus === "opened" && (
+                <p className="text-[11px] text-[#5BB5A2] -mt-6 mb-8">
+                  새 창에서 이미지가 열렸어요. 이미지를 길게 눌러 "사진에 저장"을 선택해주세요!
+                </p>
+              )}
               {shareStatus === "copied" && (
                 <p className="text-[11px] text-[#5BB5A2] -mt-6 mb-8">
-                  이미지 공유가 지원되지 않는 환경이라 공유 문구를 복사했어요. 카카오톡/인스타에 붙여넣어 공유해보세요!
+                  이미지 생성이 지원되지 않는 환경이라 결과 문구를 복사했어요. 메모장 등에 붙여넣어 확인해보세요!
                 </p>
               )}
               {shareStatus === "error" && (
-                <p className="text-[11px] text-white/40 -mt-6 mb-8">카드 생성에 실패했어요. 잠시 후 다시 시도해주세요.</p>
+                <p className="text-[11px] text-white/40 -mt-6 mb-8">이미지 저장에 실패했어요. 잠시 후 다시 시도해주세요.</p>
               )}
 
               <button

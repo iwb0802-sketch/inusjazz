@@ -27,7 +27,7 @@ export default function VoteOnVoiceSection() {
         >
           <Crown size={14} style={{ color: GOLD }} />
           <span className="text-xs font-semibold tracking-[0.15em] uppercase" style={{ color: GOLD }}>
-            {monthLabel} VOTE ON VOICE
+            {monthLabel} <span style={{ color: MINT }}>V</span>OTE <span style={{ color: MINT }}>O</span>N <span style={{ color: MINT }}>V</span>OICE
           </span>
         </div>
 
@@ -63,7 +63,7 @@ export default function VoteOnVoiceSection() {
             animation: "voteGlowPulse 2.2s ease-in-out infinite",
           }}
         >
-          VOTE ON VOICE 투표하러 가기
+          <span style={{ color: MINT }}>V</span>OTE <span style={{ color: MINT }}>O</span>N <span style={{ color: MINT }}>V</span>OICE 투표하러 가기
           <ChevronRight size={18} />
         </a>
 

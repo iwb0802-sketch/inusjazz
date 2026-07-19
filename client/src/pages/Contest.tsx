@@ -21,6 +21,8 @@ import MatchCard from "@/components/contest/MatchCard";
 import VoiceKingBanner from "@/components/contest/VoiceKingBanner";
 import { setSoundMuted, isSoundMuted, playSfx } from "@/components/contest/soundEffects";
 
+const MINT = "#5BB5A2";
+
 type Phase = "intro" | "match" | "champion";
 
 export default function Contest() {
@@ -225,9 +227,9 @@ export default function Contest() {
                 className="text-5xl sm:text-6xl mb-1 leading-tight tracking-wide"
                 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
               >
-                VOTE ON
+                <span style={{ color: MINT }}>V</span>OTE <span style={{ color: MINT }}>O</span>N
                 <br />
-                VOICE
+                <span style={{ color: MINT }}>V</span>OICE
               </motion.h1>
               <p
                 className="text-[11px] tracking-[0.4em] text-white/40 uppercase mb-5"
@@ -349,7 +351,7 @@ export default function Contest() {
             className="text-3xl sm:text-5xl mb-3 leading-tight tracking-wide"
             style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
           >
-            VOTE ON VOICE
+            <span style={{ color: MINT }}>V</span>OTE <span style={{ color: MINT }}>O</span>N <span style={{ color: MINT }}>V</span>OICE
           </h1>
           <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto break-keep">
             신랑신부님들이 직접 추천하는

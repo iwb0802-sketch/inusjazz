@@ -553,16 +553,18 @@ export default function McSection() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div ref={anim1.ref} className={`text-center mb-12 sm:mb-16 fade-up ${anim1.isVisible ? "visible" : ""}`}>
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 max-w-full"
-              style={{ background: "rgba(212,184,150,0.08)", border: "1px solid rgba(212,184,150,0.3)" }}
-            >
-              <Crown size={14} className="shrink-0" style={{ color: "#d4b896" }} />
-              <span className="text-white/70 text-xs sm:text-sm leading-snug break-keep">
-                사회자의 영상·음성을 확인하기 전,
-                <br className="sm:hidden" />
-                {" "}VOTE ON VOICE에 먼저 참여해보세요.
-              </span>
+            <div className="mb-6">
+              <div
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full max-w-full"
+                style={{ background: "rgba(212,184,150,0.08)", border: "1px solid rgba(212,184,150,0.3)" }}
+              >
+                <Crown size={14} className="shrink-0" style={{ color: "#d4b896" }} />
+                <span className="text-white/70 text-xs sm:text-sm leading-snug break-keep">
+                  사회자의 영상·음성을 확인하기 전,
+                  <br className="sm:hidden" />
+                  {" "}VOTE ON VOICE에 먼저 참여해보세요.
+                </span>
+              </div>
             </div>
 
             <span

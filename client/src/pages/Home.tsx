@@ -42,8 +42,8 @@ export default function Home() {
       <PackageSection />
       <ProcessSection />
       <ReviewSection />
-      <McSection />
       <VoteOnVoiceSection />
+      <McSection />
       <VideoGuideSection />
       <BookingSection />
       <PricingSection />

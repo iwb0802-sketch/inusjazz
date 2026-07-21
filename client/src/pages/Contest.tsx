@@ -53,6 +53,7 @@ export default function Contest() {
   const [showVoteInfo, setShowVoteInfo] = useState(false);
   const [showBenefits, setShowBenefits] = useState(false);
   const [showChampionProfile, setShowChampionProfile] = useState(false);
+  const [runnerUpProfileUrl, setRunnerUpProfileUrl] = useState<string | null>(null);
   const [shareStatus, setShareStatus] = useState<"idle" | "loading" | "done" | "opened" | "copied" | "error">("idle");
   // 하루 중복 플레이 방지: 이 기기의 오늘 첫 플레이만 전체 공유 집계에 반영됨
   const countsTowardTotalRef = useRef(true);
@@ -715,12 +716,25 @@ export default function Contest() {
                       return (
                         <div key={entry.name} className="flex flex-col items-center gap-1 w-14">
                           <div className="relative">
-                            <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white/15">
+                            <button
+                              type="button"
+                              onClick={() => setRunnerUpProfileUrl(data.profileUrl)}
+                              className="block w-12 h-12 rounded-full overflow-hidden ring-2 ring-white/15"
+                              aria-label={`${data.name} 프로필 보기`}
+                            >
                               <img src={data.image} alt={data.name} className="w-full h-full object-cover object-top" />
-                            </div>
+                            </button>
                             <span className="absolute -bottom-1 -right-1 text-[9px] font-bold text-black bg-white/85 rounded-full w-5 h-5 flex items-center justify-center">
                               {entry.rank}
                             </span>
+                            <button
+                              type="button"
+                              onClick={() => setRunnerUpProfileUrl(data.profileUrl)}
+                              className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#5BB5A2] text-black flex items-center justify-center shadow-sm ring-1 ring-black/20"
+                              aria-label={`${data.name} 프로필 자세히 보기`}
+                            >
+                              <UserRound size={11} />
+                            </button>
                           </div>
                           <span className="text-[10.5px] text-white/60 truncate w-full text-center">{data.name}</span>
                         </div>
@@ -892,6 +906,10 @@ export default function Contest() {
 
       {showChampionProfile && championData && (
         <ProfileModal url={championData.profileUrl} onClose={() => setShowChampionProfile(false)} />
+      )}
+
+      {runnerUpProfileUrl && (
+        <ProfileModal url={runnerUpProfileUrl} onClose={() => setRunnerUpProfileUrl(null)} />
       )}
     </div>
   );

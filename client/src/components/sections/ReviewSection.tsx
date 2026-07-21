@@ -117,14 +117,24 @@ export default function ReviewSection() {
           </h2>
           <div className="flex items-center justify-center gap-2 mt-3">
             <span
-              className="inline-flex items-center px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold tracking-wide"
-              style={{ background: "rgba(212,184,150,0.12)", border: "1px solid rgba(212,184,150,0.4)", color: GOLD }}
+              className="inline-flex items-center px-4 py-1.5 rounded-full text-sm sm:text-base font-bold tracking-wide"
+              style={{
+                background: "rgba(212,184,150,0.16)",
+                border: "1px solid rgba(212,184,150,0.55)",
+                color: GOLD,
+                boxShadow: "0 0 16px rgba(212,184,150,0.25)",
+              }}
             >
-              1000+ 후기
+              1500+ 후기
             </span>
           </div>
           <p className="mt-4 text-white/50 text-sm sm:text-base max-w-sm mx-auto leading-relaxed break-keep">
             실제 예식을 진행하신 신랑, 신부님의<br className="hidden sm:block" /> 카카오톡, 문자 후기입니다
+          </p>
+          <p className="mt-2 text-white/35 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed break-keep">
+            숨고·블로그 등 모든 플랫폼 후기를 합산하면
+            <br className="sm:hidden" />
+            {" "}1,500건 이상 (사회자 개별 후기 포함)
           </p>
 
           {/* Decorative divider */}

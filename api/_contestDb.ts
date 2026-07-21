@@ -57,7 +57,100 @@ export async function ensureSchema(client: PoolClient) {
       play_count INT NOT NULL DEFAULT 0,
       PRIMARY KEY (device_id, play_date)
     );
+    CREATE TABLE IF NOT EXISTS rank_snapshots (
+      snapshot_date DATE NOT NULL,
+      contestant_name TEXT NOT NULL,
+      hearts INT NOT NULL DEFAULT 0,
+      PRIMARY KEY (snapshot_date, contestant_name)
+    );
+    CREATE TABLE IF NOT EXISTS contest_events (
+      id SERIAL PRIMARY KEY,
+      event_type TEXT NOT NULL,
+      contestant_name TEXT,
+      device_id TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
   `);
+}
+
+/**
+ * KST(Asia/Seoul) 기준 오늘 날짜의 하트 스냅샷을 하루에 한 번만 저장한다.
+ * 그날의 첫 API 호출(GET/POST 어느 쪽이든) 시점에, 그 요청이 하트를 변경하기 "전" 상태를
+ * 그대로 스냅샷으로 남겨 "자정 시점 값"에 가깝게 만든다.
+ * 이후 현재 hearts_current 값과 이 스냅샷을 비교하면 당일(=전일 대비) 순위 변동을 계산할 수 있다.
+ */
+export async function ensureDailySnapshot(client: PoolClient) {
+  const existsRes = await client.query(
+    `SELECT 1 FROM rank_snapshots WHERE snapshot_date = (now() AT TIME ZONE 'Asia/Seoul')::date LIMIT 1`
+  );
+  if (existsRes.rows.length > 0) return;
+
+  const currentRows = (
+    await client.query(`SELECT contestant_name, hearts FROM hearts_current`)
+  ).rows as { contestant_name: string; hearts: number }[];
+
+  for (const row of currentRows) {
+    await client.query(
+      `INSERT INTO rank_snapshots (snapshot_date, contestant_name, hearts)
+       VALUES ((now() AT TIME ZONE 'Asia/Seoul')::date, $1, $2)
+       ON CONFLICT (snapshot_date, contestant_name) DO NOTHING`,
+      [row.contestant_name, row.hearts]
+    );
+  }
+}
+
+/** 오늘(KST) 스냅샷 값을 반환 (없으면 빈 객체) - 현재값과 비교해 순위변동 계산용 */
+export async function getTodaySnapshot(client: PoolClient): Promise<Record<string, number>> {
+  const rows = (
+    await client.query(
+      `SELECT contestant_name, hearts FROM rank_snapshots WHERE snapshot_date = (now() AT TIME ZONE 'Asia/Seoul')::date`
+    )
+  ).rows as { contestant_name: string; hearts: number }[];
+  const map: Record<string, number> = {};
+  for (const r of rows) map[r.contestant_name] = r.hearts;
+  return map;
+}
+
+/**
+ * 두 하트 맵으로 각각 순위를 매겨, 사회자별 순위 변동(양수=상승, 음수=하락, 0=동일)을 계산한다.
+ * 새로 진입해 이전 스냅샷에 없던 사회자는 변동 없음(null)으로 처리.
+ */
+export function computeRankChange(
+  before: Record<string, number>,
+  after: Record<string, number>
+): Record<string, number | null> {
+  const rankOf = (map: Record<string, number>) => {
+    const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+    const ranks: Record<string, number> = {};
+    sorted.forEach(([name], idx) => {
+      ranks[name] = idx + 1;
+    });
+    return ranks;
+  };
+  const beforeRanks = rankOf(before);
+  const afterRanks = rankOf(after);
+  const result: Record<string, number | null> = {};
+  for (const name of Object.keys(after)) {
+    if (!(name in beforeRanks)) {
+      result[name] = null;
+      continue;
+    }
+    result[name] = beforeRanks[name] - afterRanks[name];
+  }
+  return result;
+}
+
+/** 클릭/게임 이벤트 1건 기록 (실패해도 무시 - 통계용이라 메인 흐름을 막지 않음) */
+export async function insertEvent(
+  client: PoolClient,
+  eventType: string,
+  contestantName: string | null,
+  deviceId: string | null
+) {
+  await client.query(
+    `INSERT INTO contest_events (event_type, contestant_name, device_id) VALUES ($1, $2, $3)`,
+    [eventType, contestantName, deviceId]
+  );
 }
 
 /**

@@ -261,6 +261,8 @@ export async function fetchHeartsFromServer(): Promise<{
   month: HeartMap;
   allTime: HeartMap;
   currentMonthLabel: string;
+  updatedAt?: string;
+  rankChange?: Record<string, number | null>;
   lastMonthChampion: { name: string; hearts: number; monthLabel: string } | null;
 } | null> {
   try {
@@ -274,6 +276,22 @@ export async function fetchHeartsFromServer(): Promise<{
     return data;
   } catch {
     return null;
+  }
+}
+
+/**
+ * VOV 주요 액션 계측 (항목 12): 게임시작/완주/전체순위보기/프로필보기/상담클릭 등.
+ * 실패해도 절대 메인 흐름을 막지 않는 fire-and-forget 호출.
+ */
+export function trackEvent(eventType: string, contestantName?: string) {
+  try {
+    fetch("/api/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ eventType, contestantName, deviceId: getDeviceId() }),
+    }).catch(() => {});
+  } catch {
+    // ignore
   }
 }
 

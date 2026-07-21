@@ -6,7 +6,7 @@
  */
 import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX, UserRound, Download, Mic2, ListChecks, Music4, ShieldCheck, Camera } from "lucide-react";
+import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX, UserRound, Download, Mic2, ListChecks, Music4, ShieldCheck, Camera, Share2, TrendingUp, Medal } from "lucide-react";
 import {
   CONTESTANTS,
   getContestant,
@@ -16,6 +16,7 @@ import {
   fetchHeartsFromServer,
   currentMonthLabel,
   registerTournamentStart,
+  trackEvent,
 } from "@/components/contest/contestData";
 import { buildRound, roundLabel, type RoundSetup } from "@/components/contest/bracketEngine";
 import MatchCard from "@/components/contest/MatchCard";
@@ -47,6 +48,8 @@ export default function Contest() {
     hearts: number;
     monthLabel: string;
   } | null>(null);
+  const [rankChange, setRankChange] = useState<Record<string, number | null>>({});
+  const [heartsUpdatedAt, setHeartsUpdatedAt] = useState<string | undefined>(undefined);
   const [heartedThisGame, setHeartedThisGame] = useState<Set<string>>(new Set());
   const [muted, setMuted] = useState(isSoundMuted());
   const [isBlind, setIsBlind] = useState(false);
@@ -86,6 +89,8 @@ export default function Contest() {
       setMonthHearts(data.month);
       setMonthLabel(data.currentMonthLabel);
       setLastMonthChampion(data.lastMonthChampion);
+      if (data.rankChange) setRankChange(data.rankChange);
+      if (data.updatedAt) setHeartsUpdatedAt(data.updatedAt);
     });
   }, []);
 
@@ -140,6 +145,7 @@ export default function Contest() {
       setHeartedThisGame(new Set());
       setRoundIndex(1);
       setWinCounts({});
+      trackEvent("game_start");
       // 이 기기의 오늘 첫 플레이인지 확인 - 맞으면 정상 집계, 아니면 연습 모드
       const withinLimit = await registerTournamentStart();
       countsTowardTotalRef.current = withinLimit;
@@ -169,6 +175,7 @@ export default function Contest() {
         setChampion(nextWinners[0]);
         setPhase("champion");
         playSfx("champion");
+        trackEvent("game_complete", nextWinners[0]);
         if (typeof window !== "undefined") {
           window.scrollTo({ top: 0, left: 0, behavior: "auto" });
         }
@@ -195,6 +202,15 @@ export default function Contest() {
   // 결과 화면의 2~5위 미니 랭킹: 이번 회차 진출 횟수(부전승 포함) 기준 내림차순.
   // 진출 횟수가 같으면 전체 누적 하트(인기도)가 더 높은 사회자를 상위로 배치해
   // 매번 "공동 4위"만 반복되지 않고 2~5위가 항상 다른 순위로 표시되게 한다.
+  // 항목6: 결과 화면에 내가 선택한 챔피언의 이번 달 월간 실시간 순위를 표시
+  const championMonthRank = useMemo(() => {
+    if (!champion) return null;
+    const sorted = Object.entries(monthHearts).sort((a, b) => b[1] - a[1]);
+    const idx = sorted.findIndex(([name]) => name === champion);
+    if (idx === -1) return null;
+    return idx + 1;
+  }, [champion, monthHearts]);
+
   const runnerUps = useMemo(() => {
     if (!champion) return [];
     const others = CONTESTANTS.map((c) => c.name)
@@ -269,6 +285,24 @@ export default function Contest() {
       setTimeout(() => URL.revokeObjectURL(url), 2000);
     }
   }, [championData, monthHearts, monthLabel, copyTextFallback]);
+
+  // 항목8: 콘테스트 페이지 링크 공유 (Web Share API -> 클립보드 복사 폴백)
+  const [linkShareStatus, setLinkShareStatus] = useState<"idle" | "opened" | "copied" | "error">("idle");
+  const handleShareLink = useCallback(async () => {
+    const url = "https://www.inusmc.co.kr/contest";
+    trackEvent("share_link_click", championData?.name);
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ title: "VOTE ON VOICE | 이너스뮤직 사회자 목소리 콘테스트", url });
+        setLinkShareStatus("opened");
+        return;
+      }
+    } catch {
+      // 사용자가 취소했거나 지원 안 함 - 아래 클립보드 폴백으로 이동
+    }
+    const ok = await copyTextFallback(url);
+    setLinkShareStatus(ok ? "copied" : "error");
+  }, [championData, copyTextFallback]);
 
   // 콘테스트 페이지 전용 SEO/OG 메타 태그 (SPA이므로 클라이언트에서 갱신)
   useEffect(() => {
@@ -468,6 +502,42 @@ export default function Contest() {
                 ))}
               </motion.div>
 
+              {/* 이번달 실시간 TOP3~5 미리보기 (항목1) - 블라인드 테스트 참여 전, VOV 순위를 먼저 보여줌 */}
+              {Object.keys(monthHearts).length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.46, duration: 0.5 }}
+                  className="mb-9 rounded-2xl border border-[#5BB5A2]/25 bg-black/30 px-4 py-4 text-left"
+                >
+                  <p className="flex items-center gap-1.5 text-[10px] tracking-[0.15em] text-[#5BB5A2]/80 uppercase mb-2.5">
+                    <TrendingUp size={12} />
+                    {monthLabel} 실시간 TOP {Math.min(5, Object.keys(monthHearts).length)}
+                  </p>
+                  <div className="space-y-1.5">
+                    {Object.entries(monthHearts)
+                      .sort((a, b) => b[1] - a[1])
+                      .slice(0, 5)
+                      .map(([name, hearts], i) => (
+                        <div key={name} className="flex items-center justify-between text-[13px] gap-2">
+                          <span className="flex items-center gap-2 text-white/85 min-w-0">
+                            <span
+                              className={`w-5 h-5 flex items-center justify-center rounded-full text-[10px] font-bold shrink-0 ${
+                                i === 0 ? "bg-[#5BB5A2] text-black" : "bg-white/10 text-white/60"
+                              }`}
+                            >
+                              {i + 1}
+                            </span>
+                            <span className="truncate">{name}</span>
+                          </span>
+                          <span className="tabular-nums font-medium text-white/70 shrink-0">{hearts.toLocaleString()}♥</span>
+                        </div>
+                      ))}
+                  </div>
+                  <p className="text-[10px] text-white/30 mt-2.5">투표에 참여하면 순위에 바로 반영돼요.</p>
+                </motion.div>
+              )}
+
               <motion.p
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -578,7 +648,13 @@ export default function Contest() {
 
         {!(isBlind && phase === "match") && (
           <div className="mb-10">
-            <VoiceKingBanner monthHearts={monthHearts} monthLabel={monthLabel} lastMonthChampion={lastMonthChampion} />
+            <VoiceKingBanner
+              monthHearts={monthHearts}
+              monthLabel={monthLabel}
+              lastMonthChampion={lastMonthChampion}
+              rankChange={rankChange}
+              updatedAt={heartsUpdatedAt}
+            />
           </div>
         )}
 
@@ -674,30 +750,39 @@ export default function Contest() {
               {/* 사회자 프로필 자세히 보기 - 챔피언 소개 다음, 상담 버튼 전 단계 */}
               <button
                 type="button"
-                onClick={() => setShowChampionProfile(true)}
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-white/20 text-white/75 text-[13px] font-medium hover:border-white/40 hover:text-white transition-colors mb-5"
+                onClick={() => {
+                  trackEvent("profile_view", championData.name);
+                  setShowChampionProfile(true);
+                }}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-white/20 text-white/75 text-[13px] font-medium hover:border-white/40 hover:text-white transition-colors mb-1.5"
               >
                 <UserRound size={14} /> {championData.name} 사회자 프로필 자세히 보기
               </button>
-              <br />
+              <p className="text-[10.5px] text-white/30 mb-5">경력·진행 스타일 등 정보만 확인해요 (상담 신청 아님)</p>
 
-              {/* 상담 CTA - 결과 확인 직후 바로 노출 */}
+              {/* 상담 CTA - 결과 확인 직후 바로 노출, 정보 확인용 버튼과 구분되도록 채워진 스타일+상담 문구로 액션 성격을 명확히 함 */}
               <a
                 href="https://pf.kakao.com/_wxovaM/chat"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent("consult_click", championData.name)}
                 className="inline-flex items-center gap-1.5 px-8 py-3.5 rounded-full bg-[#5BB5A2] text-black text-sm font-bold hover:bg-[#6fc5b2] transition-colors shadow-[0_8px_24px_rgba(91,181,162,0.35)] mb-5"
               >
-                <MessageCircle size={16} /> {championData.name} 사회자 상담하기
+                <MessageCircle size={16} /> {championData.name} 사회자 예약 상담하기
               </a>
 
-              <p className="text-xs text-white/55 mb-3">
+              <p className="text-xs text-white/55 mb-1.5">
                 {championData.name} 사회자는 이번 달 현재까지 총{" "}
                 <span className="text-[#5BB5A2] font-medium">
                   {(monthHearts[championData.name] || 0).toLocaleString()}개
                 </span>
                 의 하트를 받았습니다.
               </p>
+              {championMonthRank && (
+                <p className="inline-flex items-center gap-1 text-[11px] text-[#d4b896] bg-[#d4b896]/10 border border-[#d4b896]/25 rounded-full px-3 py-1 mb-3">
+                  <Medal size={11} /> {monthLabel} 월간 실시간 {championMonthRank}위
+                </p>
+              )}
 
               {/* 이번 회차 2~5위 미니 랭킹 - 챔피언 외 진출 라운드가 높은 순 */}
               {runnerUps.length > 0 && (
@@ -712,7 +797,7 @@ export default function Contest() {
                           <div className="relative">
                             <button
                               type="button"
-                              onClick={() => setRunnerUpProfileUrl(data.profileUrl)}
+                              onClick={() => { trackEvent("profile_view", data.name); setRunnerUpProfileUrl(data.profileUrl); }}
                               className="block w-12 h-12 rounded-full overflow-hidden ring-2 ring-white/15"
                               aria-label={`${data.name} 프로필 보기`}
                             >
@@ -723,7 +808,7 @@ export default function Contest() {
                             </span>
                             <button
                               type="button"
-                              onClick={() => setRunnerUpProfileUrl(data.profileUrl)}
+                              onClick={() => { trackEvent("profile_view", data.name); setRunnerUpProfileUrl(data.profileUrl); }}
                               className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#5BB5A2] text-black flex items-center justify-center shadow-sm ring-1 ring-black/20"
                               aria-label={`${data.name} 프로필 자세히 보기`}
                             >
@@ -738,20 +823,33 @@ export default function Contest() {
                 </div>
               )}
 
-              {/* VOV 결과 카드 - 세로형 이미지로 생성해 기기에 바로 저장 */}
-              <button
-                type="button"
-                onClick={handleSaveImage}
-                disabled={shareStatus === "loading"}
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-white/15 text-white/60 text-[12px] font-medium hover:border-[#5BB5A2]/50 hover:text-white/85 transition-colors mb-2 disabled:opacity-50"
-              >
-                <Download size={13} />
-                {shareStatus === "loading" ? "이미지 만드는 중..." : "이미지 저장하기"}
-              </button>
+              {/* VOV 결과 카드 - 세로형 이미지로 생성해 기기에 바로 저장 + 링크 공유(항목8) */}
+              <div className="flex flex-wrap items-center justify-center gap-2 mb-2">
+                <button
+                  type="button"
+                  onClick={handleSaveImage}
+                  disabled={shareStatus === "loading"}
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-white/15 text-white/60 text-[12px] font-medium hover:border-[#5BB5A2]/50 hover:text-white/85 transition-colors disabled:opacity-50"
+                >
+                  <Download size={13} />
+                  {shareStatus === "loading" ? "이미지 만드는 중..." : "이미지 저장하기"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleShareLink}
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-white/15 text-white/60 text-[12px] font-medium hover:border-[#5BB5A2]/50 hover:text-white/85 transition-colors"
+                >
+                  <Share2 size={13} />
+                  {linkShareStatus === "copied" ? "링크 복사됨!" : linkShareStatus === "opened" ? "공유 완료" : "링크 공유하기"}
+                </button>
+              </div>
               {shareStatus === "copied" && (
                 <p className="text-[11px] text-[#5BB5A2] mb-1">
                   이미지 생성이 지원되지 않는 환경이라 결과 문구를 복사했어요.
                 </p>
+              )}
+              {linkShareStatus === "error" && (
+                <p className="text-[11px] text-white/40 mb-1">링크 공유가 지원되지 않는 환경이에요.</p>
               )}
               <p className="inline-flex items-center gap-1.5 text-[12px] font-medium text-white/70 bg-white/[0.06] border border-white/10 rounded-full px-4 py-2 mb-8">
                 <Camera size={13} className="text-[#5BB5A2] shrink-0" />

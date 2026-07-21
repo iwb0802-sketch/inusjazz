@@ -3,10 +3,12 @@
  */
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Crown, TrendingUp, ExternalLink, Play } from "lucide-react";
-import { getContestant } from "./contestData";
+import { Crown, TrendingUp, TrendingDown, Minus, ExternalLink, Play, ListOrdered, Clock } from "lucide-react";
+import { getContestant, trackEvent } from "./contestData";
 import ProfileModal from "./ProfileModal";
 import VideoModal from "./VideoModal";
+import RankingModal from "./RankingModal";
+import { deadlineLabel } from "../../../../shared/contestMonth";
 
 interface LastMonthChampion {
   name: string;
@@ -18,11 +20,42 @@ interface VoiceKingBannerProps {
   monthHearts: Record<string, number>;
   monthLabel: string;
   lastMonthChampion: LastMonthChampion | null;
+  rankChange?: Record<string, number | null>;
+  updatedAt?: string;
 }
 
-export default function VoiceKingBanner({ monthHearts, monthLabel, lastMonthChampion }: VoiceKingBannerProps) {
+function RankArrow({ change }: { change: number | null | undefined }) {
+  if (change === null || change === undefined || change === 0) {
+    return <Minus size={10} className="text-white/30" />;
+  }
+  if (change > 0) {
+    return (
+      <span className="flex items-center text-[#5BB5A2]">
+        <TrendingUp size={10} />
+      </span>
+    );
+  }
+  return (
+    <span className="flex items-center text-[#ff7a8a]">
+      <TrendingDown size={10} />
+    </span>
+  );
+}
+
+function formatUpdatedAt(iso?: string): string {
+  if (!iso) return "";
+  try {
+    const d = new Date(iso);
+    return d.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Seoul" });
+  } catch {
+    return "";
+  }
+}
+
+export default function VoiceKingBanner({ monthHearts, monthLabel, lastMonthChampion, rankChange, updatedAt }: VoiceKingBannerProps) {
   const [showProfile, setShowProfile] = useState(false);
   const [videoTarget, setVideoTarget] = useState<string | null>(null);
+  const [showRankingModal, setShowRankingModal] = useState(false);
   const ranking = Object.entries(monthHearts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5);
@@ -93,9 +126,25 @@ export default function VoiceKingBanner({ monthHearts, monthLabel, lastMonthCham
 
       {/* 이번달 실시간 */}
       <div className="rounded-2xl border border-[#5BB5A2]/25 bg-black/30 px-5 py-4">
-        <p className="flex items-center gap-1.5 text-[10px] tracking-[0.15em] text-[#5BB5A2]/80 uppercase mb-2" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
-          <TrendingUp size={12} />
-          {monthLabel} 진행중 · 실시간 순위
+        <div className="flex items-center justify-between mb-1.5 gap-2">
+          <p className="flex items-center gap-1.5 text-[10px] tracking-[0.15em] text-[#5BB5A2]/80 uppercase" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
+            <TrendingUp size={12} />
+            {monthLabel} 월간 실시간 순위
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              trackEvent("full_ranking_view");
+              setShowRankingModal(true);
+            }}
+            className="flex items-center gap-1 text-[10px] text-white/55 border border-white/15 rounded-full px-2.5 py-1 hover:text-white hover:border-white/35 transition-colors shrink-0"
+          >
+            <ListOrdered size={11} /> 전체 순위
+          </button>
+        </div>
+        <p className="flex items-center gap-1 text-[10px] text-white/35 mb-2.5">
+          <Clock size={10} />
+          {updatedAt ? `${formatUpdatedAt(updatedAt)} 기준 업데이트` : "실시간 업데이트"} · {deadlineLabel()}
         </p>
         {ranking.length === 0 ? (
           <p className="text-sm text-white/50">아직 하트가 없어요. 지금 투표에 참여해보세요!</p>
@@ -126,6 +175,7 @@ export default function VoiceKingBanner({ monthHearts, monthLabel, lastMonthCham
                   {rank !== 1 && isTied && (
                     <span className="text-[10px] text-white/55 shrink-0">공동 {rank}위</span>
                   )}
+                  <RankArrow change={rankChange?.[name]} />
                 </span>
                 <span className="flex items-center gap-2 shrink-0">
                   <motion.span
@@ -153,6 +203,15 @@ export default function VoiceKingBanner({ monthHearts, monthLabel, lastMonthCham
           </div>
         )}
       </div>
+
+      {showRankingModal && (
+        <RankingModal
+          monthHearts={monthHearts}
+          monthLabel={monthLabel}
+          rankChange={rankChange}
+          onClose={() => setShowRankingModal(false)}
+        />
+      )}
     </div>
   );
 }

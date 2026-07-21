@@ -41,3 +41,11 @@ export function prevMonthStamp(stamp: string): string {
   const d = new Date(y, m - 2, 1); // m은 1-indexed, 이전달 1일 = m-2 (0-indexed)
   return monthStamp(d);
 }
+
+/** 이번 달 마감일(말일) 표시용 라벨 - 예: "7월 31일 24:00 마감" */
+export function deadlineLabel(stamp: string = monthStamp()): string {
+  const y = parseInt(yearOf(stamp), 10);
+  const m = monthOf(stamp);
+  const lastDay = new Date(y, m, 0).getDate(); // 다음달 0일 = 이번달 말일
+  return `${m}월 ${lastDay}일 24:00 마감`;
+}

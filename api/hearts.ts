@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getPool, ensureSchema, rolloverIfNeeded, getLastMonthChampion } from "./_contestDb.js";
+import { getPool, ensureSchema, rolloverIfNeeded, getLastMonthChampion, ensureDailySnapshot, getTodaySnapshot, computeRankChange } from "./_contestDb.js";
 import { monthLabel, monthStamp } from "../shared/contestMonth.js";
 
 export const config = {
@@ -40,6 +40,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     await ensureSchema(client);
     await rolloverIfNeeded(client);
+    await ensureDailySnapshot(client);
 
     if (req.method === "GET") {
       const monthRows = (
@@ -62,11 +63,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       const champion = await getLastMonthChampion(client);
       const now = monthStamp();
+      const todaySnapshot = await getTodaySnapshot(client);
+      const rankChange = computeRankChange(todaySnapshot, month);
 
       res.status(200).json({
         month,
         allTime,
+        rankChange,
         currentMonthLabel: monthLabel(now),
+        updatedAt: new Date().toISOString(),
         lastMonthChampion: champion
           ? {
               name: champion.name,
@@ -108,7 +113,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         allTime[r.contestant_name] = (allTime[r.contestant_name] || 0) + r.hearts;
       }
 
-      res.status(200).json({ month, allTime });
+      const todaySnapshotPost = await getTodaySnapshot(client);
+      const rankChangePost = computeRankChange(todaySnapshotPost, month);
+
+      res.status(200).json({
+        month,
+        allTime,
+        rankChange: rankChangePost,
+        updatedAt: new Date().toISOString(),
+      });
       return;
     }
 

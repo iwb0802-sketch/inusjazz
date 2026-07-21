@@ -35,6 +35,9 @@ export default function Contest() {
   const [matchIdx, setMatchIdx] = useState(0);
   const [winnersAcc, setWinnersAcc] = useState<string[]>([]);
   const [champion, setChampion] = useState<string | null>(null);
+  // 이번 회차(1회 플레이) 동안 각 사회자가 승리(부전승 포함)로 다음 라운드에 진출한 횟수.
+  // 결과 화면의 2~5위 미니 랭킹은 이 값을 기준으로 매긴다 (많이 이길수록 상위 라운드까지 진출).
+  const [winCounts, setWinCounts] = useState<Record<string, number>>({});
   const [sessionHearts, setSessionHearts] = useState(0);
   const [allTime, setAllTime] = useState<Record<string, number>>({});
   const [monthHearts, setMonthHearts] = useState<Record<string, number>>({});
@@ -113,6 +116,7 @@ export default function Contest() {
       setWinnersAcc(setup.bye ? [setup.bye] : []);
       if (setup.bye) {
         giveHeart(setup.bye, 1);
+        setWinCounts((prev) => ({ ...prev, [setup.bye as string]: (prev[setup.bye as string] || 0) + 1 }));
       }
       setPhase("match");
       // 토너먼트를 새로 시작할 때(1라운드)만 최상단으로 스크롤한다.
@@ -134,6 +138,7 @@ export default function Contest() {
       setSessionHearts(0);
       setHeartedThisGame(new Set());
       setRoundIndex(1);
+      setWinCounts({});
       // 이 기기의 오늘 첫 플레이인지 확인 - 맞으면 정상 집계, 아니면 연습 모드
       const withinLimit = await registerTournamentStart();
       countsTowardTotalRef.current = withinLimit;
@@ -149,6 +154,7 @@ export default function Contest() {
     (winner: string) => {
       if (!roundSetup) return;
       giveHeart(winner, 1);
+      setWinCounts((prev) => ({ ...prev, [winner]: (prev[winner] || 0) + 1 }));
       playSfx("select");
       const nextWinners = [...winnersAcc, winner];
       const isLastMatch = matchIdx + 1 >= roundSetup.matches.length;
@@ -182,6 +188,29 @@ export default function Contest() {
   const label = roundSetup ? roundLabel(roundSetup.playersIn.length) : "";
 
   const championData = champion ? getContestant(champion) : undefined;
+
+  // 결과 화면의 2~5위 미니 랭킹: 이번 회차에서 승리(부전승 포함)로 다음 라운드에
+  // 진출한 횟수가 많은 순으로 정렬 (챔피언 제외). 진출 횟수가 같으면 공동 순위로 표시.
+  const runnerUps = useMemo(() => {
+    if (!champion) return [];
+    const others = CONTESTANTS.map((c) => c.name)
+      .filter((name) => name !== champion)
+      .sort((a, b) => (winCounts[b] || 0) - (winCounts[a] || 0));
+    let rank = 2;
+    let prevWins: number | null = null;
+    const list: { name: string; rank: number }[] = [];
+    others.slice(0, 4).forEach((name, idx) => {
+      const wins = winCounts[name] || 0;
+      if (prevWins !== null && wins === prevWins) {
+        // 공동 순위 유지
+      } else {
+        rank = idx + 2;
+      }
+      prevWins = wins;
+      list.push({ name, rank });
+    });
+    return list;
+  }, [champion, winCounts]);
 
   // 카카오톡/인스타그램 인앱 브라우저는 파일 공유(navigator.share files)를
   // 막아두거나 이상 동작하는 경우가 많아 "공유하기" 대신 순수 "이미지 저장(다운로드)"으로
@@ -674,6 +703,32 @@ export default function Contest() {
                 </span>
                 의 하트를 받았습니다.
               </p>
+
+              {/* 이번 회차 2~5위 미니 랭킹 - 챔피언 외 진출 라운드가 높은 순 */}
+              {runnerUps.length > 0 && (
+                <div className="mb-7">
+                  <p className="text-[10px] tracking-[0.15em] text-white/35 uppercase mb-2.5">이번 회차 순위</p>
+                  <div className="flex items-start justify-center gap-3 sm:gap-4 flex-wrap max-w-sm mx-auto">
+                    {runnerUps.map((entry) => {
+                      const data = getContestant(entry.name);
+                      if (!data) return null;
+                      return (
+                        <div key={entry.name} className="flex flex-col items-center gap-1 w-14">
+                          <div className="relative">
+                            <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white/15">
+                              <img src={data.image} alt={data.name} className="w-full h-full object-cover object-top" />
+                            </div>
+                            <span className="absolute -bottom-1 -right-1 text-[9px] font-bold text-black bg-white/85 rounded-full w-5 h-5 flex items-center justify-center">
+                              {entry.rank}
+                            </span>
+                          </div>
+                          <span className="text-[10.5px] text-white/60 truncate w-full text-center">{data.name}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {/* VOV 결과 카드 - 세로형 이미지로 생성해 기기에 바로 저장 */}
               <button

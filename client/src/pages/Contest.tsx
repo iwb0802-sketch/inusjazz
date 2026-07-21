@@ -192,26 +192,20 @@ export default function Contest() {
 
   // 결과 화면의 2~5위 미니 랭킹: 이번 회차에서 승리(부전승 포함)로 다음 라운드에
   // 진출한 횟수가 많은 순으로 정렬 (챔피언 제외). 진출 횟수가 같으면 공동 순위로 표시.
+  // 결과 화면의 2~5위 미니 랭킹: 이번 회차 진출 횟수(부전승 포함) 기준 내림차순.
+  // 진출 횟수가 같으면 전체 누적 하트(인기도)가 더 높은 사회자를 상위로 배치해
+  // 매번 "공동 4위"만 반복되지 않고 2~5위가 항상 다른 순위로 표시되게 한다.
   const runnerUps = useMemo(() => {
     if (!champion) return [];
     const others = CONTESTANTS.map((c) => c.name)
       .filter((name) => name !== champion)
-      .sort((a, b) => (winCounts[b] || 0) - (winCounts[a] || 0));
-    let rank = 2;
-    let prevWins: number | null = null;
-    const list: { name: string; rank: number }[] = [];
-    others.slice(0, 4).forEach((name, idx) => {
-      const wins = winCounts[name] || 0;
-      if (prevWins !== null && wins === prevWins) {
-        // 공동 순위 유지
-      } else {
-        rank = idx + 2;
-      }
-      prevWins = wins;
-      list.push({ name, rank });
-    });
-    return list;
-  }, [champion, winCounts]);
+      .sort((a, b) => {
+        const winDiff = (winCounts[b] || 0) - (winCounts[a] || 0);
+        if (winDiff !== 0) return winDiff;
+        return (allTime[b] || 0) - (allTime[a] || 0);
+      });
+    return others.slice(0, 4).map((name, idx) => ({ name, rank: idx + 2 }));
+  }, [champion, winCounts, allTime]);
 
   // 카카오톡/인스타그램 인앱 브라우저는 파일 공유(navigator.share files)를
   // 막아두거나 이상 동작하는 경우가 많아 "공유하기" 대신 순수 "이미지 저장(다운로드)"으로

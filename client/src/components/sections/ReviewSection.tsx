@@ -26,12 +26,20 @@ const REVIEW_KING_MCS = [
   { name: "장윤태", url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=133" },
 ];
 
+// 후기 2000+ 증빙 자료 (숨고 프로필, 블로그 후기게시판, 사회자 후기글)
+const PROOF_IMAGES = [
+  { src: "/images/proof/proof-soomgo.jpg", alt: "숨고 프로필 리뷰수 625건" },
+  { src: "/images/proof/proof-blog.jpg", alt: "블로그 후기게시판 Total 560건" },
+  { src: "/images/proof/proof-singer-blog.jpg", alt: "사회자 후기글 930건" },
+];
+
 export default function ReviewSection() {
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
@@ -125,7 +133,7 @@ export default function ReviewSection() {
                 boxShadow: "0 0 16px rgba(212,184,150,0.25)",
               }}
             >
-              1500+ 후기
+              2000+ 후기
             </span>
           </div>
           <p className="mt-4 text-white/50 text-sm sm:text-base max-w-sm mx-auto leading-relaxed break-keep">
@@ -134,7 +142,35 @@ export default function ReviewSection() {
           <p className="mt-2 text-white/35 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed break-keep">
             숨고·블로그 등 모든 플랫폼 후기를 합산하면
             <br className="sm:hidden" />
-            {" "}1,500건 이상 (사회자 개별 후기 포함)
+            {" "}2,000건 이상 (사회자 개별 후기 포함)
+          </p>
+
+          {/* 증빙 자료 — 숨고/블로그 실제 후기 캡처 */}
+          <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3 max-w-lg mx-auto">
+            {PROOF_IMAGES.map((img) => (
+              <button
+                key={img.src}
+                type="button"
+                onClick={() => setLightbox(img)}
+                className="group relative rounded-lg overflow-hidden bg-[#161616] transition-transform duration-300 hover:scale-[1.03]"
+                style={{ border: "1px solid rgba(212,184,150,0.3)" }}
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className="w-full h-24 sm:h-32 object-contain p-1.5"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-end justify-center pb-1.5">
+                  <span className="text-white/0 group-hover:text-white/90 text-[10px] transition-colors duration-300">
+                    크게보기
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-white/25 text-[11px] sm:text-xs">
+            증빙 자료 · 클릭하면 크게 볼 수 있어요
           </p>
 
           {/* Decorative divider */}
@@ -440,6 +476,32 @@ export default function ReviewSection() {
         className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
         style={{ background: "linear-gradient(to top, #0d0d0d 0%, transparent 100%)" }}
       />
+
+      {/* 증빙 자료 라이트박스 */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
+          style={{ background: "rgba(0,0,0,0.9)" }}
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightbox(null)}
+            aria-label="닫기"
+            className="absolute top-5 right-5 sm:top-8 sm:right-8 w-10 h-10 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors"
+            style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.2)" }}
+          >
+            ✕
+          </button>
+          <img
+            src={lightbox.src}
+            alt={lightbox.alt}
+            className="max-w-full max-h-[85vh] object-contain rounded-lg"
+            style={{ border: "1px solid rgba(212,184,150,0.4)" }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </section>
   );
 }

@@ -123,6 +123,9 @@ export default function ReviewSection() {
           >
             고객님들의 <span style={{ color: GOLD }}>생생한 후기</span>
           </h2>
+          <p className="mt-3 text-sm sm:text-base font-medium break-keep" style={{ color: GOLD }}>
+            업계 최다 수준의 실제 후기, 이너스뮤직이 증명합니다
+          </p>
           <div className="flex items-center justify-center gap-2 mt-3">
             <span
               className="inline-flex items-center px-4 py-1.5 rounded-full text-sm sm:text-base font-bold tracking-wide"

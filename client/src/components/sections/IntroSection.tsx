@@ -67,7 +67,7 @@ export default function IntroSection() {
               </p>
             </div>
 
-            {/* 본식 후기 1,000건 */}
+            {/* 본식 후기 2,000건 */}
             <div className="relative rounded-sm px-6 py-10 sm:py-12 hover:border-[#d4b896]/30 transition-all duration-500 group overflow-hidden"
               style={{ background: "linear-gradient(145deg, rgba(212,184,150,0.06) 0%, rgba(212,184,150,0.02) 100%)", border: "1px solid rgba(212,184,150,0.12)" }}>
               <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(212,184,150,0.4), transparent)" }} />
@@ -78,7 +78,7 @@ export default function IntroSection() {
               </div>
               <p className="text-[#d4b896] text-4xl sm:text-5xl font-bold tracking-tight" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
                 <CountUpNumber
-                  targetNumber={1000}
+                  targetNumber={2000}
                   duration={2000}
                   className="text-[#d4b896]"
                   style={{ fontFamily: "'Cormorant Garamond', serif" }}

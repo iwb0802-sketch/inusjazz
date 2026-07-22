@@ -26,11 +26,11 @@ const REVIEW_KING_MCS = [
   { name: "장윤태", url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=133" },
 ];
 
-// 후기 2000+ 증빙 자료 (숨고 프로필, 블로그 후기게시판, 사회자 후기글)
+// 후기 2000+ 증빙 자료 (숨고 프로필, 홈페이지 후기게시판, 블로그 사회자 후기글)
 const PROOF_IMAGES = [
-  { src: "/images/proof/proof-soomgo.jpg", alt: "숨고 프로필 리뷰수 625건" },
-  { src: "/images/proof/proof-blog.jpg", alt: "블로그 후기게시판 Total 560건" },
-  { src: "/images/proof/proof-singer-blog.jpg", alt: "사회자 후기글 930건" },
+  { src: "/images/proof/proof-soomgo.jpg", alt: "숨고 프로필 리뷰수 625건", label: "출처 · 숨고" },
+  { src: "/images/proof/proof-blog.jpg", alt: "홈페이지 후기게시판 Total 560건", label: "출처 · 홈페이지" },
+  { src: "/images/proof/proof-singer-blog.jpg", alt: "블로그 사회자 후기글 930건", label: "출처 · 블로그" },
 ];
 
 export default function ReviewSection() {
@@ -39,7 +39,7 @@ export default function ReviewSection() {
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string; label: string } | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
@@ -145,31 +145,35 @@ export default function ReviewSection() {
             {" "}2,000건 이상 (사회자 개별 후기 포함)
           </p>
 
-          {/* 증빙 자료 — 숨고/블로그 실제 후기 캡처 */}
+          {/* 증빙 자료 — 숨고/홈페이지/블로그 실제 후기 캡처 */}
           <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3 max-w-lg mx-auto">
             {PROOF_IMAGES.map((img) => (
-              <button
-                key={img.src}
-                type="button"
-                onClick={() => setLightbox(img)}
-                className="group relative rounded-lg overflow-hidden bg-[#161616] transition-transform duration-300 hover:scale-[1.03]"
-                style={{ border: "1px solid rgba(212,184,150,0.3)" }}
-              >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  className="w-full h-24 sm:h-32 object-contain p-1.5"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-end justify-center pb-1.5">
-                  <span className="text-white/0 group-hover:text-white/90 text-[10px] transition-colors duration-300">
-                    크게보기
-                  </span>
-                </div>
-              </button>
+              <div key={img.src} className="flex flex-col items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setLightbox(img)}
+                  className="group relative w-full rounded-lg overflow-hidden bg-[#161616] transition-transform duration-300 hover:scale-[1.03]"
+                  style={{ border: "1px solid rgba(212,184,150,0.3)" }}
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="w-full h-24 sm:h-32 object-contain p-1.5"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-end justify-center pb-1.5">
+                    <span className="text-white/0 group-hover:text-white/90 text-[10px] transition-colors duration-300">
+                      크게보기
+                    </span>
+                  </div>
+                </button>
+                <span className="text-white/45 text-[10px] sm:text-xs tracking-wide">
+                  {img.label}
+                </span>
+              </div>
             ))}
           </div>
-          <p className="mt-2 text-white/25 text-[11px] sm:text-xs">
+          <p className="mt-3 text-white/25 text-[11px] sm:text-xs">
             증빙 자료 · 클릭하면 크게 볼 수 있어요
           </p>
 

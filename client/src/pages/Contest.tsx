@@ -476,7 +476,7 @@ export default function Contest() {
                 </span>
                 <span className="w-px h-3 bg-white/15" />
                 <span className="text-[11px] tracking-wide whitespace-nowrap">
-                  후기 <span className="text-[#d4b896] font-medium">1,500건+</span>
+                  후기 <span className="text-[#d4b896] font-medium">2,000건+</span>
                 </span>
               </motion.div>
 

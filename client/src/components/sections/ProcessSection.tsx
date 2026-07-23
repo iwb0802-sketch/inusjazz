@@ -233,6 +233,7 @@ export default function ProcessSection() {
               background: "rgba(212,184,150,0.08)",
               border: "1px solid rgba(212,184,150,0.35)",
               color: GOLD,
+              animation: "scriptGlowPulse 2.6s ease-in-out infinite",
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLButtonElement).style.background = "rgba(212,184,150,0.15)";
@@ -248,6 +249,13 @@ export default function ProcessSection() {
           </button>
         </div>
       </div>
+
+      <style>{`
+        @keyframes scriptGlowPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(212,184,150,0.25), 0 0 8px rgba(212,184,150,0.15); }
+          50% { box-shadow: 0 0 0 5px rgba(212,184,150,0), 0 0 18px rgba(212,184,150,0.4); }
+        }
+      `}</style>
 
       <ScriptPreviewModal isOpen={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} />
     </section>

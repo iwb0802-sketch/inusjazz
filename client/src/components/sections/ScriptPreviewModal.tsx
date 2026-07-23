@@ -152,6 +152,27 @@ export default function ScriptPreviewModal({ isOpen, onClose }: Props) {
             })}
           </div>
 
+          {/* 대본 제작 철학 — 균형 */}
+          <div
+            className="mb-8 sm:mb-10 p-4 sm:p-5 rounded-lg"
+            style={{ background: "rgba(214,177,107,0.05)", border: "1px solid rgba(214,177,107,0.18)" }}
+          >
+            <p
+              className="text-[11px] font-semibold tracking-[0.15em] uppercase mb-2"
+              style={{ color: GOLD, fontFamily: "'Cormorant Garamond', serif" }}
+            >
+              참고사항
+            </p>
+            <p className="text-white/70 text-xs sm:text-sm leading-relaxed break-keep">
+              가뜩이나 신경 쓰실 것 많은 두 분을 위해, 예식에 꼭 필요한 핵심사항을 간결하게 파악해 대본에 담습니다.
+              <br className="hidden sm:block" />
+              <br className="hidden sm:block" />
+              그리고 대본에만 과도하게 의존하면 사회자 고유의 개성이 묻힐 수 있죠.
+              <br className="hidden sm:block" />
+              두 분의 스토리는 살리되, 사회자의 텐션과 스타일이 자연스럽게 드러날 수 있도록 균형 있게 대본을 제작합니다.
+            </p>
+          </div>
+
           {/* Before & After 비교 */}
           <div className="mb-2">
             <p

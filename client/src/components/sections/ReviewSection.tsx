@@ -30,7 +30,7 @@ const REVIEW_KING_MCS = [
 const PROOF_IMAGES = [
   { src: "/images/proof/proof-soomgo.jpg", alt: "숨고 프로필 리뷰수 625건", label: "출처 · 숨고" },
   { src: "/images/proof/proof-blog.jpg", alt: "홈페이지 후기게시판 Total 560건", label: "출처 · 홈페이지" },
-  { src: "/images/proof/proof-singer-blog.jpg", alt: "블로그 사회자 후기글 930건", label: "출처 · 블로그" },
+  { src: "/images/proof/proof-singer-blog.jpg", alt: "블로그 사회자 후기글 931건", label: "출처 · 블로그" },
 ];
 
 export default function ReviewSection() {

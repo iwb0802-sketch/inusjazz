@@ -33,6 +33,7 @@ const PHASES = [
         icon: CalendarCheck,
         title: "예약 & 사회자 지정",
         desc: "원하시는 스타일에 맞는 사회자를 직접 지정",
+        note: "지정된 사회자는 인사차 1차 해피콜 연락드립니다",
       },
       {
         num: "02",
@@ -194,6 +195,11 @@ export default function ProcessSection() {
                           <p className="text-white/40 text-xs mt-1 leading-relaxed">
                             {step.desc}
                           </p>
+                          {"note" in step && step.note && (
+                            <p className="text-white/30 text-[11px] mt-1 leading-relaxed break-keep">
+                              {step.note}
+                            </p>
+                          )}
                         </div>
                       </div>
                     );

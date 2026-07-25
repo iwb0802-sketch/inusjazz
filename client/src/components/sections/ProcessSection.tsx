@@ -192,11 +192,11 @@ export default function ProcessSection() {
                           <p className="text-white/90 text-sm font-medium leading-snug">
                             {step.title}
                           </p>
-                          <p className="text-white/40 text-xs mt-1 leading-relaxed">
+                          <p className="text-white/65 text-xs mt-1 leading-relaxed">
                             {step.desc}
                           </p>
                           {"note" in step && step.note && (
-                            <p className="text-white/30 text-[11px] mt-1 leading-relaxed break-keep">
+                            <p className="text-white/45 text-[11px] mt-1 leading-relaxed break-keep">
                               {step.note}
                             </p>
                           )}

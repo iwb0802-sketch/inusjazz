@@ -4,8 +4,26 @@
  * 형식: "YYYY-M" (예: "2026-7")
  */
 
+/**
+ * KST(Asia/Seoul) 기준 연/월을 반환한다.
+ * 서버(Vercel)는 UTC로 동작하므로 서버 로컬시간(getFullYear/getMonth)을 그대로 쓰면
+ * KST 자정~오전 9시 사이에는 아직 "전날/전달"로 잘못 계산되는 버그가 있었다.
+ * 반드시 Intl.DateTimeFormat으로 KST 기준 연/월을 뽑아야 한다.
+ */
+function kstYearMonth(date: Date): { y: number; m: number } {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "numeric",
+  }).formatToParts(date);
+  const y = parseInt(parts.find((p) => p.type === "year")?.value ?? "0", 10);
+  const m = parseInt(parts.find((p) => p.type === "month")?.value ?? "0", 10);
+  return { y, m };
+}
+
 export function monthStamp(date: Date = new Date()): string {
-  return `${date.getFullYear()}-${date.getMonth() + 1}`;
+  const { y, m } = kstYearMonth(date);
+  return `${y}-${m}`;
 }
 
 export function monthLabel(stamp: string): string {

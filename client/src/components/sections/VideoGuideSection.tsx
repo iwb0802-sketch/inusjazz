@@ -56,7 +56,7 @@ const HIDDEN_GEMS = [
   {
     name: "김범태",
     tier: "STANDARD",
-    highlight: "라디오DJ 같은 부드럽고 위트있는 진행",
+    highlight: "현직 배우로 활동중, 라디오DJ 같은 부드럽고 위트있는 진행",
     image: "/images/mc-kimbeomtae.jpg",
     url: "https://blog.naver.com/inusmusics/223192531041",
   },

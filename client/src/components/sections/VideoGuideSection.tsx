@@ -60,6 +60,13 @@ const HIDDEN_GEMS = [
     image: "/images/mc-kimbeomtae.jpg",
     url: "https://blog.naver.com/inusmusics/223192531041",
   },
+  {
+    name: "김태우",
+    tier: "BEST",
+    highlight: "스탠드업 코미디언 출신, 유쾌한 입담과 뛰어난 순발력",
+    image: "/images/mc-kimtaewoo.jpg",
+    url: "https://blog.naver.com/inusmusics/224364756942",
+  },
 ];
 
 export default function VideoGuideSection() {
@@ -199,14 +206,18 @@ export default function VideoGuideSection() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
-            {HIDDEN_GEMS.map((mc) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 max-w-2xl mx-auto">
+            {HIDDEN_GEMS.map((mc, i) => (
               <a
                 key={mc.name}
                 href={mc.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-center text-center p-3 sm:p-4 rounded-lg transition-all duration-300"
+                className={`group flex flex-col items-center text-center p-3 sm:p-4 rounded-lg transition-all duration-300 ${
+                  i === HIDDEN_GEMS.length - 1 && HIDDEN_GEMS.length % 2 !== 0
+                    ? "col-span-2 max-w-[calc(50%-0.375rem)] mx-auto sm:col-span-1 sm:max-w-none sm:mx-0"
+                    : ""
+                }`}
                 style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(91,181,162,0.18)" }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLAnchorElement).style.background = "rgba(91,181,162,0.08)";

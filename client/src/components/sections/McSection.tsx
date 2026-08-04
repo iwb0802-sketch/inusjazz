@@ -58,7 +58,7 @@ const MCS = [
   {
     name: "석재선",
     role: "",
-    tier: "BEST",
+    tier: "PREMIUM",
     desc: "5년+ 경력",
     image: "/images/mc-profile-3_33ff7a32.jpg",
     reviewKeywords: ["깔끔한진행", "자연스러운강약조절", "집중도높은목소리톤", "세심한멘트진행", "자연스러운분위기리드", "몰입도높은진행"],

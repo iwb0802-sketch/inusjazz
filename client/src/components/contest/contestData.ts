@@ -56,7 +56,7 @@ export const CONTESTANTS: Contestant[] = [
   },
   {
     name: "석재선",
-    tier: "BEST",
+    tier: "PREMIUM",
     desc: "5년+ 경력",
     image: "/images/mc-profile-3_33ff7a32.jpg",
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",

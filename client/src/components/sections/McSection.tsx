@@ -62,7 +62,7 @@ const MCS = [
     desc: "10년+ 경력",
     image: "/images/mc-profile-3_33ff7a32.jpg",
     reviewKeywords: ["깔끔한진행", "자연스러운강약조절", "집중도높은목소리톤", "세심한멘트진행", "자연스러운분위기리드", "몰입도높은진행"],
-    tags: ["웨딩 사회 경력 10년+", "누적 진행 500회 이상"],
+    tags: ["웨딩 사회 경력 10년+", "누적 진행 1000회 이상"],
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223822182933",
     styles: ["품격형", "감동형"],

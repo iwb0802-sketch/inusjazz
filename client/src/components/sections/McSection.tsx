@@ -66,7 +66,7 @@ const MCS = [
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223822182933",
     styles: ["품격형", "감동형"],
-    youtubeId: "zx_iAhMkMns",
+    youtubeId: "PmtzbgT_PNw",
     audioFile: "/audio/mc-jaesun.mp3",
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/RWSmnUABYYeEBdIF.png",
   },

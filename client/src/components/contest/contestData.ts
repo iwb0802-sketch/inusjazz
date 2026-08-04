@@ -63,7 +63,7 @@ export const CONTESTANTS: Contestant[] = [
     profileUrl: "https://www.inusmusic.com/profile-jaesun.html",
     audioFile: "/audio/mc-jaesun.mp3",
     audioFileBlind: "/audio/mc-jaesun-blind.mp3",
-    videoId: "zx_iAhMkMns",
+    videoId: "PmtzbgT_PNw",
     styleTags: ["안정적인 진행", "격식 있는 품격"],
   },
   {

@@ -681,7 +681,7 @@ export default function Contest() {
               <div className="grid grid-cols-2 gap-3 sm:gap-5 relative">
                 <MatchCard
                   contestant={contestantA}
-                  hearts={allTime[contestantA.name] || 0}
+                  hearts={monthHearts[contestantA.name] || 0}
                   side="left"
                   onSelectWinner={() => selectWinner(contestantA.name)}
                   onHeart={() => manualHeart(contestantA.name)}
@@ -690,7 +690,7 @@ export default function Contest() {
                 />
                 <MatchCard
                   contestant={contestantB}
-                  hearts={allTime[contestantB.name] || 0}
+                  hearts={monthHearts[contestantB.name] || 0}
                   side="right"
                   onSelectWinner={() => selectWinner(contestantB.name)}
                   onHeart={() => manualHeart(contestantB.name)}

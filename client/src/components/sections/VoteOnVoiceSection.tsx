@@ -31,6 +31,29 @@ export default function VoteOnVoiceSection() {
           </span>
         </div>
 
+        {/* 프리미엄 골드 크라운 - 은은한 글로우 + 미세한 플로팅 */}
+        <div className="relative flex items-center justify-center mb-4 sm:mb-5" aria-hidden="true">
+          <span
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: 130,
+              height: 130,
+              background: "radial-gradient(circle, rgba(212,184,150,0.22) 0%, rgba(212,184,150,0.08) 40%, transparent 70%)",
+              animation: "crownAura 3.6s ease-in-out infinite",
+            }}
+          />
+          <Crown
+            size={46}
+            strokeWidth={1.4}
+            className="relative"
+            style={{
+              color: GOLD,
+              filter: "drop-shadow(0 0 10px rgba(212,184,150,0.55)) drop-shadow(0 0 26px rgba(212,184,150,0.28))",
+              animation: "crownFloat 4.2s ease-in-out infinite",
+            }}
+          />
+        </div>
+
         <h2
           className="text-white text-2xl sm:text-3xl md:text-4xl mb-5 leading-snug break-keep"
           style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
@@ -76,6 +99,17 @@ export default function VoteOnVoiceSection() {
         @keyframes voteGlowPulse {
           0%, 100% { box-shadow: 0 0 0 0 rgba(212,184,150,0.55), 0 4px 20px rgba(212,184,150,0.35); }
           50% { box-shadow: 0 0 0 14px rgba(212,184,150,0), 0 4px 28px rgba(212,184,150,0.55); }
+        }
+        @keyframes crownAura {
+          0%, 100% { opacity: 0.55; transform: scale(0.92); }
+          50% { opacity: 1; transform: scale(1.08); }
+        }
+        @keyframes crownFloat {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          [style*="crownAura"], [style*="crownFloat"] { animation: none !important; }
         }
       `}</style>
     </section>

@@ -73,10 +73,6 @@ export default function VideoGuideSection() {
             등급별 사회자의 실제 진행 영상을 확인하고
             <br />
             나에게 맞는 사회자를 직접 선택하세요
-            <br />
-            <span className="text-white/65 text-sm sm:text-base mt-1 inline-block">
-              (숨은 실력자들도 많으니 꼭 한번 살펴보세요.)
-            </span>
           </p>
         </div>
 

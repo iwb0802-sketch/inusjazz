@@ -4,7 +4,7 @@
  */
 import { useState, useEffect } from "react";
 
-const API_URL = "https://bnsmusics.godohosting.com/bns/admin/schedule_api.php";
+const API_URL = "/api/schedule";
 
 const ALL_EMCEES = [
   "고승범","구한림","김민수","길상우","김범태","김선혁","김성환","문학진",

@@ -1,9 +1,7 @@
 {
   "buildCommand": "npx pnpm install --no-frozen-lockfile && npx vite build",
   "outputDirectory": "dist/public",
-  "routes": [
-    { "src": "/schedule.html", "dest": "/schedule.html" },
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }

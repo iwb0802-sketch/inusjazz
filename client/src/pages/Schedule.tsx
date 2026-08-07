@@ -185,7 +185,11 @@ export default function Schedule() {
                   <div style={{ textAlign: "center", padding: "24px 20px", color: "#64748b", fontSize: 13 }}>
                     <div style={{ fontSize: 28, marginBottom: 8 }}>✅</div>이 시간대에 배정된 사회자가 없습니다.
                   </div>
-                ) : (data.slots[key]||[]).map((item: any, i: number) => (
+                ) : (data.slots[key]||[]).filter((item: any) => item.assigned).length === 0 ? (
+                  <div style={{ textAlign: "center", padding: "24px 20px", color: "#64748b", fontSize: 13 }}>
+                    <div style={{ fontSize: 28, marginBottom: 8 }}>✅</div>이 시간대에 배정된 사회자가 없습니다.
+                  </div>
+                ) : (data.slots[key]||[]).filter((item: any) => item.assigned).map((item: any, i: number) => (
                   <div key={i} style={{ background: item.assigned ? "rgba(239,68,68,0.08)" : "rgba(255,255,255,0.07)", border: item.assigned ? "1px solid rgba(239,68,68,0.4)" : "1px solid rgba(255,255,255,0.1)", borderRadius: 12, padding: "14px 16px", marginBottom: 8, display: "flex", alignItems: "center", gap: 12 }}>
                     <div style={{ width: 40, height: 40, borderRadius: "50%", background: item.assigned ? "linear-gradient(135deg,#dc2626,#ef4444)" : "rgba(148,163,184,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 700, color: item.assigned ? "#fff" : "#64748b", flexShrink: 0 }}>
                       {item.assigned ? item.mc_name.charAt(0) : "?"}
@@ -196,7 +200,7 @@ export default function Schedule() {
                         <span style={{ fontSize: 10, fontWeight: 700, background: item.assigned ? "#dc2626" : "rgba(148,163,184,0.2)", color: item.assigned ? "#fff" : "#64748b", padding: "2px 7px", borderRadius: 20 }}>{item.assigned ? "배정완료" : "미지정"}</span>
                       </div>
                       <div style={{ fontSize: 12, color: "#94a3b8" }}>
-                        <span style={{ color: "#a78bfa", fontWeight: 600 }}>{item.time}</span> · {item.place}
+                        <span style={{ color: "#a78bfa", fontWeight: 600 }}>{item.time}</span>
                       </div>
                     </div>
                   </div>

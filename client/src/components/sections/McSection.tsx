@@ -6,7 +6,7 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, X, ExternalLink, ChevronDown, Crown } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, ExternalLink, ChevronDown, Crown, ArrowRight } from "lucide-react";
 import McMatchModal from "./McMatchModal";
 
 const MCS = [
@@ -553,18 +553,27 @@ export default function McSection() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div ref={anim1.ref} className={`text-center mb-12 sm:mb-16 fade-up ${anim1.isVisible ? "visible" : ""}`}>
-            <div className="mb-6">
-              <div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full max-w-full"
-                style={{ background: "rgba(212,184,150,0.08)", border: "1px solid rgba(212,184,150,0.3)" }}
+            <div className="mb-6 flex justify-center">
+              {/* VOV 참여 유도 CTA — 그라데이션 테두리 + shimmer + 클릭 이동 */}
+              <a
+                href="/contest"
+                className="vov-cta group relative inline-block max-w-full rounded-full p-[1.5px] no-underline"
+                aria-label="VOTE ON VOICE 콘테스트 참여하기"
               >
-                <Crown size={14} className="shrink-0" style={{ color: "#d4b896" }} />
-                <span className="text-white/70 text-xs sm:text-sm leading-snug break-keep">
-                  사회자의 영상·음성을 확인하기 전,
-                  <br className="sm:hidden" />
-                  {" "}VOTE ON VOICE에 먼저 참여해보세요.
+                <span className="vov-cta-inner relative flex items-center gap-2 px-4 py-2.5 sm:px-5 rounded-full overflow-hidden">
+                  <Crown size={15} className="shrink-0 vov-crown" style={{ color: "#d4b896" }} />
+                  <span className="relative z-10 text-white/80 text-xs sm:text-sm leading-snug break-keep text-left">
+                    사회자의 영상·음성을 확인하기 전,
+                    <br className="sm:hidden" />
+                    {" "}<span className="vov-word">VOTE ON VOICE</span>에 먼저 참여해보세요.
+                  </span>
+                  <ArrowRight
+                    size={14}
+                    className="relative z-10 shrink-0 text-[#5BB5A2] transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                  <span className="vov-shimmer" aria-hidden="true" />
                 </span>
-              </div>
+              </a>
             </div>
 
             <span
@@ -952,7 +961,63 @@ export default function McSection() {
         <IframeModal url={iframeUrl} onClose={() => setIframeUrl(null)} />
       )}
 
+      {/* VOV CTA 배지 스타일 */}
+      <style>{`
+        @keyframes vovBorderFlow {
+          0%   { background-position: 0% 50%; }
+          100% { background-position: 200% 50%; }
+        }
+        @keyframes vovGlowPulse {
+          0%, 100% { box-shadow: 0 0 0 rgba(91,181,162,0.0), 0 0 12px rgba(212,184,150,0.18); }
+          50%      { box-shadow: 0 0 18px rgba(91,181,162,0.35), 0 0 26px rgba(212,184,150,0.30); }
+        }
+        @keyframes vovShimmer {
+          0%   { transform: translateX(-130%) skewX(-18deg); }
+          55%  { transform: translateX(230%) skewX(-18deg); }
+          100% { transform: translateX(230%) skewX(-18deg); }
+        }
+        @keyframes vovCrownBob {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50%      { transform: translateY(-2px) rotate(-6deg); }
+        }
 
+        .vov-cta {
+          background: linear-gradient(90deg, #d4b896, #5BB5A2, #d4b896, #5BB5A2);
+          background-size: 200% 100%;
+          animation: vovBorderFlow 4s linear infinite, vovGlowPulse 2.8s ease-in-out infinite;
+          transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
+        }
+        .vov-cta:hover { transform: translateY(-2px) scale(1.02); }
+
+        .vov-cta-inner {
+          background: linear-gradient(135deg, #131313 0%, #0d0d0d 100%);
+          border-radius: 9999px;
+        }
+
+        .vov-word {
+          color: #5BB5A2;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+        }
+
+        .vov-crown { animation: vovCrownBob 2.4s ease-in-out infinite; }
+
+        .vov-shimmer {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 45%;
+          height: 100%;
+          pointer-events: none;
+          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.16) 50%, rgba(255,255,255,0) 100%);
+          animation: vovShimmer 3.4s ease-in-out infinite;
+          z-index: 5;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .vov-cta, .vov-crown, .vov-shimmer { animation: none !important; }
+        }
+      `}</style>
     </>
   );
 }

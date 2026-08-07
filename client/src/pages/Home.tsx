@@ -15,6 +15,7 @@ import PricingSection from "@/components/sections/PricingSection";
 import ProcessSection from "@/components/sections/ProcessSection";
 import McSection from "@/components/sections/McSection";
 import VoteOnVoiceSection from "@/components/sections/VoteOnVoiceSection";
+import HiddenGemsSection from "@/components/sections/HiddenGemsSection";
 import VideoGuideSection from "@/components/sections/VideoGuideSection";
 import ReviewSection from "@/components/sections/ReviewSection";
 import QnaSection from "@/components/sections/QnaSection";
@@ -45,6 +46,8 @@ export default function Home() {
       {/* 순서: 사회자 이름 노출 전에 VOTE ON VOICE 블라인드 투표 유도 */}
       <VoteOnVoiceSection />
       <McSection />
+      {/* 숨은 강자 — 사회자 카드 직후에 배치 (맥락 연결) */}
+      <HiddenGemsSection />
       <VideoGuideSection />
       <BookingSection />
       <PricingSection />

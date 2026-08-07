@@ -67,31 +67,31 @@ export default function HiddenGemsSection() {
           </span>
         </div>
 
-        {/* 규모(17명) + 큐레이션(5명 선별) 동시 전달 */}
+        {/* 규모(17명) 전달 + TOP 9와 우열 뉘앙스 제거 (기준 축: 인기 vs 인지도 대비 실력) */}
         <h3
-          className="text-white text-[19px] leading-snug sm:text-2xl mb-3 break-keep max-w-[19rem] sm:max-w-none mx-auto"
+          className="text-white text-[17px] min-[375px]:text-[19px] leading-snug sm:text-2xl mb-3 break-keep max-w-[19rem] sm:max-w-none mx-auto"
           style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
         >
           <span className="whitespace-nowrap">
-            소속 사회자 <span className="text-[#d4b896]">17명</span> 중,
+            소속 사회자 <span className="text-[#d4b896]">17명</span>.
           </span>
           <br className="sm:hidden" />
           {" "}
-          <span className="whitespace-nowrap">이너스뮤직이 선별한</span>
+          <span className="whitespace-nowrap">그중 <span className="text-[#5BB5A2]">아직 덜 알려진</span></span>
           <br className="sm:hidden" />
           {" "}
-          <span className="whitespace-nowrap text-[#5BB5A2]">숨은 강자 5인</span>
+          <span className="whitespace-nowrap"><span className="text-[#5BB5A2]">실력자 5인</span>을 따로 소개합니다.</span>
         </h3>
 
         <p className="text-white/50 text-xs sm:text-sm leading-relaxed break-keep max-w-[19rem] sm:max-w-xl mx-auto">
-          <span className="whitespace-nowrap sm:whitespace-normal">실력은 확실한데 아직 덜 알려진</span>
+          <span className="whitespace-nowrap">검증 기준은 위 TOP 사회자와 똑같습니다.</span>
           <br className="sm:hidden" />
           {" "}
-          <span className="whitespace-nowrap sm:whitespace-normal">사회자만 직접 골랐습니다.</span>
+          <span className="whitespace-nowrap">다른 건 인지도뿐입니다.</span>
           <br className="sm:hidden" />
           {" "}
           <span className="whitespace-nowrap">
-            지금 예약하시면 <span className="text-[#d4b896] font-semibold">1만원 추가 할인</span> 혜택도 드려요.
+            그래서 지금 예약하시면 <span className="text-[#d4b896] font-semibold">1만원 추가 할인</span>을 드려요.
           </span>
         </p>
       </div>

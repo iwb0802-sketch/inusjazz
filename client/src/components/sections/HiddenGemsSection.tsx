@@ -66,16 +66,33 @@ export default function HiddenGemsSection() {
             Hidden Gems
           </span>
         </div>
+
+        {/* 규모(17명) + 큐레이션(5명 선별) 동시 전달 */}
         <h3
-          className="text-white text-xl sm:text-2xl mb-2 break-keep"
+          className="text-white text-[19px] leading-snug sm:text-2xl mb-3 break-keep max-w-[19rem] sm:max-w-none mx-auto"
           style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
         >
-          아직 저평가된 <span className="text-[#5BB5A2]">숨은 강자들</span>
-        </h3>
-        <p className="text-white/50 text-xs sm:text-sm break-keep">
-          실력은 확실한데 상대적으로 덜 알려진 사회자입니다.
+          <span className="whitespace-nowrap">
+            소속 사회자 <span className="text-[#d4b896]">17명</span> 중,
+          </span>
           <br className="sm:hidden" />
-          {" "}지금 예약하시면 <span className="text-[#d4b896] font-semibold">1만원 추가 할인</span> 혜택도 드려요.
+          {" "}
+          <span className="whitespace-nowrap">이너스뮤직이 선별한</span>
+          <br className="sm:hidden" />
+          {" "}
+          <span className="whitespace-nowrap text-[#5BB5A2]">숨은 강자 5인</span>
+        </h3>
+
+        <p className="text-white/50 text-xs sm:text-sm leading-relaxed break-keep max-w-[19rem] sm:max-w-xl mx-auto">
+          <span className="whitespace-nowrap sm:whitespace-normal">실력은 확실한데 아직 덜 알려진</span>
+          <br className="sm:hidden" />
+          {" "}
+          <span className="whitespace-nowrap sm:whitespace-normal">사회자만 직접 골랐습니다.</span>
+          <br className="sm:hidden" />
+          {" "}
+          <span className="whitespace-nowrap">
+            지금 예약하시면 <span className="text-[#d4b896] font-semibold">1만원 추가 할인</span> 혜택도 드려요.
+          </span>
         </p>
       </div>
 

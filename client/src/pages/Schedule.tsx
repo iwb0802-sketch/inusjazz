@@ -110,20 +110,47 @@ const VENUE_REGION_MAP: Record<string, string> = {
   "국회의사당": "여의도", "프레스센터국제회의장": "중구",
 };
 
-// 장소에서 지역 추출 (매핑 테이블 우선, 없으면 괄호 추출)
+// 지역명 키워드 (장소명에 포함되면 자동 감지)
+const REGION_KEYWORDS = [
+  "여의도","홍대","신초","합정","이태원","일산","분당","판교","수원","성남",
+  "인천","부평","부천","안양","안산","광명","의정부","구리","남양주","하남",
+  "동탄","신도림","여원","사당","강남","서초","송파","강동","마포","영등포",
+  "성북","노원","은평","중랑","구로","금천","동작","관악","양천","용산",
+];
+
+// 장소에서 지역 추출 (매핑 테이블 우선 → 구/시 자동 감지 → 괄호 추출 → 지역명 키워드)
 function extractRegion(place: string): string {
   if (!place) return "";
   const cleaned = place.replace(/\(취소\)/g, "").trim();
-  // 매핑 테이블에서 키워드 매칭
+
+  // 1. 매핑 테이블에서 키워드 매칭
   for (const [key, region] of Object.entries(VENUE_REGION_MAP)) {
     if (cleaned.includes(key)) return region;
   }
-  // 괄호 안 내용 추출 (예: 웨딩여율리(여의도) → 여의도)
-  const m = cleaned.match(/\(([^)]+)\)/);
-  if (m) {
-    const inner = m[1].replace(/역$/, "").replace(/구$/, "").trim();
-    if (inner.length >= 2) return inner;
+
+  // 2. 괄호 안 내용 추출 (예: 웨딩여율리(여의도) → 여의도)
+  const bracketMatch = cleaned.match(/\(([^)]+)\)/);
+  if (bracketMatch) {
+    const inner = bracketMatch[1].replace(/역$/, "").replace(/홈$/, "").trim();
+    // 구/시/동 등 행정지명이면 바로 사용
+    if (/[구시동군]s*$/.test(inner) && inner.length >= 2) {
+      return inner.replace(/[구시동군]$/, "").trim();
+    }
+    if (inner.length >= 2 && inner.length <= 6) return inner;
   }
+
+  // 3. 장소명에 구/시 키워드 포함 여부 (예: "강남구", "영등포구")
+  const districtMatch = cleaned.match(/([^s(]+[구시])/);
+  if (districtMatch) {
+    const d = districtMatch[1].replace(/[구시]$/, "").trim();
+    if (d.length >= 2) return d;
+  }
+
+  // 4. 지역명 키워드 직접 포함
+  for (const kw of REGION_KEYWORDS) {
+    if (cleaned.includes(kw)) return kw;
+  }
+
   return "";
 }
 

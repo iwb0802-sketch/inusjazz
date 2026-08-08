@@ -4,8 +4,9 @@
 import { useState, useRef } from "react";
 
 const API_URL = "/api/schedule";
+const KAKAO_URL = "https://pf.kakao.com/_wxovaM/chat";
 
-// 활동 사회자 명단 (구한림, 김성환 제외)
+// 활동 사회자 명단
 const ALL_EMCEES = [
   "고승범","김민수","길상우","김범태","김선혁",
   "민준호","이우영","장윤태","석재선","이도영","이도건","심비성",
@@ -20,7 +21,7 @@ interface McProfile {
 
 const MC_PROFILES: McProfile[] = [
   { name:"석재선",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-profile-3_33ff7a32.jpg",         url:"https://blog.naver.com/inusmusics/223822182933", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-jaesun.mp3" },
-  { name:"이우영",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-lee-wooyoung-new_fa27e84d.webp", url:"https://blog.naver.com/inusmusics/220767962639",                         desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-wooyoung.mp3", imgPos:"50% 55%" },
+  { name:"이우영",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-lee-wooyoung-new_fa27e84d.webp", url:"https://blog.naver.com/inusmusics/220767962639", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-wooyoung.mp3", imgPos:"50% 55%" },
   { name:"장윤태",  tier:"PREMIUM",  tierOrder:1, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/YIRjIXsBhCqAiMgE.jpg", url:"https://blog.naver.com/inusmusics/223246261228", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yuntae.mp3" },
   { name:"최윤아",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-yuna.jpg",                       url:"https://blog.naver.com/inusmusics/224327229799", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yoona.mp3" },
   { name:"민준호",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-minjunho.webp", url:"https://blog.naver.com/inusmusics/223597460181", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-minjunho.mp3" },
@@ -41,8 +42,22 @@ const SLOT_RANGES: Record<string, [number, number]> = {
   am: [660, 840], pm1: [840, 960], pm2: [960, 1140],
 };
 const SLOT_LABELS: Record<string, string> = {
-  am: "오전 11~2시", pm1: "오후 2~4시", pm2: "오후 4~7시",
+  am: "오전 11~2시", pm1: "오후 2~4시", pm2: "오후 4~7시", other: "기타 시간대",
 };
+
+// 장소에서 지역 추출 (괄호 안 내용 또는 앞 2~3글자)
+function extractRegion(place: string): string {
+  if (!place) return "";
+  const m = place.match(/\(([^)]+)\)/);
+  if (m) {
+    const inner = m[1];
+    // 역이름 제거 (예: 회기역 → 회기)
+    const cleaned = inner.replace(/역$/, "").replace(/구$/, "").trim();
+    return cleaned + " 지역";
+  }
+  // 괄호 없으면 앞 3글자
+  return place.slice(0, 3) + " 지역";
+}
 
 function parseTimeToMin(t: string): number {
   const m = t.match(/(\d+)\s*시\s*(\d+)?/);
@@ -62,7 +77,7 @@ function getAssignedMap(slots: Record<string, any[]>) {
   return map;
 }
 function getAvailableMcs(slotKey: string, assignedMap: Record<string, number[]>) {
-  const [rangeStart, rangeEnd] = SLOT_RANGES[slotKey];
+  const [rangeStart, rangeEnd] = SLOT_RANGES[slotKey] || [0, 0];
   return ALL_EMCEES.filter(name => {
     const times = assignedMap[name] || [];
     const blockedRanges = times.map(t => [t - 150, t + 150] as [number, number]);
@@ -80,7 +95,9 @@ function minToTimeStr(m: number): string {
 }
 function getAvailableTimeInSlot(mcName: string, slotKey: string, assignedMap: Record<string, number[]>): string {
   const times = assignedMap[mcName] || [];
-  const [rangeStart, rangeEnd] = SLOT_RANGES[slotKey];
+  const range = SLOT_RANGES[slotKey];
+  if (!range) return '';
+  const [rangeStart, rangeEnd] = range;
   const blockedRanges = times.map(t => [t - 150, t + 150] as [number, number]);
   const availTimes: number[] = [];
   for (let t = rangeStart; t <= rangeEnd; t += 30) {
@@ -129,12 +146,11 @@ const C = {
   text:"#e2e8f0", textMuted:"#64748b", textSub:"#94a3b8",
 };
 
-// 오디오 재생 버튼 컴포넌트
+// 오디오 재생 버튼
 function AudioBtn({ audioSrc, size = 28 }: { audioSrc: string; size?: number }) {
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   if (!audioSrc) return null;
-
   const toggle = (e: React.MouseEvent) => {
     e.preventDefault(); e.stopPropagation();
     if (playing) {
@@ -149,7 +165,6 @@ function AudioBtn({ audioSrc, size = 28 }: { audioSrc: string; size?: number }) 
       setPlaying(true);
     }
   };
-
   return (
     <button onClick={toggle}
       style={{ width:size, height:size, borderRadius:"50%", background: playing ? C.mint : "rgba(0,0,0,0.55)", border:`2px solid ${playing ? C.mint : "rgba(255,255,255,0.7)"}`, color:"#fff", fontSize:size*0.4, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, transition:"all 0.2s", backdropFilter:"blur(4px)", boxShadow:"0 2px 8px rgba(0,0,0,0.4)" }}
@@ -169,10 +184,9 @@ function McCard({ name }: { name: string }) {
     STANDARD: { background: "rgba(148,163,184,0.1)", color: "#94a3b8", border: "1px solid rgba(148,163,184,0.2)" },
   };
   const tier: Tier = p?.tier || "STANDARD";
-  const url = p?.url || "https://www.inusmc.co.kr/#mc";
+  const url = p?.url || KAKAO_URL;
   return (
     <div style={{ background:C.card, border:`1px solid ${C.cardBorder}`, borderRadius:12, overflow:"hidden", position:"relative" }}>
-      {/* 오디오 버튼 - 우상단 */}
       {p?.audio && (
         <div style={{ position:"absolute", top:6, right:6, zIndex:2 }}>
           <AudioBtn audioSrc={p.audio} size={26} />
@@ -180,8 +194,8 @@ function McCard({ name }: { name: string }) {
       )}
       <a href={url} target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"block" }}>
         {p?.img && !imgErr ? (
-        <img src={p.img} alt={name} onError={() => setImgErr(true)}
-          style={{ width:"100%", height:110, objectFit:"cover", objectPosition:p.imgPos||"50% 15%", display:"block" }} />
+          <img src={p.img} alt={name} onError={() => setImgErr(true)}
+            style={{ width:"100%", height:110, objectFit:"cover", objectPosition:p.imgPos||"50% 15%", display:"block" }} />
         ) : (
           <div style={{ width:"100%", height:110, background:`linear-gradient(135deg,${C.mintLight},rgba(91,181,162,0.05))`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:30, fontWeight:700, color:C.mint }}>
             {name.charAt(0)}
@@ -189,7 +203,10 @@ function McCard({ name }: { name: string }) {
         )}
         <div style={{ padding:"10px 10px 12px" }}>
           <div style={{ fontSize:13, fontWeight:700, color:C.text, marginBottom:4 }}>{name}</div>
-          <span style={{ fontSize:9, fontWeight:700, padding:"2px 6px", borderRadius:4, ...tierStyles[tier] }}>{tier}</span>
+          <div style={{ display:"flex", alignItems:"center", gap:4, flexWrap:"wrap" }}>
+            <span style={{ fontSize:9, fontWeight:700, padding:"2px 6px", borderRadius:4, ...tierStyles[tier] }}>{tier}</span>
+            <span style={{ fontSize:9, fontWeight:600, padding:"2px 6px", borderRadius:4, background:"rgba(91,181,162,0.15)", color:C.mint, border:`1px solid ${C.mintBorder}` }}>서울 기준 가능</span>
+          </div>
         </div>
       </a>
     </div>
@@ -208,15 +225,17 @@ function AssignedCard({ item, slotKey, assignedMap }: { item: any; slotKey: stri
     BEST:     { background: C.mintLight, color: C.mint, border: `1px solid ${C.mintBorder}` },
     STANDARD: { background: "rgba(148,163,184,0.1)", color: "#94a3b8", border: "1px solid rgba(148,163,184,0.2)" },
   };
-  const avatarUrl = p?.url || "https://www.inusmc.co.kr/#mc";
+  const avatarUrl = p?.url || KAKAO_URL;
   const hasAvail = sameSlotAvail || otherAvail.length > 0;
+  // 지역 정보
+  const region = item.place ? extractRegion(item.place) : "";
 
   return (
     <div style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.4)", borderRadius:14, padding:"14px 16px", marginBottom:10, display:"flex", alignItems:"flex-start", gap:14 }}>
       <a href={avatarUrl} target="_blank" rel="noopener noreferrer" style={{ flexShrink:0 }}>
         {p?.img && !imgErr ? (
           <img src={p.img} alt={item.mc_name} onError={() => setImgErr(true)}
-            style={{ width:48, height:48, borderRadius:"50%", objectFit:"cover", objectPosition:"50% 15%", border:`2px solid ${C.mintBorder}` }} />
+            style={{ width:48, height:48, borderRadius:"50%", objectFit:"cover", objectPosition:p.imgPos||"50% 15%", border:`2px solid ${C.mintBorder}` }} />
         ) : (
           <div style={{ width:48, height:48, borderRadius:"50%", background:C.mintLight, border:`2px solid ${C.mintBorder}`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, fontWeight:700, color:C.mint }}>
             {item.mc_name.charAt(0)}
@@ -232,11 +251,12 @@ function AssignedCard({ item, slotKey, assignedMap }: { item: any; slotKey: stri
         </div>
         <div style={{ fontSize:12, color:C.textSub, marginBottom: hasAvail ? 8 : 0 }}>
           <span style={{ color:C.mint, fontWeight:600 }}>{item.times ? item.times.join(', ') : item.time}</span>
+          {region && <span style={{ marginLeft:6, color:C.textMuted, fontSize:11 }}>📍 {region}</span>}
           {p && <span style={{ marginLeft:8, color:C.textMuted }}>{p.desc}</span>}
         </div>
         {hasAvail && (
           <div style={{ background:"rgba(91,181,162,0.1)", border:`1px solid ${C.mintBorder}`, borderRadius:8, padding:"6px 10px" }}>
-            <div style={{ fontSize:10, color:C.mint, fontWeight:700, marginBottom:4 }}>⏰ 추가 가능 시간</div>
+            <div style={{ fontSize:10, color:C.mint, fontWeight:700, marginBottom:4 }}>⏰ 추가 가능 시간 <span style={{ fontWeight:400, color:C.textMuted }}>(서울 기준)</span></div>
             <div style={{ display:"flex", gap:4, flexWrap:"wrap" }}>
               {sameSlotAvail && (
                 <span style={{ fontSize:11, fontWeight:700, background:C.mint, color:"#fff", padding:"3px 10px", borderRadius:20 }}>
@@ -277,12 +297,18 @@ export default function Schedule() {
     setLoading(false);
   };
 
+  // 상담 신청 URL (날짜+시간대 포함)
+  const getConsultUrl = (slotLabel: string) => {
+    const msg = encodeURIComponent(`안녕하세요! ${date ? formatDate(date) : ""} ${slotLabel} 시간대 사회자 상담 신청합니다.`);
+    return `${KAKAO_URL}?msg=${msg}`;
+  };
+
   return (
-    <div style={{ fontFamily:"'Apple SD Gothic Neo','Noto Sans KR',sans-serif", background:C.bg, minHeight:"100vh", color:C.text, padding:"0 0 80px" }}>
+    <div style={{ fontFamily:"'Apple SD Gothic Neo','Noto Sans KR',sans-serif", background:C.bg, minHeight:"100vh", color:C.text, padding:"0 0 100px", boxSizing:"border-box", overflowX:"hidden" }}>
 
       {/* 상단 네비 */}
       <div style={{ display:"flex", alignItems:"center", padding:"16px 20px", borderBottom:`1px solid ${C.cardBorder}`, background:"rgba(0,0,0,0.3)", backdropFilter:"blur(10px)", position:"sticky", top:0, zIndex:10 }}>
-        <a href="/" style={{ display:"flex", alignItems:"center", gap:6, color:C.mint, textDecoration:"none", fontSize:13, fontWeight:600, padding:"6px 12px", background:C.mintLight, border:`1px solid ${C.mintBorder}`, borderRadius:8 }}>
+        <a href="/" style={{ display:"flex", alignItems:"center", gap:6, color:C.mint, textDecoration:"none", fontSize:13, fontWeight:600, padding:"6px 12px", background:C.mintLight, border:`1px solid ${C.mintBorder}`, borderRadius:8, whiteSpace:"nowrap" }}>
           ← 메인으로
         </a>
         <div style={{ flex:1, textAlign:"center", fontSize:15, fontWeight:700, color:C.text }}>사회자 스케줄 현황</div>
@@ -303,9 +329,9 @@ export default function Schedule() {
           <div style={{ display:"flex", gap:10 }}>
             <input type="date" value={date} onChange={e => setDate(e.target.value)}
               onKeyDown={e => e.key==="Enter" && search()}
-              style={{ flex:1, height:48, background:"rgba(255,255,255,0.08)", border:`1.5px solid ${C.cardBorder}`, borderRadius:10, color:C.text, fontSize:16, padding:"0 14px", fontFamily:"inherit", outline:"none" }} />
+              style={{ flex:1, height:48, background:"rgba(255,255,255,0.08)", border:`1.5px solid ${C.cardBorder}`, borderRadius:10, color:C.text, fontSize:16, padding:"0 14px", fontFamily:"inherit", outline:"none", minWidth:0 }} />
             <button onClick={search}
-              style={{ height:48, padding:"0 24px", background:`linear-gradient(135deg,#3d9e8c,${C.mint})`, border:"none", borderRadius:10, color:"#fff", fontSize:15, fontWeight:700, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap", boxShadow:`0 4px 15px rgba(91,181,162,0.3)` }}>
+              style={{ height:48, padding:"0 24px", background:`linear-gradient(135deg,#3d9e8c,${C.mint})`, border:"none", borderRadius:10, color:"#fff", fontSize:15, fontWeight:700, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap", boxShadow:`0 4px 15px rgba(91,181,162,0.3)`, flexShrink:0 }}>
               조회
             </button>
           </div>
@@ -321,7 +347,14 @@ export default function Schedule() {
         )}
 
         {/* 에러 */}
-        {error && <div style={{ textAlign:"center", padding:"20px", color:"#f87171" }}>⚠️ {error}</div>}
+        {error && (
+          <div style={{ textAlign:"center", padding:"24px 20px", background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.3)", borderRadius:12 }}>
+            <div style={{ color:"#f87171", marginBottom:12 }}>⚠️ {error}</div>
+            <button onClick={search} style={{ padding:"8px 20px", background:`linear-gradient(135deg,#3d9e8c,${C.mint})`, border:"none", borderRadius:8, color:"#fff", fontSize:13, fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>
+              다시 시도
+            </button>
+          </div>
+        )}
 
         {/* 초기 안내 */}
         {!loading && !data && !error && (
@@ -334,6 +367,9 @@ export default function Schedule() {
         {/* 결과 */}
         {data && (() => {
           const assignedMap = getAssignedMap(data.slots);
+          const hasOther = (data.slots["other"]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정").length > 0;
+          const tabs = hasOther ? ["am","pm1","pm2","other"] : ["am","pm1","pm2"];
+
           return (
             <div>
               <div style={{ textAlign:"center", fontSize:16, fontWeight:700, color:C.text, marginBottom:16, padding:"12px 16px", background:C.card, borderRadius:12, border:`1px solid ${C.cardBorder}` }}>
@@ -341,13 +377,13 @@ export default function Schedule() {
               </div>
 
               {/* 탭 */}
-              <div style={{ display:"flex", gap:8, marginBottom:20 }}>
-                {["am","pm1","pm2"].map(key => {
-                  const cnt = (data.slots[key]||[]).filter((i: any) => i.assigned).length;
+              <div style={{ display:"flex", gap:6, marginBottom:12, flexWrap:"nowrap", overflowX:"auto" }}>
+                {tabs.map(key => {
+                  const cnt = (data.slots[key]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정").length;
                   const isActive = activeTab===key;
                   return (
                     <button key={key} onClick={() => setActiveTab(key)}
-                      style={{ flex:1, height:52, background:isActive?`linear-gradient(135deg,#3d9e8c,${C.mint})`:C.card, border:isActive?"none":`1.5px solid ${C.cardBorder}`, borderRadius:12, color:isActive?"#fff":C.textSub, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"inherit", lineHeight:1.4, boxShadow:isActive?`0 4px 15px rgba(91,181,162,0.25)`:"none" }}>
+                      style={{ flex:"1 0 auto", minWidth:0, height:52, background:isActive?`linear-gradient(135deg,#3d9e8c,${C.mint})`:C.card, border:isActive?"none":`1.5px solid ${C.cardBorder}`, borderRadius:12, color:isActive?"#fff":C.textSub, fontSize:11, fontWeight:600, cursor:"pointer", fontFamily:"inherit", lineHeight:1.4, boxShadow:isActive?`0 4px 15px rgba(91,181,162,0.25)`:"none", padding:"0 8px" }}>
                       {SLOT_LABELS[key]}<br/>
                       <span style={{ fontSize:10, background:"rgba(255,255,255,0.2)", borderRadius:10, padding:"1px 6px" }}>{cnt}건 배정</span>
                     </button>
@@ -355,22 +391,28 @@ export default function Schedule() {
                 })}
               </div>
 
+              {/* 가능 여부 안내 - 탭 바로 아래 */}
+              <div style={{ background:"rgba(91,181,162,0.08)", border:`1px solid ${C.mintBorder}`, borderRadius:10, padding:"10px 14px", marginBottom:16, fontSize:11, color:"#a7d9d0", lineHeight:1.7 }}>
+                ※ 가능 여부는 서울 기준으로 계산됩니다. 경기·인천 지역은 이동시간에 따라 달라질 수 있으며, 실제 예약은 상담 후 최종 확정됩니다.
+              </div>
+
               {/* 탭 내용 */}
-              {["am","pm1","pm2"].map(key => {
+              {tabs.map(key => {
                 if (activeTab !== key) return null;
-                const assignedItems = (data.slots[key]||[]).filter((i: any) => i.assigned);
-                // 같은 이름끼리 합치기 (시간 여러 개 표시)
+                const assignedItems = (data.slots[key]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정");
+                // 같은 이름끼리 합치기 (시간 여러 개 표시, 장소도 합치기)
                 const mergedMap: Record<string, any> = {};
                 assignedItems.forEach((i: any) => {
                   if (!mergedMap[i.mc_name]) {
-                    mergedMap[i.mc_name] = { ...i, times: [i.time] };
-                  } else if (!mergedMap[i.mc_name].times.includes(i.time)) {
-                    mergedMap[i.mc_name].times.push(i.time);
+                    mergedMap[i.mc_name] = { ...i, times: [i.time], places: i.place ? [i.place] : [] };
+                  } else {
+                    if (!mergedMap[i.mc_name].times.includes(i.time)) mergedMap[i.mc_name].times.push(i.time);
+                    if (i.place && !mergedMap[i.mc_name].places.includes(i.place)) mergedMap[i.mc_name].places.push(i.place);
                   }
                 });
                 const uniqueNames = sortByTierAndName(Object.keys(mergedMap));
                 const sortedItems = uniqueNames.map(n => mergedMap[n]).filter(Boolean);
-                const availableMcs = sortByTierAndName(getAvailableMcs(key, assignedMap));
+                const availableMcs = key !== "other" ? sortByTierAndName(getAvailableMcs(key, assignedMap)) : [];
 
                 return (
                   <div key={key}>
@@ -383,36 +425,44 @@ export default function Schedule() {
                       <AssignedCard key={i} item={item} slotKey={key} assignedMap={assignedMap} />
                     ))}
 
-                    <div style={{ marginTop:24, paddingTop:18, borderTop:`1px solid ${C.cardBorder}` }}>
-                      <div style={{ fontSize:13, fontWeight:700, color:C.mint, marginBottom:4 }}>✨ 이 시간대 가능한 사회자</div>
-                      <div style={{ fontSize:11, color:C.textMuted, marginBottom:14 }}>앞뒤 2시간 30분 이내 다른 예식이 없는 사회자입니다.</div>
-                      {availableMcs.length === 0 ? (
-                        <div style={{ padding:16, textAlign:"center", color:C.textMuted, fontSize:12, background:C.card, borderRadius:10 }}>이 시간대에 가능한 사회자가 없습니다.</div>
-                      ) : (
-                        <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10 }}>
-                          {availableMcs.map(name => <McCard key={name} name={name} />)}
-                        </div>
-                      )}
+                    {/* 가능한 사회자 섹션 (other 탭 제외) */}
+                    {key !== "other" && (
+                      <div style={{ marginTop:24, paddingTop:18, borderTop:`1px solid ${C.cardBorder}` }}>
+                        <div style={{ fontSize:13, fontWeight:700, color:C.mint, marginBottom:4 }}>✨ 이 시간대 가능한 사회자</div>
+                        <div style={{ fontSize:11, color:C.textMuted, marginBottom:14 }}>앞뒤 2시간 30분 이내 다른 예식이 없는 사회자 (서울 기준)</div>
+                        {availableMcs.length === 0 ? (
+                          <div style={{ padding:16, textAlign:"center", color:C.textMuted, fontSize:12, background:C.card, borderRadius:10 }}>이 시간대에 가능한 사회자가 없습니다.</div>
+                        ) : (
+                          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10 }}>
+                            {availableMcs.map(name => <McCard key={name} name={name} />)}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* 상담 신청 CTA */}
+                    <div style={{ marginTop:20, background:`linear-gradient(135deg,rgba(91,181,162,0.12),rgba(91,181,162,0.06))`, border:`1px solid ${C.mintBorder}`, borderRadius:14, padding:"16px 18px", textAlign:"center" }}>
+                      <div style={{ fontSize:13, color:C.textSub, marginBottom:10 }}>
+                        {date && <><span style={{ color:C.mint, fontWeight:700 }}>{formatDate(date)}</span> {SLOT_LABELS[key]} 예약 문의</>}
+                      </div>
+                      <a href={getConsultUrl(SLOT_LABELS[key])} target="_blank" rel="noopener noreferrer"
+                        style={{ display:"inline-flex", alignItems:"center", gap:8, padding:"12px 24px", background:"#FEE500", borderRadius:10, color:"#3A1D1D", fontSize:14, fontWeight:700, textDecoration:"none", boxShadow:"0 4px 12px rgba(254,229,0,0.3)" }}>
+                        💬 이 시간대 상담 신청
+                      </a>
+                      <div style={{ fontSize:10, color:C.textMuted, marginTop:8 }}>카카오톡으로 연결됩니다 · 상담 후 최종 확정</div>
                     </div>
                   </div>
                 );
               })}
-
-              {/* 안내 문구 */}
-              <div style={{ background:C.mintLight, border:`1px solid ${C.mintBorder}`, borderRadius:12, padding:"16px 18px", fontSize:12, color:"#a7d9d0", lineHeight:1.8, marginTop:24 }}>
-                <div style={{ fontWeight:700, color:C.mint, marginBottom:8 }}>📌 예약 안내</div>
-                <div>• <strong>예약은 서울·경기·인천 지역만 가능합니다.</strong></div>
-                <div style={{ marginTop:6 }}>• 사회자 가능 시간(예식 2시간 30분 간격 기준)은 <strong>서울 지역 기준</strong>입니다. 경기·인천 등 서울 외 지역의 예식은 이동 시간이 필요하므로, 화면에 '가능'으로 표시되더라도 바로 예약하지 마시고 <strong>반드시 상담 후 예약</strong>을 잡아주세요.</div>
-              </div>
             </div>
           );
         })()}
       </div>
 
-      {/* 카카오톡 플로팅 버튼 */}
-      <a href="https://pf.kakao.com/_wxovaM/chat" target="_blank" rel="noopener noreferrer"
-        style={{ position:"fixed", bottom:24, right:20, width:56, height:56, borderRadius:"50%", background:"#FEE500", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:"0 4px 16px rgba(0,0,0,0.3)", zIndex:100, textDecoration:"none", fontSize:26 }}>
-        💬
+      {/* 카카오톡 플로팅 버튼 - 하단 고정 (AI 챗봇 제거, 단일 버튼) */}
+      <a href={KAKAO_URL} target="_blank" rel="noopener noreferrer"
+        style={{ position:"fixed", bottom:24, right:20, display:"flex", alignItems:"center", gap:8, padding:"12px 18px", background:"#FEE500", borderRadius:28, color:"#3A1D1D", fontSize:13, fontWeight:700, textDecoration:"none", boxShadow:"0 4px 16px rgba(0,0,0,0.3)", zIndex:100, whiteSpace:"nowrap" }}>
+        💬 카카오 상담
       </a>
     </div>
   );

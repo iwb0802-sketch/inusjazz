@@ -28,7 +28,7 @@ const MC_PROFILES: McProfile[] = [
   { name:"고승범",  tier:"BEST",     tierOrder:2, img:"/images/mc-profile-4_a9e52880.jpg",         url:"https://blog.naver.com/inusmusics/223235771542", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-seungbeom.mp3", imgPos:"50% 5%" },
   { name:"김민수",  tier:"BEST",     tierOrder:2, img:"/images/mc-profile-1_33531819.jpg",         url:"https://blog.naver.com/inusmusics/223996383838", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-minsu.mp3" },
   { name:"김선혁",  tier:"BEST",     tierOrder:2, img:"/images/host_sunhyuk_1ed704ab.jpg",         url:"https://blog.naver.com/inusmusics/221025505211", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-sunhyuk.mp3" },
-  { name:"김태우",  tier:"BEST",     tierOrder:2, img:"/images/mc-taewoo.webp", url:"https://www.inusmc.co.kr/#mc", desc:"웨딩 사회 경력 5년+", audio:"/audio/mc-taewoo.mp3" },
+  { name: "김태우",  tier:"BEST",     tierOrder:2, img:"/images/mc-taewoo.webp", url:"https://m.blog.naver.com/inusmusics/224364756942", desc:"웨딩 사회 경력 5년+", audio:"/audio/mc-taewoo.mp3" },
   { name:"길상우",  tier:"BEST",     tierOrder:2, img:"/images/mc-gilsangwoo.jpg",                 url:"https://blog.naver.com/inusmusics/220802942529", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-gilsangwoo.mp3" },
   { name:"이도영",  tier:"BEST",     tierOrder:2, img:"/images/mc-profile-2_f194877b.jpg",         url:"https://blog.naver.com/inusmusics/223845891681", desc:"웨딩 사회 경력 4년+",  audio:"/audio/mc-idoyoung.mp3" },
   { name:"김범태",  tier:"STANDARD", tierOrder:3, img:"/images/mc-beomtae.webp", url:"https://blog.naver.com/inusmusics/223192531041", desc:"웨딩 전문 사회자", audio:"/audio/mc-beomtae.mp3", imgPos:"50% 20%" },

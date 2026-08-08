@@ -82,10 +82,54 @@ function getAvailableMcs(slotKey: string, assignedMap: Record<string, number[]>)
     return false; // 탭 전체가 막힘
   });
 }
-function getAvailableSlots(mcName: string, assignedMap: Record<string, number[]>): string[] {
+// 분 → 시간 텍스트 변환
+function minToTimeStr(m: number): string {
+  const h = Math.floor(m / 60);
+  const min = m % 60;
+  const displayH = h > 12 ? h - 12 : h;
+  return min === 0 ? `${displayH}시` : `${displayH}시${String(min).padStart(2,'0')}분`;
+}
+
+// 특정 탭 내에서 가능한 시간대 범위 문자열 반환 (현재 탭 기준)
+function getAvailableTimeInSlot(mcName: string, slotKey: string, assignedMap: Record<string, number[]>): string {
+  const times = assignedMap[mcName] || [];
+  const [rangeStart, rangeEnd] = SLOT_RANGES[slotKey];
+  const blockedRanges = times.map(t => [t - 150, t + 150] as [number, number]);
+
+  // 가능한 시간 구간 찾기 (30분 단위)
+  const availTimes: number[] = [];
+  for (let t = rangeStart; t <= rangeEnd; t += 30) {
+    const blocked = blockedRanges.some(([s, e]) => t >= s && t <= e);
+    if (!blocked) availTimes.push(t);
+  }
+  if (availTimes.length === 0) return '';
+
+  // 연속 구간으로 묶기
+  const segments: [number, number][] = [];
+  let segStart = availTimes[0];
+  let segEnd = availTimes[0];
+  for (let i = 1; i < availTimes.length; i++) {
+    if (availTimes[i] - availTimes[i-1] <= 30) {
+      segEnd = availTimes[i];
+    } else {
+      segments.push([segStart, segEnd]);
+      segStart = availTimes[i];
+      segEnd = availTimes[i];
+    }
+  }
+  segments.push([segStart, segEnd]);
+
+  return segments.map(([s, e]) =>
+    s === e ? `${minToTimeStr(s)} 가능` : `${minToTimeStr(s)}~${minToTimeStr(e)} 가능`
+  ).join(', ');
+}
+
+// 다른 탭에서 가능한 탭 목록 (기존 유지)
+function getAvailableSlots(mcName: string, slotKey: string, assignedMap: Record<string, number[]>): string[] {
   const times = assignedMap[mcName] || [];
   return Object.entries(SLOT_RANGES)
-    .filter(([, [rangeStart, rangeEnd]]) => {
+    .filter(([k, [rangeStart, rangeEnd]]) => {
+      if (k === slotKey) return false; // 현재 탭 제외
       const blockedRanges = times.map(t => [t - 150, t + 150] as [number, number]);
       for (let t = rangeStart; t <= rangeEnd; t += 30) {
         const blocked = blockedRanges.some(([s, e]) => t >= s && t <= e);
@@ -145,10 +189,11 @@ function McCard({ name, url }: { name: string; url: string }) {
 }
 
 // 배정완료 사회자 카드 컴포넌트
-function AssignedCard({ item, assignedMap }: { item: any; assignedMap: Record<string, number[]> }) {
+function AssignedCard({ item, slotKey, assignedMap }: { item: any; slotKey: string; assignedMap: Record<string, number[]> }) {
   const p = MC_MAP[item.mc_name];
   const [imgErr, setImgErr] = useState(false);
-  const otherAvail = getAvailableSlots(item.mc_name, assignedMap);
+  const sameSlotAvail = getAvailableTimeInSlot(item.mc_name, slotKey, assignedMap);
+  const otherAvail = getAvailableSlots(item.mc_name, slotKey, assignedMap);
   const tier: Tier = p?.tier || "STANDARD";
   const tierStyles: Record<Tier, React.CSSProperties> = {
     PREMIUM:  { background: C.goldLight, color: C.gold, border: `1px solid ${C.goldBorder}` },
@@ -175,12 +220,17 @@ function AssignedCard({ item, assignedMap }: { item: any; assignedMap: Record<st
           <span style={{ fontSize:9, fontWeight:700, padding:"2px 6px", borderRadius:4, ...tierStyles[tier] }}>{tier}</span>
           <span style={{ fontSize:10, fontWeight:700, background:"rgba(239,68,68,0.2)", color:"#f87171", padding:"2px 7px", borderRadius:20, border:"1px solid rgba(239,68,68,0.3)" }}>배정완료</span>
         </div>
-        <div style={{ fontSize:12, color:C.textSub, marginBottom: otherAvail.length>0 ? 6 : 0 }}>
+        <div style={{ fontSize:12, color:C.textSub, marginBottom: (sameSlotAvail || otherAvail.length>0) ? 6 : 0 }}>
           <span style={{ color:C.mint, fontWeight:600 }}>{item.time}</span>
           {p && <span style={{ marginLeft:8, color:C.textMuted }}>{p.desc}</span>}
         </div>
-        {otherAvail.length > 0 && (
+        {(sameSlotAvail || otherAvail.length > 0) && (
           <div style={{ display:"flex", gap:4, flexWrap:"wrap" }}>
+            {sameSlotAvail && (
+              <span style={{ fontSize:10, fontWeight:600, background:C.mintLight, color:C.mint, padding:"2px 8px", borderRadius:20, border:`1px solid ${C.mintBorder}` }}>
+                {sameSlotAvail}
+              </span>
+            )}
             {otherAvail.map(s => (
               <span key={s} style={{ fontSize:10, fontWeight:600, background:C.mintLight, color:C.mint, padding:"2px 8px", borderRadius:20, border:`1px solid ${C.mintBorder}` }}>
                 {s} 가능
@@ -309,7 +359,7 @@ export default function Schedule() {
                         <div style={{ fontSize:24, marginBottom:8 }}>✅</div>이 시간대에 배정된 사회자가 없습니다.
                       </div>
                     ) : sortedItems.map((item: any, i: number) => (
-                      <AssignedCard key={i} item={item} assignedMap={assignedMap} />
+                      <AssignedCard key={i} item={item} slotKey={key} assignedMap={assignedMap} />
                     ))}
 
                     {/* 가능한 사회자 */}

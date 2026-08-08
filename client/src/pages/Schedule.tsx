@@ -83,9 +83,16 @@ function getAvailableMcs(slotKey: string, assignedMap: Record<string, number[]>)
   });
 }
 function getAvailableSlots(mcName: string, assignedMap: Record<string, number[]>): string[] {
-  const times = assignedMap[mcName]||[];
+  const times = assignedMap[mcName] || [];
   return Object.entries(SLOT_RANGES)
-    .filter(([, [s,e]]) => !times.some(t => Math.abs(t-(s+e)/2)<=150))
+    .filter(([, [rangeStart, rangeEnd]]) => {
+      const blockedRanges = times.map(t => [t - 150, t + 150] as [number, number]);
+      for (let t = rangeStart; t <= rangeEnd; t += 30) {
+        const blocked = blockedRanges.some(([s, e]) => t >= s && t <= e);
+        if (!blocked) return true;
+      }
+      return false;
+    })
     .map(([k]) => SLOT_LABELS[k]);
 }
 function sortByTierAndName(names: string[]) {

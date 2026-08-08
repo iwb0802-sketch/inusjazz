@@ -61,8 +61,26 @@ function getAssignedMap(slots: Record<string, any[]>) {
   return map;
 }
 function getAvailableMcs(slotKey: string, assignedMap: Record<string, number[]>) {
-  const [s, e] = SLOT_RANGES[slotKey]; const mid = (s+e)/2;
-  return ALL_EMCEES.filter(name => !(assignedMap[name]||[]).some(t => Math.abs(t-mid)<=150));
+  const [rangeStart, rangeEnd] = SLOT_RANGES[slotKey];
+  // 탭 범위 내 어느 시간이든 150분 여유가 있으면 추천
+  // 즉, 기존 배정 시간과 탭 범위가 전혀 겹치지 않는 사회자만 제외
+  // (배정시간 ± 150분) 구간이 탭 범위와 완전히 겹쳐야 제외
+  return ALL_EMCEES.filter(name => {
+    const times = assignedMap[name] || [];
+    // 탭 범위 내에 예약 가능한 시간이 하나라도 있으면 추천
+    // 배정된 모든 시간에 대해 탭 전체가 막히는지 확인
+    // 탭 범위 [rangeStart, rangeEnd] 중 어느 시간 T에 대해
+    // 모든 배정 시간과 |T - assigned| > 150 이면 가능
+    // = 탭 범위가 모든 배정시간의 ±150 구간에 완전히 포함되지 않으면 가능
+    const blockedRanges = times.map(t => [t - 150, t + 150] as [number, number]);
+    // 탭 범위 내에 막히지 않는 시간이 있는지 확인
+    // 간단히: rangeStart~rangeEnd를 30분 간격으로 체크
+    for (let t = rangeStart; t <= rangeEnd; t += 30) {
+      const blocked = blockedRanges.some(([s, e]) => t >= s && t <= e);
+      if (!blocked) return true; // 이 시간은 가능
+    }
+    return false; // 탭 전체가 막힘
+  });
 }
 function getAvailableSlots(mcName: string, assignedMap: Record<string, number[]>): string[] {
   const times = assignedMap[mcName]||[];

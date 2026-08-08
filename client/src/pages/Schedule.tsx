@@ -181,7 +181,7 @@ function McCard({ name }: { name: string }) {
       <a href={url} target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"block" }}>
         {p?.img && !imgErr ? (
           <img src={p.img} alt={name} onError={() => setImgErr(true)}
-            style={{ width:"100%", height:110, objectFit:"cover", objectPosition:"top", display:"block" }} />
+            style={{ width:"100%", height:110, objectFit:"cover", objectPosition:"50% 15%", display:"block" }} />
         ) : (
           <div style={{ width:"100%", height:110, background:`linear-gradient(135deg,${C.mintLight},rgba(91,181,162,0.05))`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:30, fontWeight:700, color:C.mint }}>
             {name.charAt(0)}
@@ -216,7 +216,7 @@ function AssignedCard({ item, slotKey, assignedMap }: { item: any; slotKey: stri
       <a href={avatarUrl} target="_blank" rel="noopener noreferrer" style={{ flexShrink:0 }}>
         {p?.img && !imgErr ? (
           <img src={p.img} alt={item.mc_name} onError={() => setImgErr(true)}
-            style={{ width:48, height:48, borderRadius:"50%", objectFit:"cover", objectPosition:"top", border:`2px solid ${C.mintBorder}` }} />
+            style={{ width:48, height:48, borderRadius:"50%", objectFit:"cover", objectPosition:"50% 15%", border:`2px solid ${C.mintBorder}` }} />
         ) : (
           <div style={{ width:48, height:48, borderRadius:"50%", background:C.mintLight, border:`2px solid ${C.mintBorder}`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, fontWeight:700, color:C.mint }}>
             {item.mc_name.charAt(0)}

@@ -6,9 +6,9 @@ import { useState } from "react";
 const API_URL = "/api/schedule";
 
 const ALL_EMCEES = [
-  "고승범","구한림","김민수","길상우","김범태","김선혁","김성환",
+  "고승범","구한림","김민수","길상우","김범태","김선혁",
   "민준호","이우영","장윤태","석재선","이도영","이도건","심비성",
-  "김태우","최윤아","임원빈"
+  "김태우","최윤아"
 ];
 
 type Tier = "PREMIUM" | "BEST" | "STANDARD";

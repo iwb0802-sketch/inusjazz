@@ -7,7 +7,6 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, X, ExternalLink, ChevronDown, Crown, ArrowRight } from "lucide-react";
-import McMatchModal from "./McMatchModal";
 
 const MCS = [
   {
@@ -479,7 +478,6 @@ export default function McSection() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedMc, setSelectedMc] = useState<MC | null>(null);
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
-  const [matchOpen, setMatchOpen] = useState(false);
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -622,10 +620,10 @@ export default function McSection() {
               </p>
             </div>
 
-            {/* 사회자 추천 버튼 */}
+            {/* 사회자 스케줄 현황 버튼 */}
             <div className="flex justify-center mt-8">
-              <button
-                onClick={() => setMatchOpen(true)}
+              <a
+                href="/schedule"
                 style={{
                   display: "flex", alignItems: "center", gap: "10px",
                   padding: "14px 32px",
@@ -635,21 +633,23 @@ export default function McSection() {
                   fontFamily: "'Noto Sans KR', sans-serif", letterSpacing: "0.06em",
                   transition: "all 0.3s",
                   borderRadius: "4px",
+                  textDecoration: "none",
                 }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.2) 0%, rgba(91,181,162,0.15) 100%)";
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = "#d6b16b";
+                  (e.currentTarget as HTMLAnchorElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.2) 0%, rgba(91,181,162,0.15) 100%)";
+                  (e.currentTarget as HTMLAnchorElement).style.borderColor = "#d6b16b";
                 }}
                 onMouseLeave={e => {
-                  (e.currentTarget as HTMLButtonElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.08) 100%)";
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(214,177,107,0.4)";
+                  (e.currentTarget as HTMLAnchorElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.08) 100%)";
+                  (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(214,177,107,0.4)";
                 }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <path d="M16 2v4M8 2v4M3 10h18"/>
                 </svg>
-                내 조건에 어울리는 사회자 찾기
-              </button>
+                사회자 스케줄 현황
+              </a>
             </div>
           </div>
 
@@ -926,26 +926,6 @@ export default function McSection() {
 
         </div>
       </section>
-
-      {/* 사회자 매칭 모달 */}
-      <McMatchModal
-        isOpen={matchOpen}
-        onClose={() => setMatchOpen(false)}
-        onOpenProfile={(key) => {
-          const profileMap: Record<string, string> = {
-            "이우영": "/profile-wooyoung.html",
-            "김선혁": "/profile-sunhyuk.html",
-            "고승범": "/profile-seungbeom.html",
-            "장윤태": "/profile-yuntae.html",
-            "이도영": "/profile-idoyoung.html",
-            "석재선": "/profile-jaesun.html",
-            "김민수": "/profile-minsu.html",
-            "길상우": "/profile-gilsangwoo.html",
-                    "최윤아": "/profile-yuna.html",
-          };
-          if (profileMap[key]) setIframeUrl(profileMap[key]);
-        }}
-      />
 
       {/* 프로필 모달 */}
       {selectedMc && (

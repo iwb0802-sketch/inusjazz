@@ -8,6 +8,8 @@ const STORAGE_KEY = "inuscard_popup_closed_v2";
 export default function InusCardPopup() {
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  // 히어로 영역을 지나면 숨김 — 스크롤 중 본문(VOV 배지 등)을 가리지 않도록
+  const [pastHero, setPastHero] = useState(false);
 
   useEffect(() => {
     const closed = localStorage.getItem(STORAGE_KEY);
@@ -24,6 +26,21 @@ export default function InusCardPopup() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const onScroll = () => {
+      const limit = window.innerHeight * 0.75;
+      setPastHero(window.scrollY > limit);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // 히어로를 지나면 펼쳐진 카드는 접어둔다
+  useEffect(() => {
+    if (pastHero && expanded) setExpanded(false);
+  }, [pastHero, expanded]);
+
   const handleClose = () => {
     setExpanded(false);
     setTimeout(() => setVisible(false), 200);
@@ -38,7 +55,10 @@ export default function InusCardPopup() {
 
   return (
     <div
-      className="fixed top-20 left-4 sm:left-6 z-[100]"
+      className={`fixed top-20 left-4 sm:left-6 z-[100] transition-all duration-300 ${
+        pastHero ? "opacity-0 -translate-y-2 pointer-events-none" : "opacity-100 translate-y-0"
+      }`}
+      aria-hidden={pastHero}
       style={{ animation: "fadeInUp 0.4s cubic-bezier(0.23,1,0.32,1)" }}
     >
       {/* 미니 토글 버튼 */}

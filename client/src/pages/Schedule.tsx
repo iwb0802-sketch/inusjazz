@@ -231,7 +231,7 @@ function AssignedCard({ item, slotKey, assignedMap }: { item: any; slotKey: stri
           {p?.audio && <AudioBtn audioSrc={p.audio} size={26} />}
         </div>
         <div style={{ fontSize:12, color:C.textSub, marginBottom: hasAvail ? 8 : 0 }}>
-          <span style={{ color:C.mint, fontWeight:600 }}>{item.time}</span>
+          <span style={{ color:C.mint, fontWeight:600 }}>{item.times ? item.times.join(', ') : item.time}</span>
           {p && <span style={{ marginLeft:8, color:C.textMuted }}>{p.desc}</span>}
         </div>
         {hasAvail && (
@@ -359,16 +359,17 @@ export default function Schedule() {
               {["am","pm1","pm2"].map(key => {
                 if (activeTab !== key) return null;
                 const assignedItems = (data.slots[key]||[]).filter((i: any) => i.assigned);
-                // 이름+시간 기준 중복 제거
-                const seen = new Set<string>();
-                const dedupedItems = assignedItems.filter((i: any) => {
-                  const key2 = i.mc_name + '_' + i.time;
-                  if (seen.has(key2)) return false;
-                  seen.add(key2); return true;
+                // 같은 이름끼리 합치기 (시간 여러 개 표시)
+                const mergedMap: Record<string, any> = {};
+                assignedItems.forEach((i: any) => {
+                  if (!mergedMap[i.mc_name]) {
+                    mergedMap[i.mc_name] = { ...i, times: [i.time] };
+                  } else if (!mergedMap[i.mc_name].times.includes(i.time)) {
+                    mergedMap[i.mc_name].times.push(i.time);
+                  }
                 });
-                const uniqueNames = Array.from(new Set(dedupedItems.map((i: any) => i.mc_name))) as string[];
-                const sortedNames = sortByTierAndName(uniqueNames);
-                const sortedItems = sortedNames.map(n => dedupedItems.find((i: any) => i.mc_name===n)).filter(Boolean);
+                const uniqueNames = sortByTierAndName(Object.keys(mergedMap));
+                const sortedItems = uniqueNames.map(n => mergedMap[n]).filter(Boolean);
                 const availableMcs = sortByTierAndName(getAvailableMcs(key, assignedMap));
 
                 return (

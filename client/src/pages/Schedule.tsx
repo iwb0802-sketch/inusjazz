@@ -359,8 +359,16 @@ export default function Schedule() {
               {["am","pm1","pm2"].map(key => {
                 if (activeTab !== key) return null;
                 const assignedItems = (data.slots[key]||[]).filter((i: any) => i.assigned);
-                const sortedNames = sortByTierAndName(assignedItems.map((i: any) => i.mc_name));
-                const sortedItems = sortedNames.map(n => assignedItems.find((i: any) => i.mc_name===n)).filter(Boolean);
+                // 이름+시간 기준 중복 제거
+                const seen = new Set<string>();
+                const dedupedItems = assignedItems.filter((i: any) => {
+                  const key2 = i.mc_name + '_' + i.time;
+                  if (seen.has(key2)) return false;
+                  seen.add(key2); return true;
+                });
+                const uniqueNames = Array.from(new Set(dedupedItems.map((i: any) => i.mc_name))) as string[];
+                const sortedNames = sortByTierAndName(uniqueNames);
+                const sortedItems = sortedNames.map(n => dedupedItems.find((i: any) => i.mc_name===n)).filter(Boolean);
                 const availableMcs = sortByTierAndName(getAvailableMcs(key, assignedMap));
 
                 return (

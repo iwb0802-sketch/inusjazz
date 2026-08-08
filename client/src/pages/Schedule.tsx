@@ -323,7 +323,8 @@ function AssignedCard({ item, slotKey, assignedMap }: { item: any; slotKey: stri
   const avatarUrl = p?.url || KAKAO_URL;
   const hasAvail = sameSlotAvail || otherAvail.length > 0;
   // 지역 정보
-  const region = item.place ? extractRegion(item.place) : "";
+  // API의 place_region 우선 사용, 없으면 클라이언트 extractRegion 폴백
+  const region = item.place_region || (item.place ? extractRegion(item.place) : "");
 
   return (
     <div style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.4)", borderRadius:14, padding:"14px 16px", marginBottom:10, display:"flex", alignItems:"flex-start", gap:14 }}>

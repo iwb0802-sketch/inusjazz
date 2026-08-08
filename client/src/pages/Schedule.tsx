@@ -152,7 +152,7 @@ function AudioBtn({ audioSrc, size = 28 }: { audioSrc: string; size?: number }) 
 
   return (
     <button onClick={toggle}
-      style={{ width:size, height:size, borderRadius:"50%", background: playing ? C.mint : C.mintLight, border:`1px solid ${C.mintBorder}`, color: playing ? "#fff" : C.mint, fontSize:size*0.45, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, transition:"all 0.2s" }}
+      style={{ width:size, height:size, borderRadius:"50%", background: playing ? C.mint : "rgba(0,0,0,0.55)", border:`2px solid ${playing ? C.mint : "rgba(255,255,255,0.7)"}`, color:"#fff", fontSize:size*0.4, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, transition:"all 0.2s", backdropFilter:"blur(4px)", boxShadow:"0 2px 8px rgba(0,0,0,0.4)" }}
       title={playing ? "정지" : "목소리 듣기"}>
       {playing ? "⏹" : "▶"}
     </button>

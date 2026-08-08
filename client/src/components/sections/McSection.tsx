@@ -620,35 +620,39 @@ export default function McSection() {
               </p>
             </div>
 
-            {/* 사회자 스케줄 현황 버튼 */}
-            <div className="flex justify-center mt-8">
-              <a
-                href="/schedule"
-                style={{
-                  display: "flex", alignItems: "center", gap: "10px",
-                  padding: "14px 32px",
-                  background: "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.08) 100%)",
-                  border: "1px solid rgba(214,177,107,0.4)",
-                  color: "#d6b16b", cursor: "pointer", fontSize: "14px", fontWeight: 700,
-                  fontFamily: "'Noto Sans KR', sans-serif", letterSpacing: "0.06em",
-                  transition: "all 0.3s",
-                  borderRadius: "4px",
-                  textDecoration: "none",
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLAnchorElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.2) 0%, rgba(91,181,162,0.15) 100%)";
-                  (e.currentTarget as HTMLAnchorElement).style.borderColor = "#d6b16b";
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLAnchorElement).style.background = "linear-gradient(135deg, rgba(214,177,107,0.12) 0%, rgba(91,181,162,0.08) 100%)";
-                  (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(214,177,107,0.4)";
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <rect x="3" y="4" width="18" height="18" rx="2"/>
-                  <path d="M16 2v4M8 2v4M3 10h18"/>
+            {/* 예식일 기준 예약 가능 사회자 조회 CTA — 골드 solid (VOV 배지와 역할 분리: 여긴 전환 직전 행동) */}
+            <div className="flex justify-center mt-5 sm:mt-6">
+              <a href="/schedule" className="mc-sched-cta group">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="shrink-0"
+                >
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
                 </svg>
-                사회자 스케줄 현황
+                {/* 아주 좁은 화면(<340px)에서만 쉼표 뒤에서 깔끔하게 2줄로 나눔 */}
+                <span className="text-center leading-snug break-keep">
+                  <span className="whitespace-nowrap">우리 예식일,</span>
+                  <br className="min-[340px]:hidden" />
+                  {" "}
+                  <span className="whitespace-nowrap">가능한 사회자 보기</span>
+                </span>
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  className="shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+                >
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
               </a>
             </div>
           </div>
@@ -956,6 +960,35 @@ export default function McSection() {
           55%  { transform: translateX(230%) skewX(-18deg); }
           100% { transform: translateX(230%) skewX(-18deg); }
         }
+        /* 스케줄 조회 CTA — 골드 solid, 애니메이션 없이 색 대비로 시선 확보 */
+        .mc-sched-cta {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 9px;
+          padding: 14px 26px;
+          border-radius: 6px;
+          background: linear-gradient(135deg, #e0c188 0%, #cba55f 100%);
+          color: #14100a;
+          font-size: 14px;
+          font-weight: 800;
+          font-family: 'Noto Sans KR', sans-serif;
+          letter-spacing: 0.01em;
+          text-decoration: none;
+          border: 1px solid rgba(255,255,255,0.18);
+          box-shadow: 0 6px 20px rgba(203,165,95,0.28);
+          transition: transform 0.25s cubic-bezier(0.23,1,0.32,1), box-shadow 0.25s ease, background 0.25s ease;
+        }
+        .mc-sched-cta:hover {
+          background: linear-gradient(135deg, #ecd09a 0%, #d9b46e 100%);
+          box-shadow: 0 10px 28px rgba(203,165,95,0.42);
+          transform: translateY(-2px);
+        }
+        .mc-sched-cta:active { transform: translateY(0); }
+        @media (max-width: 400px) {
+          .mc-sched-cta { padding: 13px 20px; font-size: 13px; gap: 7px; }
+        }
+
         @keyframes vovCrownBob {
           0%, 100% { transform: translateY(0) rotate(0deg); }
           50%      { transform: translateY(-2px) rotate(-6deg); }

@@ -26,6 +26,7 @@ import { setSoundMuted, isSoundMuted, playSfx } from "@/components/contest/sound
 import { buildShareCard } from "@/components/contest/shareCard";
 
 const MINT = "#5BB5A2";
+const GOLD = "#d4b896";
 
 type Phase = "intro" | "match" | "champion";
 
@@ -601,20 +602,39 @@ export default function Contest() {
                 )}
               </motion.div>
 
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
-                className="text-[12px] text-white/60 mt-5 tracking-wide break-keep"
+                className="mt-6 mx-auto w-full max-w-[340px] sm:max-w-sm"
               >
-                지난달 VOTE ON VOICE가 된 사회자는
-                <br />
-                이번 달 한 달간 지정 예약 시
-                <br />
-                1만 원 할인 혜택이 제공됩니다.
-                <br />
-                (이벤트 중복 적용 가능)
-              </motion.p>
+                <div
+                  className="rounded-2xl px-4 py-3.5 text-center"
+                  style={{
+                    border: `1px solid ${GOLD}33`,
+                    background: `linear-gradient(180deg, ${GOLD}12, rgba(255,255,255,0.02))`,
+                    boxShadow: `0 6px 24px rgba(212,184,150,0.08)`,
+                  }}
+                >
+                  <span
+                    className="inline-block text-[10px] tracking-[0.18em] px-2.5 py-1 rounded-full mb-2.5"
+                    style={{ color: GOLD, border: `1px solid ${GOLD}44`, background: `${GOLD}14` }}
+                  >
+                    이달의 혜택
+                  </span>
+                  <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
+                    <span className="inline-block">지난달 </span>
+                    <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
+                    <span className="inline-block">&nbsp;사회자를</span>{" "}
+                    <span className="inline-block">이번 달 지정 예약하시면</span>
+                  </p>
+                  <p className="mt-1 text-[15px] font-bold tracking-wide break-keep" style={{ color: GOLD }}>
+                    1만 원 할인
+                    <span className="text-white/70 font-medium text-[13px]"> 혜택 제공</span>
+                  </p>
+                  <p className="mt-1.5 text-[11px] text-white/40 break-keep">다른 이벤트와 중복 적용 가능</p>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         )}
@@ -631,19 +651,39 @@ export default function Contest() {
           >
             <span style={{ color: MINT }}>V</span>OTE <span style={{ color: MINT }}>O</span>N <span style={{ color: MINT }}>V</span>OICE
           </h1>
-          <p className="text-sm text-white/60 leading-relaxed max-w-md mx-auto break-keep">
-            신랑신부님이 직접 듣고 선택하는
-            <br />
-            이너스뮤직 사회자 목소리 콘테스트.
-            <br />
-            지난달 VOTE ON VOICE가 된 사회자는
-            <br />
-            이번 달 한 달간 지정 예약 시
-            <br />
-            1만 원 할인 혜택이 제공됩니다.
-            <br />
-            (이벤트 중복 적용 가능)
+          <p className="text-sm text-white/65 leading-[1.8] max-w-md mx-auto break-keep">
+            <span className="inline-block">신랑신부님이 직접 듣고 선택하는</span>{" "}
+            <span className="inline-block">이너스뮤직 사회자 목소리 콘테스트</span>
           </p>
+
+          <div className="mt-4 mx-auto w-full max-w-[340px] sm:max-w-sm">
+            <div
+              className="rounded-2xl px-4 py-3.5 text-center"
+              style={{
+                border: `1px solid ${GOLD}33`,
+                background: `linear-gradient(180deg, ${GOLD}12, rgba(255,255,255,0.02))`,
+                boxShadow: `0 6px 24px rgba(212,184,150,0.08)`,
+              }}
+            >
+              <span
+                className="inline-block text-[10px] tracking-[0.18em] px-2.5 py-1 rounded-full mb-2.5"
+                style={{ color: GOLD, border: `1px solid ${GOLD}44`, background: `${GOLD}14` }}
+              >
+                이달의 혜택
+              </span>
+              <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
+                <span className="inline-block">지난달 </span>
+                <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
+                <span className="inline-block">&nbsp;사회자를</span>{" "}
+                <span className="inline-block">이번 달 지정 예약하시면</span>
+              </p>
+              <p className="mt-1 text-[15px] font-bold tracking-wide break-keep" style={{ color: GOLD }}>
+                1만 원 할인
+                <span className="text-white/70 font-medium text-[13px]"> 혜택 제공</span>
+              </p>
+              <p className="mt-1.5 text-[11px] text-white/40 break-keep">다른 이벤트와 중복 적용 가능</p>
+            </div>
+          </div>
         </div>
 
         {!(isBlind && phase === "match") && (

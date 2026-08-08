@@ -525,7 +525,18 @@ export default function Schedule() {
                     {key !== "other" && (
                       <div style={{ marginTop:24, paddingTop:18, borderTop:`1px solid ${C.cardBorder}` }}>
                         <div style={{ fontSize:13, fontWeight:700, color:C.mint, marginBottom:4 }}>✨ 이 시간대 가능한 사회자</div>
-                        <div style={{ fontSize:11, color:C.textMuted, marginBottom:14 }}>앞뒤 2시간 30분 이내 다른 예식이 없는 사회자 (서울 기준)</div>
+                        <div style={{ fontSize:11, color:C.textMuted, marginBottom:12 }}>앞뒤 2시간 30분 이내 다른 예식이 없는 사회자 (서울 기준)</div>
+
+                        {/* 원했던 사회자가 마감이어도 이탈하지 않도록 — 개인이 아닌 '이너스 검증'을 신뢰하게 만드는 안내 */}
+                        <div style={{ background:C.card, border:`1px solid ${C.mintBorder}`, borderLeft:`3px solid ${C.mint}`, borderRadius:10, padding:"11px 13px", marginBottom:14 }}>
+                          <div style={{ fontSize:12, fontWeight:700, color:C.text, marginBottom:4, lineHeight:1.5, wordBreak:"keep-all" }}>
+                            원하셨던 사회자가 마감이어도 괜찮습니다.
+                          </div>
+                          <div style={{ fontSize:11.5, color:C.textSub, lineHeight:1.7, wordBreak:"keep-all" }}>
+                            아래 사회자 모두 <span style={{ color:C.mint, fontWeight:700 }}>동일한 기준으로 검증</span>된 분들입니다.
+                            {" "}이너스뮤직은 특정 한 명이 아닌, 전체 진행 품질을 책임집니다.
+                          </div>
+                        </div>
                         {availableMcs.length === 0 ? (
                           <div style={{ padding:16, textAlign:"center", color:C.textMuted, fontSize:12, background:C.card, borderRadius:10 }}>이 시간대에 가능한 사회자가 없습니다.</div>
                         ) : (

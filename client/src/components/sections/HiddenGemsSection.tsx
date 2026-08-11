@@ -220,27 +220,41 @@ export default function HiddenGemsSection() {
                       type="button"
                       onClick={() => togglePlay(mc.name, mc.audioFile)}
                       aria-label={`${mc.name} 사회자 목소리 미리듣기`}
-                      className="flex items-center justify-center gap-1 flex-1 min-w-0 rounded-md py-[7px] text-[10px] sm:text-[11px] font-semibold transition-all duration-300"
+                      className="flex items-center justify-center gap-1 flex-1 basis-0 min-w-0 rounded-md py-[9px] sm:py-[10px] text-[11px] sm:text-[12px] font-semibold transition-all duration-300"
                       style={
                         playing === mc.name
                           ? { background: "#5BB5A2", color: "#0d0d0d", border: "1px solid #5BB5A2" }
                           : { background: "rgba(91,181,162,0.10)", color: "#7fd3c1", border: "1px solid rgba(91,181,162,0.4)" }
                       }
                     >
-                      {playing === mc.name ? <Pause size={11} /> : <Play size={11} />}
+                      {playing === mc.name ? <Pause size={12} /> : <Play size={12} />}
                       <span className="whitespace-nowrap">{playing === mc.name ? "재생 중" : "목소리 듣기"}</span>
-                      {playing === mc.name && <Volume2 size={11} className="animate-pulse" />}
+                      {playing === mc.name && <Volume2 size={12} className="animate-pulse" />}
                     </button>
 
                     <a
                       href={mc.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-0.5 flex-shrink-0 rounded-md px-2.5 py-[7px] text-[10px] sm:text-[11px] font-semibold text-white/60 hover:text-white transition-colors duration-300"
-                      style={{ border: "1px solid rgba(255,255,255,0.14)" }}
+                      className="mc-gem-profile flex items-center justify-center gap-0.5 flex-1 basis-0 min-w-0 rounded-md py-[9px] sm:py-[10px] text-[11px] sm:text-[12px] font-bold transition-all duration-300"
+                      style={{
+                        background: "rgba(212,184,150,0.10)",
+                        color: "#e5cba3",
+                        border: "1px solid rgba(212,184,150,0.45)",
+                      }}
+                      onMouseEnter={(e) => {
+                        const t = e.currentTarget as HTMLAnchorElement;
+                        t.style.background = "rgba(212,184,150,0.22)";
+                        t.style.color = "#f2e0c2";
+                      }}
+                      onMouseLeave={(e) => {
+                        const t = e.currentTarget as HTMLAnchorElement;
+                        t.style.background = "rgba(212,184,150,0.10)";
+                        t.style.color = "#e5cba3";
+                      }}
                     >
-                      <span className="whitespace-nowrap">프로필</span>
-                      <ChevronRight size={11} />
+                      <span className="whitespace-nowrap">프로필 보기</span>
+                      <ChevronRight size={12} />
                     </a>
                   </div>
                 </div>

@@ -34,7 +34,7 @@ const COMMON = [
   {
     icon: Smartphone,
     title: "모바일청첩장 무료 제공",
-    desc: "예약 고객에 한해 무료로 제작해 드립니다",
+    desc: "예약 고객에 한해 무료 제작 및\n공유 권한 부여 (무한 수정)",
   },
 ];
 
@@ -238,7 +238,9 @@ export default function EventSection() {
                     <c.icon size={16} className="text-[#c09a7e] flex-shrink-0 mt-[2px]" />
                     <div className="min-w-0">
                       <p className="text-[#1a1a1a] text-[13px] sm:text-sm font-semibold break-keep">{c.title}</p>
-                      <p className="text-[#777] text-[11.5px] sm:text-xs mt-0.5 leading-relaxed break-keep">{c.desc}</p>
+                      <p className="text-[#777] text-[11.5px] sm:text-xs mt-0.5 leading-relaxed break-keep whitespace-pre-line">
+                        {c.desc}
+                      </p>
                     </div>
                   </div>
                 ))}

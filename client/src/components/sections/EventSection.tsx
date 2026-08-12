@@ -29,7 +29,7 @@ const COMMON = [
   {
     icon: Music4,
     title: "MR 제공 및 편집",
-    desc: "MR 제공 · MR/AR 편집 지원 (축가 함께 예약 시)",
+    desc: "MR 제공 · MR/AR 편집 지원",
   },
   {
     icon: Smartphone,

@@ -22,6 +22,7 @@ import QnaSection from "@/components/sections/QnaSection";
 import BookingSection from "@/components/sections/BookingSection";
 import ServiceSection from "@/components/sections/ServiceSection";
 import EventSection from "@/components/sections/EventSection";
+import QuickLinksSection from "@/components/sections/QuickLinksSection";
 import CtaSection from "@/components/sections/CtaSection";
 import Footer from "@/components/Footer";
 import FloatingButtons from "@/components/FloatingButtons";
@@ -51,7 +52,9 @@ export default function Home() {
       <VideoGuideSection />
       <BookingSection />
       <PricingSection />
+      {/* 이벤트 총정리 → 그 뒤에 바로가기 6종 */}
       <EventSection />
+      <QuickLinksSection />
       <QnaSection />
       <ServiceSection />
       <CtaSection />

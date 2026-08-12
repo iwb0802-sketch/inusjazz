@@ -13,7 +13,6 @@ import {
   Crown,
   Music4,
   Smartphone,
-  FileText,
   ArrowRight,
 } from "lucide-react";
 
@@ -197,14 +196,6 @@ export default function EventSection() {
                   </li>
                 ))}
               </ul>
-
-              <div
-                className="flex items-start gap-2 mt-5 pt-4 text-[11px] sm:text-xs text-[#777] break-keep leading-relaxed"
-                style={{ borderTop: "1px dashed #e2e2e2" }}
-              >
-                <FileText size={13} className="text-[#d4b896] flex-shrink-0 mt-[2px]" />
-                <span>대본·혼인서약서·성혼선언문 샘플은 상담 시 직접 확인하실 수 있습니다.</span>
-              </div>
             </div>
 
             {/* 공통 혜택 */}

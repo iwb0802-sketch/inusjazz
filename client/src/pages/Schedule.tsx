@@ -416,7 +416,7 @@ export default function Schedule() {
         {/* 하위 메뉴 */}
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:20 }}>
           <a href="/schedule" style={{ textDecoration:"none", textAlign:"center", padding:"11px 8px", color:"#fff", background:`linear-gradient(135deg,#3d9e8c,${C.mint})`, borderRadius:10, fontSize:13, fontWeight:800 }}>사회자 스케줄</a>
-          <a href="/performance-schedule" style={{ textDecoration:"none", textAlign:"center", padding:"11px 8px", color:C.textSub, background:C.card, border:`1px solid ${C.cardBorder}`, borderRadius:10, fontSize:13, fontWeight:700 }}>전체 연주 편성</a>
+          <a href="/performance-schedule" style={{ textDecoration:"none", textAlign:"center", padding:"11px 8px", color:C.textSub, background:C.card, border:`1px solid ${C.cardBorder}`, borderRadius:10, fontSize:13, fontWeight:700 }}>주말 연주 편성</a>
         </div>
 
         {/* 헤더 */}

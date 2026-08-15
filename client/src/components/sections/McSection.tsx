@@ -50,7 +50,7 @@ const MCS = [
     highlight: "따뜻하고 안정적인 진행으로 신랑신부님의 이야기를 감동적으로 전달합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",
     styles: ["품격형", "밝은형", "감동형"],
-    youtubeId: "ali34pV7ALk",
+    youtubeId: "_WitF1Nxugs",
     audioFile: "/audio/mc-idoyoung.mp3",
     profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/ppTgmcIFaCtGyINq.png",
   },

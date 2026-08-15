@@ -51,7 +51,7 @@ export const CONTESTANTS: Contestant[] = [
     profileUrl: "https://www.inusmusic.com/profile-idoyoung.html",
     audioFile: "/audio/mc-idoyoung.mp3",
     audioFileBlind: "/audio/mc-idoyoung-blind.mp3",
-    videoId: "ali34pV7ALk",
+    videoId: "_WitF1Nxugs",
     styleTags: ["안정적인 진행", "감동적인 멘트"],
   },
   {

@@ -81,20 +81,20 @@ export default function PerformanceSchedule() {
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Apple SD Gothic Neo','Noto Sans KR',sans-serif", paddingBottom: 84, overflowX: "hidden" }}>
       <header style={{ position: "sticky", top: 0, zIndex: 20, display: "flex", alignItems: "center", minHeight: 60, padding: "10px 16px", background: "rgba(11,20,38,0.94)", borderBottom: `1px solid ${C.cardBorder}`, backdropFilter: "blur(12px)" }}>
         <a href="/" style={{ flexShrink: 0, padding: "7px 10px", borderRadius: 8, color: C.mint, background: C.mintLight, border: `1px solid ${C.mintBorder}`, textDecoration: "none", fontSize: 12, fontWeight: 700 }}>← 메인</a>
-        <div style={{ flex: 1, textAlign: "center", fontSize: 15, fontWeight: 800 }}>주말 연주 편성</div>
+        <div style={{ flex: 1, textAlign: "center", fontSize: 15, fontWeight: 800 }}>주말 주요 연주 편성</div>
         <div style={{ width: 56 }} />
       </header>
 
       <main style={{ width: "100%", maxWidth: 720, margin: "0 auto", padding: "18px 14px 40px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 22 }}>
           <a href="/schedule" style={{ textDecoration: "none", textAlign: "center", padding: "11px 8px", color: C.textSub, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 10, fontSize: 13, fontWeight: 700 }}>사회자 스케줄</a>
-          <a href="/performance-schedule" style={{ textDecoration: "none", textAlign: "center", padding: "11px 8px", color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, borderRadius: 10, fontSize: 13, fontWeight: 800 }}>주말 연주 편성</a>
+          <a href="/performance-schedule" style={{ textDecoration: "none", textAlign: "center", padding: "11px 8px", color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, borderRadius: 10, fontSize: 13, fontWeight: 800 }}>주말 주요 편성</a>
         </div>
 
         <section style={{ textAlign: "center", padding: "10px 10px 20px" }}>
           <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 3, color: C.mint, marginBottom: 9 }}>INUS MUSIC</div>
-          <h1 style={{ margin: 0, fontSize: 22, lineHeight: 1.4 }}>주말 연주 편성</h1>
-          <p style={{ margin: "8px 0 0", fontSize: 13, color: C.textSub, lineHeight: 1.65 }}>선택한 날짜가 포함된 주말의 연주 일정을<br/>시간과 연주편성별로 확인할 수 있습니다.</p>
+          <h1 style={{ margin: 0, fontSize: 22, lineHeight: 1.4 }}>주말 주요 연주 편성</h1>
+          <p style={{ margin: "8px 0 0", fontSize: 13, color: C.textSub, lineHeight: 1.65 }}>주말에 많이 진행되는 실제 연주 사례를<br/>시간과 연주편성별로 확인할 수 있습니다.</p>
         </section>
 
         <section style={{ background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 16, padding: 16, marginBottom: 18 }}>
@@ -114,18 +114,18 @@ export default function PerformanceSchedule() {
         {error && <ErrorView message={error} retry={search} />}
         {!loading && !data && !error && (
           <div style={{ padding: "36px 18px", textAlign: "center", color: C.textMuted, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 14, fontSize: 13, lineHeight: 1.75 }}>
-            날짜를 선택한 뒤 조회하면<br/>그 주 토요일·일요일 연주 편성을 표시합니다.
+            기준 주를 선택한 뒤 조회하면<br/>토요일·일요일 주요 연주 사례를 표시합니다.
           </div>
         )}
 
         {data && (
           <section>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "13px 14px", marginBottom: 12, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 12 }}>
-              <span style={{ fontSize: 14, fontWeight: 800 }}><b style={{ color: C.mint }}>{prettyDate(data.week_start)}</b> ~ <b style={{ color: C.mint }}>{prettyDate(data.week_end)}</b></span>
-              <span style={{ flexShrink: 0, padding: "3px 8px", borderRadius: 20, color: C.mint, background: C.mintLight, fontSize: 11, fontWeight: 800 }}>주말 일정</span>
+              <span style={{ fontSize: 14, fontWeight: 800 }}><b style={{ color: C.mint }}>토요일 · 일요일</b> 주요 연주 편성</span>
+              <span style={{ flexShrink: 0, padding: "3px 8px", borderRadius: 20, color: C.mint, background: C.mintLight, fontSize: 11, fontWeight: 800 }}>주말 사례</span>
             </div>
             <div style={{ margin: "0 2px 12px", padding: "10px 12px", borderRadius: 10, border: `1px solid ${C.mintBorder}`, background: C.mintLight, color: C.textSub, fontSize: 11, lineHeight: 1.65 }}>
-              ※ 토요일·일요일 일정만 표시됩니다. 장소는 지역 단위로, 신부 이름은 개인정보 보호를 위해 일부 마스킹하여 표시됩니다.
+              ※ 토요일·일요일에 많이 진행되는 실제 연주편성 사례입니다. 장소는 지역 단위로, 신부 이름은 개인정보 보호를 위해 일부 마스킹하여 표시됩니다.
             </div>
             {data.days.map(day => <DayCard key={day.date} day={day} />)}
           </section>
@@ -152,7 +152,7 @@ function DayCard({ day }: { day: DayItem }) {
   const dayColor = day.weekday === "일" ? "#FCA5A5" : day.weekday === "토" ? "#93C5FD" : C.mint;
   return <article style={{ overflow: "hidden", marginBottom: 12, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 14 }}>
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", background: isWeekend ? "rgba(255,255,255,.035)" : "rgba(91,181,162,.055)", borderBottom: `1px solid ${C.cardBorder}` }}>
-      <div><span style={{ fontSize: 15, fontWeight: 800 }}>{prettyDate(day.date)}</span><span style={{ marginLeft: 6, fontSize: 12, color: dayColor, fontWeight: 800 }}>({day.weekday})</span></div>
+      <div><span style={{ fontSize: 15, fontWeight: 800 }}>{day.weekday === "토" ? "토요일" : "일요일"}</span><span style={{ marginLeft: 6, fontSize: 12, color: dayColor, fontWeight: 800 }}>주요 편성</span></div>
       <span style={{ padding: "3px 8px", borderRadius: 20, color: C.textSub, background: "rgba(255,255,255,.07)", fontSize: 11, fontWeight: 700 }}>{day.events.length}건</span>
     </div>
     {day.events.length === 0 ? <div style={{ padding: "20px 14px", textAlign: "center", color: C.textMuted, fontSize: 12 }}>등록된 연주 일정이 없습니다.</div> : <div>{day.events.map((event, index) => <EventRow key={`${event.time}-${index}`} event={event} />)}</div>}

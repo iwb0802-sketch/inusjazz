@@ -154,6 +154,12 @@
 .export-spec div { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-family: "DM Mono", monospace; font-size: 10px; }
 .export-spec span { color: #68736b; }
 .export-spec b { font-weight: 500; color: #18201d; }
+.export-spec .format-row { align-items: center; }
+.format-choices { display: inline-flex; border: 1px solid rgba(24,32,29,.28); }
+.format-choice { min-width: 39px; min-height: 23px; padding: 0 7px; border: 0; border-right: 1px solid rgba(24,32,29,.28); background: transparent; color: #6b746d; font-family: "DM Mono", monospace; font-size: 9px; transition: background .16s cubic-bezier(.23,1,.32,1), color .16s cubic-bezier(.23,1,.32,1); }
+.format-choice:last-child { border-right: 0; }
+.format-choice:hover { color: #18201d; }
+.format-choice.active { background: #18201d; color: #f7f4ee; }
 .export-button { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 45px; margin-top: 18px; border: 1px solid #18201d; background: #18201d; color: #f7f4ee; font-size: 12px; font-weight: 700; transition: background .16s cubic-bezier(.23,1,.32,1), color .16s cubic-bezier(.23,1,.32,1), transform .16s cubic-bezier(.23,1,.32,1); }
 .export-button:hover:not(:disabled) { background: #f04d38; border-color: #f04d38; }
 .privacy-note { position: relative; display: flex; align-items: flex-start; gap: 7px; margin-top: 15px; color: #677168; font-size: 10px; line-height: 1.55; }

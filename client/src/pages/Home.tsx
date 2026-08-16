@@ -4,6 +4,8 @@
  * 버밀리언은 선택 범위·재생·핵심 행동에만 사용한다.
  */
 import { ChangeEvent, PointerEvent, useCallback, useEffect, useRef, useState } from "react";
+// MP3 인코더 API는 프로젝트 내부 선언 파일로 경계를 한정합니다.
+import lamejs from "lamejs";
 import {
   ChevronDown,
   Download,
@@ -25,6 +27,7 @@ import { toast } from "sonner";
 
 type Range = { start: number; end: number };
 type Clip = Range;
+type ExportFormat = "wav" | "mp3";
 
 const vermilion = "#F04D38";
 const sage = "#9BAA94";
@@ -98,6 +101,52 @@ function encodeWav(
   return new Blob([view], { type: "audio/wav" });
 }
 
+function encodeMp3(
+  buffer: AudioBuffer,
+  clip: Clip,
+  volume: number,
+  fadeIn: number,
+  fadeOut: number,
+) {
+  const sampleRate = buffer.sampleRate;
+  const channels = Math.min(buffer.numberOfChannels, 2);
+  const startFrame = Math.floor(clip.start * sampleRate);
+  const endFrame = Math.min(buffer.length, Math.ceil(clip.end * sampleRate));
+  const frameCount = Math.max(0, endFrame - startFrame);
+  const encoder = new lamejs.Mp3Encoder(channels, sampleRate, 192);
+  const left = buffer.getChannelData(0);
+  const right = channels === 2 ? buffer.getChannelData(1) : left;
+  const chunks: Int8Array[] = [];
+  const framesPerBlock = 1152;
+  const fadeInFrames = Math.max(1, Math.round(fadeIn * sampleRate));
+  const fadeOutFrames = Math.max(1, Math.round(fadeOut * sampleRate));
+
+  for (let frame = 0; frame < frameCount; frame += framesPerBlock) {
+    const blockLength = Math.min(framesPerBlock, frameCount - frame);
+    const leftBlock = new Int16Array(blockLength);
+    const rightBlock = new Int16Array(blockLength);
+    for (let index = 0; index < blockLength; index += 1) {
+      const currentFrame = frame + index;
+      let envelope = volume;
+      if (fadeIn > 0 && currentFrame < fadeInFrames) envelope *= currentFrame / fadeInFrames;
+      if (fadeOut > 0 && currentFrame > frameCount - fadeOutFrames) {
+        envelope *= Math.max(0, (frameCount - currentFrame) / fadeOutFrames);
+      }
+      const toInt16 = (sample: number) => {
+        const clamped = clamp(sample * envelope, -1, 1);
+        return clamped < 0 ? clamped * 0x8000 : clamped * 0x7fff;
+      };
+      leftBlock[index] = toInt16(left[startFrame + currentFrame] ?? 0);
+      rightBlock[index] = toInt16(right[startFrame + currentFrame] ?? 0);
+    }
+    const encoded = channels === 2 ? encoder.encodeBuffer(leftBlock, rightBlock) : encoder.encodeBuffer(leftBlock);
+    if (encoded.length > 0) chunks.push(new Int8Array(encoded));
+  }
+  const finalBlock = encoder.flush();
+  if (finalBlock.length > 0) chunks.push(new Int8Array(finalBlock));
+  return new Blob(chunks, { type: "audio/mpeg" });
+}
+
 export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -119,6 +168,8 @@ export default function Home() {
   const [volume, setVolume] = useState(0.9);
   const [fadeIn, setFadeIn] = useState(0);
   const [fadeOut, setFadeOut] = useState(0);
+  const [exportFormat, setExportFormat] = useState<ExportFormat>("wav");
+  const [isExporting, setIsExporting] = useState(false);
 
   const duration = audioBuffer?.duration ?? 0;
   const clipDuration = Math.max(0, clip.end - clip.start);
@@ -375,21 +426,32 @@ export default function Home() {
     toast.message("원본 범위로 되돌렸습니다.");
   };
 
-  const exportWav = () => {
+  const exportAudio = () => {
     if (!audioBuffer) {
       toast.message("내보낼 오디오를 먼저 불러와 주세요.");
       return;
     }
     stopPlayback();
-    const blob = encodeWav(audioBuffer, clip, volume, fadeIn, fadeOut);
-    const href = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    const baseName = (fileName || "soundcut").replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9가-힣_-]/g, "-");
-    anchor.href = href;
-    anchor.download = `${baseName}-edit.wav`;
-    anchor.click();
-    URL.revokeObjectURL(href);
-    toast.success("WAV 파일을 준비했습니다.");
+    setIsExporting(true);
+    window.setTimeout(() => {
+      try {
+        const blob = exportFormat === "mp3"
+          ? encodeMp3(audioBuffer, clip, volume, fadeIn, fadeOut)
+          : encodeWav(audioBuffer, clip, volume, fadeIn, fadeOut);
+        const href = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        const baseName = (fileName || "soundcut").replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9가-힣_-]/g, "-");
+        anchor.href = href;
+        anchor.download = `${baseName}-edit.${exportFormat}`;
+        anchor.click();
+        URL.revokeObjectURL(href);
+        toast.success(`${exportFormat.toUpperCase()} 파일을 준비했습니다.`);
+      } catch {
+        toast.error("파일 저장을 완료하지 못했습니다. 다시 시도해 주세요.");
+      } finally {
+        setIsExporting(false);
+      }
+    }, 30);
   };
 
   const setFadedValue = (setter: (value: number) => void, value: string) => {
@@ -510,10 +572,11 @@ export default function Home() {
           <h2>새 파일로<br />저장하기</h2>
           <p>현재 클립 범위와 음량, 페이드 설정을 그대로 굽습니다.</p>
           <div className="export-spec">
-            <div><span>FORMAT</span><b>WAV / PCM</b></div>
+            <div className="format-row"><span>FORMAT</span><div className="format-choices"><button type="button" className={exportFormat === "wav" ? "format-choice active" : "format-choice"} onClick={() => setExportFormat("wav")}>WAV</button><button type="button" className={exportFormat === "mp3" ? "format-choice active" : "format-choice"} onClick={() => setExportFormat("mp3")}>MP3</button></div></div>
+            <div><span>QUALITY</span><b>{exportFormat === "mp3" ? "192 KBPS" : "PCM 16-BIT"}</b></div>
             <div><span>RANGE</span><b>{audioBuffer ? formatTime(clipDuration) : "—"}</b></div>
           </div>
-          <button type="button" className="export-button" onClick={exportWav} disabled={!audioBuffer}><Download size={17} /> WAV 내보내기</button>
+          <button type="button" className="export-button" onClick={exportAudio} disabled={!audioBuffer || isExporting}><Download size={17} /> {isExporting ? "저장 준비 중" : `${exportFormat.toUpperCase()} 내보내기`}</button>
           <div className="privacy-note"><Info size={14} /> 오디오 파일은 서버로 전송되지 않습니다.</div>
         </aside>
       </main>

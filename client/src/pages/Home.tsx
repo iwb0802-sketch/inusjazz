@@ -1,5 +1,5 @@
 /**
- * SoundCut Studio — 테이프 벤치
+ * 이너스뮤직 스튜디오 — 테이프 벤치
  * 따뜻한 편집 작업대와 정밀한 파형을 결합한다. 파형이 항상 가장 큰 시각적 면적을 차지하며,
  * 버밀리언은 선택 범위·재생·핵심 행동에만 사용한다.
  */
@@ -464,10 +464,10 @@ export default function Home() {
       <input ref={inputRef} onChange={handleFileChange} type="file" accept="audio/*" className="sr-only" />
       <header className="topbar">
         <div className="brand-lockup">
-          <img src="/manus-storage/soundcut-logo_bbd01bff.png" alt="SoundCut Studio" className="brand-mark" />
+          <img src="/manus-storage/soundcut-logo_bbd01bff.png" alt="이너스뮤직 스튜디오" className="brand-mark" />
           <div>
             <p className="eyebrow">LOCAL AUDIO WORKBENCH</p>
-            <h1>SoundCut <span>Studio</span></h1>
+            <h1>이너스뮤직 <span>스튜디오</span></h1>
           </div>
         </div>
         <div className="session-note"><span className="status-dot" /> 브라우저 안에서만 처리됩니다</div>

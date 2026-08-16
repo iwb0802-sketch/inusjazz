@@ -464,7 +464,7 @@ export default function Home() {
       <input ref={inputRef} onChange={handleFileChange} type="file" accept="audio/*" className="sr-only" />
       <header className="topbar">
         <div className="brand-lockup">
-          <img src="/manus-storage/soundcut-logo_bbd01bff.png" alt="이너스뮤직 스튜디오" className="brand-mark" />
+          <img src="/brand/inus-music-studio-logo.png" alt="이너스뮤직 스튜디오" className="brand-mark" />
           <div>
             <p className="eyebrow">LOCAL AUDIO WORKBENCH</p>
             <h1>이너스뮤직 <span>스튜디오</span></h1>
@@ -522,7 +522,7 @@ export default function Home() {
 
           {!audioBuffer && (
             <button type="button" className="empty-workspace" onClick={() => inputRef.current?.click()}>
-              <img src="/manus-storage/soundcut-empty-workbench_02b085fb.jpg" alt="아날로그 오디오 편집 책상" />
+              <img src="/brand/inus-music-workbench.jpg" alt="아날로그 오디오 편집 책상" />
               <div className="empty-overlay">
                 <div className="upload-stamp"><Upload size={19} /> AUDIO IN</div>
                 <h3>파일을 작업대에<br />놓으세요.</h3>
@@ -567,7 +567,7 @@ export default function Home() {
         </section>
 
         <aside className="export-rail" aria-label="내보내기">
-          <div className="export-art"><img src="/manus-storage/soundcut-export-card_b487faaa.jpg" alt="자른 오디오 테이프" /></div>
+          <div className="export-art"><img src="/brand/inus-music-export.jpg" alt="자른 오디오 테이프" /></div>
           <p className="section-number">03 / COMMIT</p>
           <h2>새 파일로<br />저장하기</h2>
           <p>현재 클립 범위와 음량, 페이드 설정을 그대로 굽습니다.</p>

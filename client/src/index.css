@@ -124,7 +124,7 @@
 
 .wave-area { position: relative; min-height: 310px; flex: 1; border: 1px solid rgba(24,32,29,.24); background: #f7f4ee; overflow: hidden; }
 .wave-area::after { content: ""; position: absolute; right: 0; bottom: 0; left: 0; height: 8px; background: repeating-linear-gradient(90deg, rgba(24,32,29,.22) 0 1px, transparent 1px 12px); opacity: .7; pointer-events: none; }
-.wave-area.quiet { display: block; min-height: 260px; background-color: #f7f4ee; background-image: linear-gradient(90deg, rgba(247,244,238,.95), rgba(247,244,238,.82)), url("/manus-storage/soundcut-waveform-poster_4c9da693.jpg"); background-position: center, right center; background-size: cover, 42% 100%; background-repeat: no-repeat; }
+.wave-area.quiet { display: block; min-height: 260px; background-color: #f7f4ee; background-image: linear-gradient(90deg, rgba(247,244,238,.95), rgba(247,244,238,.82)), url("/brand/inus-music-waveform.jpg"); background-position: center, right center; background-size: cover, 42% 100%; background-repeat: no-repeat; }
 .timeline-ruler { position: absolute; top: 10px; left: 0; right: 0; z-index: 1; height: 18px; color: #849087; font-family: "DM Mono", monospace; font-size: 9px; pointer-events: none; }
 .timeline-ruler span { position: absolute; transform: translateX(-50%); }
 .timeline-ruler span:first-child { transform: none; }

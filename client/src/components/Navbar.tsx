@@ -10,12 +10,13 @@ const NAV_LINKS = [
   { label: "견적", href: "#pricing" },
 ];
 
-const SERVICE_LINKS = [
+const SERVICE_LINKS: { label: string; href: string; isNew?: boolean }[] = [
   { label: "클래식 연주", href: "https://inusclassic.kr/" },
   { label: "재즈 연주", href: "https://inusjazz.kr/" },
   { label: "축가", href: "https://inusmusic.kr/" },
   { label: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
   { label: "모바일 청첩장", href: "https://inuscard.com" },
+  { label: "음원편집", href: "https://www.inusmusic.com/audio", isNew: true },
   { label: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
 ];
 
@@ -116,10 +117,18 @@ export default function Navbar() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setServiceOpen(false)}
-                    className="block px-4 py-3 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200 border-b border-white/5 last:border-0 tracking-wide"
+                    className="flex items-center gap-1.5 px-4 py-3 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200 border-b border-white/5 last:border-0 tracking-wide"
                     style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
                   >
-                    {item.label}
+                    <span>{item.label}</span>
+                    {item.isNew && (
+                      <span
+                        className="text-[9px] font-bold leading-none px-1.5 py-[3px] rounded-full tracking-[0.08em]"
+                        style={{ background: "#5BB5A2", color: "#0d0d0d" }}
+                      >
+                        NEW
+                      </span>
+                    )}
                   </a>
                 ))}
               </div>
@@ -185,7 +194,7 @@ export default function Navbar() {
             </button>
             <div
               className={`overflow-hidden transition-all duration-300 ${
-                mobileServiceOpen ? "max-h-60" : "max-h-0"
+                mobileServiceOpen ? "max-h-96" : "max-h-0"
               }`}
             >
               {SERVICE_LINKS.map((item) => (
@@ -194,9 +203,17 @@ export default function Navbar() {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block pl-4 py-2.5 text-white/50 hover:text-white transition-colors text-sm tracking-wide"
+                  className="flex items-center gap-1.5 pl-4 py-2.5 text-white/50 hover:text-white transition-colors text-sm tracking-wide"
                 >
-                  {item.label}
+                  <span>{item.label}</span>
+                  {item.isNew && (
+                    <span
+                      className="text-[9px] font-bold leading-none px-1.5 py-[3px] rounded-full tracking-[0.08em]"
+                      style={{ background: "#5BB5A2", color: "#0d0d0d" }}
+                    >
+                      NEW
+                    </span>
+                  )}
                 </a>
               ))}
             </div>

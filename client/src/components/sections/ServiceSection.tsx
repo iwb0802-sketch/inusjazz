@@ -1,12 +1,13 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Music, Mic, Theater, MicVocal, Package, Smartphone } from "lucide-react";
+import { Music, Mic, Theater, MicVocal, Package, Smartphone, AudioWaveform } from "lucide-react";
 
-const EXTRAS = [
+const EXTRAS: { icon: any; label: string; href: string; isNew?: boolean }[] = [
   { icon: Music, label: "클래식 연주", href: "https://inusclassic.kr/" },
   { icon: Mic, label: "재즈 연주", href: "https://inusjazz.kr/" },
   { icon: MicVocal, label: "축가", href: "https://inusmusic.kr/" },
   { icon: Theater, label: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
   { icon: Smartphone, label: "모바일 청첩장", href: "https://inuscard.com" },
+  { icon: AudioWaveform, label: "음원편집", href: "https://www.inusmusic.com/audio", isNew: true },
   { icon: Package, label: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
 ];
 
@@ -35,7 +36,7 @@ export default function ServiceSection() {
 
         {/* Extra Options */}
         <div ref={anim3.ref} className={`fade-up ${anim3.isVisible ? "visible" : ""}`}>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
             {EXTRAS.map((item, i) => {
               const Icon = item.icon;
               const content = (
@@ -45,21 +46,36 @@ export default function ServiceSection() {
                     className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-400"
                     style={{ background: "linear-gradient(90deg, transparent, #d4b896, transparent)" }}
                   />
+                  {item.isNew && (
+                    <span
+                      className="absolute top-2 right-2 text-[8.5px] font-bold leading-none px-1.5 py-[3px] rounded-full tracking-[0.08em]"
+                      style={{ background: "#5BB5A2", color: "#fff", boxShadow: "0 2px 6px rgba(91,181,162,0.35)" }}
+                    >
+                      NEW
+                    </span>
+                  )}
                   <div className="w-10 h-10 mx-auto mb-3 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                     style={{
-                      background: "linear-gradient(145deg, rgba(212,184,150,0.15), rgba(212,184,150,0.06))",
-                      border: "1px solid rgba(212,184,150,0.25)",
+                      background: item.isNew
+                        ? "linear-gradient(145deg, rgba(91,181,162,0.18), rgba(91,181,162,0.07))"
+                        : "linear-gradient(145deg, rgba(212,184,150,0.15), rgba(212,184,150,0.06))",
+                      border: item.isNew ? "1px solid rgba(91,181,162,0.3)" : "1px solid rgba(212,184,150,0.25)",
                     }}>
-                    <Icon size={18} style={{ color: "#d4b896" }} />
+                    <Icon size={18} style={{ color: item.isNew ? "#5BB5A2" : "#d4b896" }} />
                   </div>
-                  <p className="text-[#333] text-sm">{item.label}</p>
+                  <p className="text-[#333] text-sm break-keep">{item.label}</p>
                 </>
               );
 
-              const cardStyle = {
-                border: "1px solid rgba(212,184,150,0.22)",
-                boxShadow: "0 2px 10px rgba(212,184,150,0.06)",
-              };
+              const cardStyle = item.isNew
+                ? {
+                    border: "1px solid rgba(91,181,162,0.38)",
+                    boxShadow: "0 2px 12px rgba(91,181,162,0.12)",
+                  }
+                : {
+                    border: "1px solid rgba(212,184,150,0.22)",
+                    boxShadow: "0 2px 10px rgba(212,184,150,0.06)",
+                  };
 
               if (item.href) {
                 return (
@@ -71,12 +87,14 @@ export default function ServiceSection() {
                     className="group relative overflow-hidden bg-white rounded-sm p-5 text-center transition-all duration-400 hover:-translate-y-0.5"
                     style={cardStyle}
                     onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.border = "1px solid rgba(212,184,150,0.50)";
-                      (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 8px 28px rgba(212,184,150,0.22)";
+                      const t = e.currentTarget as HTMLAnchorElement;
+                      t.style.border = item.isNew ? "1px solid rgba(91,181,162,0.65)" : "1px solid rgba(212,184,150,0.50)";
+                      t.style.boxShadow = item.isNew ? "0 8px 28px rgba(91,181,162,0.25)" : "0 8px 28px rgba(212,184,150,0.22)";
                     }}
                     onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.border = "1px solid rgba(212,184,150,0.22)";
-                      (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 2px 10px rgba(212,184,150,0.06)";
+                      const t = e.currentTarget as HTMLAnchorElement;
+                      t.style.border = item.isNew ? "1px solid rgba(91,181,162,0.38)" : "1px solid rgba(212,184,150,0.22)";
+                      t.style.boxShadow = item.isNew ? "0 2px 12px rgba(91,181,162,0.12)" : "0 2px 10px rgba(212,184,150,0.06)";
                     }}
                   >
                     {content}

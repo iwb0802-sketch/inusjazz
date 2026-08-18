@@ -3,8 +3,10 @@
  * Design: Light background, two-column pricing cards + service icons grid
  * 지정 배정 vs 랜덤 배정 + 포함 서비스 안내
  */
+import { useState } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import {
+  ChevronDown,
   Diamond,
   Check,
   Shuffle,
@@ -53,6 +55,7 @@ const serviceGroups = [
 ];
 
 export default function PricingSection() {
+  const [showDiscount, setShowDiscount] = useState(false);
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
   const anim3 = useScrollAnimation();
@@ -97,29 +100,51 @@ export default function PricingSection() {
               <div className="p-6 sm:p-8">
                 {/* Price Range */}
                 <div className="text-center mb-6">
-                  <div className="flex flex-col items-center">
-                    <p className="text-[#1a1a1a] text-2xl sm:text-3xl font-bold tracking-tight">
-                      160,000<span className="text-base font-normal text-[#666]">원</span>
-                      <span className="text-[#bbb] mx-2 font-normal">~</span>
-                      220,000<span className="text-base font-normal text-[#666]">원</span>
-                    </p>
-                    <p className="text-[#a08a6f] text-[12px] sm:text-[13px] break-keep">
-                      이벤트 참여 시{" "}
-                      <span className="font-semibold text-[#c09a7e]">120,000원 ~ 180,000원</span>
-                    </p>
-                  </div>
-                  <span
-                    className="inline-block mt-3 text-[10.5px] sm:text-[11px] font-medium px-2.5 py-1 rounded-full break-keep tracking-wide"
-                    style={{ background: "rgba(212,184,150,0.10)", color: "#a08a6f", border: "1px solid rgba(212,184,150,0.35)" }}
+                  <p className="text-[#999] text-[11px] sm:text-xs tracking-[0.14em] mb-1.5">정가</p>
+                  <p className="text-[#1a1a1a] text-2xl sm:text-3xl font-bold tracking-tight break-keep">
+                    <span className="whitespace-nowrap">160,000<span className="text-base font-normal text-[#666]">원</span></span>
+                    <span className="text-[#ccc] font-normal mx-1.5">~</span>
+                    <span className="whitespace-nowrap">220,000<span className="text-base font-normal text-[#666]">원</span></span>
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowDiscount((v) => !v)}
+                    className="inline-flex items-center gap-1.5 mt-4 px-4 py-2 rounded-full text-[11.5px] sm:text-xs font-semibold tracking-wide transition-all duration-300 hover:opacity-80"
+                    style={{ background: "rgba(212,184,150,0.12)", color: "#a08a6f", border: "1px solid rgba(212,184,150,0.4)" }}
                   >
-                    이벤트 중복 참여 시 최대 4만원 할인
-                  </span>
+                    {showDiscount ? "할인가 닫기" : "할인가 보기"}
+                    <ChevronDown
+                      size={13}
+                      className={`transition-transform duration-300 ${showDiscount ? "rotate-180" : ""}`}
+                    />
+                  </button>
+
+                  <div
+                    className="overflow-hidden transition-all duration-500 ease-out"
+                    style={{ maxHeight: showDiscount ? 200 : 0, opacity: showDiscount ? 1 : 0 }}
+                  >
+                    <div
+                      className="mt-4 rounded-lg py-4 px-3"
+                      style={{ background: "rgba(212,184,150,0.07)", border: "1px dashed rgba(212,184,150,0.45)" }}
+                    >
+                      <p className="text-[#a08a6f] text-[11px] sm:text-xs tracking-[0.12em] mb-1 break-keep">이벤트 참여 시</p>
+                      <p className="text-[#c09a7e] text-xl sm:text-2xl font-bold tracking-tight break-keep">
+                        <span className="whitespace-nowrap">120,000<span className="text-sm font-normal">원</span></span>
+                        <span className="text-[#dcc9b3] font-normal mx-1.5">~</span>
+                        <span className="whitespace-nowrap">180,000<span className="text-sm font-normal">원</span></span>
+                      </p>
+                      <p className="text-[#999] text-[10.5px] sm:text-[11px] mt-2 break-keep leading-relaxed">
+                        이벤트 중복 참여 시 최대 4만원 할인
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Tier List */}
                 <div className="flex items-center justify-between px-1 mb-1.5">
                   <span className="text-[#aaa] text-[10.5px] tracking-wide">등급</span>
-                  <span className="text-[#aaa] text-[10.5px] tracking-wide">정가 / 이벤트 참여가</span>
+                  <span className="text-[#aaa] text-[10.5px] tracking-wide">{showDiscount ? "정가 / 이벤트 참여가" : "정가"}</span>
                 </div>
                 <div className="space-y-3 mb-8">
                   <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
@@ -129,7 +154,9 @@ export default function PricingSection() {
                     </div>
                     <span className="flex items-baseline gap-1.5">
                       <span className="text-[#1a1a1a] text-base font-bold">160,000원</span>
-                      <span className="text-[#c09a7e] text-[12px]">/ 120,000원</span>
+                      {showDiscount && (
+                        <span className="text-[#c09a7e] text-[12px]">/ 120,000원</span>
+                      )}
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
@@ -139,7 +166,9 @@ export default function PricingSection() {
                     </div>
                     <span className="flex items-baseline gap-1.5">
                       <span className="text-[#1a1a1a] text-base font-bold">180,000원</span>
-                      <span className="text-[#c09a7e] text-[12px]">/ 140,000원</span>
+                      {showDiscount && (
+                        <span className="text-[#c09a7e] text-[12px]">/ 140,000원</span>
+                      )}
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
@@ -149,7 +178,9 @@ export default function PricingSection() {
                     </div>
                     <span className="flex items-baseline gap-1.5">
                       <span className="text-[#1a1a1a] text-base font-bold">220,000원</span>
-                      <span className="text-[#c09a7e] text-[12px]">/ 180,000원</span>
+                      {showDiscount && (
+                        <span className="text-[#c09a7e] text-[12px]">/ 180,000원</span>
+                      )}
                     </span>
                   </div>
                 </div>
@@ -188,21 +219,41 @@ export default function PricingSection() {
               <div className="p-6 sm:p-8">
                 {/* Price */}
                 <div className="text-center mb-6">
-                  <div className="flex flex-col items-center">
-                    <p className="text-[#1a1a1a] text-3xl sm:text-4xl font-bold tracking-tight">
-                      140,000<span className="text-base font-normal text-[#666]">원</span>
-                    </p>
-                    <p className="mt-2.5 text-[#a08a6f] text-[12px] sm:text-[13px] break-keep">
-                      이벤트 참여 시{" "}
-                      <span className="font-semibold text-[#c09a7e]">100,000원</span>
-                    </p>
-                  </div>
-                  <span
-                    className="inline-block mt-3 text-[10.5px] sm:text-[11px] font-medium px-2.5 py-1 rounded-full break-keep tracking-wide"
-                    style={{ background: "rgba(212,184,150,0.10)", color: "#a08a6f", border: "1px solid rgba(212,184,150,0.35)" }}
+                  <p className="text-[#999] text-[11px] sm:text-xs tracking-[0.14em] mb-1.5">정가</p>
+                  <p className="text-[#1a1a1a] text-3xl sm:text-4xl font-bold tracking-tight whitespace-nowrap">
+                    140,000<span className="text-base font-normal text-[#666]">원</span>
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowDiscount((v) => !v)}
+                    className="inline-flex items-center gap-1.5 mt-4 px-4 py-2 rounded-full text-[11.5px] sm:text-xs font-semibold tracking-wide transition-all duration-300 hover:opacity-80"
+                    style={{ background: "rgba(212,184,150,0.12)", color: "#a08a6f", border: "1px solid rgba(212,184,150,0.4)" }}
                   >
-                    이벤트 중복 참여 시 최대 4만원 할인
-                  </span>
+                    {showDiscount ? "할인가 닫기" : "할인가 보기"}
+                    <ChevronDown
+                      size={13}
+                      className={`transition-transform duration-300 ${showDiscount ? "rotate-180" : ""}`}
+                    />
+                  </button>
+
+                  <div
+                    className="overflow-hidden transition-all duration-500 ease-out"
+                    style={{ maxHeight: showDiscount ? 200 : 0, opacity: showDiscount ? 1 : 0 }}
+                  >
+                    <div
+                      className="mt-4 rounded-lg py-4 px-3"
+                      style={{ background: "rgba(212,184,150,0.07)", border: "1px dashed rgba(212,184,150,0.45)" }}
+                    >
+                      <p className="text-[#a08a6f] text-[11px] sm:text-xs tracking-[0.12em] mb-1 break-keep">이벤트 참여 시</p>
+                      <p className="text-[#c09a7e] text-2xl sm:text-3xl font-bold tracking-tight whitespace-nowrap">
+                        100,000<span className="text-sm font-normal">원</span>
+                      </p>
+                      <p className="text-[#999] text-[10.5px] sm:text-[11px] mt-2 break-keep leading-relaxed">
+                        이벤트 중복 참여 시 최대 4만원 할인
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Features */}

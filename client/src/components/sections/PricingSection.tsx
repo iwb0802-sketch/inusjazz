@@ -96,36 +96,61 @@ export default function PricingSection() {
 
               <div className="p-6 sm:p-8">
                 {/* Price Range */}
-                <div className="text-center mb-8">
-                  <p className="text-[#1a1a1a] text-2xl sm:text-3xl font-bold">
-                    160,000<span className="text-base font-normal text-[#666]">원</span>
-                    <span className="text-[#999] mx-2">~</span>
-                    220,000<span className="text-base font-normal text-[#666]">원</span>
+                <div className="text-center mb-6">
+                  <p className="text-[#999] text-[12px] sm:text-[13px]">
+                    정가 <span className="line-through decoration-[#c9c9c9]">160,000원 ~ 220,000원</span>
                   </p>
+                  <p className="mt-2 text-[#5BB5A2] text-[11px] sm:text-xs font-bold tracking-wide">
+                    이벤트 참여 시
+                  </p>
+                  <p className="mt-0.5 text-[#1a1a1a] text-2xl sm:text-3xl font-bold">
+                    120,000<span className="text-base font-normal text-[#666]">원</span>
+                    <span className="text-[#999] mx-2">~</span>
+                    180,000<span className="text-base font-normal text-[#666]">원</span>
+                  </p>
+                  <span
+                    className="inline-block mt-2.5 text-[11px] sm:text-xs font-bold px-2.5 py-1 rounded-full break-keep"
+                    style={{ background: "rgba(91,181,162,0.13)", color: "#3f9d8a", border: "1px solid rgba(91,181,162,0.35)" }}
+                  >
+                    이벤트 중복 참여 시 최대 4만원 할인
+                  </span>
                 </div>
 
                 {/* Tier List */}
+                <div className="flex items-center justify-between px-1 mb-1.5">
+                  <span className="text-[#aaa] text-[10.5px] tracking-wide">등급</span>
+                  <span className="text-[#aaa] text-[10.5px] tracking-wide">정가 → 이벤트 참여가</span>
+                </div>
                 <div className="space-y-3 mb-8">
                   <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
                     <div className="flex items-center gap-2">
                       <Diamond size={14} className="text-[#d4b896]" />
                       <span className="text-[#333] text-base font-semibold">일반 등급</span>
                     </div>
-                    <span className="text-[#1a1a1a] font-semibold">160,000원</span>
+                    <span className="flex items-baseline gap-1.5">
+                      <span className="text-[#b3b3b3] text-[13px] line-through decoration-[#cfcfcf]">160,000</span>
+                      <span className="text-[#1a1a1a] font-bold">120,000원</span>
+                    </span>
                   </div>
                   <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
                     <div className="flex items-center gap-2">
                       <Diamond size={14} className="text-[#d4b896]" />
                       <span className="text-[#333] text-base font-semibold">베스트 등급</span>
                     </div>
-                    <span className="text-[#1a1a1a] font-semibold">180,000원</span>
+                    <span className="flex items-baseline gap-1.5">
+                      <span className="text-[#b3b3b3] text-[13px] line-through decoration-[#cfcfcf]">180,000</span>
+                      <span className="text-[#1a1a1a] font-bold">140,000원</span>
+                    </span>
                   </div>
                   <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
                     <div className="flex items-center gap-2">
                       <Diamond size={14} className="text-[#d4b896]" />
                       <span className="text-[#333] text-base font-semibold">프리미엄 등급</span>
                     </div>
-                    <span className="text-[#1a1a1a] font-semibold">220,000원</span>
+                    <span className="flex items-baseline gap-1.5">
+                      <span className="text-[#b3b3b3] text-[13px] line-through decoration-[#cfcfcf]">220,000</span>
+                      <span className="text-[#1a1a1a] font-bold">180,000원</span>
+                    </span>
                   </div>
                 </div>
 
@@ -162,10 +187,22 @@ export default function PricingSection() {
 
               <div className="p-6 sm:p-8">
                 {/* Price */}
-                <div className="text-center mb-8">
-                  <p className="text-[#1a1a1a] text-3xl sm:text-4xl font-bold">
-                    140,000<span className="text-base font-normal text-[#666]">원</span>
+                <div className="text-center mb-6">
+                  <p className="text-[#999] text-[12px] sm:text-[13px]">
+                    정가 <span className="line-through decoration-[#c9c9c9]">140,000원</span>
                   </p>
+                  <p className="mt-2 text-[#5BB5A2] text-[11px] sm:text-xs font-bold tracking-wide">
+                    이벤트 참여 시
+                  </p>
+                  <p className="mt-0.5 text-[#1a1a1a] text-3xl sm:text-4xl font-bold">
+                    100,000<span className="text-base font-normal text-[#666]">원</span>
+                  </p>
+                  <span
+                    className="inline-block mt-2.5 text-[11px] sm:text-xs font-bold px-2.5 py-1 rounded-full break-keep"
+                    style={{ background: "rgba(91,181,162,0.13)", color: "#3f9d8a", border: "1px solid rgba(91,181,162,0.35)" }}
+                  >
+                    이벤트 중복 참여 시 최대 4만원 할인
+                  </span>
                 </div>
 
                 {/* Features */}
@@ -194,7 +231,43 @@ export default function PricingSection() {
           </div>
 
           {/* Bottom Note */}
-          <p className="text-center text-[#999] text-xs mt-8">
+          {/* 할인 구성 안내 */}
+          <div
+            className="mt-8 rounded-lg p-5 sm:p-6"
+            style={{ background: "#fff", border: "1px solid rgba(212,184,150,0.3)" }}
+          >
+            <p className="text-center text-[#1a1a1a] text-[13px] sm:text-sm font-bold mb-4 break-keep">
+              할인은 <span className="text-[#5BB5A2]">중복 적용</span>됩니다 · 최대 4만원
+            </p>
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              {[
+                { t: "상담 후기 작성", v: "2만원" },
+                { t: "지인 할인 코드", v: "1만원" },
+                { t: "블로그 상담 후기 게시", v: "" },
+              ].map((d) => (
+                <div
+                  key={d.t}
+                  className="text-center rounded-md py-2.5 px-2 flex flex-col justify-center"
+                  style={{ background: "#faf9f7", border: "1px solid #eee" }}
+                >
+                  <p className="text-[#666] text-[10.5px] sm:text-[11px] break-keep leading-snug">{d.t}</p>
+                  {d.v ? (
+                    <p className="text-[#c09a7e] text-[13px] sm:text-sm font-bold mt-0.5">-{d.v}</p>
+                  ) : (
+                    <p className="text-[#c09a7e] text-[11px] sm:text-xs font-bold mt-0.5 break-keep">추가 할인</p>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-[#999] text-[10.5px] sm:text-xs mt-4 break-keep leading-relaxed">
+              <span className="whitespace-nowrap">위 할인가는 각 이벤트에 참여하셨을 경우</span>{" "}
+              <span className="whitespace-nowrap">적용되는 금액입니다.</span>
+              <br className="sm:hidden" />{" "}
+              <span className="whitespace-nowrap">참여 여부·적용 가능 항목은 상담 시 안내드립니다.</span>
+            </p>
+          </div>
+
+          <p className="text-center text-[#999] text-xs mt-5">
             ※ 모든 가격은 부가세 포함 금액입니다. 자세한 내용은 카카오톡 상담을 통해 확인해주세요.
           </p>
         </div>

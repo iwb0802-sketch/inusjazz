@@ -5,6 +5,7 @@
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import {
+  ArrowRight,
   Diamond,
   Check,
   Shuffle,
@@ -97,17 +98,20 @@ export default function PricingSection() {
               <div className="p-6 sm:p-8">
                 {/* Price Range */}
                 <div className="text-center mb-6">
-                  <p className="text-[#999] text-[12px] sm:text-[13px]">
-                    정가 <span className="line-through decoration-[#c9c9c9]">160,000원 ~ 220,000원</span>
-                  </p>
-                  <p className="mt-2 text-[#5BB5A2] text-[11px] sm:text-xs font-bold tracking-wide">
-                    이벤트 참여 시
-                  </p>
-                  <p className="mt-0.5 text-[#1a1a1a] text-2xl sm:text-3xl font-bold">
-                    120,000<span className="text-base font-normal text-[#666]">원</span>
-                    <span className="text-[#999] mx-2">~</span>
-                    180,000<span className="text-base font-normal text-[#666]">원</span>
-                  </p>
+                  <div className="flex flex-col items-center gap-1">
+                    <p className="text-[#aaa] text-[12px] sm:text-[13px] break-keep">
+                      정가 <span className="line-through decoration-[#cfcfcf]">160,000원 ~ 220,000원</span>
+                    </p>
+                    <ArrowRight size={14} className="text-[#5BB5A2] rotate-90" />
+                    <p className="text-[#5BB5A2] text-[11px] sm:text-xs font-bold tracking-wide">
+                      이벤트가
+                    </p>
+                    <p className="text-[#1a1a1a] text-2xl sm:text-3xl font-bold">
+                      120,000<span className="text-base font-normal text-[#666]">원</span>
+                      <span className="text-[#999] mx-2">~</span>
+                      180,000<span className="text-base font-normal text-[#666]">원</span>
+                    </p>
+                  </div>
                   <span
                     className="inline-block mt-2.5 text-[11px] sm:text-xs font-bold px-2.5 py-1 rounded-full break-keep"
                     style={{ background: "rgba(91,181,162,0.13)", color: "#3f9d8a", border: "1px solid rgba(91,181,162,0.35)" }}
@@ -119,7 +123,7 @@ export default function PricingSection() {
                 {/* Tier List */}
                 <div className="flex items-center justify-between px-1 mb-1.5">
                   <span className="text-[#aaa] text-[10.5px] tracking-wide">등급</span>
-                  <span className="text-[#aaa] text-[10.5px] tracking-wide">정가 → 이벤트 참여가</span>
+                  <span className="text-[#aaa] text-[10.5px] tracking-wide">정가 → 이벤트가</span>
                 </div>
                 <div className="space-y-3 mb-8">
                   <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
@@ -129,6 +133,7 @@ export default function PricingSection() {
                     </div>
                     <span className="flex items-baseline gap-1.5">
                       <span className="text-[#b3b3b3] text-[13px] line-through decoration-[#cfcfcf]">160,000</span>
+                      <span className="text-[#5BB5A2] text-[12px]">→</span>
                       <span className="text-[#1a1a1a] font-bold">120,000원</span>
                     </span>
                   </div>
@@ -139,6 +144,7 @@ export default function PricingSection() {
                     </div>
                     <span className="flex items-baseline gap-1.5">
                       <span className="text-[#b3b3b3] text-[13px] line-through decoration-[#cfcfcf]">180,000</span>
+                      <span className="text-[#5BB5A2] text-[12px]">→</span>
                       <span className="text-[#1a1a1a] font-bold">140,000원</span>
                     </span>
                   </div>
@@ -149,6 +155,7 @@ export default function PricingSection() {
                     </div>
                     <span className="flex items-baseline gap-1.5">
                       <span className="text-[#b3b3b3] text-[13px] line-through decoration-[#cfcfcf]">220,000</span>
+                      <span className="text-[#5BB5A2] text-[12px]">→</span>
                       <span className="text-[#1a1a1a] font-bold">180,000원</span>
                     </span>
                   </div>
@@ -188,15 +195,18 @@ export default function PricingSection() {
               <div className="p-6 sm:p-8">
                 {/* Price */}
                 <div className="text-center mb-6">
-                  <p className="text-[#999] text-[12px] sm:text-[13px]">
-                    정가 <span className="line-through decoration-[#c9c9c9]">140,000원</span>
-                  </p>
-                  <p className="mt-2 text-[#5BB5A2] text-[11px] sm:text-xs font-bold tracking-wide">
-                    이벤트 참여 시
-                  </p>
-                  <p className="mt-0.5 text-[#1a1a1a] text-3xl sm:text-4xl font-bold">
-                    100,000<span className="text-base font-normal text-[#666]">원</span>
-                  </p>
+                  <div className="flex flex-col items-center gap-1">
+                    <p className="text-[#aaa] text-[12px] sm:text-[13px] break-keep">
+                      정가 <span className="line-through decoration-[#cfcfcf]">140,000원</span>
+                    </p>
+                    <ArrowRight size={14} className="text-[#5BB5A2] rotate-90" />
+                    <p className="text-[#5BB5A2] text-[11px] sm:text-xs font-bold tracking-wide">
+                      이벤트가
+                    </p>
+                    <p className="text-[#1a1a1a] text-3xl sm:text-4xl font-bold">
+                      100,000<span className="text-base font-normal text-[#666]">원</span>
+                    </p>
+                  </div>
                   <span
                     className="inline-block mt-2.5 text-[11px] sm:text-xs font-bold px-2.5 py-1 rounded-full break-keep"
                     style={{ background: "rgba(91,181,162,0.13)", color: "#3f9d8a", border: "1px solid rgba(91,181,162,0.35)" }}
@@ -260,7 +270,7 @@ export default function PricingSection() {
               ))}
             </div>
             <p className="text-center text-[#999] text-[10.5px] sm:text-xs mt-4 break-keep leading-relaxed">
-              <span className="whitespace-nowrap">위 할인가는 각 이벤트에 참여하셨을 경우</span>{" "}
+              <span className="whitespace-nowrap">위 이벤트가는 각 이벤트에 참여하셨을 경우</span>{" "}
               <span className="whitespace-nowrap">적용되는 금액입니다.</span>
               <br className="sm:hidden" />{" "}
               <span className="whitespace-nowrap">참여 여부·적용 가능 항목은 상담 시 안내드립니다.</span>

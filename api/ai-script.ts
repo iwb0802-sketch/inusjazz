@@ -22,6 +22,7 @@ type GeneratePayload = {
   customOrder?: string;
   coupleStory?: string;
   requests?: string;
+  companyGuide?: string;
 };
 
 const CORE_GUIDE = `
@@ -48,6 +49,8 @@ const CORE_GUIDE = `
 18. 기본 예식은 번호/식순/시간/멘트/비고의 5열 구조입니다. 기본 식순은 하객 입장 안내, 오프닝, 개식 선언, 혼주님 입장, 화촉점화, 신랑 입장, 신부 입장, 맞절, 혼인서약, 반지 교환, 성혼선언, 편지/덕담/축가(답변에 있는 경우), 양가혼주님 및 내빈 인사, 행진, 폐회입니다. 사용자가 정한 식순이 있으면 그 식순을 우선합니다.
 19. 2부 피로연은 개식사, 신랑신부 입장, 촛불점화, 케이크커팅, 축배, 퇴장 순서의 짧고 경쾌한 톤을 사용합니다.
 20. 같은 틀을 기계적으로 반복하지 말고, style 값에 맞춰 클래식·트렌디·감성 버전을 변주하되 위 규칙은 절대 어기지 마세요.
+21. 이너스뮤직 프리미엄 실제 대본 기준을 따르세요. 모든 식순은 `번호 / 식순 / 시간 / 멘트 / 비고`로 정리하고, 오프닝·입장·맞절·서약·성혼선언·축가·양가 인사·행진의 연결이 자연스러워야 합니다. 각 입장과 핵심 순서에는 실제 현장 진행이 가능한 명확한 콜 구령을 넣으세요.
+22. 인수인계 자료에서 확인된 프리미엄 대본 톤처럼 차분하고 품격 있는 존댓말을 기본으로 하되, 답변지에 있는 실제 두 사람의 매력·인연·감사말은 따뜻하고 자연스럽게 연결하세요. 검증되지 않은 개인사·가족사·관계·곡명은 만들지 마세요.
 
 [출력 규칙]
 반드시 JSON 객체만 출력하세요. Markdown 코드블록이나 설명 문단은 절대 출력하지 마세요.
@@ -155,6 +158,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       신랑신부스토리_답변지: cleanText(body.coupleStory, 10000),
       특별요청_음원_연출: cleanText(body.requests, 6000),
     };
+    const companyGuide = cleanText(body.companyGuide, 18000);
 
     const userPrompt = `아래는 이번 커플의 제공 정보입니다. 제공 정보 외의 사실은 절대 만들지 마세요.\n\n[커플 정보]\n${JSON.stringify(input, null, 2)}\n\n회사 기준에 따라 엑셀용 사회 대본 JSON을 작성하세요.`;
     const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -168,7 +172,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5",
         max_tokens: 7000,
         temperature: 0.85,
-        system: process.env.AI_SCRIPT_GUIDE ? `${CORE_GUIDE}\n\n[회사 추가 지침]\n${process.env.AI_SCRIPT_GUIDE}` : CORE_GUIDE,
+        system: [CORE_GUIDE, process.env.AI_SCRIPT_GUIDE ? `[서버 고정 회사 지침]\n${process.env.AI_SCRIPT_GUIDE}` : "", companyGuide ? `[관리자 화면에서 저장한 회사 지침]\n${companyGuide}` : ""].filter(Boolean).join("\n\n"),
         messages: [{ role: "user", content: userPrompt }],
       }),
 

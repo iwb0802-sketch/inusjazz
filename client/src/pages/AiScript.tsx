@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ExcelJS from "exceljs";
 
 const API_URL = "/api/ai-script";
@@ -8,6 +8,7 @@ type CeremonyType = "main" | "reception";
 type ScriptStyle = "classic" | "trendy" | "warm";
 type ScriptSection = { no: number; order: string; time: string; script: string; note: string };
 type GeneratedScript = { title: string; subtitle: string; sections: ScriptSection[]; review_flags: string[] };
+type WorkspaceTab = "generator" | "guide";
 
 type FormValues = {
   groomName: string; brideName: string; mcName: string; ceremonyType: CeremonyType; style: ScriptStyle;
@@ -25,6 +26,32 @@ const C = {
   ink: "#111B2E", navy: "#17243B", mint: "#2D9B8A", mintSoft: "#E8FAF8", mintPale: "#F4FCFB",
   cream: "#F7F8F5", line: "#DCE4E3", text: "#263238", muted: "#71808A", coral: "#E36C6C", white: "#FFFFFF",
 };
+
+const DEFAULT_COMPANY_GUIDE = `# 이너스뮤직 프리미엄 사회 대본 기준
+
+## 기본 문체
+- 차분하고 품격 있는 한국어 존댓말을 사용합니다.
+- 신랑은 "OOO 군", 신부는 "OOO 양"으로 표기합니다.
+- 과장된 표현보다 따뜻하고 자연스러운 연결을 우선합니다.
+
+## 기본 식순
+하객 입장 안내 → 오프닝 → 개식 선언 → 혼주님 입장/화촉점화 → 신랑 입장 → 신부 입장 → 맞절 → 혼인서약 → 반지 교환 → 성혼선언 → 축가·덕담·편지(있는 경우) → 양가 인사 → 내빈 인사 → 행진 → 폐회
+
+## 반드시 지킬 사항
+- 제공되지 않은 첫 만남, 직업, 가족관계, 곡명, 관계를 만들지 않습니다.
+- 답변지의 실제 인용 문장만 <answer>와 </answer>로 감싸서 반영합니다.
+- 음원 타이밍·연출·서프라이즈 주의는 멘트가 아니라 비고에 작성합니다.
+- 박수 요청은 반드시 대상을 명시하고, 실제 진행 가능한 콜 구령을 넣습니다.
+- 신부 입장은 감성적으로 강조하되 콜 직전에는 "그럼 불러보겠습니다."를 사용합니다.
+- 화촉점화 뒤에는 양가 인사, 내빈 인사, 혼주석 착석 안내가 자연스럽게 이어지게 합니다.
+- 민감한 가족 정보나 답변지의 상충 정보는 멘트에 쓰지 않고 확인 필요 사항으로 남깁니다.
+
+## 프리미엄 대본 스타일
+- 각 식순 사이의 감정과 진행 흐름이 끊기지 않게 연결합니다.
+- 오프닝은 참석자 환영과 예식의 의미를 자연스럽게 전달합니다.
+- 입장 순서에서는 답변지에 있는 실제 매력과 이야기를 품격 있게 연결합니다.
+- 축가·덕담 소개는 제공된 관계와 곡명만 사용합니다.
+- 양가 인사와 행진은 감사와 축복의 분위기로 마무리합니다.`;
 
 function stripTags(text: string) {
   return (text || "").replace(/<answer>/g, "").replace(/<\/answer>/g, "");
@@ -72,6 +99,36 @@ function PrimaryButton({ children, onClick, disabled }: { children: React.ReactN
   return <button onClick={onClick} disabled={disabled} style={{ border: "none", cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? .62 : 1, fontFamily: "inherit", fontWeight: 800, fontSize: 14, color: C.white, background: `linear-gradient(135deg,${C.mint},#54BDA9)`, borderRadius: 10, minHeight: 46, padding: "0 18px", boxShadow: "0 7px 18px rgba(45,155,138,.22)" }}>{children}</button>;
 }
 
+function GuideManager({ guide, onChange }: { guide: string; onChange: (value: string) => void }) {
+  const [saved, setSaved] = useState(false);
+  const save = () => {
+    localStorage.setItem("inus_ai_company_guide", guide.trim());
+    setSaved(true);
+    window.setTimeout(() => setSaved(false), 1800);
+  };
+  const restore = () => {
+    if (window.confirm("현재 작성한 지침을 기본 프리미엄 기준으로 되돌릴까요?")) onChange(DEFAULT_COMPANY_GUIDE);
+  };
+  return <section style={{ maxWidth: 980, background: C.white, border: `1px solid ${C.line}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 25px rgba(19,36,59,.05)" }}>
+    <div style={{ padding: "20px 22px", background: C.mintPale, borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ fontSize: 16, color: C.ink, fontWeight: 900 }}>회사 지침 관리</div>
+      <p style={{ margin: "6px 0 0", color: C.muted, fontSize: 12, lineHeight: 1.7 }}>여기에 적고 저장한 내용은 이 브라우저에서 보관되며, 이후 모든 AI 대본 생성 요청에 자동으로 함께 반영됩니다. 실제 대본 예시는 개인정보를 지운 핵심 표현·식순·금지 문구 중심으로 입력해주세요.</p>
+    </div>
+    <div style={{ padding: 22 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 10, marginBottom: 18 }}>
+        {[["01", "필수 식순", "기본 순서·생략 가능 순서"], ["02", "표현 기준", "반드시 쓰거나 피할 표현"], ["03", "대본 예시", "좋은 문장·전환 방식"]].map(([num, title, desc]) => <div key={num} style={{ border: `1px solid ${C.line}`, borderRadius: 10, padding: 12, background: "#FBFDFC" }}><div style={{ color: C.mint, fontSize: 10, fontWeight: 900 }}>{num}</div><div style={{ color: C.ink, fontSize: 13, fontWeight: 900, marginTop: 3 }}>{title}</div><div style={{ color: C.muted, fontSize: 10, marginTop: 3, lineHeight: 1.5 }}>{desc}</div></div>)}
+      </div>
+      <FieldLabel>이너스뮤직 회사 지침</FieldLabel>
+      <TextArea value={guide} onChange={onChange} rows={29} placeholder="회사 대본 작성 기준, 금지 표현, 식순 원칙, 좋은 멘트 예시를 입력하세요." />
+      <div style={{ display: "flex", gap: 9, flexWrap: "wrap", alignItems: "center", marginTop: 16 }}>
+        <PrimaryButton onClick={save}>회사 지침 저장</PrimaryButton>
+        <button onClick={restore} style={{ minHeight: 46, padding: "0 15px", borderRadius: 10, border: `1px solid ${C.line}`, background: C.white, color: C.muted, fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>기본 기준 복원</button>
+        <span style={{ color: saved ? C.mint : C.muted, fontSize: 11, fontWeight: saved ? 800 : 500 }}>{saved ? "저장 완료 · 다음 대본부터 반영됩니다." : "저장 후 대본 작성 탭에서 생성하면 이 지침이 반영됩니다."}</span>
+      </div>
+    </div>
+  </section>;
+}
+
 export default function AiScript() {
   const [password, setPassword] = useState(() => sessionStorage.getItem("inus_ai_script_password") || "");
   const [passwordInput, setPasswordInput] = useState("");
@@ -82,6 +139,13 @@ export default function AiScript() {
   const [error, setError] = useState("");
   const [showMore, setShowMore] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState<WorkspaceTab>("generator");
+  const [companyGuide, setCompanyGuide] = useState(DEFAULT_COMPANY_GUIDE);
+
+  useEffect(() => {
+    const savedGuide = localStorage.getItem("inus_ai_company_guide");
+    if (savedGuide) setCompanyGuide(savedGuide);
+  }, []);
 
   const update = <K extends keyof FormValues>(key: K, value: FormValues[K]) => setForm(prev => ({ ...prev, [key]: value }));
   const sectionCount = script?.sections.length || 0;
@@ -106,7 +170,7 @@ export default function AiScript() {
       const response = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, companyGuide }),
       });
       const result = await response.json();
       if (!response.ok) {
@@ -213,11 +277,15 @@ export default function AiScript() {
         <a href={ADMIN_HOME} style={{ color: "#BFEDE5", textDecoration: "none", fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" }}>← 관리자</a>
         <div style={{ width: 1, height: 18, background: "rgba(255,255,255,.18)" }} />
         <div style={{ minWidth: 0, flex: 1 }}><div style={{ color: "#61D5C0", fontSize: 10, fontWeight: 900, letterSpacing: 2.6 }}>INUS MUSIC</div><div style={{ fontWeight: 800, fontSize: 16, letterSpacing: "-.4px" }}>AI 사회 대본 작성실</div></div>
-        <button onClick={() => { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }} style={{ background: "transparent", border: "1px solid rgba(255,255,255,.25)", borderRadius: 7, color: "#E4EEEC", fontSize: 11, padding: "7px 9px", cursor: "pointer", fontFamily: "inherit" }}>잠금</button>
+        <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+          {([ ["generator", "대본 작성"], ["guide", "회사 지침"] ] as [WorkspaceTab, string][]).map(([key, label]) => <button key={key} onClick={() => setActiveTab(key)} style={{ background: activeTab === key ? "#61D5C0" : "transparent", border: `1px solid ${activeTab === key ? "#61D5C0" : "rgba(255,255,255,.25)"}`, borderRadius: 7, color: activeTab === key ? C.ink : "#E4EEEC", fontSize: 11, padding: "7px 9px", cursor: "pointer", fontFamily: "inherit", fontWeight: 800 }}>{label}</button>)}
+          <button onClick={() => { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }} style={{ background: "transparent", border: "1px solid rgba(255,255,255,.25)", borderRadius: 7, color: "#E4EEEC", fontSize: 11, padding: "7px 9px", cursor: "pointer", fontFamily: "inherit" }}>잠금</button>
+        </div>
       </div>
     </header>
 
     <main style={{ maxWidth: 1380, margin: "0 auto", padding: "28px 20px 80px", boxSizing: "border-box" }}>
+      {activeTab === "guide" ? <GuideManager guide={companyGuide} onChange={setCompanyGuide} /> : <>
       <div style={{ marginBottom: 22 }}>
         <h1 style={{ fontSize: 27, color: C.ink, margin: 0, letterSpacing: "-1.2px" }}>맞춤형 사회 대본 생성</h1>
         <p style={{ margin: "8px 0 0", fontSize: 13, color: C.muted, lineHeight: 1.7 }}>필수 정보만으로 초안을 만든 뒤, 답변지·요청사항을 추가하면 회사 기준에 맞춰 더 정교하게 작성됩니다.</p>
@@ -268,6 +336,7 @@ export default function AiScript() {
           </div>
         </section>}
       </div>
+      </>}
     </main>
   </div>;
 }

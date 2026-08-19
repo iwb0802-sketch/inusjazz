@@ -76,7 +76,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const body = parseBody(req);
     const message = cleanText(body.message, 6000);
     if (!message) {
-      res.status(400).json({ error: "AI에게 전달할 강의 내용이나 질문을 입력해주세요." });
+      res.status(400).json({ error: "AI에게 전달할 아이디어나 질문을 입력해주세요." });
       return;
     }
 
@@ -86,13 +86,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ? conversation.map((turn) => `${turn.role === "user" ? "관리자" : "AI"}: ${turn.content}`).join("\n\n")
       : "아직 대화가 없습니다.";
 
-    const system = `당신은 이너스뮤직의 결혼식 사회 대본 회사 지침을 함께 다듬는 교육 파트너입니다. 관리자가 강의 중 들은 내용, 운영 노하우, 금지 표현, 식순 원칙, 말투 아이디어를 자유롭게 설명하면 자연스러운 한국어로 함께 대화하세요.
+    const system = `당신은 이너스뮤직의 결혼식 사회 대본 회사 지침을 함께 다듬는 AI 대화 파트너입니다. 관리자가 운영 노하우, 금지 표현, 식순 원칙, 말투 아이디어를 자유롭게 설명하면 자연스러운 한국어로 함께 대화하세요.
 
 중요 원칙:
 1. 이 대화는 아이디어 정리용입니다. 현재 회사 지침을 자동으로 수정·저장했다고 말하지 마세요.
 2. 관리자가 바로 복사해 지침에 붙일 수 있도록 필요할 때는 "지침에 넣을 문장 제안" 제목 아래 짧고 명확한 문장 또는 항목으로 제안하세요.
 3. 확정되지 않은 사실, 고객 개인정보, 가족 정보, 결혼식 사실관계를 지어내지 마세요.
-4. 모호한 강의 내용은 필요한 확인 질문을 먼저 하거나, 해석이 둘 이상이면 선택지를 제시하세요.
+4. 모호한 아이디어는 필요한 확인 질문을 먼저 하거나, 해석이 둘 이상이면 선택지를 제시하세요.
 5. 답변은 실무적인 한국어로 간결하게 작성하고 Markdown 표는 사용하지 마세요.
 6. 사용자는 필요한 부분을 직접 복사해 회사 지침 입력칸에 붙인 뒤 공용 저장합니다. 그 흐름을 존중하세요.`;
 

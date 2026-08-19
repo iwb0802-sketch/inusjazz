@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import ExcelJS from "exceljs";
 
 const API_URL = "/api/ai-script";
+const REVISION_API_URL = "/api/ai-script-revise";
 const GUIDE_API_URL = "/api/ai-guide";
 const GUIDE_LEARN_API_URL = "/api/ai-guide-learn";
 const ADMIN_HOME = "http://bnsmusics.godohosting.com/bns/admin/event_list.php?sUser_id=bnsmusic&sUser_nm=%EA%B4%80%EB%A6%AC%EC%9E%90";
@@ -10,6 +11,7 @@ type CeremonyType = "main" | "reception";
 type ScriptStyle = "classic" | "trendy" | "warm";
 type ScriptSection = { no: number; order: string; time: string; script: string; note: string };
 type GeneratedScript = { title: string; subtitle: string; sections: ScriptSection[]; review_flags: string[] };
+type RevisionMessage = { role: "user" | "assistant"; content: string; createdAt: string };
 type LearnedPattern = { id: string; title: string; summary: string; createdAt: string };
 type GuideVersion = { id: string; guide: string; savedAt: string };
 type SharedGuideResponse = { guide: string; learnedPatterns: LearnedPattern[]; guideHistory: GuideVersion[]; currentVersionId: string | null; updatedAt: string | null };
@@ -243,6 +245,10 @@ export default function AiScript() {
   const [script, setScript] = useState<GeneratedScript | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [revisionInstruction, setRevisionInstruction] = useState("");
+  const [revisionMessages, setRevisionMessages] = useState<RevisionMessage[]>([]);
+  const [revisionLoading, setRevisionLoading] = useState(false);
+  const [revisionError, setRevisionError] = useState("");
   const [showMore, setShowMore] = useState(false);
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<WorkspaceTab>("generator");
@@ -336,7 +342,7 @@ export default function AiScript() {
       setError("신랑·신부 이름을 모두 입력해주세요.");
       return;
     }
-    setLoading(true); setError(""); setScript(null);
+    setLoading(true); setError(""); setScript(null); setRevisionMessages([]); setRevisionInstruction(""); setRevisionError("");
     try {
       const response = await fetch(API_URL, {
         method: "POST",
@@ -352,6 +358,31 @@ export default function AiScript() {
     } catch (e) {
       setError(e instanceof Error ? e.message : "대본 생성 중 오류가 발생했습니다.");
     } finally { setLoading(false); }
+  };
+
+  const reviseScript = async () => {
+    if (!script || !revisionInstruction.trim() || revisionLoading) return;
+    const userMessage: RevisionMessage = { role: "user", content: revisionInstruction.trim(), createdAt: new Date().toISOString() };
+    const conversation = [...revisionMessages, userMessage];
+    setRevisionMessages(conversation);
+    setRevisionInstruction("");
+    setRevisionLoading(true); setRevisionError("");
+    try {
+      const response = await fetch(REVISION_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
+        body: JSON.stringify({ instruction: userMessage.content, script, companyGuide: guideForGeneration, conversation }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        if (response.status === 401) { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }
+        throw new Error(result.error || "AI 대본 수정에 실패했습니다.");
+      }
+      setScript(result.script as GeneratedScript);
+      setRevisionMessages((current) => [...current, { role: "assistant", content: String(result.assistantMessage || "요청하신 내용을 반영해 대본을 수정했습니다."), createdAt: new Date().toISOString() }]);
+    } catch (e) {
+      setRevisionError(e instanceof Error ? e.message : "AI 대본 수정 중 오류가 발생했습니다.");
+    } finally { setRevisionLoading(false); }
   };
 
   const updateSection = (index: number, field: keyof ScriptSection, value: string) => {
@@ -502,6 +533,17 @@ export default function AiScript() {
           <div style={{ padding: 18 }}>
             <div style={{ marginBottom: 16, padding: "12px 14px", background: C.mintPale, border: `1px solid #C4EEE8`, borderRadius: 10 }}><div style={{ color: C.ink, fontSize: 14, fontWeight: 900 }}>{script.title}</div><div style={{ color: C.muted, fontSize: 11, marginTop: 4 }}>{script.subtitle}</div><div style={{ color: C.coral, fontSize: 10, marginTop: 8 }}>빨간색 굵은 글씨는 답변지·요청사항 인용 구간이며, 엑셀에도 동일하게 적용됩니다.</div></div>
             {script.review_flags.length > 0 && <div style={{ marginBottom: 16, padding: "11px 13px", background: "#FFF9E9", border: "1px solid #F2DFAB", borderRadius: 10 }}><div style={{ color: "#8A671D", fontSize: 11, fontWeight: 900, marginBottom: 6 }}>⚑ 발송 전 확인 필요</div>{script.review_flags.map((flag, index) => <div key={index} style={{ color: "#81672B", fontSize: 11, lineHeight: 1.6 }}>• {flag}</div>)}</div>}
+            <section style={{ marginBottom: 16, border: `1px solid #BCE8E0`, borderRadius: 12, overflow: "hidden", background: "#FBFFFE" }}>
+              <div style={{ padding: "12px 14px", background: C.mintPale, borderBottom: "1px solid #BCE8E0" }}><div style={{ color: C.ink, fontSize: 13, fontWeight: 900 }}>AI와 대화하며 대본 다듬기</div><div style={{ color: C.muted, fontSize: 10, lineHeight: 1.55, marginTop: 4 }}>현재 작성된 전체 대본을 기준으로 요청한 부분만 수정합니다. 수정 후에도 다시 이어서 지시할 수 있습니다.</div></div>
+              <div style={{ padding: 13 }}>
+                {revisionMessages.length > 0 && <div style={{ display: "grid", gap: 8, maxHeight: 230, overflowY: "auto", marginBottom: 11, paddingRight: 2 }}>{revisionMessages.map((message, index) => <div key={`${message.createdAt}-${index}`} style={{ justifySelf: message.role === "user" ? "end" : "start", maxWidth: "92%", padding: "9px 11px", borderRadius: message.role === "user" ? "11px 11px 2px 11px" : "11px 11px 11px 2px", background: message.role === "user" ? C.ink : C.mintSoft, color: message.role === "user" ? C.white : C.text, fontSize: 11, lineHeight: 1.65, whiteSpace: "pre-wrap" }}><div style={{ fontSize: 9, fontWeight: 900, color: message.role === "user" ? "#BFEDE5" : C.mint, marginBottom: 3 }}>{message.role === "user" ? "나의 수정 요청" : "AI 수정 완료"}</div>{message.content}</div>)}</div>}
+                {revisionMessages.length === 0 && <div style={{ color: C.muted, background: C.white, border: `1px dashed ${C.line}`, borderRadius: 9, padding: "10px 11px", fontSize: 10, lineHeight: 1.65, marginBottom: 11 }}>예: “오프닝을 조금 더 감성적으로 바꿔줘”, “신부 입장 멘트만 더 웅장하게”, “축가 소개는 두 문장으로 짧게”, “전체적으로 너무 길어서 20% 줄여줘”</div>}
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 9 }}>{["오프닝을 더 감성적으로", "신부 입장만 더 웅장하게", "전체 멘트를 조금 더 간결하게", "축가 소개를 자연스럽게 다듬어줘"].map((suggestion) => <button key={suggestion} onClick={() => setRevisionInstruction(suggestion)} disabled={revisionLoading} style={{ border: `1px solid ${C.line}`, borderRadius: 999, background: C.white, color: C.muted, padding: "5px 8px", fontSize: 10, cursor: "pointer", fontFamily: "inherit" }}>{suggestion}</button>)}</div>
+                <TextArea value={revisionInstruction} onChange={setRevisionInstruction} rows={3} placeholder="수정 요청을 자연스럽게 입력하세요. 예: 화촉점화부터 신랑 입장까지의 연결이 매끄럽게 이어지도록 수정해줘." />
+                {revisionError && <div style={{ marginTop: 8, padding: "8px 10px", borderRadius: 7, background: "#FFF2F2", color: "#B53B3B", fontSize: 10, lineHeight: 1.55 }}>{revisionError}</div>}
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", marginTop: 10 }}><span style={{ color: C.muted, fontSize: 10, lineHeight: 1.45 }}>AI가 수정한 뒤에도 직접 칸을 고쳐 엑셀로 저장할 수 있습니다.</span><PrimaryButton onClick={reviseScript} disabled={revisionLoading || !revisionInstruction.trim()}>{revisionLoading ? "AI가 수정 중입니다…" : "수정 요청 보내기"}</PrimaryButton></div>
+              </div>
+            </section>
             <div style={{ display: "grid", gap: 12 }}>{script.sections.map((section, index) => <article key={`${section.no}-${index}`} style={{ border: `1px solid ${C.line}`, borderRadius: 11, overflow: "hidden" }}><div style={{ display: "grid", gridTemplateColumns: "38px minmax(0,1fr) auto", alignItems: "center", gap: 9, padding: "10px 12px", background: C.mintPale, borderBottom: `1px solid ${C.line}` }}><div style={{ width: 27, height: 27, display: "grid", placeItems: "center", borderRadius: "50%", background: C.mint, color: C.white, fontWeight: 900, fontSize: 12 }}>{section.no}</div><input value={section.order} onChange={e => updateSection(index, "order", e.target.value)} style={{ minWidth: 0, color: C.ink, fontWeight: 900, fontSize: 13, border: "none", background: "transparent", fontFamily: "inherit", outline: "none" }} /><input value={section.time} onChange={e => updateSection(index, "time", e.target.value)} style={{ width: 70, color: C.mint, fontWeight: 800, textAlign: "right", fontSize: 11, border: "none", background: "transparent", fontFamily: "inherit", outline: "none" }} /></div><div style={{ padding: 13 }}><textarea value={section.script} onChange={e => updateSection(index, "script", e.target.value)} rows={Math.max(6, Math.min(18, section.script.split("\n").length + 1))} style={{ boxSizing: "border-box", resize: "vertical", width: "100%", color: C.text, fontSize: 12, lineHeight: 1.72, border: `1px solid ${C.line}`, borderRadius: 7, padding: 10, fontFamily: "inherit", outline: "none", background: "#FEFEFE" }} /><div style={{ marginTop: 8, padding: "8px 10px", borderRadius: 7, background: "#FFFDFD", border: "1px dashed #E3D4D4", whiteSpace: "pre-wrap", fontSize: 11, lineHeight: 1.7, color: C.text }}><span style={{ color: C.muted, fontWeight: 800, marginRight: 5 }}>미리보기</span>{answerPreview(section.script)}</div><div style={{ marginTop: 9 }}><FieldLabel optional>사회자 참고 비고</FieldLabel><TextArea value={section.note} onChange={v => updateSection(index, "note", v)} rows={2} placeholder="음원 타이밍, 확인 사항, 연출 주의사항" /></div></div></article>)}</div>
             <div style={{ marginTop: 18, display: "flex", justifyContent: "flex-end" }}><PrimaryButton onClick={downloadExcel}>↓ 엑셀 대본 저장</PrimaryButton></div>
           </div>

@@ -1,6 +1,4 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { addAiScriptCors, requireAiScriptAdmin } from "./_aiScriptAuth";
-
 export const config = { runtime: "nodejs" };
 
 type ScriptSection = {
@@ -64,6 +62,31 @@ const CORE_GUIDE = `
 }
 script는 충분히 실제 낭독 가능한 길이로 작성하세요. note가 필요 없으면 빈 문자열로 둡니다.
 `;
+
+function addAiScriptCors(req: VercelRequest, res: VercelResponse): boolean {
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Inus-Ai-Password");
+  if (req.method === "OPTIONS") {
+    res.status(204).end();
+    return true;
+  }
+  return false;
+}
+
+function requireAiScriptAdmin(req: VercelRequest, res: VercelResponse): boolean {
+  const expected = process.env.AI_SCRIPT_ADMIN_PASSWORD || "";
+  const header = req.headers["x-inus-ai-password"];
+  const provided = Array.isArray(header) ? header[0] : (header || "");
+  if (!expected) {
+    res.status(500).json({ error: "AI_SCRIPT_ADMIN_PASSWORD 환경변수가 설정되지 않았습니다." });
+    return false;
+  }
+  if (provided !== expected) {
+    res.status(401).json({ error: "관리자 인증 정보가 올바르지 않습니다." });
+    return false;
+  }
+  return true;
+}
 
 function parseBody(req: VercelRequest): GeneratePayload {
   if (typeof req.body === "string") return JSON.parse(req.body) as GeneratePayload;
@@ -148,7 +171,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         system: process.env.AI_SCRIPT_GUIDE ? `${CORE_GUIDE}\n\n[회사 추가 지침]\n${process.env.AI_SCRIPT_GUIDE}` : CORE_GUIDE,
         messages: [{ role: "user", content: userPrompt }],
       }),
-      signal: AbortSignal.timeout(110000),
+
     });
 
     const result = await response.json() as any;

@@ -113,6 +113,25 @@ function PrimaryButton({ children, onClick, disabled }: { children: React.ReactN
   return <button onClick={onClick} disabled={disabled} style={{ border: "none", cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? .62 : 1, fontFamily: "inherit", fontWeight: 800, fontSize: 14, color: C.white, background: `linear-gradient(135deg,${C.mint},#54BDA9)`, borderRadius: 10, minHeight: 46, padding: "0 18px", boxShadow: "0 7px 18px rgba(45,155,138,.22)" }}>{children}</button>;
 }
 
+function RevisionSidebar({ messages, instruction, loading, error, onInstructionChange, onSubmit }: {
+  messages: RevisionMessage[]; instruction: string; loading: boolean; error: string;
+  onInstructionChange: (value: string) => void; onSubmit: () => void;
+}) {
+  const suggestions = ["오프닝을 더 감성적으로", "신부 입장만 더 웅장하게", "전체 멘트를 조금 더 간결하게", "축가 소개를 자연스럽게 다듬어줘"];
+  return <aside className="ai-revision-sidebar" aria-label="AI 대본 수정 대화창">
+    <div style={{ padding: "14px 15px", background: C.mintPale, borderBottom: "1px solid #BCE8E0" }}><div style={{ color: C.ink, fontSize: 14, fontWeight: 900 }}>AI 대본 수정 대화</div><div style={{ color: C.muted, fontSize: 10, lineHeight: 1.55, marginTop: 4 }}>대본을 보면서 원하는 부분을 바로 지시하세요. 이 창은 화면을 내려도 따라옵니다.</div></div>
+    <div style={{ padding: 13 }}>
+      {messages.length > 0 && <div style={{ display: "grid", gap: 8, maxHeight: 250, overflowY: "auto", marginBottom: 11, paddingRight: 2 }}>{messages.map((message, index) => <div key={`${message.createdAt}-${index}`} style={{ justifySelf: message.role === "user" ? "end" : "start", maxWidth: "94%", padding: "9px 10px", borderRadius: message.role === "user" ? "11px 11px 2px 11px" : "11px 11px 11px 2px", background: message.role === "user" ? C.ink : C.mintSoft, color: message.role === "user" ? C.white : C.text, fontSize: 11, lineHeight: 1.62, whiteSpace: "pre-wrap" }}><div style={{ fontSize: 9, fontWeight: 900, color: message.role === "user" ? "#BFEDE5" : C.mint, marginBottom: 3 }}>{message.role === "user" ? "나의 수정 요청" : "AI 수정 완료"}</div>{message.content}</div>)}</div>}
+      {messages.length === 0 && <div style={{ color: C.muted, background: C.white, border: `1px dashed ${C.line}`, borderRadius: 9, padding: "10px 11px", fontSize: 10, lineHeight: 1.65, marginBottom: 11 }}>예: “오프닝을 조금 더 감성적으로 바꿔줘”, “축가 소개는 두 문장으로 짧게”, “전체를 20% 줄여줘”</div>}
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 9 }}>{suggestions.map((suggestion) => <button key={suggestion} onClick={() => onInstructionChange(suggestion)} disabled={loading} style={{ border: `1px solid ${C.line}`, borderRadius: 999, background: C.white, color: C.muted, padding: "5px 8px", fontSize: 10, cursor: "pointer", fontFamily: "inherit" }}>{suggestion}</button>)}</div>
+      <TextArea value={instruction} onChange={onInstructionChange} rows={5} placeholder="수정 요청을 입력하세요. 예: 화촉점화부터 신랑 입장까지의 연결이 매끄럽게 이어지도록 수정해줘." />
+      {error && <div style={{ marginTop: 8, padding: "8px 10px", borderRadius: 7, background: "#FFF2F2", color: "#B53B3B", fontSize: 10, lineHeight: 1.55 }}>{error}</div>}
+      <div style={{ marginTop: 10 }}><PrimaryButton onClick={onSubmit} disabled={loading || !instruction.trim()}>{loading ? "AI가 수정 중입니다…" : "수정 요청 보내기"}</PrimaryButton></div>
+      <div style={{ marginTop: 9, color: C.muted, fontSize: 10, lineHeight: 1.55 }}>수정된 대본은 아래에서 직접 보완한 뒤 엑셀로 저장할 수 있습니다.</div>
+    </div>
+  </aside>;
+}
+
 function GuideManager({ guide, patterns, versions, currentVersionId, password, loading, updatedAt, onChange, onPatternsChange, onSave, onRestore, onReload }: {
   guide: string; patterns: LearnedPattern[]; versions: GuideVersion[]; currentVersionId: string | null; password: string; loading: boolean; updatedAt: string | null;
   onChange: (value: string) => void; onPatternsChange: (value: LearnedPattern[]) => void;
@@ -493,7 +512,7 @@ export default function AiScript() {
         <p style={{ margin: "8px 0 0", fontSize: 13, color: C.muted, lineHeight: 1.7 }}>필수 정보만으로 초안을 만든 뒤, 답변지·요청사항을 추가하면 회사 기준에 맞춰 더 정교하게 작성됩니다.</p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: script ? "minmax(320px, .85fr) minmax(460px, 1.15fr)" : "minmax(320px, 760px)", gap: 22, alignItems: "start" }}>
+      <div className={`ai-script-workspace${script ? " ai-script-workspace--has-script" : ""}`}>
         <section style={{ background: C.white, border: `1px solid ${C.line}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 25px rgba(19,36,59,.05)" }}>
           <div style={{ padding: "18px 20px", background: C.mintPale, borderBottom: `1px solid ${C.line}` }}><div style={{ fontSize: 14, fontWeight: 900, color: C.ink }}>01. 기본 정보</div><div style={{ fontSize: 11, color: C.muted, marginTop: 4 }}>신랑·신부 이름만 입력해도 기본 대본 초안을 생성합니다.</div></div>
           <div style={{ padding: 20 }}>
@@ -533,7 +552,7 @@ export default function AiScript() {
           <div style={{ padding: 18 }}>
             <div style={{ marginBottom: 16, padding: "12px 14px", background: C.mintPale, border: `1px solid #C4EEE8`, borderRadius: 10 }}><div style={{ color: C.ink, fontSize: 14, fontWeight: 900 }}>{script.title}</div><div style={{ color: C.muted, fontSize: 11, marginTop: 4 }}>{script.subtitle}</div><div style={{ color: C.coral, fontSize: 10, marginTop: 8 }}>빨간색 굵은 글씨는 답변지·요청사항 인용 구간이며, 엑셀에도 동일하게 적용됩니다.</div></div>
             {script.review_flags.length > 0 && <div style={{ marginBottom: 16, padding: "11px 13px", background: "#FFF9E9", border: "1px solid #F2DFAB", borderRadius: 10 }}><div style={{ color: "#8A671D", fontSize: 11, fontWeight: 900, marginBottom: 6 }}>⚑ 발송 전 확인 필요</div>{script.review_flags.map((flag, index) => <div key={index} style={{ color: "#81672B", fontSize: 11, lineHeight: 1.6 }}>• {flag}</div>)}</div>}
-            <section style={{ marginBottom: 16, border: `1px solid #BCE8E0`, borderRadius: 12, overflow: "hidden", background: "#FBFFFE" }}>
+            <section style={{ display: "none" }} aria-hidden="true">
               <div style={{ padding: "12px 14px", background: C.mintPale, borderBottom: "1px solid #BCE8E0" }}><div style={{ color: C.ink, fontSize: 13, fontWeight: 900 }}>AI와 대화하며 대본 다듬기</div><div style={{ color: C.muted, fontSize: 10, lineHeight: 1.55, marginTop: 4 }}>현재 작성된 전체 대본을 기준으로 요청한 부분만 수정합니다. 수정 후에도 다시 이어서 지시할 수 있습니다.</div></div>
               <div style={{ padding: 13 }}>
                 {revisionMessages.length > 0 && <div style={{ display: "grid", gap: 8, maxHeight: 230, overflowY: "auto", marginBottom: 11, paddingRight: 2 }}>{revisionMessages.map((message, index) => <div key={`${message.createdAt}-${index}`} style={{ justifySelf: message.role === "user" ? "end" : "start", maxWidth: "92%", padding: "9px 11px", borderRadius: message.role === "user" ? "11px 11px 2px 11px" : "11px 11px 11px 2px", background: message.role === "user" ? C.ink : C.mintSoft, color: message.role === "user" ? C.white : C.text, fontSize: 11, lineHeight: 1.65, whiteSpace: "pre-wrap" }}><div style={{ fontSize: 9, fontWeight: 900, color: message.role === "user" ? "#BFEDE5" : C.mint, marginBottom: 3 }}>{message.role === "user" ? "나의 수정 요청" : "AI 수정 완료"}</div>{message.content}</div>)}</div>}
@@ -548,6 +567,7 @@ export default function AiScript() {
             <div style={{ marginTop: 18, display: "flex", justifyContent: "flex-end" }}><PrimaryButton onClick={downloadExcel}>↓ 엑셀 대본 저장</PrimaryButton></div>
           </div>
         </section>}
+        {script && <RevisionSidebar messages={revisionMessages} instruction={revisionInstruction} loading={revisionLoading} error={revisionError} onInstructionChange={setRevisionInstruction} onSubmit={reviseScript} />}
       </div>
       </>}
     </main>

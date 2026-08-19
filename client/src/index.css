@@ -252,3 +252,53 @@ html {
     transform: translateY(0);
   }
 }
+
+/* AI 사회 대본 결과 화면: 대본을 보며 수정하는 고정 사이드 대화창 */
+.ai-script-workspace {
+  display: grid;
+  grid-template-columns: minmax(320px, 760px);
+  gap: 22px;
+  align-items: start;
+}
+
+.ai-script-workspace--has-script {
+  grid-template-columns: minmax(260px, 0.62fr) minmax(480px, 1.38fr) minmax(286px, 0.78fr);
+}
+
+.ai-revision-sidebar {
+  position: sticky;
+  top: 76px;
+  align-self: start;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  border: 1px solid #BCE8E0;
+  border-radius: 14px;
+  background: #FBFFFE;
+  box-shadow: 0 10px 28px rgba(19, 36, 59, 0.09);
+}
+
+@media (max-width: 1199px) {
+  .ai-script-workspace--has-script {
+    grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+  }
+
+  .ai-revision-sidebar {
+    grid-column: 2;
+    grid-row: 2;
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 800px) {
+  .ai-script-workspace,
+  .ai-script-workspace--has-script {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .ai-revision-sidebar {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}

@@ -4,6 +4,7 @@ import ExcelJS from "exceljs";
 const API_URL = "/api/ai-script";
 const REVISION_API_URL = "/api/ai-script-revise";
 const GUIDE_API_URL = "/api/ai-guide";
+const GUIDE_CHAT_API_URL = "/api/ai-guide-chat";
 const GUIDE_LEARN_API_URL = "/api/ai-guide-learn";
 const ADMIN_HOME = "http://bnsmusics.godohosting.com/bns/admin/event_list.php?sUser_id=bnsmusic&sUser_nm=%EA%B4%80%EB%A6%AC%EC%9E%90";
 
@@ -12,6 +13,7 @@ type ScriptStyle = "classic" | "trendy" | "warm";
 type ScriptSection = { no: number; order: string; time: string; script: string; note: string };
 type GeneratedScript = { title: string; subtitle: string; sections: ScriptSection[]; review_flags: string[] };
 type RevisionMessage = { role: "user" | "assistant"; content: string; createdAt: string };
+type GuideChatMessage = { role: "user" | "assistant"; content: string; createdAt: string };
 type LearnedPattern = { id: string; title: string; summary: string; createdAt: string };
 type GuideVersion = { id: string; guide: string; savedAt: string };
 type SharedGuideResponse = { guide: string; learnedPatterns: LearnedPattern[]; guideHistory: GuideVersion[]; currentVersionId: string | null; updatedAt: string | null };
@@ -144,6 +146,11 @@ function GuideManager({ guide, patterns, versions, currentVersionId, password, l
   const [exampleSource, setExampleSource] = useState("");
   const [showVersions, setShowVersions] = useState(false);
   const [restoring, setRestoring] = useState(false);
+  const [guideChatInput, setGuideChatInput] = useState("");
+  const [guideChatMessages, setGuideChatMessages] = useState<GuideChatMessage[]>([]);
+  const [guideChatLoading, setGuideChatLoading] = useState(false);
+  const [guideChatError, setGuideChatError] = useState("");
+  const [copiedGuideChatIndex, setCopiedGuideChatIndex] = useState<number | null>(null);
 
   const save = async (nextPatterns = patterns) => {
     setSaving(true); setStatus("");
@@ -165,6 +172,37 @@ function GuideManager({ guide, patterns, versions, currentVersionId, password, l
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "저장 버전 복원에 실패했습니다.");
     } finally { setRestoring(false); }
+  };
+
+  const askGuideAssistant = async () => {
+    if (!guideChatInput.trim() || guideChatLoading) return;
+    const userMessage: GuideChatMessage = { role: "user", content: guideChatInput.trim(), createdAt: new Date().toISOString() };
+    const conversation = [...guideChatMessages, userMessage];
+    setGuideChatMessages(conversation);
+    setGuideChatInput("");
+    setGuideChatLoading(true); setGuideChatError("");
+    try {
+      const response = await fetch(GUIDE_CHAT_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
+        body: JSON.stringify({ message: userMessage.content, currentGuide: guide, conversation }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "AI 지침 대화에 실패했습니다.");
+      setGuideChatMessages((current) => [...current, { role: "assistant", content: String(result.reply || "아이디어를 정리하지 못했습니다."), createdAt: new Date().toISOString() }]);
+    } catch (error) {
+      setGuideChatError(error instanceof Error ? error.message : "AI 지침 대화 중 오류가 발생했습니다.");
+    } finally { setGuideChatLoading(false); }
+  };
+
+  const copyGuideChatAnswer = async (content: string, index: number) => {
+    try {
+      await navigator.clipboard.writeText(content);
+      setCopiedGuideChatIndex(index);
+      window.setTimeout(() => setCopiedGuideChatIndex(null), 1800);
+    } catch {
+      setGuideChatError("복사에 실패했습니다. 답변을 길게 눌러 직접 복사해주세요.");
+    }
   };
 
   const loadExampleFile = async (file: File) => {
@@ -228,6 +266,17 @@ function GuideManager({ guide, patterns, versions, currentVersionId, password, l
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 10, marginBottom: 18 }}>
         {[['01', '필수 식순', '기본 순서·생략 가능 순서'], ['02', '표현 기준', '반드시 쓰거나 피할 표현'], ['03', '학습 요약', '개인정보 제거 문체·전환 원칙']].map(([num, title, desc]) => <div key={num} style={{ border: `1px solid ${C.line}`, borderRadius: 10, padding: 12, background: "#FBFDFC" }}><div style={{ color: C.mint, fontSize: 10, fontWeight: 900 }}>{num}</div><div style={{ color: C.ink, fontSize: 13, fontWeight: 900, marginTop: 3 }}>{title}</div><div style={{ color: C.muted, fontSize: 10, marginTop: 3, lineHeight: 1.5 }}>{desc}</div></div>)}
       </div>
+      <section style={{ marginBottom: 22, border: `1px solid #BCE8E0`, borderRadius: 12, overflow: "hidden", background: "#FBFFFE" }}>
+        <div style={{ padding: "14px 15px", background: C.mintPale, borderBottom: "1px solid #BCE8E0" }}><div style={{ color: C.ink, fontSize: 14, fontWeight: 900 }}>AI 지침 아이디어 대화</div><div style={{ color: C.muted, fontSize: 10, lineHeight: 1.6, marginTop: 4 }}>강의 내용이나 운영 아이디어를 편하게 설명하세요. AI 답변은 자동 저장되지 않으며, 필요한 문장만 복사해 아래 회사 지침 칸에 직접 붙여넣으면 됩니다.</div></div>
+        <div style={{ padding: 14 }}>
+          {guideChatMessages.length > 0 && <div style={{ display: "grid", gap: 9, maxHeight: 340, overflowY: "auto", marginBottom: 12, paddingRight: 2 }}>{guideChatMessages.map((message, index) => <div key={`${message.createdAt}-${index}`} style={{ justifySelf: message.role === "user" ? "end" : "start", maxWidth: "94%", padding: "10px 11px", borderRadius: message.role === "user" ? "12px 12px 3px 12px" : "12px 12px 12px 3px", background: message.role === "user" ? C.ink : C.white, color: message.role === "user" ? C.white : C.text, border: message.role === "assistant" ? `1px solid ${C.line}` : "none", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-wrap" }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginBottom: 4 }}><span style={{ fontSize: 9, fontWeight: 900, color: message.role === "user" ? "#BFEDE5" : C.mint }}>{message.role === "user" ? "나의 강의·아이디어" : "AI 아이디어 정리"}</span>{message.role === "assistant" && <button onClick={() => void copyGuideChatAnswer(message.content, index)} style={{ flexShrink: 0, border: `1px solid ${C.line}`, borderRadius: 6, background: C.white, color: C.ink, fontSize: 10, fontWeight: 800, padding: "4px 7px", cursor: "pointer", fontFamily: "inherit" }}>{copiedGuideChatIndex === index ? "복사 완료" : "답변 복사"}</button>}</div>{message.content}</div>)}</div>}
+          {guideChatMessages.length === 0 && <div style={{ color: C.muted, background: C.white, border: `1px dashed ${C.line}`, borderRadius: 9, padding: "10px 11px", fontSize: 11, lineHeight: 1.65, marginBottom: 11 }}>예: “오늘 강의에서 신부 입장 전 멘트는 이런 분위기로 해야 한다고 들었어. 회사 지침으로 정리해줘.” 또는 “축가 소개에서 반드시 피해야 할 표현을 같이 정리해보자.”</div>}
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 9 }}>{["강의 내용을 지침 문장으로 정리해줘", "금지 표현 기준을 함께 정리해보자", "현재 지침에서 빠진 확인 사항을 제안해줘"].map((suggestion) => <button key={suggestion} onClick={() => setGuideChatInput(suggestion)} disabled={guideChatLoading} style={{ border: `1px solid ${C.line}`, borderRadius: 999, background: C.white, color: C.muted, padding: "5px 8px", fontSize: 10, cursor: "pointer", fontFamily: "inherit" }}>{suggestion}</button>)}</div>
+          <TextArea value={guideChatInput} onChange={setGuideChatInput} rows={4} placeholder="강의에서 들은 내용, 추가하고 싶은 원칙, 고민되는 표현을 편하게 입력하세요." />
+          {guideChatError && <div style={{ marginTop: 8, padding: "8px 10px", borderRadius: 7, background: "#FFF2F2", color: "#B53B3B", fontSize: 10, lineHeight: 1.55 }}>{guideChatError}</div>}
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", marginTop: 10 }}><span style={{ color: C.muted, fontSize: 10, lineHeight: 1.45 }}>대화 내용은 이 브라우저에서만 이어지며 공용 지침에 자동 저장되지 않습니다.</span><PrimaryButton onClick={askGuideAssistant} disabled={guideChatLoading || !guideChatInput.trim()}>{guideChatLoading ? "AI가 정리 중입니다…" : "AI에게 물어보기"}</PrimaryButton></div>
+        </div>
+      </section>
       <FieldLabel>이너스뮤직 회사 지침</FieldLabel>
       <TextArea value={guide} onChange={onChange} rows={24} placeholder="회사 대본 작성 기준, 금지 표현, 식순 원칙, 좋은 멘트 예시를 입력하세요." />
       <div style={{ display: "flex", gap: 9, flexWrap: "wrap", alignItems: "center", marginTop: 16 }}>

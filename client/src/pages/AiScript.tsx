@@ -22,7 +22,7 @@ type FormValues = {
 
 const defaultForm: FormValues = {
   groomName: "", brideName: "", mcName: "", ceremonyType: "main", style: "classic",
-  weddingDate: "", weddingTime: "", venue: "", duration: "40분",
+  weddingDate: "", weddingTime: "12:00", venue: "", duration: "40분",
   customOrder: "", coupleStory: "", requests: "",
 };
 
@@ -30,6 +30,13 @@ const C = {
   ink: "#111B2E", navy: "#17243B", mint: "#2D9B8A", mintSoft: "#E8FAF8", mintPale: "#F4FCFB",
   cream: "#F7F8F5", line: "#DCE4E3", text: "#263238", muted: "#71808A", coral: "#E36C6C", white: "#FFFFFF",
 };
+
+const WEDDING_TIME_OPTIONS = Array.from({ length: 85 }, (_, index) => {
+  const totalMinutes = 8 * 60 + index * 10;
+  const hour = String(Math.floor(totalMinutes / 60)).padStart(2, "0");
+  const minute = String(totalMinutes % 60).padStart(2, "0");
+  return `${hour}:${minute}`;
+});
 
 const DEFAULT_COMPANY_GUIDE = `# 이너스뮤직 프리미엄 사회 대본 기준
 
@@ -432,7 +439,7 @@ export default function AiScript() {
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 17 }}>
               <div><FieldLabel optional>예식 날짜</FieldLabel><Input type="date" value={form.weddingDate} onChange={v => update("weddingDate", v)} /></div>
-              <div><FieldLabel optional>예식 시간</FieldLabel><Input type="time" value={form.weddingTime} onChange={v => update("weddingTime", v)} /></div>
+              <div><FieldLabel optional>예식 시간</FieldLabel><select value={form.weddingTime} onChange={e => update("weddingTime", e.target.value)} style={{ boxSizing: "border-box", width: "100%", height: 44, border: `1px solid ${C.line}`, borderRadius: 9, padding: "0 10px", background: C.white, fontFamily: "inherit", color: C.text }}><option value="">시간 미정</option>{WEDDING_TIME_OPTIONS.map((time) => <option key={time} value={time}>{time.replace(":", "시 ")}분</option>)}</select><div style={{ color: C.muted, fontSize: 9, marginTop: 4 }}>10분 단위 · 기본 12시 00분</div></div>
               <div><FieldLabel>대본 유형</FieldLabel><select value={form.ceremonyType} onChange={e => update("ceremonyType", e.target.value as CeremonyType)} style={{ boxSizing: "border-box", width: "100%", height: 44, border: `1px solid ${C.line}`, borderRadius: 9, padding: "0 10px", background: C.white, fontFamily: "inherit", color: C.text }}><option value="main">본식</option><option value="reception">2부 피로연</option></select></div>
             </div>
 

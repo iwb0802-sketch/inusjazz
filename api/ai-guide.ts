@@ -5,11 +5,20 @@ export const config = { runtime: "nodejs" };
 
 const GUIDE_PATH = "ai-script/company-guides.json";
 const MAX_GUIDE_LENGTH = 30000;
+const MAX_HISTORY_ITEMS = 20;
+
+type GuideVersion = {
+  id: string;
+  guide: string;
+  savedAt: string;
+};
 
 type SharedGuideDocument = {
-  version: 1;
+  version: 2;
   guide: string;
   learnedPatterns: LearnedPattern[];
+  guideHistory: GuideVersion[];
+  currentVersionId: string | null;
   updatedAt: string | null;
 };
 
@@ -23,6 +32,7 @@ type LearnedPattern = {
 type SaveGuidePayload = {
   guide?: unknown;
   learnedPatterns?: unknown;
+  restoreVersionId?: unknown;
 };
 
 function addCors(req: VercelRequest, res: VercelResponse): boolean {
@@ -56,7 +66,7 @@ function cleanText(value: unknown, limit: number): string {
 }
 
 function emptyDocument(): SharedGuideDocument {
-  return { version: 1, guide: "", learnedPatterns: [], updatedAt: null };
+  return { version: 2, guide: "", learnedPatterns: [], guideHistory: [], currentVersionId: null, updatedAt: null };
 }
 
 function normalizePatterns(value: unknown): LearnedPattern[] {
@@ -72,12 +82,53 @@ function normalizePatterns(value: unknown): LearnedPattern[] {
   }).filter((item) => Boolean(item.summary));
 }
 
+function normalizeHistory(value: unknown): GuideVersion[] {
+  if (!Array.isArray(value)) return [];
+  const seen = new Set<string>();
+  return value.map((item, index) => {
+    const record = item && typeof item === "object" ? item as Record<string, unknown> : {};
+    const id = cleanText(record.id, 100) || `legacy-${index + 1}`;
+    return {
+      id,
+      guide: cleanText(record.guide, MAX_GUIDE_LENGTH),
+      savedAt: cleanText(record.savedAt, 40) || new Date().toISOString(),
+    };
+  }).filter((item) => {
+    if (!item.guide || seen.has(item.id)) return false;
+    seen.add(item.id);
+    return true;
+  }).slice(0, MAX_HISTORY_ITEMS);
+}
+
 function normalizeDocument(value: unknown): SharedGuideDocument {
   const record = value && typeof value === "object" ? value as Record<string, unknown> : {};
+  const guide = cleanText(record.guide, MAX_GUIDE_LENGTH);
+  const history = normalizeHistory(record.guideHistory);
+  const currentVersionId = cleanText(record.currentVersionId, 100) || null;
+  const existingCurrent = currentVersionId && history.some((item) => item.id === currentVersionId) ? currentVersionId : null;
+
+  if (guide && history.length === 0) {
+    const migratedVersion: GuideVersion = {
+      id: "legacy-current",
+      guide,
+      savedAt: cleanText(record.updatedAt, 40) || new Date().toISOString(),
+    };
+    return {
+      version: 2,
+      guide,
+      learnedPatterns: normalizePatterns(record.learnedPatterns),
+      guideHistory: [migratedVersion],
+      currentVersionId: migratedVersion.id,
+      updatedAt: cleanText(record.updatedAt, 40) || migratedVersion.savedAt,
+    };
+  }
+
   return {
-    version: 1,
-    guide: cleanText(record.guide, MAX_GUIDE_LENGTH),
+    version: 2,
+    guide,
     learnedPatterns: normalizePatterns(record.learnedPatterns),
+    guideHistory: history,
+    currentVersionId: existingCurrent,
     updatedAt: cleanText(record.updatedAt, 40) || null,
   };
 }
@@ -109,6 +160,10 @@ async function saveSharedGuide(document: SharedGuideDocument): Promise<void> {
   });
 }
 
+function newVersionId(now: string): string {
+  return `guide-${now.replace(/[^0-9]/g, "").slice(0, 14)}-${Math.random().toString(36).slice(2, 7)}`;
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (addCors(req, res)) return;
   if (!requireAdmin(req, res)) return;
@@ -127,18 +182,44 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const body = parseBody(req);
+    const existing = await readSharedGuide();
+    const restoreVersionId = cleanText(body.restoreVersionId, 100);
+
+    if (restoreVersionId) {
+      const selected = existing.guideHistory.find((item) => item.id === restoreVersionId);
+      if (!selected) {
+        res.status(404).json({ error: "선택한 저장 버전을 찾을 수 없습니다. 최신 지침을 다시 불러온 후 시도해주세요." });
+        return;
+      }
+      const restored: SharedGuideDocument = {
+        ...existing,
+        guide: selected.guide,
+        currentVersionId: selected.id,
+        updatedAt: new Date().toISOString(),
+      };
+      await saveSharedGuide(restored);
+      res.setHeader("Cache-Control", "no-store");
+      res.status(200).json(restored);
+      return;
+    }
+
     const guide = cleanText(body.guide, MAX_GUIDE_LENGTH);
     if (!guide) {
       res.status(400).json({ error: "저장할 회사 지침을 입력해주세요." });
       return;
     }
 
-    const existing = await readSharedGuide();
+    const now = new Date().toISOString();
+    const alreadySaved = existing.guideHistory.find((item) => item.guide === guide);
+    const currentVersion = alreadySaved || { id: newVersionId(now), guide, savedAt: now };
+    const history = [currentVersion, ...existing.guideHistory.filter((item) => item.id !== currentVersion.id)].slice(0, MAX_HISTORY_ITEMS);
     const document: SharedGuideDocument = {
-      version: 1,
+      version: 2,
       guide,
       learnedPatterns: Array.isArray(body.learnedPatterns) ? normalizePatterns(body.learnedPatterns) : existing.learnedPatterns,
-      updatedAt: new Date().toISOString(),
+      guideHistory: history,
+      currentVersionId: currentVersion.id,
+      updatedAt: now,
     };
     await saveSharedGuide(document);
 

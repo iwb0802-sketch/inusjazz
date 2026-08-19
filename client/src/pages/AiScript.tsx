@@ -11,7 +11,8 @@ type ScriptStyle = "classic" | "trendy" | "warm";
 type ScriptSection = { no: number; order: string; time: string; script: string; note: string };
 type GeneratedScript = { title: string; subtitle: string; sections: ScriptSection[]; review_flags: string[] };
 type LearnedPattern = { id: string; title: string; summary: string; createdAt: string };
-type SharedGuideResponse = { guide: string; learnedPatterns: LearnedPattern[]; updatedAt: string | null };
+type GuideVersion = { id: string; guide: string; savedAt: string };
+type SharedGuideResponse = { guide: string; learnedPatterns: LearnedPattern[]; guideHistory: GuideVersion[]; currentVersionId: string | null; updatedAt: string | null };
 type WorkspaceTab = "generator" | "guide";
 
 type FormValues = {
@@ -110,16 +111,18 @@ function PrimaryButton({ children, onClick, disabled }: { children: React.ReactN
   return <button onClick={onClick} disabled={disabled} style={{ border: "none", cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? .62 : 1, fontFamily: "inherit", fontWeight: 800, fontSize: 14, color: C.white, background: `linear-gradient(135deg,${C.mint},#54BDA9)`, borderRadius: 10, minHeight: 46, padding: "0 18px", boxShadow: "0 7px 18px rgba(45,155,138,.22)" }}>{children}</button>;
 }
 
-function GuideManager({ guide, patterns, password, loading, updatedAt, onChange, onPatternsChange, onSave, onReload }: {
-  guide: string; patterns: LearnedPattern[]; password: string; loading: boolean; updatedAt: string | null;
+function GuideManager({ guide, patterns, versions, currentVersionId, password, loading, updatedAt, onChange, onPatternsChange, onSave, onRestore, onReload }: {
+  guide: string; patterns: LearnedPattern[]; versions: GuideVersion[]; currentVersionId: string | null; password: string; loading: boolean; updatedAt: string | null;
   onChange: (value: string) => void; onPatternsChange: (value: LearnedPattern[]) => void;
-  onSave: (guide: string, patterns: LearnedPattern[]) => Promise<void>; onReload: () => Promise<void>;
+  onSave: (guide: string, patterns: LearnedPattern[]) => Promise<void>; onRestore: (versionId: string) => Promise<void>; onReload: () => Promise<void>;
 }) {
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const [learning, setLearning] = useState(false);
   const [exampleTitle, setExampleTitle] = useState("");
   const [exampleSource, setExampleSource] = useState("");
+  const [showVersions, setShowVersions] = useState(false);
+  const [restoring, setRestoring] = useState(false);
 
   const save = async (nextPatterns = patterns) => {
     setSaving(true); setStatus("");
@@ -131,8 +134,16 @@ function GuideManager({ guide, patterns, password, loading, updatedAt, onChange,
     } finally { setSaving(false); }
   };
 
-  const restore = () => {
-    if (window.confirm("현재 작성한 지침을 기본 프리미엄 기준으로 되돌릴까요? 복원 뒤에는 공용 저장을 눌러야 모든 기기에 반영됩니다.")) onChange(DEFAULT_COMPANY_GUIDE);
+  const restoreVersion = async (version: GuideVersion) => {
+    if (!window.confirm(`「${new Date(version.savedAt).toLocaleString("ko-KR")}」에 저장한 지침으로 공용 내용을 복원할까요? 현재 작성 중인 내용은 이 저장 버전으로 교체됩니다.`)) return;
+    setRestoring(true); setStatus("");
+    try {
+      await onRestore(version.id);
+      setShowVersions(false);
+      setStatus("선택한 저장 버전으로 공용 지침을 복원했습니다.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "저장 버전 복원에 실패했습니다.");
+    } finally { setRestoring(false); }
   };
 
   const loadExampleFile = async (file: File) => {
@@ -199,11 +210,12 @@ function GuideManager({ guide, patterns, password, loading, updatedAt, onChange,
       <FieldLabel>이너스뮤직 회사 지침</FieldLabel>
       <TextArea value={guide} onChange={onChange} rows={24} placeholder="회사 대본 작성 기준, 금지 표현, 식순 원칙, 좋은 멘트 예시를 입력하세요." />
       <div style={{ display: "flex", gap: 9, flexWrap: "wrap", alignItems: "center", marginTop: 16 }}>
-        <PrimaryButton onClick={() => save()} disabled={saving || loading}>{saving ? "공용 저장 중…" : "공용 지침 저장"}</PrimaryButton>
-        <button onClick={restore} disabled={saving} style={{ minHeight: 46, padding: "0 15px", borderRadius: 10, border: `1px solid ${C.line}`, background: C.white, color: C.muted, fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>기본 기준 복원</button>
-        <button onClick={() => { void onReload().then(() => setStatus("공용 저장소의 최신 지침을 불러왔습니다.")).catch((error) => setStatus(error instanceof Error ? error.message : "새로고침에 실패했습니다.")); }} disabled={loading || saving} style={{ minHeight: 46, padding: "0 15px", borderRadius: 10, border: `1px solid ${C.line}`, background: C.white, color: C.muted, fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>최신 지침 불러오기</button>
+        <PrimaryButton onClick={() => save()} disabled={saving || loading || restoring}>{saving ? "공용 저장 중…" : "공용 지침 저장"}</PrimaryButton>
+        <button onClick={() => setShowVersions((value) => !value)} disabled={saving || loading || restoring || versions.length === 0} style={{ minHeight: 46, padding: "0 15px", borderRadius: 10, border: `1px solid ${C.mint}`, background: showVersions ? C.mintSoft : C.white, color: C.ink, fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>{showVersions ? "저장 버전 닫기" : `저장 버전 복원${versions.length ? ` (${versions.length})` : ""}`}</button>
+        <button onClick={() => { void onReload().then(() => setStatus("공용 저장소의 최신 지침을 불러왔습니다.")).catch((error) => setStatus(error instanceof Error ? error.message : "새로고침에 실패했습니다.")); }} disabled={loading || saving || restoring} style={{ minHeight: 46, padding: "0 15px", borderRadius: 10, border: `1px solid ${C.line}`, background: C.white, color: C.muted, fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>최신 지침 불러오기</button>
       </div>
-      <div style={{ color: status ? (status.includes("실패") || status.includes("입력") || status.includes("지원") ? "#B53B3B" : C.mint) : C.muted, fontSize: 11, fontWeight: status ? 800 : 500, lineHeight: 1.65, marginTop: 10 }}>{status || (updatedAt ? `마지막 공용 저장: ${new Date(updatedAt).toLocaleString("ko-KR")}` : "아직 공용 저장된 지침이 없습니다. 저장 후 모든 관리자 기기에서 공유됩니다.")}</div>
+      <div style={{ color: status ? (status.includes("실패") || status.includes("입력") || status.includes("지원") ? "#B53B3B" : C.mint) : C.muted, fontSize: 11, fontWeight: status ? 800 : 500, lineHeight: 1.65, marginTop: 10 }}>{status || (updatedAt ? `마지막 공용 저장: ${new Date(updatedAt).toLocaleString("ko-KR")}` : "아직 공용 저장된 지침이 없습니다. 첫 저장 후 버전 선택 복원을 사용할 수 있습니다.")}</div>
+      {showVersions && <div style={{ marginTop: 16, padding: 14, borderRadius: 11, border: `1px solid #BCE8E0`, background: C.mintPale }}><div style={{ color: C.ink, fontWeight: 900, fontSize: 13 }}>저장된 지침 버전 선택</div><p style={{ margin: "5px 0 12px", color: C.muted, fontSize: 10, lineHeight: 1.6 }}>저장할 때마다 최대 20개 버전이 보관됩니다. 원하는 버전만 선택해 현재 공용 지침으로 복원할 수 있습니다.</p><div style={{ display: "grid", gap: 8 }}>{versions.map((version) => <article key={version.id} style={{ border: `1px solid ${version.id === currentVersionId ? C.mint : C.line}`, borderRadius: 9, padding: "10px 11px", background: C.white }}><div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center" }}><div style={{ minWidth: 0 }}><div style={{ color: C.ink, fontWeight: 900, fontSize: 11 }}>{new Date(version.savedAt).toLocaleString("ko-KR")}{version.id === currentVersionId && <span style={{ marginLeft: 6, color: C.mint, fontSize: 10 }}>현재 사용 중</span>}</div><div style={{ marginTop: 4, color: C.muted, fontSize: 10, lineHeight: 1.5, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{version.guide.replace(/[#*`\n]/g, " ").replace(/\s+/g, " ").trim().slice(0, 95) || "내용 없음"}</div></div><button onClick={() => void restoreVersion(version)} disabled={restoring || version.id === currentVersionId} style={{ flexShrink: 0, border: "none", borderRadius: 7, background: version.id === currentVersionId ? "#E9EEEE" : C.mint, color: version.id === currentVersionId ? C.muted : C.white, fontWeight: 800, fontSize: 10, padding: "8px 9px", cursor: version.id === currentVersionId ? "default" : "pointer", fontFamily: "inherit" }}>{version.id === currentVersionId ? "현재 버전" : restoring ? "복원 중…" : "이 버전 복원"}</button></div></article>)}</div></div>}
 
       <div style={{ marginTop: 28, paddingTop: 22, borderTop: `1px solid ${C.line}` }}>
         <div style={{ fontSize: 14, color: C.ink, fontWeight: 900 }}>대본 예시 학습 요약</div>
@@ -236,6 +248,8 @@ export default function AiScript() {
   const [activeTab, setActiveTab] = useState<WorkspaceTab>("generator");
   const [companyGuide, setCompanyGuide] = useState(DEFAULT_COMPANY_GUIDE);
   const [learnedPatterns, setLearnedPatterns] = useState<LearnedPattern[]>([]);
+  const [guideHistory, setGuideHistory] = useState<GuideVersion[]>([]);
+  const [currentGuideVersionId, setCurrentGuideVersionId] = useState<string | null>(null);
   const [guideUpdatedAt, setGuideUpdatedAt] = useState<string | null>(null);
   const [guideLoading, setGuideLoading] = useState(false);
 
@@ -252,6 +266,8 @@ export default function AiScript() {
       const data = result as SharedGuideResponse;
       setCompanyGuide(data.guide?.trim() || DEFAULT_COMPANY_GUIDE);
       setLearnedPatterns(Array.isArray(data.learnedPatterns) ? data.learnedPatterns : []);
+      setGuideHistory(Array.isArray(data.guideHistory) ? data.guideHistory : []);
+      setCurrentGuideVersionId(data.currentVersionId || null);
       setGuideUpdatedAt(data.updatedAt || null);
     } finally { setGuideLoading(false); }
   };
@@ -270,6 +286,27 @@ export default function AiScript() {
     const data = result as SharedGuideResponse;
     setCompanyGuide(data.guide || guide);
     setLearnedPatterns(Array.isArray(data.learnedPatterns) ? data.learnedPatterns : patterns);
+    setGuideHistory(Array.isArray(data.guideHistory) ? data.guideHistory : []);
+    setCurrentGuideVersionId(data.currentVersionId || null);
+    setGuideUpdatedAt(data.updatedAt || null);
+  };
+
+  const restoreSharedGuideVersion = async (versionId: string) => {
+    const response = await fetch(GUIDE_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
+      body: JSON.stringify({ restoreVersionId: versionId }),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      if (response.status === 401) { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }
+      throw new Error(result.error || "저장 버전 복원에 실패했습니다.");
+    }
+    const data = result as SharedGuideResponse;
+    setCompanyGuide(data.guide || DEFAULT_COMPANY_GUIDE);
+    setLearnedPatterns(Array.isArray(data.learnedPatterns) ? data.learnedPatterns : []);
+    setGuideHistory(Array.isArray(data.guideHistory) ? data.guideHistory : []);
+    setCurrentGuideVersionId(data.currentVersionId || null);
     setGuideUpdatedAt(data.updatedAt || null);
   };
 
@@ -419,7 +456,7 @@ export default function AiScript() {
     </header>
 
     <main style={{ maxWidth: 1380, margin: "0 auto", padding: "28px 20px 80px", boxSizing: "border-box" }}>
-      {activeTab === "guide" ? <GuideManager guide={companyGuide} patterns={learnedPatterns} password={password} loading={guideLoading} updatedAt={guideUpdatedAt} onChange={setCompanyGuide} onPatternsChange={setLearnedPatterns} onSave={saveSharedGuide} onReload={loadSharedGuide} /> : <>
+      {activeTab === "guide" ? <GuideManager guide={companyGuide} patterns={learnedPatterns} versions={guideHistory} currentVersionId={currentGuideVersionId} password={password} loading={guideLoading} updatedAt={guideUpdatedAt} onChange={setCompanyGuide} onPatternsChange={setLearnedPatterns} onSave={saveSharedGuide} onRestore={restoreSharedGuideVersion} onReload={loadSharedGuide} /> : <>
       <div style={{ marginBottom: 22 }}>
         <h1 style={{ fontSize: 27, color: C.ink, margin: 0, letterSpacing: "-1.2px" }}>맞춤형 사회 대본 생성</h1>
         <p style={{ margin: "8px 0 0", fontSize: 13, color: C.muted, lineHeight: 1.7 }}>필수 정보만으로 초안을 만든 뒤, 답변지·요청사항을 추가하면 회사 기준에 맞춰 더 정교하게 작성됩니다.</p>

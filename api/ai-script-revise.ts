@@ -1,5 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
+import { jsonrepair } from "jsonrepair";
+
 export const config = { runtime: "nodejs" };
 
 type ScriptSection = {
@@ -128,7 +130,19 @@ function parseRevisionJson(text: string): { assistantMessage: string; script: { 
   const start = compact.indexOf("{");
   const end = compact.lastIndexOf("}");
   if (start < 0 || end < start) throw new Error("AI 수정 응답에 JSON 결과가 없습니다.");
-  const parsed = JSON.parse(compact.slice(start, end + 1)) as Record<string, unknown>;
+  const candidate = compact.slice(start, end + 1);
+  let parsed: Record<string, unknown>;
+  try {
+    parsed = JSON.parse(candidate) as Record<string, unknown>;
+  } catch (initialError) {
+    try {
+      parsed = JSON.parse(jsonrepair(candidate)) as Record<string, unknown>;
+      console.warn("AI 대본 수정 응답의 JSON 형식을 자동 보정했습니다.");
+    } catch {
+      const detail = initialError instanceof Error ? initialError.message : "형식 오류";
+      throw new Error(`AI 수정 응답 JSON 보정에 실패했습니다: ${detail}`);
+    }
+  }
   const script = normalizeScript(parsed.script as ExistingScript);
   return {
     assistantMessage: cleanText(parsed.assistant_message, 1000) || "요청하신 내용을 반영해 대본을 수정했습니다.",
@@ -172,8 +186,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
       body: JSON.stringify({
         model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5",
-        max_tokens: 7000,
-        temperature: 0.45,
+        max_tokens: 8500,
+        temperature: 0.35,
         system: [CORE_REVISION_GUIDE, process.env.AI_SCRIPT_GUIDE ? `[서버 고정 회사 지침]\n${process.env.AI_SCRIPT_GUIDE}` : "", companyGuide ? `[관리자 공용 회사 지침]\n${companyGuide}` : ""].filter(Boolean).join("\n\n"),
         messages: [{ role: "user", content: userPrompt }],
       }),

@@ -2,12 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import ExcelJS from "exceljs";
 
 const API_URL = "/api/ai-script";
+const GUIDE_API_URL = "/api/ai-guide";
+const GUIDE_LEARN_API_URL = "/api/ai-guide-learn";
 const ADMIN_HOME = "http://bnsmusics.godohosting.com/bns/admin/event_list.php?sUser_id=bnsmusic&sUser_nm=%EA%B4%80%EB%A6%AC%EC%9E%90";
 
 type CeremonyType = "main" | "reception";
 type ScriptStyle = "classic" | "trendy" | "warm";
 type ScriptSection = { no: number; order: string; time: string; script: string; note: string };
 type GeneratedScript = { title: string; subtitle: string; sections: ScriptSection[]; review_flags: string[] };
+type LearnedPattern = { id: string; title: string; summary: string; createdAt: string };
+type SharedGuideResponse = { guide: string; learnedPatterns: LearnedPattern[]; updatedAt: string | null };
 type WorkspaceTab = "generator" | "guide";
 
 type FormValues = {
@@ -99,31 +103,114 @@ function PrimaryButton({ children, onClick, disabled }: { children: React.ReactN
   return <button onClick={onClick} disabled={disabled} style={{ border: "none", cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? .62 : 1, fontFamily: "inherit", fontWeight: 800, fontSize: 14, color: C.white, background: `linear-gradient(135deg,${C.mint},#54BDA9)`, borderRadius: 10, minHeight: 46, padding: "0 18px", boxShadow: "0 7px 18px rgba(45,155,138,.22)" }}>{children}</button>;
 }
 
-function GuideManager({ guide, onChange }: { guide: string; onChange: (value: string) => void }) {
-  const [saved, setSaved] = useState(false);
-  const save = () => {
-    localStorage.setItem("inus_ai_company_guide", guide.trim());
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 1800);
+function GuideManager({ guide, patterns, password, loading, updatedAt, onChange, onPatternsChange, onSave, onReload }: {
+  guide: string; patterns: LearnedPattern[]; password: string; loading: boolean; updatedAt: string | null;
+  onChange: (value: string) => void; onPatternsChange: (value: LearnedPattern[]) => void;
+  onSave: (guide: string, patterns: LearnedPattern[]) => Promise<void>; onReload: () => Promise<void>;
+}) {
+  const [status, setStatus] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [learning, setLearning] = useState(false);
+  const [exampleTitle, setExampleTitle] = useState("");
+  const [exampleSource, setExampleSource] = useState("");
+
+  const save = async (nextPatterns = patterns) => {
+    setSaving(true); setStatus("");
+    try {
+      await onSave(guide, nextPatterns);
+      setStatus("공용 저장 완료 · 다른 관리자 기기에서도 같은 지침을 불러옵니다.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "공용 지침 저장에 실패했습니다.");
+    } finally { setSaving(false); }
   };
+
   const restore = () => {
-    if (window.confirm("현재 작성한 지침을 기본 프리미엄 기준으로 되돌릴까요?")) onChange(DEFAULT_COMPANY_GUIDE);
+    if (window.confirm("현재 작성한 지침을 기본 프리미엄 기준으로 되돌릴까요? 복원 뒤에는 공용 저장을 눌러야 모든 기기에 반영됩니다.")) onChange(DEFAULT_COMPANY_GUIDE);
   };
+
+  const loadExampleFile = async (file: File) => {
+    if (file.size > 3 * 1024 * 1024) throw new Error("예시 파일은 3MB 이하만 불러올 수 있습니다.");
+    const filename = file.name.toLowerCase();
+    if (filename.endsWith(".xlsx")) {
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(await file.arrayBuffer());
+      const text = workbook.worksheets.map((sheet) => {
+        const rows: string[] = [];
+        sheet.eachRow((row) => {
+          const cells: string[] = [];
+          row.eachCell({ includeEmpty: false }, (cell) => cells.push(String(cell.text || cell.value || "").trim()));
+          if (cells.length) rows.push(cells.join(" | "));
+        });
+        return rows.join("\n");
+      }).join("\n\n");
+      setExampleSource(text.slice(0, 45000));
+    } else if (filename.endsWith(".txt") || filename.endsWith(".md") || filename.endsWith(".csv")) {
+      setExampleSource((await file.text()).slice(0, 45000));
+    } else {
+      throw new Error("현재는 .xlsx, .txt, .md, .csv 형식만 지원합니다. 워드·PDF 원문은 내용을 복사해 붙여넣어주세요.");
+    }
+    if (!exampleTitle.trim()) setExampleTitle(file.name.replace(/\.[^.]+$/, ""));
+  };
+
+  const learnExample = async () => {
+    if (exampleSource.trim().length < 80) { setStatus("대본 예시를 80자 이상 붙여넣거나 파일에서 불러와주세요."); return; }
+    setLearning(true); setStatus("");
+    try {
+      const response = await fetch(GUIDE_LEARN_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
+        body: JSON.stringify({ title: exampleTitle, sourceText: exampleSource }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "대본 예시 학습에 실패했습니다.");
+      const nextPatterns = [...patterns, result.pattern as LearnedPattern].slice(-20);
+      onPatternsChange(nextPatterns);
+      await onSave(guide, nextPatterns);
+      setExampleSource(""); setExampleTitle("");
+      setStatus("개인정보를 제외한 학습 요약을 공용 지침에 저장했습니다. 원본 대본은 저장되지 않습니다.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "대본 예시 학습에 실패했습니다.");
+    } finally { setLearning(false); }
+  };
+
+  const deletePattern = async (id: string) => {
+    const nextPatterns = patterns.filter((pattern) => pattern.id !== id);
+    onPatternsChange(nextPatterns);
+    try { await onSave(guide, nextPatterns); setStatus("학습 요약을 공용 저장소에서 삭제했습니다."); }
+    catch (error) { setStatus(error instanceof Error ? error.message : "학습 요약 삭제에 실패했습니다."); }
+  };
+
   return <section style={{ maxWidth: 980, background: C.white, border: `1px solid ${C.line}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 25px rgba(19,36,59,.05)" }}>
     <div style={{ padding: "20px 22px", background: C.mintPale, borderBottom: `1px solid ${C.line}` }}>
       <div style={{ fontSize: 16, color: C.ink, fontWeight: 900 }}>회사 지침 관리</div>
-      <p style={{ margin: "6px 0 0", color: C.muted, fontSize: 12, lineHeight: 1.7 }}>여기에 적고 저장한 내용은 이 브라우저에서 보관되며, 이후 모든 AI 대본 생성 요청에 자동으로 함께 반영됩니다. 실제 대본 예시는 개인정보를 지운 핵심 표현·식순·금지 문구 중심으로 입력해주세요.</p>
+      <p style={{ margin: "6px 0 0", color: C.muted, fontSize: 12, lineHeight: 1.7 }}>저장한 지침과 개인정보가 제거된 학습 요약은 공용 저장소에 보관되어 모든 관리자 기기에서 동일하게 반영됩니다. 실제 고객 대본 원문은 저장하지 않습니다.</p>
     </div>
     <div style={{ padding: 22 }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 10, marginBottom: 18 }}>
-        {[["01", "필수 식순", "기본 순서·생략 가능 순서"], ["02", "표현 기준", "반드시 쓰거나 피할 표현"], ["03", "대본 예시", "좋은 문장·전환 방식"]].map(([num, title, desc]) => <div key={num} style={{ border: `1px solid ${C.line}`, borderRadius: 10, padding: 12, background: "#FBFDFC" }}><div style={{ color: C.mint, fontSize: 10, fontWeight: 900 }}>{num}</div><div style={{ color: C.ink, fontSize: 13, fontWeight: 900, marginTop: 3 }}>{title}</div><div style={{ color: C.muted, fontSize: 10, marginTop: 3, lineHeight: 1.5 }}>{desc}</div></div>)}
+        {[['01', '필수 식순', '기본 순서·생략 가능 순서'], ['02', '표현 기준', '반드시 쓰거나 피할 표현'], ['03', '학습 요약', '개인정보 제거 문체·전환 원칙']].map(([num, title, desc]) => <div key={num} style={{ border: `1px solid ${C.line}`, borderRadius: 10, padding: 12, background: "#FBFDFC" }}><div style={{ color: C.mint, fontSize: 10, fontWeight: 900 }}>{num}</div><div style={{ color: C.ink, fontSize: 13, fontWeight: 900, marginTop: 3 }}>{title}</div><div style={{ color: C.muted, fontSize: 10, marginTop: 3, lineHeight: 1.5 }}>{desc}</div></div>)}
       </div>
       <FieldLabel>이너스뮤직 회사 지침</FieldLabel>
-      <TextArea value={guide} onChange={onChange} rows={29} placeholder="회사 대본 작성 기준, 금지 표현, 식순 원칙, 좋은 멘트 예시를 입력하세요." />
+      <TextArea value={guide} onChange={onChange} rows={24} placeholder="회사 대본 작성 기준, 금지 표현, 식순 원칙, 좋은 멘트 예시를 입력하세요." />
       <div style={{ display: "flex", gap: 9, flexWrap: "wrap", alignItems: "center", marginTop: 16 }}>
-        <PrimaryButton onClick={save}>회사 지침 저장</PrimaryButton>
-        <button onClick={restore} style={{ minHeight: 46, padding: "0 15px", borderRadius: 10, border: `1px solid ${C.line}`, background: C.white, color: C.muted, fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>기본 기준 복원</button>
-        <span style={{ color: saved ? C.mint : C.muted, fontSize: 11, fontWeight: saved ? 800 : 500 }}>{saved ? "저장 완료 · 다음 대본부터 반영됩니다." : "저장 후 대본 작성 탭에서 생성하면 이 지침이 반영됩니다."}</span>
+        <PrimaryButton onClick={() => save()} disabled={saving || loading}>{saving ? "공용 저장 중…" : "공용 지침 저장"}</PrimaryButton>
+        <button onClick={restore} disabled={saving} style={{ minHeight: 46, padding: "0 15px", borderRadius: 10, border: `1px solid ${C.line}`, background: C.white, color: C.muted, fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>기본 기준 복원</button>
+        <button onClick={() => { void onReload().then(() => setStatus("공용 저장소의 최신 지침을 불러왔습니다.")).catch((error) => setStatus(error instanceof Error ? error.message : "새로고침에 실패했습니다.")); }} disabled={loading || saving} style={{ minHeight: 46, padding: "0 15px", borderRadius: 10, border: `1px solid ${C.line}`, background: C.white, color: C.muted, fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>최신 지침 불러오기</button>
+      </div>
+      <div style={{ color: status ? (status.includes("실패") || status.includes("입력") || status.includes("지원") ? "#B53B3B" : C.mint) : C.muted, fontSize: 11, fontWeight: status ? 800 : 500, lineHeight: 1.65, marginTop: 10 }}>{status || (updatedAt ? `마지막 공용 저장: ${new Date(updatedAt).toLocaleString("ko-KR")}` : "아직 공용 저장된 지침이 없습니다. 저장 후 모든 관리자 기기에서 공유됩니다.")}</div>
+
+      <div style={{ marginTop: 28, paddingTop: 22, borderTop: `1px solid ${C.line}` }}>
+        <div style={{ fontSize: 14, color: C.ink, fontWeight: 900 }}>대본 예시 학습 요약</div>
+        <p style={{ margin: "6px 0 14px", color: C.muted, fontSize: 11, lineHeight: 1.7 }}>예시 원문을 잠시 분석해 문체·식순·전환 방식만 비식별 요약으로 저장합니다. 신랑·신부 이름, 연락처, 예식장 등 원문은 저장되지 않습니다.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: 9, alignItems: "end", marginBottom: 10 }}>
+          <div><FieldLabel optional>예시 제목</FieldLabel><Input value={exampleTitle} onChange={setExampleTitle} placeholder="예: 프리미엄 본식 진행 흐름" /></div>
+          <label style={{ minHeight: 44, display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0 13px", borderRadius: 9, border: `1px solid ${C.line}`, background: C.white, color: C.ink, fontWeight: 800, cursor: "pointer", fontSize: 12 }}>
+            엑셀·텍스트 불러오기
+            <input type="file" accept=".xlsx,.txt,.md,.csv" style={{ display: "none" }} onChange={(event) => { const file = event.target.files?.[0]; if (!file) return; void loadExampleFile(file).catch((error) => setStatus(error instanceof Error ? error.message : "파일을 불러오지 못했습니다.")); event.currentTarget.value = ""; }} />
+          </label>
+        </div>
+        <TextArea value={exampleSource} onChange={setExampleSource} rows={8} placeholder="실제 대본 예시를 붙여넣거나 엑셀(.xlsx)·텍스트 파일에서 불러오세요. 분석 후 원문은 저장되지 않고, 개인정보를 제외한 학습 요약만 공용 저장됩니다." />
+        <div style={{ display: "flex", gap: 9, flexWrap: "wrap", alignItems: "center", marginTop: 12 }}><PrimaryButton onClick={learnExample} disabled={learning || saving}>{learning ? "개인정보를 제외해 학습 중…" : "학습 요약 생성·공용 저장"}</PrimaryButton><span style={{ color: C.muted, fontSize: 10 }}>지원: .xlsx, .txt, .md, .csv · Word/PDF는 내용을 붙여넣어주세요.</span></div>
+        {patterns.length > 0 && <div style={{ display: "grid", gap: 10, marginTop: 18 }}>{patterns.map((pattern) => <article key={pattern.id} style={{ border: `1px solid ${C.line}`, borderRadius: 10, padding: "13px 14px", background: "#FBFDFC" }}><div style={{ display: "flex", gap: 10, justifyContent: "space-between", alignItems: "start" }}><div><div style={{ color: C.ink, fontSize: 12, fontWeight: 900 }}>{pattern.title}</div><div style={{ color: C.muted, fontSize: 10, marginTop: 3 }}>{new Date(pattern.createdAt).toLocaleString("ko-KR")}</div></div><button onClick={() => { if (window.confirm("이 학습 요약을 공용 저장소에서 삭제할까요?")) void deletePattern(pattern.id); }} style={{ border: "none", background: "transparent", color: C.coral, fontSize: 11, fontWeight: 800, cursor: "pointer", padding: 0 }}>삭제</button></div><div style={{ color: C.text, fontSize: 11, lineHeight: 1.7, whiteSpace: "pre-wrap", marginTop: 10 }}>{pattern.summary}</div></article>)}</div>}
       </div>
     </div>
   </section>;
@@ -141,16 +228,56 @@ export default function AiScript() {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<WorkspaceTab>("generator");
   const [companyGuide, setCompanyGuide] = useState(DEFAULT_COMPANY_GUIDE);
+  const [learnedPatterns, setLearnedPatterns] = useState<LearnedPattern[]>([]);
+  const [guideUpdatedAt, setGuideUpdatedAt] = useState<string | null>(null);
+  const [guideLoading, setGuideLoading] = useState(false);
+
+  const loadSharedGuide = async () => {
+    if (!password) return;
+    setGuideLoading(true);
+    try {
+      const response = await fetch(GUIDE_API_URL, { headers: { "X-Inus-Ai-Password": password, "Cache-Control": "no-cache" } });
+      const result = await response.json();
+      if (!response.ok) {
+        if (response.status === 401) { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }
+        throw new Error(result.error || "공용 회사 지침을 불러오지 못했습니다.");
+      }
+      const data = result as SharedGuideResponse;
+      setCompanyGuide(data.guide?.trim() || DEFAULT_COMPANY_GUIDE);
+      setLearnedPatterns(Array.isArray(data.learnedPatterns) ? data.learnedPatterns : []);
+      setGuideUpdatedAt(data.updatedAt || null);
+    } finally { setGuideLoading(false); }
+  };
+
+  const saveSharedGuide = async (guide: string, patterns: LearnedPattern[]) => {
+    const response = await fetch(GUIDE_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
+      body: JSON.stringify({ guide, learnedPatterns: patterns }),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      if (response.status === 401) { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }
+      throw new Error(result.error || "공용 회사 지침 저장에 실패했습니다.");
+    }
+    const data = result as SharedGuideResponse;
+    setCompanyGuide(data.guide || guide);
+    setLearnedPatterns(Array.isArray(data.learnedPatterns) ? data.learnedPatterns : patterns);
+    setGuideUpdatedAt(data.updatedAt || null);
+  };
 
   useEffect(() => {
-    const savedGuide = localStorage.getItem("inus_ai_company_guide");
-    if (savedGuide) setCompanyGuide(savedGuide);
-  }, []);
+    if (authenticated && password) void loadSharedGuide().catch(() => undefined);
+  }, [authenticated, password]);
 
   const update = <K extends keyof FormValues>(key: K, value: FormValues[K]) => setForm(prev => ({ ...prev, [key]: value }));
   const sectionCount = script?.sections.length || 0;
 
   const fullPlainText = useMemo(() => script ? script.sections.map(s => `[${s.no}. ${s.order}]\n${stripTags(s.script)}${s.note ? `\n※ ${s.note}` : ""}`).join("\n\n") : "", [script]);
+  const guideForGeneration = useMemo(() => {
+    const summaries = learnedPatterns.map((pattern, index) => `[학습 요약 ${index + 1}: ${pattern.title}]\n${pattern.summary}`);
+    return [companyGuide, ...summaries].filter(Boolean).join("\n\n");
+  }, [companyGuide, learnedPatterns]);
 
   const login = () => {
     if (!passwordInput.trim()) return;
@@ -170,7 +297,7 @@ export default function AiScript() {
       const response = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
-        body: JSON.stringify({ ...form, companyGuide }),
+        body: JSON.stringify({ ...form, companyGuide: guideForGeneration }),
       });
       const result = await response.json();
       if (!response.ok) {
@@ -285,7 +412,7 @@ export default function AiScript() {
     </header>
 
     <main style={{ maxWidth: 1380, margin: "0 auto", padding: "28px 20px 80px", boxSizing: "border-box" }}>
-      {activeTab === "guide" ? <GuideManager guide={companyGuide} onChange={setCompanyGuide} /> : <>
+      {activeTab === "guide" ? <GuideManager guide={companyGuide} patterns={learnedPatterns} password={password} loading={guideLoading} updatedAt={guideUpdatedAt} onChange={setCompanyGuide} onPatternsChange={setLearnedPatterns} onSave={saveSharedGuide} onReload={loadSharedGuide} /> : <>
       <div style={{ marginBottom: 22 }}>
         <h1 style={{ fontSize: 27, color: C.ink, margin: 0, letterSpacing: "-1.2px" }}>맞춤형 사회 대본 생성</h1>
         <p style={{ margin: "8px 0 0", fontSize: 13, color: C.muted, lineHeight: 1.7 }}>필수 정보만으로 초안을 만든 뒤, 답변지·요청사항을 추가하면 회사 기준에 맞춰 더 정교하게 작성됩니다.</p>

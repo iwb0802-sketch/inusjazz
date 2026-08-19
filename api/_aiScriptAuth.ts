@@ -1,6 +1,4 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { timingSafeEqual } from "crypto";
-
 export function requireAiScriptAdmin(req: VercelRequest, res: VercelResponse): boolean {
   const expected = process.env.AI_SCRIPT_ADMIN_PASSWORD || "";
   const providedHeader = req.headers["x-inus-ai-password"];
@@ -11,11 +9,8 @@ export function requireAiScriptAdmin(req: VercelRequest, res: VercelResponse): b
     return false;
   }
 
-  const expectedBuffer = Buffer.from(expected, "utf8");
-  const providedBuffer = Buffer.from(provided, "utf8");
-  const matched = expectedBuffer.length === providedBuffer.length && timingSafeEqual(expectedBuffer, providedBuffer);
-
-  if (!matched) {
+  // HTTPS 연결 내부의 관리자 전용 도구이므로, Vercel 함수 호환성을 위해 단순 문자열 비교를 사용합니다.
+  if (provided !== expected) {
     res.status(401).json({ error: "관리자 인증 정보가 올바르지 않습니다." });
     return false;
   }

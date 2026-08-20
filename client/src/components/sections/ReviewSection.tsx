@@ -249,10 +249,10 @@ export default function ReviewSection() {
             <p className="mt-2.5 text-[11.5px] sm:text-xs break-keep leading-relaxed" style={{ color: "rgba(212,184,150,0.75)" }}>
               위 캡처는 <span className="font-bold" style={{ color: GOLD }}>{PROOF_AS_OF} 기준</span>입니다
             </p>
-            <p className="mt-1.5 text-[10.5px] sm:text-[11px] text-white/35 break-keep leading-relaxed">
-              후기는 계속 쌓이고 있어 현재 건수는 더 많습니다
+            <p className="mt-2 text-xs sm:text-[13px] font-medium text-white/70 break-keep leading-relaxed">
+              후기는 계속 쌓이고 있어 <span className="font-bold text-white/95">현재 건수는 더 많습니다</span>
               <br />
-              <span className="text-white/55">원본 보기</span>로 실시간 수치를 확인하실 수 있습니다
+              <span className="font-bold" style={{ color: GOLD }}>원본 보기</span>로 실시간 수치를 확인하실 수 있습니다
             </p>
           </div>
 

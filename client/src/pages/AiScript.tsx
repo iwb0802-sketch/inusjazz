@@ -17,7 +17,7 @@ type GuideChatMessage = { role: "user" | "assistant"; content: string; createdAt
 type LearnedPattern = { id: string; title: string; summary: string; createdAt: string };
 type GuideVersion = { id: string; guide: string; savedAt: string };
 type SharedGuideResponse = { guide: string; learnedPatterns: LearnedPattern[]; guideHistory: GuideVersion[]; currentVersionId: string | null; updatedAt: string | null };
-type WorkspaceTab = "generator" | "guide";
+type WorkspaceTab = "generator" | "editor" | "guide";
 
 type FormValues = {
   groomName: string; brideName: string; mcName: string; ceremonyType: CeremonyType; style: ScriptStyle;
@@ -326,6 +326,14 @@ export default function AiScript() {
   const [currentGuideVersionId, setCurrentGuideVersionId] = useState<string | null>(null);
   const [guideUpdatedAt, setGuideUpdatedAt] = useState<string | null>(null);
   const [guideLoading, setGuideLoading] = useState(false);
+  const [uploadedScript, setUploadedScript] = useState<GeneratedScript | null>(null);
+  const [uploadedFileName, setUploadedFileName] = useState("");
+  const [uploadLoading, setUploadLoading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const [uploadRevisionInstruction, setUploadRevisionInstruction] = useState("");
+  const [uploadRevisionMessages, setUploadRevisionMessages] = useState<RevisionMessage[]>([]);
+  const [uploadRevisionLoading, setUploadRevisionLoading] = useState(false);
+  const [uploadRevisionError, setUploadRevisionError] = useState("");
 
   const loadSharedGuide = async () => {
     if (!password) return;
@@ -457,13 +465,93 @@ export default function AiScript() {
     setScript(current => current ? { ...current, sections: current.sections.map((section, i) => i === index ? { ...section, [field]: field === "no" ? Number(value) : value } : section) } : current);
   };
 
+  const updateUploadedSection = (index: number, field: keyof ScriptSection, value: string) => {
+    setUploadedScript(current => current ? { ...current, sections: current.sections.map((section, i) => i === index ? { ...section, [field]: field === "no" ? Number(value) : value } : section) } : current);
+  };
+
+  const uploadExistingScript = async (file: File) => {
+    if (!file.name.toLowerCase().endsWith(".xlsx")) throw new Error("이너스뮤직 사회 대본 엑셀(.xlsx) 파일만 올려주세요.");
+    if (file.size > 8 * 1024 * 1024) throw new Error("업로드 파일은 8MB 이하만 가능합니다.");
+    setUploadLoading(true); setUploadError("");
+    try {
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(await file.arrayBuffer());
+      const worksheet = workbook.worksheets[0];
+      if (!worksheet) throw new Error("엑셀 시트를 찾지 못했습니다.");
+      const normalizeHeader = (value: string) => value.replace(/\s+/g, "").replace(/[·:]/g, "").toLowerCase();
+      const aliases: Record<string, string[]> = {
+        no: ["번호", "no"], order: ["식순", "순서"], time: ["시간", "예식시간"], script: ["진행멘트", "멘트", "대본"], note: ["사회자참고비고", "비고", "참고사항"],
+      };
+      let headerRowNumber = 0;
+      let columns: Record<string, number> = {};
+      for (let rowNumber = 1; rowNumber <= Math.min(worksheet.rowCount, 30); rowNumber += 1) {
+        const row = worksheet.getRow(rowNumber);
+        const candidate: Record<string, number> = {};
+        for (let columnNumber = 1; columnNumber <= Math.max(worksheet.columnCount, 5); columnNumber += 1) {
+          const text = normalizeHeader(String(row.getCell(columnNumber).text || ""));
+          Object.entries(aliases).forEach(([key, names]) => { if (names.includes(text)) candidate[key] = columnNumber; });
+        }
+        if (candidate.order && candidate.script) { headerRowNumber = rowNumber; columns = candidate; break; }
+      }
+      if (!headerRowNumber) throw new Error("식순·진행 멘트 열을 찾지 못했습니다. 이너스뮤직에서 내려받은 대본 엑셀인지 확인해주세요.");
+      const sections: ScriptSection[] = [];
+      for (let rowNumber = headerRowNumber + 1; rowNumber <= worksheet.rowCount; rowNumber += 1) {
+        const row = worksheet.getRow(rowNumber);
+        const order = String(row.getCell(columns.order).text || "").trim();
+        const scriptText = String(row.getCell(columns.script).text || "").trim();
+        if (!order && !scriptText) continue;
+        if (/새로운시작|이너스뮤직/.test(`${order} ${scriptText}`) && !scriptText) continue;
+        if (!order || !scriptText) continue;
+        const noText = columns.no ? String(row.getCell(columns.no).text || "") : "";
+        sections.push({
+          no: Number(noText.replace(/[^0-9]/g, "")) || sections.length + 1,
+          order,
+          time: columns.time ? String(row.getCell(columns.time).text || "").trim() : "",
+          script: scriptText,
+          note: columns.note ? String(row.getCell(columns.note).text || "").trim() : "",
+        });
+      }
+      if (!sections.length) throw new Error("수정할 대본 식순을 읽지 못했습니다. 엑셀 파일의 내용이 비어 있는지 확인해주세요.");
+      const title = String(worksheet.getCell("A1").text || "").trim() || "업로드한 결혼식 사회 대본";
+      const subtitle = String(worksheet.getCell("A2").text || "").trim();
+      setUploadedScript({ title, subtitle, sections, review_flags: [] });
+      setUploadedFileName(file.name);
+      setUploadRevisionMessages([]); setUploadRevisionInstruction(""); setUploadRevisionError("");
+    } finally { setUploadLoading(false); }
+  };
+
+  const reviseUploadedScript = async () => {
+    if (!uploadedScript || !uploadRevisionInstruction.trim() || uploadRevisionLoading) return;
+    const userMessage: RevisionMessage = { role: "user", content: uploadRevisionInstruction.trim(), createdAt: new Date().toISOString() };
+    const conversation = [...uploadRevisionMessages, userMessage];
+    setUploadRevisionMessages(conversation);
+    setUploadRevisionInstruction("");
+    setUploadRevisionLoading(true); setUploadRevisionError("");
+    try {
+      const response = await fetch(REVISION_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
+        body: JSON.stringify({ instruction: userMessage.content, script: uploadedScript, companyGuide: guideForGeneration, conversation }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        if (response.status === 401) { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }
+        throw new Error(result.error || "업로드 대본 수정에 실패했습니다.");
+      }
+      setUploadedScript(result.script as GeneratedScript);
+      setUploadRevisionMessages((current) => [...current, { role: "assistant", content: String(result.assistantMessage || "요청하신 내용을 반영했습니다."), createdAt: new Date().toISOString() }]);
+    } catch (error) {
+      setUploadRevisionError(error instanceof Error ? error.message : "업로드 대본 수정 중 오류가 발생했습니다.");
+    } finally { setUploadRevisionLoading(false); }
+  };
+
   const copyScript = async () => {
     await navigator.clipboard.writeText(fullPlainText);
     setCopied(true); window.setTimeout(() => setCopied(false), 1800);
   };
 
-  const downloadExcel = async () => {
-    if (!script) return;
+  const downloadExcel = async (targetScript: GeneratedScript | null = script, filename?: string) => {
+    if (!targetScript) return;
     const workbook = new ExcelJS.Workbook();
     workbook.creator = "이너스뮤직";
     workbook.created = new Date();
@@ -481,7 +569,7 @@ export default function AiScript() {
 
     worksheet.mergeCells("A1:E1");
     const title = worksheet.getCell("A1");
-    title.value = script.title || `${form.groomName} 신랑 · ${form.brideName} 신부 결혼식 사회 대본`;
+    title.value = targetScript.title || `${form.groomName} 신랑 · ${form.brideName} 신부 결혼식 사회 대본`;
     title.font = { name: fontName, size: 16, bold: true, color: { argb: "FFFFFFFF" } };
     title.fill = solidFill("FF2F8077");
     title.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
@@ -489,7 +577,7 @@ export default function AiScript() {
 
     worksheet.mergeCells("A2:E2");
     const subtitle = worksheet.getCell("A2");
-    subtitle.value = script.subtitle || `사회자: ${form.mcName || "미정"}`;
+    subtitle.value = targetScript.subtitle || `사회자: ${form.mcName || "미정"}`;
     subtitle.font = { name: fontName, size: 11, bold: true, color: { argb: "FF285A54" } };
     subtitle.fill = solidFill("FFDDF4EF");
     subtitle.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
@@ -512,7 +600,7 @@ export default function AiScript() {
       { no: "FF80D4C8", order: "FFB9ECE4", time: "FFE2F6F2", note: "FFF2FBF9" },
     ];
 
-    script.sections.forEach((section, index) => {
+    targetScript.sections.forEach((section, index) => {
       const color = sectionColors[index % sectionColors.length];
       const row = worksheet.addRow([section.no, section.order, section.time, "", section.note]);
       const scriptText = stripTags(section.script);
@@ -551,7 +639,7 @@ export default function AiScript() {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = `${formatFilenamePart(form.groomName)}_${formatFilenamePart(form.brideName)}_결혼식_사회대본.xlsx`;
+    anchor.download = filename || `${formatFilenamePart(form.groomName)}_${formatFilenamePart(form.brideName)}_결혼식_사회대본.xlsx`;
     anchor.click();
     URL.revokeObjectURL(url);
   };
@@ -580,14 +668,39 @@ export default function AiScript() {
         <div style={{ width: 1, height: 18, background: "rgba(255,255,255,.18)" }} />
         <div style={{ minWidth: 0, flex: 1 }}><div style={{ color: "#61D5C0", fontSize: 10, fontWeight: 900, letterSpacing: 2.6 }}>INUS MUSIC</div><div style={{ fontWeight: 800, fontSize: 16, letterSpacing: "-.4px" }}>AI 사회 대본 작성실</div></div>
         <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
-          {([ ["generator", "대본 작성"], ["guide", "회사 지침"] ] as [WorkspaceTab, string][]).map(([key, label]) => <button key={key} onClick={() => setActiveTab(key)} style={{ background: activeTab === key ? "#61D5C0" : "transparent", border: `1px solid ${activeTab === key ? "#61D5C0" : "rgba(255,255,255,.25)"}`, borderRadius: 7, color: activeTab === key ? C.ink : "#E4EEEC", fontSize: 11, padding: "7px 9px", cursor: "pointer", fontFamily: "inherit", fontWeight: 800 }}>{label}</button>)}
+          {([ ["generator", "대본 작성"], ["editor", "대본 수정"], ["guide", "회사 지침"] ] as [WorkspaceTab, string][]).map(([key, label]) => <button key={key} onClick={() => setActiveTab(key)} style={{ background: activeTab === key ? "#61D5C0" : "transparent", border: `1px solid ${activeTab === key ? "#61D5C0" : "rgba(255,255,255,.25)"}`, borderRadius: 7, color: activeTab === key ? C.ink : "#E4EEEC", fontSize: 11, padding: "7px 9px", cursor: "pointer", fontFamily: "inherit", fontWeight: 800 }}>{label}</button>)}
           <button onClick={() => { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }} style={{ background: "transparent", border: "1px solid rgba(255,255,255,.25)", borderRadius: 7, color: "#E4EEEC", fontSize: 11, padding: "7px 9px", cursor: "pointer", fontFamily: "inherit" }}>잠금</button>
         </div>
       </div>
     </header>
 
     <main style={{ maxWidth: 1380, margin: "0 auto", padding: "28px 20px 80px", boxSizing: "border-box" }}>
-      {activeTab === "guide" ? <GuideManager guide={companyGuide} patterns={learnedPatterns} versions={guideHistory} currentVersionId={currentGuideVersionId} password={password} loading={guideLoading} updatedAt={guideUpdatedAt} onChange={setCompanyGuide} onPatternsChange={setLearnedPatterns} onSave={saveSharedGuide} onRestore={restoreSharedGuideVersion} onReload={loadSharedGuide} /> : <>
+      {activeTab === "guide" ? <GuideManager guide={companyGuide} patterns={learnedPatterns} versions={guideHistory} currentVersionId={currentGuideVersionId} password={password} loading={guideLoading} updatedAt={guideUpdatedAt} onChange={setCompanyGuide} onPatternsChange={setLearnedPatterns} onSave={saveSharedGuide} onRestore={restoreSharedGuideVersion} onReload={loadSharedGuide} /> : activeTab === "editor" ? <>
+        <div style={{ marginBottom: 22 }}>
+          <h1 style={{ fontSize: 27, color: C.ink, margin: 0, letterSpacing: "-1.2px" }}>기존 대본 수정</h1>
+          <p style={{ margin: "8px 0 0", fontSize: 13, color: C.muted, lineHeight: 1.7 }}>이전에 내려받은 이너스뮤직 사회 대본 엑셀을 올린 뒤 수정사항을 말하면 AI가 반영합니다. 수정 후에는 같은 진행용 양식의 엑셀로 다시 저장할 수 있습니다.</p>
+        </div>
+        {!uploadedScript ? <section style={{ maxWidth: 760, background: C.white, border: `1px solid ${C.line}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 25px rgba(19,36,59,.05)" }}>
+          <div style={{ padding: "18px 20px", background: C.mintPale, borderBottom: `1px solid ${C.line}` }}><div style={{ fontSize: 14, fontWeight: 900, color: C.ink }}>01. 이전 대본 엑셀 불러오기</div><div style={{ fontSize: 11, color: C.muted, marginTop: 4 }}>대본 작성 화면에서 내려받은 `.xlsx` 파일을 선택해주세요.</div></div>
+          <div style={{ padding: 22 }}>
+            <label style={{ minHeight: 150, border: `2px dashed ${C.mint}`, borderRadius: 12, background: C.mintPale, display: "grid", placeItems: "center", textAlign: "center", padding: 20, cursor: uploadLoading ? "wait" : "pointer", boxSizing: "border-box" }}>
+              <div><div style={{ color: C.ink, fontWeight: 900, fontSize: 15 }}>{uploadLoading ? "대본 엑셀을 읽는 중입니다…" : "대본 엑셀 파일 선택"}</div><div style={{ color: C.muted, fontSize: 11, marginTop: 7, lineHeight: 1.6 }}>지원 형식: `.xlsx` · 최대 8MB<br />식순·시간·진행 멘트·비고를 자동으로 읽어옵니다.</div></div>
+              <input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" disabled={uploadLoading} style={{ display: "none" }} onChange={(event) => { const file = event.target.files?.[0]; if (!file) return; void uploadExistingScript(file).catch((error) => setUploadError(error instanceof Error ? error.message : "엑셀 파일을 불러오지 못했습니다.")); event.currentTarget.value = ""; }} />
+            </label>
+            {uploadError && <div style={{ marginTop: 14, padding: "11px 12px", borderRadius: 9, background: "#FFF2F2", border: "1px solid #F1C2C2", color: "#B53B3B", fontSize: 12, lineHeight: 1.6 }}>⚠️ {uploadError}</div>}
+          </div>
+        </section> : <div className="ai-script-workspace ai-script-workspace--has-script">
+          <section style={{ minWidth: 0, background: C.white, border: `1px solid ${C.line}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 25px rgba(19,36,59,.05)" }}>
+            <div style={{ padding: "18px 20px", background: C.ink, color: C.white, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}><div style={{ flex: 1, minWidth: 180 }}><div style={{ color: "#61D5C0", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>UPLOADED SCRIPT</div><div style={{ fontWeight: 800, fontSize: 16, marginTop: 3 }}>{uploadedScript.title} · {uploadedScript.sections.length}개 식순</div><div style={{ color: "#BFEDE5", fontSize: 10, marginTop: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{uploadedFileName}</div></div><button onClick={() => { setUploadedScript(null); setUploadedFileName(""); setUploadError(""); setUploadRevisionMessages([]); }} style={{ border: "1px solid rgba(255,255,255,.25)", borderRadius: 7, background: "rgba(255,255,255,.08)", color: C.white, padding: "8px 10px", cursor: "pointer", fontFamily: "inherit", fontSize: 11 }}>다른 파일</button><button onClick={() => void downloadExcel(uploadedScript, `${formatFilenamePart(uploadedFileName.replace(/\.xlsx$/i, "") || "수정대본")}_수정본.xlsx`)} style={{ border: "none", borderRadius: 7, background: "#61D5C0", color: C.ink, padding: "8px 10px", cursor: "pointer", fontFamily: "inherit", fontWeight: 900, fontSize: 11 }}>수정본 엑셀 저장</button></div>
+            <div style={{ padding: 18 }}>
+              <div style={{ marginBottom: 16, padding: "12px 14px", background: C.mintPale, border: `1px solid #C4EEE8`, borderRadius: 10 }}><div style={{ color: C.ink, fontSize: 14, fontWeight: 900 }}>업로드한 대본을 직접 확인·수정할 수 있습니다.</div><div style={{ color: C.muted, fontSize: 11, lineHeight: 1.6, marginTop: 4 }}>오른쪽 대화창에서 AI 수정 요청을 보내거나, 각 식순의 내용을 직접 바꾼 뒤 수정본 엑셀 저장을 누르세요.</div></div>
+              <div style={{ display: "grid", gap: 12 }}>{uploadedScript.sections.map((section, index) => <article key={`${section.no}-${index}`} style={{ border: `1px solid ${C.line}`, borderRadius: 11, overflow: "hidden" }}><div style={{ display: "grid", gridTemplateColumns: "38px minmax(0,1fr) auto", alignItems: "center", gap: 9, padding: "10px 12px", background: C.mintPale, borderBottom: `1px solid ${C.line}` }}><div style={{ width: 27, height: 27, display: "grid", placeItems: "center", borderRadius: "50%", background: C.mint, color: C.white, fontWeight: 900, fontSize: 12 }}>{section.no}</div><input value={section.order} onChange={e => updateUploadedSection(index, "order", e.target.value)} style={{ minWidth: 0, color: C.ink, fontWeight: 900, fontSize: 13, border: "none", background: "transparent", fontFamily: "inherit", outline: "none" }} /><input value={section.time} onChange={e => updateUploadedSection(index, "time", e.target.value)} style={{ width: 70, color: C.mint, fontWeight: 800, textAlign: "right", fontSize: 11, border: "none", background: "transparent", fontFamily: "inherit", outline: "none" }} /></div><div style={{ padding: 13 }}><textarea value={section.script} onChange={e => updateUploadedSection(index, "script", e.target.value)} rows={Math.max(5, Math.min(18, section.script.split("\n").length + 1))} style={{ boxSizing: "border-box", resize: "vertical", width: "100%", color: C.text, fontSize: 12, lineHeight: 1.72, border: `1px solid ${C.line}`, borderRadius: 7, padding: 10, fontFamily: "inherit", outline: "none", background: "#FEFEFE" }} /><div style={{ marginTop: 9 }}><FieldLabel optional>사회자 참고 비고</FieldLabel><TextArea value={section.note} onChange={v => updateUploadedSection(index, "note", v)} rows={2} placeholder="음원 타이밍, 확인 사항, 연출 주의사항" /></div></div></article>)}</div>
+              <div style={{ marginTop: 18, display: "flex", justifyContent: "flex-end" }}><PrimaryButton onClick={() => void downloadExcel(uploadedScript, `${formatFilenamePart(uploadedFileName.replace(/\.xlsx$/i, "") || "수정대본")}_수정본.xlsx`)}>↓ 수정본 엑셀 저장</PrimaryButton></div>
+            </div>
+          </section>
+          <RevisionSidebar messages={uploadRevisionMessages} instruction={uploadRevisionInstruction} loading={uploadRevisionLoading} error={uploadRevisionError} onInstructionChange={setUploadRevisionInstruction} onSubmit={reviseUploadedScript} />
+        </div>}
+      </> : <>
       <div style={{ marginBottom: 22 }}>
         <h1 style={{ fontSize: 27, color: C.ink, margin: 0, letterSpacing: "-1.2px" }}>맞춤형 사회 대본 생성</h1>
         <p style={{ margin: "8px 0 0", fontSize: 13, color: C.muted, lineHeight: 1.7 }}>필수 정보만으로 초안을 만든 뒤, 답변지·요청사항을 추가하면 회사 기준에 맞춰 더 정교하게 작성됩니다.</p>
@@ -629,7 +742,7 @@ export default function AiScript() {
         </section>
 
         {script && <section style={{ minWidth: 0, background: C.white, border: `1px solid ${C.line}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 25px rgba(19,36,59,.05)" }}>
-          <div style={{ padding: "18px 20px", background: C.ink, color: C.white, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}><div style={{ flex: 1, minWidth: 190 }}><div style={{ color: "#61D5C0", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>DRAFT READY</div><div style={{ fontWeight: 800, fontSize: 16, marginTop: 3 }}>03. 생성된 사회 대본 · {sectionCount}개 식순</div></div><button onClick={copyScript} style={{ border: "1px solid rgba(255,255,255,.25)", borderRadius: 7, background: "rgba(255,255,255,.08)", color: C.white, padding: "8px 10px", cursor: "pointer", fontFamily: "inherit", fontSize: 11 }}>{copied ? "복사 완료" : "전체 복사"}</button><button onClick={downloadExcel} style={{ border: "none", borderRadius: 7, background: "#61D5C0", color: C.ink, padding: "8px 10px", cursor: "pointer", fontFamily: "inherit", fontWeight: 900, fontSize: 11 }}>엑셀 다운로드</button></div>
+          <div style={{ padding: "18px 20px", background: C.ink, color: C.white, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}><div style={{ flex: 1, minWidth: 190 }}><div style={{ color: "#61D5C0", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>DRAFT READY</div><div style={{ fontWeight: 800, fontSize: 16, marginTop: 3 }}>03. 생성된 사회 대본 · {sectionCount}개 식순</div></div><button onClick={copyScript} style={{ border: "1px solid rgba(255,255,255,.25)", borderRadius: 7, background: "rgba(255,255,255,.08)", color: C.white, padding: "8px 10px", cursor: "pointer", fontFamily: "inherit", fontSize: 11 }}>{copied ? "복사 완료" : "전체 복사"}</button><button onClick={() => void downloadExcel()} style={{ border: "none", borderRadius: 7, background: "#61D5C0", color: C.ink, padding: "8px 10px", cursor: "pointer", fontFamily: "inherit", fontWeight: 900, fontSize: 11 }}>엑셀 다운로드</button></div>
           <div style={{ padding: 18 }}>
             <div style={{ marginBottom: 16, padding: "12px 14px", background: C.mintPale, border: `1px solid #C4EEE8`, borderRadius: 10 }}><div style={{ color: C.ink, fontSize: 14, fontWeight: 900 }}>{script.title}</div><div style={{ color: C.muted, fontSize: 11, marginTop: 4 }}>{script.subtitle}</div><div style={{ color: C.coral, fontSize: 10, marginTop: 8 }}>빨간색 굵은 글씨는 답변지·요청사항 인용 구간이며, 엑셀에도 동일하게 적용됩니다.</div></div>
             {script.review_flags.length > 0 && <div style={{ marginBottom: 16, padding: "11px 13px", background: "#FFF9E9", border: "1px solid #F2DFAB", borderRadius: 10 }}><div style={{ color: "#8A671D", fontSize: 11, fontWeight: 900, marginBottom: 6 }}>⚑ 발송 전 확인 필요</div>{script.review_flags.map((flag, index) => <div key={index} style={{ color: "#81672B", fontSize: 11, lineHeight: 1.6 }}>• {flag}</div>)}</div>}

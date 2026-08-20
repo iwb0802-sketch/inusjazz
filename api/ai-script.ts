@@ -22,6 +22,8 @@ type GeneratePayload = {
   venue?: string;
   duration?: string;
   familyEntranceMode?: "lighting_only" | "parents_and_lighting";
+  coupleEntranceMode?: "separate" | "together";
+  ringExchangeMode?: "include" | "exclude";
   customOrder?: string;
   coupleStory?: string;
   requests?: string;
@@ -49,7 +51,7 @@ const CORE_GUIDE = `
 15. 식순 간 앞뒤 문맥이 이어지도록 작성합니다. 예를 들어 화동이 반지를 전달했다면 다음 반지 교환 멘트에서 이를 자연스럽게 연결합니다.
 16. 음원 타이밍·링크·연출 참고는 script가 아니라 note에만 정확히 적습니다.
 17. 답변지에 다른 커플 정보가 섞였을 가능성이 있거나 정보가 상충되면 반영하지 말고 review_flags에 확인 필요 사항을 기록하세요.
-18. 기본 예식은 번호/식순/시간/멘트/비고의 5열 구조입니다. 기본 식순은 하객 입장 안내, 오프닝, 개식 선언, 화촉점화, 신랑 입장, 신부 입장, 맞절, 혼인서약, 반지 교환, 성혼선언, 편지/덕담/축가(답변에 있는 경우), 양가혼주님 및 내빈 인사, 행진, 폐회입니다. 혼주님 입장은 기본 식순이 아닙니다. 이번 요청의 [혼주님입장_화촉점화선택]이 "혼주님 입장 + 화촉점화"일 때에만 개식 선언 뒤에 혼주님 입장과 화촉점화를 순서대로 작성하세요. "화촉점화만"이면 혼주님 입장 식순을 만들지 말고 화촉점화부터 진행하세요. 이 선택은 기본 식순·지정 식순의 일반 표현보다 우선합니다.
+18. 기본 예식은 번호/식순/시간/멘트/비고의 5열 구조입니다. 기본 식순은 하객 입장 안내, 오프닝, 개식 선언, 화촉점화, 신랑신부 입장, 맞절, 혼인서약, 반지 교환(선택한 경우), 성혼선언, 편지/덕담/축가(답변에 있는 경우), 양가혼주님 및 내빈 인사, 행진, 폐회입니다. 혼주님 입장은 기본 식순이 아닙니다. 이번 요청의 [혼주님입장_화촉점화선택]이 "혼주님 입장 + 화촉점화"일 때에만 개식 선언 뒤에 혼주님 입장과 화촉점화를 순서대로 작성하세요. "화촉점화만"이면 혼주님 입장 식순을 만들지 말고 화촉점화부터 진행하세요. [신랑신부입장방식]이 "신랑·신부 따로 입장"이면 신랑 입장 후 신부 입장을 각각 작성하고, "신랑·신부 동시입장"이면 두 분을 함께 소개하는 신랑신부 동시입장 식순 하나만 작성하며 신랑·신부 단독 입장 식순은 만들지 마세요. [반지교환선택]이 "반지 교환 없음"이면 반지 교환·예물 교환·반지 관련 식순과 멘트를 절대 만들지 마세요. 이 세 선택은 기본 식순·지정 식순의 일반 표현보다 우선합니다.
 19. 2부 피로연은 개식사, 신랑신부 입장, 촛불점화, 케이크커팅, 축배, 퇴장 순서의 짧고 경쾌한 톤을 사용합니다.
 20. 같은 틀을 기계적으로 반복하지 말고, style 값에 맞춰 클래식·트렌디·감성 버전을 변주하되 위 규칙은 절대 어기지 마세요.
 21. 이너스뮤직 프리미엄 실제 대본 기준을 따르세요. 모든 식순은 번호 / 식순 / 시간 / 멘트 / 비고의 5열 구조로 정리하고, 오프닝·입장·맞절·서약·성혼선언·축가·양가 인사·행진의 연결이 자연스러워야 합니다. 각 입장과 핵심 순서에는 실제 현장 진행이 가능한 명확한 콜 구령을 넣으세요.
@@ -195,13 +197,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       예식장소: cleanText(body.venue, 150),
       예상진행시간: cleanText(body.duration, 50),
       혼주님입장_화촉점화선택: body.familyEntranceMode === "parents_and_lighting" ? "혼주님 입장 + 화촉점화" : "화촉점화만 (기본)",
+      신랑신부입장방식: body.coupleEntranceMode === "together" ? "신랑·신부 동시입장" : "신랑·신부 따로 입장 (기본)",
+      반지교환선택: body.ringExchangeMode === "exclude" ? "반지 교환 없음" : "반지 교환 있음 (기본)",
       지정식순: cleanText(body.customOrder, 4000),
       신랑신부스토리_답변지: cleanText(body.coupleStory, 10000),
       특별요청_음원_연출: cleanText(body.requests, 6000),
     };
     const companyGuide = cleanText(body.companyGuide, 18000);
+    const selectionSystemGuide = `[이번 생성 식순 선택 · 최우선 적용]\n- 혼주님 입장·화촉점화: ${input.혼주님입장_화촉점화선택}\n- 신랑·신부 입장 방식: ${input.신랑신부입장방식}\n- 반지 교환: ${input.반지교환선택}\n위 선택값은 공용 회사 지침 안의 기본 식순 표현이나 지정 식순의 일반 표현보다 우선합니다. 선택과 맞지 않는 식순·멘트·비고는 생성하지 마세요.`;
 
-    const userPrompt = `아래는 이번 커플의 제공 정보입니다. 제공 정보 외의 사실은 절대 만들지 마세요.\n\n[커플 정보]\n${JSON.stringify(input, null, 2)}\n\n[혼주님 입장·화촉점화 필수 적용]\n커플 정보의 혼주님입장_화촉점화선택을 그대로 따르세요. 화촉점화만이면 혼주님 입장 식순을 절대 만들지 말고, 혼주님 입장 + 화촉점화이면 두 식순을 개식 선언 뒤에 순서대로 작성하세요.\n\n회사 기준에 따라 엑셀용 사회 대본 JSON을 작성하세요.`;
+    const userPrompt = `아래는 이번 커플의 제공 정보입니다. 제공 정보 외의 사실은 절대 만들지 마세요.\n\n[커플 정보]\n${JSON.stringify(input, null, 2)}\n\n[식순 선택 필수 적용]\n1. 혼주님입장_화촉점화선택을 그대로 따르세요. 화촉점화만이면 혼주님 입장 식순을 절대 만들지 말고, 혼주님 입장 + 화촉점화이면 두 식순을 개식 선언 뒤에 순서대로 작성하세요.\n2. 신랑신부입장방식이 따로 입장이면 신랑 입장과 신부 입장을 각각 작성하세요. 동시입장이면 두 분이 함께 입장하는 식순 하나만 작성하고, 신랑·신부 단독 입장 식순은 만들지 마세요.\n3. 반지교환선택이 반지 교환 없음이면 반지 교환·예물 교환 관련 식순, 멘트, 비고를 만들지 마세요.\n\n회사 기준에 따라 엑셀용 사회 대본 JSON을 작성하세요.`;
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -213,7 +218,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5",
         max_tokens: 8500,
         temperature: 0.65,
-        system: [CORE_GUIDE, process.env.AI_SCRIPT_GUIDE ? `[서버 고정 회사 지침]\n${process.env.AI_SCRIPT_GUIDE}` : "", companyGuide ? `[관리자 화면에서 저장한 회사 지침]\n${companyGuide}` : ""].filter(Boolean).join("\n\n"),
+        system: [CORE_GUIDE, process.env.AI_SCRIPT_GUIDE ? `[서버 고정 회사 지침]\n${process.env.AI_SCRIPT_GUIDE}` : "", companyGuide ? `[관리자 화면에서 저장한 회사 지침]\n${companyGuide}` : "", selectionSystemGuide].filter(Boolean).join("\n\n"),
         messages: [{ role: "user", content: userPrompt }],
       }),
 

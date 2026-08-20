@@ -465,54 +465,86 @@ export default function AiScript() {
   const downloadExcel = async () => {
     if (!script) return;
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("예식 대본", { views: [{ showGridLines: false }] });
+    workbook.creator = "이너스뮤직";
+    workbook.created = new Date();
+    const worksheet = workbook.addWorksheet("예식 대본", { views: [{ showGridLines: false, state: "frozen", ySplit: 3 }] });
     worksheet.columns = [
-      { width: 6 }, { width: 15 }, { width: 14 }, { width: 78.5 }, { width: 39.4 },
+      { width: 6.5 }, { width: 18 }, { width: 13 }, { width: 76 }, { width: 35 },
     ];
+    worksheet.pageSetup = { orientation: "landscape", fitToPage: true, fitToWidth: 1, fitToHeight: 0, paperSize: 9, margins: { left: 0.25, right: 0.25, top: 0.35, bottom: 0.35, header: 0.15, footer: 0.15 } };
+    worksheet.headerFooter.oddFooter = "&C이너스뮤직 · 결혼식 사회 대본";
+
+    const fontName = "맑은 고딕";
+    const thin = { style: "thin" as const, color: { argb: "FFB8D9D4" } };
+    const divider = { style: "medium" as const, color: { argb: "FF319587" } };
+    const solidFill = (argb: string) => ({ type: "pattern" as const, pattern: "solid" as const, fgColor: { argb } });
+
     worksheet.mergeCells("A1:E1");
-    worksheet.getCell("A1").value = script.title || `${form.groomName} 신랑 · ${form.brideName} 신부 결혼식 사회 대본`;
-    worksheet.getCell("A1").font = { name: "Arial", size: 16, bold: true, color: { argb: "FFFFFFFF" } };
-    worksheet.getCell("A1").fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF2D9B8A" } };
-    worksheet.getCell("A1").alignment = { horizontal: "center", vertical: "middle", wrapText: true };
-    worksheet.getRow(1).height = 31;
+    const title = worksheet.getCell("A1");
+    title.value = script.title || `${form.groomName} 신랑 · ${form.brideName} 신부 결혼식 사회 대본`;
+    title.font = { name: fontName, size: 16, bold: true, color: { argb: "FFFFFFFF" } };
+    title.fill = solidFill("FF2F8077");
+    title.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+    worksheet.getRow(1).height = 32;
 
     worksheet.mergeCells("A2:E2");
-    worksheet.getCell("A2").value = script.subtitle || `사회자: ${form.mcName || "미정"}`;
-    worksheet.getCell("A2").font = { name: "Arial", size: 12, bold: true, color: { argb: "FFFFFFFF" } };
-    worksheet.getCell("A2").fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF5BC8B5" } };
-    worksheet.getCell("A2").alignment = { horizontal: "center", vertical: "middle" };
+    const subtitle = worksheet.getCell("A2");
+    subtitle.value = script.subtitle || `사회자: ${form.mcName || "미정"}`;
+    subtitle.font = { name: fontName, size: 11, bold: true, color: { argb: "FF285A54" } };
+    subtitle.fill = solidFill("FFDDF4EF");
+    subtitle.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+    subtitle.border = { bottom: divider };
     worksheet.getRow(2).height = 24;
 
     const header = worksheet.getRow(3);
-    ["번호", "식순", "시간", "멘트", "비고"].forEach((value, index) => header.getCell(index + 1).value = value);
-    header.height = 25;
-    const thin = { style: "thin" as const, color: { argb: "FF808080" } };
-    const mediumTeal = { style: "medium" as const, color: { argb: "FF2D9B8A" } };
+    ["번호", "식순", "시간", "진행 멘트", "사회자 참고 비고"].forEach((value, index) => header.getCell(index + 1).value = value);
+    header.height = 27;
     header.eachCell(cell => {
-      cell.font = { name: "Arial", size: 11, bold: true, color: { argb: "FFFFFFFF" } };
-      cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF1A7A6C" } };
+      cell.font = { name: fontName, size: 10, bold: true, color: { argb: "FF1B514B" } };
+      cell.fill = solidFill("FFBEEDE6");
       cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
-      cell.border = { top: thin, bottom: mediumTeal, left: thin, right: thin };
+      cell.border = { top: thin, bottom: divider, left: thin, right: thin };
     });
 
-    script.sections.forEach((section) => {
+    const sectionColors = [
+      { no: "FF8DDDD2", order: "FFC0F1EA", time: "FFE6F8F5", note: "FFF4FCFA" },
+      { no: "FF9EE3D8", order: "FFD0F4ED", time: "FFEAF9F6", note: "FFF6FCFB" },
+      { no: "FF80D4C8", order: "FFB9ECE4", time: "FFE2F6F2", note: "FFF2FBF9" },
+    ];
+
+    script.sections.forEach((section, index) => {
+      const color = sectionColors[index % sectionColors.length];
       const row = worksheet.addRow([section.no, section.order, section.time, "", section.note]);
+      const scriptText = stripTags(section.script);
+      const estimatedLines = scriptText.split("\n").reduce((sum, line) => sum + Math.max(1, Math.ceil(line.length / 52)), 0);
+      row.height = Math.max(58, Math.min(330, estimatedLines * 16 + 22));
       row.getCell(4).value = toRichText(section.script);
-      row.height = Math.max(46, Math.min(300, (stripTags(section.script).split("\n").length + 2) * 17));
+
+      row.getCell(1).fill = solidFill(color.no);
+      row.getCell(1).font = { name: fontName, size: 12, bold: true, color: { argb: "FF164E48" } };
+      row.getCell(2).fill = solidFill(color.order);
+      row.getCell(2).font = { name: fontName, size: 11, bold: true, color: { argb: "FF194F49" } };
+      row.getCell(3).fill = solidFill(color.time);
+      row.getCell(3).font = { name: fontName, size: 10, italic: true, color: { argb: "FF317D73" } };
+      row.getCell(4).fill = solidFill("FFFFFFFF");
+      row.getCell(5).fill = solidFill(color.note);
+      row.getCell(5).font = { name: fontName, size: 9, italic: true, color: { argb: "FF3E625D" } };
+
       row.eachCell((cell, column) => {
-        cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFE8FAF8" } };
-        cell.border = { top: thin, bottom: mediumTeal, left: thin, right: thin };
-        cell.alignment = { horizontal: column === 1 || column === 2 || column === 3 ? "center" : "left", vertical: column === 2 ? "middle" : "top", wrapText: true };
-        if (column !== 4) cell.font = { name: "Arial", size: column === 5 ? 9 : 10, bold: column === 1 || column === 2, color: { argb: column === 1 ? "FF1A7A6C" : "FF2C2C2C" } };
+        cell.border = { top: thin, bottom: divider, left: thin, right: thin };
+        cell.alignment = { horizontal: column <= 3 ? "center" : "left", vertical: column <= 3 ? "middle" : "top", wrapText: true };
+        if (column === 4) cell.font = { name: fontName, size: 10, color: { argb: "FF202B29" } };
       });
     });
 
-    const footerRow = worksheet.addRow(["💚  두 분의 결혼을 진심으로 축하합니다  💚"]);
+    const footerRow = worksheet.addRow(["두 분의 새로운 시작을 진심으로 축하합니다 · 이너스뮤직"]);
     worksheet.mergeCells(`A${footerRow.number}:E${footerRow.number}`);
-    footerRow.height = 26;
+    footerRow.height = 28;
     const footer = worksheet.getCell(`A${footerRow.number}`);
-    footer.font = { name: "Arial", size: 11, bold: true, color: { argb: "FF2D9B8A" } };
+    footer.font = { name: fontName, size: 10, bold: true, color: { argb: "FF2F8077" } };
+    footer.fill = solidFill("FFE7F7F3");
     footer.alignment = { horizontal: "center", vertical: "middle" };
+    footer.border = { top: divider, bottom: thin, left: thin, right: thin };
 
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });

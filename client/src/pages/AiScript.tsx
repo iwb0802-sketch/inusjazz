@@ -6,7 +6,7 @@ const REVISION_API_URL = "/api/ai-script-revise";
 const GUIDE_API_URL = "/api/ai-guide";
 const GUIDE_CHAT_API_URL = "/api/ai-guide-chat";
 const GUIDE_LEARN_API_URL = "/api/ai-guide-learn";
-const ADMIN_HOME = "http://bnsmusics.godohosting.com/bns/admin/event_list.php?sUser_id=bnsmusic&sUser_nm=%EA%B4%80%EB%A6%AC%EC%9E%90";
+const GUIDE_AUTH_API_URL = "/api/ai-guide-auth";
 
 type CeremonyType = "main" | "reception";
 type ScriptStyle = "classic" | "trendy" | "warm";
@@ -189,7 +189,7 @@ function GuideManager({ guide, patterns, versions, currentVersionId, password, l
     try {
       const response = await fetch(GUIDE_CHAT_API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
+        headers: { "Content-Type": "application/json", "X-Inus-Guide-Password": password },
         body: JSON.stringify({ message: userMessage.content, currentGuide: guide, conversation }),
       });
       const result = await response.json();
@@ -240,7 +240,7 @@ function GuideManager({ guide, patterns, versions, currentVersionId, password, l
     try {
       const response = await fetch(GUIDE_LEARN_API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
+        headers: { "Content-Type": "application/json", "X-Inus-Guide-Password": password },
         body: JSON.stringify({ title: exampleTitle, sourceText: exampleSource }),
       });
       const result = await response.json();
@@ -331,6 +331,11 @@ export default function AiScript() {
   const [currentGuideVersionId, setCurrentGuideVersionId] = useState<string | null>(null);
   const [guideUpdatedAt, setGuideUpdatedAt] = useState<string | null>(null);
   const [guideLoading, setGuideLoading] = useState(false);
+  const [guidePassword, setGuidePassword] = useState("");
+  const [guidePasswordInput, setGuidePasswordInput] = useState("");
+  const [guideUnlocked, setGuideUnlocked] = useState(false);
+  const [guideAuthLoading, setGuideAuthLoading] = useState(false);
+  const [guideAuthError, setGuideAuthError] = useState("");
   const [uploadedScript, setUploadedScript] = useState<GeneratedScript | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState("");
   const [uploadLoading, setUploadLoading] = useState(false);
@@ -340,65 +345,87 @@ export default function AiScript() {
   const [uploadRevisionLoading, setUploadRevisionLoading] = useState(false);
   const [uploadRevisionError, setUploadRevisionError] = useState("");
 
-  const loadSharedGuide = async () => {
-    if (!password) return;
-    setGuideLoading(true);
-    try {
-      const response = await fetch(GUIDE_API_URL, { headers: { "X-Inus-Ai-Password": password, "Cache-Control": "no-cache" } });
-      const result = await response.json();
-      if (!response.ok) {
-        if (response.status === 401) { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }
-        throw new Error(result.error || "공용 회사 지침을 불러오지 못했습니다.");
-      }
-      const data = result as SharedGuideResponse;
-      setCompanyGuide(data.guide?.trim() || DEFAULT_COMPANY_GUIDE);
-      setLearnedPatterns(Array.isArray(data.learnedPatterns) ? data.learnedPatterns : []);
-      setGuideHistory(Array.isArray(data.guideHistory) ? data.guideHistory : []);
-      setCurrentGuideVersionId(data.currentVersionId || null);
-      setGuideUpdatedAt(data.updatedAt || null);
-    } finally { setGuideLoading(false); }
-  };
-
-  const saveSharedGuide = async (guide: string, patterns: LearnedPattern[]) => {
-    const response = await fetch(GUIDE_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
-      body: JSON.stringify({ guide, learnedPatterns: patterns }),
-    });
-    const result = await response.json();
-    if (!response.ok) {
-      if (response.status === 401) { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }
-      throw new Error(result.error || "공용 회사 지침 저장에 실패했습니다.");
-    }
-    const data = result as SharedGuideResponse;
-    setCompanyGuide(data.guide || guide);
-    setLearnedPatterns(Array.isArray(data.learnedPatterns) ? data.learnedPatterns : patterns);
-    setGuideHistory(Array.isArray(data.guideHistory) ? data.guideHistory : []);
-    setCurrentGuideVersionId(data.currentVersionId || null);
-    setGuideUpdatedAt(data.updatedAt || null);
-  };
-
-  const restoreSharedGuideVersion = async (versionId: string) => {
-    const response = await fetch(GUIDE_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Inus-Ai-Password": password },
-      body: JSON.stringify({ restoreVersionId: versionId }),
-    });
-    const result = await response.json();
-    if (!response.ok) {
-      if (response.status === 401) { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }
-      throw new Error(result.error || "저장 버전 복원에 실패했습니다.");
-    }
-    const data = result as SharedGuideResponse;
-    setCompanyGuide(data.guide || DEFAULT_COMPANY_GUIDE);
+  const applySharedGuide = (data: SharedGuideResponse) => {
+    setCompanyGuide(data.guide?.trim() || DEFAULT_COMPANY_GUIDE);
     setLearnedPatterns(Array.isArray(data.learnedPatterns) ? data.learnedPatterns : []);
     setGuideHistory(Array.isArray(data.guideHistory) ? data.guideHistory : []);
     setCurrentGuideVersionId(data.currentVersionId || null);
     setGuideUpdatedAt(data.updatedAt || null);
   };
 
+  const clearGuideAccess = () => {
+    setGuidePassword("");
+    setGuidePasswordInput("");
+    setGuideUnlocked(false);
+    setGuideAuthError("");
+  };
+
+  const loadSharedGuide = async (accessPassword = "") => {
+    const useGuidePassword = Boolean(accessPassword);
+    const activePassword = useGuidePassword ? accessPassword : password;
+    if (!activePassword) return;
+    setGuideLoading(true);
+    try {
+      const response = await fetch(GUIDE_API_URL, { headers: useGuidePassword ? { "X-Inus-Guide-Password": activePassword, "Cache-Control": "no-cache" } : { "X-Inus-Ai-Password": activePassword, "Cache-Control": "no-cache" } });
+      const result = await response.json();
+      if (!response.ok) {
+        if (response.status === 401 && useGuidePassword) clearGuideAccess();
+        if (response.status === 401 && !useGuidePassword) { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }
+        throw new Error(result.error || "공용 회사 지침을 불러오지 못했습니다.");
+      }
+      applySharedGuide(result as SharedGuideResponse);
+    } finally { setGuideLoading(false); }
+  };
+
+  const unlockGuide = async () => {
+    const candidate = guidePasswordInput.trim();
+    if (!candidate || guideAuthLoading) return;
+    setGuideAuthLoading(true); setGuideAuthError("");
+    try {
+      const response = await fetch(GUIDE_AUTH_API_URL, { method: "POST", headers: { "X-Inus-Guide-Password": candidate } });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "회사 지침 전용 비밀번호가 올바르지 않습니다.");
+      await loadSharedGuide(candidate);
+      setGuidePassword(candidate);
+      setGuidePasswordInput("");
+      setGuideUnlocked(true);
+    } catch (error) {
+      setGuideAuthError(error instanceof Error ? error.message : "회사 지침 잠금을 해제하지 못했습니다.");
+    } finally { setGuideAuthLoading(false); }
+  };
+
+  const saveSharedGuide = async (guide: string, patterns: LearnedPattern[]) => {
+    if (!guidePassword) throw new Error("회사 지침 전용 비밀번호를 먼저 입력해주세요.");
+    const response = await fetch(GUIDE_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Inus-Guide-Password": guidePassword },
+      body: JSON.stringify({ guide, learnedPatterns: patterns }),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      if (response.status === 401) clearGuideAccess();
+      throw new Error(result.error || "공용 회사 지침 저장에 실패했습니다.");
+    }
+    applySharedGuide(result as SharedGuideResponse);
+  };
+
+  const restoreSharedGuideVersion = async (versionId: string) => {
+    if (!guidePassword) throw new Error("회사 지침 전용 비밀번호를 먼저 입력해주세요.");
+    const response = await fetch(GUIDE_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Inus-Guide-Password": guidePassword },
+      body: JSON.stringify({ restoreVersionId: versionId }),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      if (response.status === 401) clearGuideAccess();
+      throw new Error(result.error || "저장 버전 복원에 실패했습니다.");
+    }
+    applySharedGuide(result as SharedGuideResponse);
+  };
+
   useEffect(() => {
-    if (authenticated && password) void loadSharedGuide().catch(() => undefined);
+    if (authenticated && password) void loadSharedGuide("").catch(() => undefined);
   }, [authenticated, password]);
 
   const update = <K extends keyof FormValues>(key: K, value: FormValues[K]) => setForm(prev => ({ ...prev, [key]: value }));
@@ -660,7 +687,6 @@ export default function AiScript() {
           style={{ boxSizing: "border-box", width: "100%", height: 46, border: `1px solid ${C.line}`, borderRadius: 9, padding: "0 13px", fontSize: 14, marginBottom: 12, outline: "none" }} />
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 10 }}>
           <PrimaryButton onClick={login}>관리자 도구 열기</PrimaryButton>
-          <a href={ADMIN_HOME} style={{ color: C.muted, textAlign: "center", fontSize: 12, textDecoration: "none", padding: 4 }}>← 기존 관리자 페이지로</a>
         </div>
       </div>
     </div>;
@@ -669,18 +695,16 @@ export default function AiScript() {
   return <div style={{ minHeight: "100vh", background: C.cream, color: C.text, fontFamily: "'Apple SD Gothic Neo','Noto Sans KR',sans-serif" }}>
     <header style={{ background: C.ink, color: C.white, position: "sticky", top: 0, zIndex: 10, borderBottom: "1px solid rgba(255,255,255,.1)" }}>
       <div style={{ maxWidth: 1380, margin: "0 auto", padding: "15px 20px", display: "flex", alignItems: "center", gap: 14 }}>
-        <a href={ADMIN_HOME} style={{ color: "#BFEDE5", textDecoration: "none", fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" }}>← 관리자</a>
-        <div style={{ width: 1, height: 18, background: "rgba(255,255,255,.18)" }} />
         <div style={{ minWidth: 0, flex: 1 }}><div style={{ color: "#61D5C0", fontSize: 10, fontWeight: 900, letterSpacing: 2.6 }}>INUS MUSIC</div><div style={{ fontWeight: 800, fontSize: 16, letterSpacing: "-.4px" }}>AI 사회 대본 작성실</div></div>
         <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
-          {([ ["generator", "대본 작성"], ["editor", "대본 수정"], ["guide", "회사 지침"] ] as [WorkspaceTab, string][]).map(([key, label]) => <button key={key} onClick={() => setActiveTab(key)} style={{ background: activeTab === key ? "#61D5C0" : "transparent", border: `1px solid ${activeTab === key ? "#61D5C0" : "rgba(255,255,255,.25)"}`, borderRadius: 7, color: activeTab === key ? C.ink : "#E4EEEC", fontSize: 11, padding: "7px 9px", cursor: "pointer", fontFamily: "inherit", fontWeight: 800 }}>{label}</button>)}
-          <button onClick={() => { sessionStorage.removeItem("inus_ai_script_password"); setAuthenticated(false); setPassword(""); }} style={{ background: "transparent", border: "1px solid rgba(255,255,255,.25)", borderRadius: 7, color: "#E4EEEC", fontSize: 11, padding: "7px 9px", cursor: "pointer", fontFamily: "inherit" }}>잠금</button>
+          {([ ["generator", "대본 작성"], ["editor", "대본 수정"], ["guide", guideUnlocked ? "회사 지침" : "회사 지침 · 잠금"] ] as [WorkspaceTab, string][]).map(([key, label]) => <button key={key} onClick={() => setActiveTab(key)} style={{ background: activeTab === key ? "#61D5C0" : "transparent", border: `1px solid ${activeTab === key ? "#61D5C0" : "rgba(255,255,255,.25)"}`, borderRadius: 7, color: activeTab === key ? C.ink : "#E4EEEC", fontSize: 11, padding: "7px 9px", cursor: "pointer", fontFamily: "inherit", fontWeight: 800 }}>{label}</button>)}
+          <button onClick={() => { sessionStorage.removeItem("inus_ai_script_password"); clearGuideAccess(); setAuthenticated(false); setPassword(""); }} style={{ background: "transparent", border: "1px solid rgba(255,255,255,.25)", borderRadius: 7, color: "#E4EEEC", fontSize: 11, padding: "7px 9px", cursor: "pointer", fontFamily: "inherit" }}>잠금</button>
         </div>
       </div>
     </header>
 
     <main style={{ maxWidth: 1380, margin: "0 auto", padding: "28px 20px 80px", boxSizing: "border-box" }}>
-      {activeTab === "guide" ? <GuideManager guide={companyGuide} patterns={learnedPatterns} versions={guideHistory} currentVersionId={currentGuideVersionId} password={password} loading={guideLoading} updatedAt={guideUpdatedAt} onChange={setCompanyGuide} onPatternsChange={setLearnedPatterns} onSave={saveSharedGuide} onRestore={restoreSharedGuideVersion} onReload={loadSharedGuide} /> : activeTab === "editor" ? <>
+      {activeTab === "guide" ? (guideUnlocked ? <GuideManager guide={companyGuide} patterns={learnedPatterns} versions={guideHistory} currentVersionId={currentGuideVersionId} password={guidePassword} loading={guideLoading} updatedAt={guideUpdatedAt} onChange={setCompanyGuide} onPatternsChange={setLearnedPatterns} onSave={saveSharedGuide} onRestore={restoreSharedGuideVersion} onReload={() => loadSharedGuide(guidePassword)} /> : <section style={{ maxWidth: 520, margin: "26px auto", background: C.white, border: `1px solid ${C.line}`, borderRadius: 16, padding: "30px 28px", boxShadow: "0 6px 25px rgba(19,36,59,.05)" }}><div style={{ color: C.mint, fontSize: 11, fontWeight: 900, letterSpacing: 2, marginBottom: 8 }}>COMPANY GUIDE · LOCKED</div><h1 style={{ color: C.ink, margin: "0 0 8px", fontSize: 23, letterSpacing: "-.8px" }}>회사 지침 전용 잠금</h1><p style={{ margin: "0 0 22px", color: C.muted, fontSize: 12, lineHeight: 1.7 }}>회사 지침, 저장 버전, 대본 예시 학습, AI 지침 대화는 대본 작성실 로그인과 별도의 전용 비밀번호를 입력해야 열립니다.</p><FieldLabel>회사 지침 전용 비밀번호</FieldLabel><input type="password" value={guidePasswordInput} onChange={event => setGuidePasswordInput(event.target.value)} onKeyDown={event => event.key === "Enter" && void unlockGuide()} placeholder="전용 비밀번호 입력" autoFocus style={{ boxSizing: "border-box", width: "100%", height: 46, border: `1px solid ${C.line}`, borderRadius: 9, padding: "0 13px", fontSize: 14, outline: "none" }} />{guideAuthError && <div style={{ marginTop: 10, padding: "9px 10px", borderRadius: 8, background: "#FFF2F2", color: "#B53B3B", fontSize: 11, lineHeight: 1.55 }}>{guideAuthError}</div>}<div style={{ marginTop: 14 }}><PrimaryButton onClick={() => void unlockGuide()} disabled={guideAuthLoading || !guidePasswordInput.trim()}>{guideAuthLoading ? "확인 중…" : "회사 지침 열기"}</PrimaryButton></div></section>) : activeTab === "editor" ? <>
         <div style={{ marginBottom: 22 }}>
           <h1 style={{ fontSize: 27, color: C.ink, margin: 0, letterSpacing: "-1.2px" }}>기존 대본 수정</h1>
           <p style={{ margin: "8px 0 0", fontSize: 13, color: C.muted, lineHeight: 1.7 }}>이전에 내려받은 이너스뮤직 사회 대본 엑셀을 올린 뒤 수정사항을 말하면 AI가 반영합니다. 수정 후에는 같은 진행용 양식의 엑셀로 다시 저장할 수 있습니다.</p>

@@ -15,7 +15,7 @@ type GuideChatPayload = {
 
 function addCors(req: VercelRequest, res: VercelResponse): boolean {
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Inus-Ai-Password");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Inus-Guide-Password");
   if (req.method === "OPTIONS") {
     res.status(204).end();
     return true;
@@ -24,15 +24,15 @@ function addCors(req: VercelRequest, res: VercelResponse): boolean {
 }
 
 function requireAdmin(req: VercelRequest, res: VercelResponse): boolean {
-  const expected = process.env.AI_SCRIPT_ADMIN_PASSWORD || "";
-  const header = req.headers["x-inus-ai-password"];
+  const expected = process.env.AI_GUIDE_ADMIN_PASSWORD || "";
+  const header = req.headers["x-inus-guide-password"];
   const provided = Array.isArray(header) ? header[0] : (header || "");
   if (!expected) {
-    res.status(500).json({ error: "AI_SCRIPT_ADMIN_PASSWORD 환경변수가 설정되지 않았습니다." });
+    res.status(500).json({ error: "AI_GUIDE_ADMIN_PASSWORD 환경변수가 설정되지 않았습니다." });
     return false;
   }
   if (provided !== expected) {
-    res.status(401).json({ error: "관리자 인증 정보가 올바르지 않습니다." });
+    res.status(401).json({ error: "회사 지침 전용 비밀번호가 올바르지 않습니다." });
     return false;
   }
   return true;

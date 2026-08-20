@@ -37,7 +37,7 @@ type SaveGuidePayload = {
 
 function addCors(req: VercelRequest, res: VercelResponse): boolean {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Inus-Ai-Password");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Inus-Ai-Password, X-Inus-Guide-Password");
   if (req.method === "OPTIONS") {
     res.status(204).end();
     return true;
@@ -45,17 +45,29 @@ function addCors(req: VercelRequest, res: VercelResponse): boolean {
   return false;
 }
 
-function requireAdmin(req: VercelRequest, res: VercelResponse): boolean {
-  const expected = process.env.AI_SCRIPT_ADMIN_PASSWORD || "";
-  const header = req.headers["x-inus-ai-password"];
-  const provided = Array.isArray(header) ? header[0] : (header || "");
+function headerValue(req: VercelRequest, name: string): string {
+  const value = req.headers[name];
+  return Array.isArray(value) ? value[0] : (value || "");
+}
 
-  if (!expected) {
-    res.status(500).json({ error: "AI_SCRIPT_ADMIN_PASSWORD 환경변수가 설정되지 않았습니다." });
+function requireGuideAccess(req: VercelRequest, res: VercelResponse): boolean {
+  const scriptPassword = process.env.AI_SCRIPT_ADMIN_PASSWORD || "";
+  const guidePassword = process.env.AI_GUIDE_ADMIN_PASSWORD || "";
+  const scriptProvided = headerValue(req, "x-inus-ai-password");
+  const guideProvided = headerValue(req, "x-inus-guide-password");
+
+  if (req.method === "GET") {
+    if ((scriptPassword && scriptProvided === scriptPassword) || (guidePassword && guideProvided === guidePassword)) return true;
+    res.status(401).json({ error: "회사 지침을 불러올 인증 정보가 올바르지 않습니다." });
     return false;
   }
-  if (provided !== expected) {
-    res.status(401).json({ error: "관리자 인증 정보가 올바르지 않습니다." });
+
+  if (!guidePassword) {
+    res.status(500).json({ error: "AI_GUIDE_ADMIN_PASSWORD 환경변수가 설정되지 않았습니다." });
+    return false;
+  }
+  if (guideProvided !== guidePassword) {
+    res.status(401).json({ error: "회사 지침 전용 비밀번호가 올바르지 않습니다." });
     return false;
   }
   return true;
@@ -166,7 +178,7 @@ function newVersionId(now: string): string {
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (addCors(req, res)) return;
-  if (!requireAdmin(req, res)) return;
+  if (!requireGuideAccess(req, res)) return;
 
   try {
     if (req.method === "GET") {

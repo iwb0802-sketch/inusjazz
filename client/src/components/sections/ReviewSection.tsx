@@ -58,6 +58,7 @@ const PROOF_IMAGES = [
 ];
 
 const PROOF_TOTAL = PROOF_IMAGES.reduce((sum, p) => sum + p.count, 0);
+const PROOF_AS_OF = "2026.07.27";
 
 export default function ReviewSection() {
   const anim1 = useScrollAnimation();
@@ -201,23 +202,33 @@ export default function ReviewSection() {
                     {img.label}
                   </span>
                   <span
-                    className="text-sm sm:text-base font-bold tabular-nums"
-                    style={{ color: GOLD, fontFamily: "'JetBrains Mono', monospace" }}
+                    className="text-xl sm:text-2xl font-bold tabular-nums leading-none tracking-tight"
+                    style={{ color: GOLD }}
                   >
                     {img.count.toLocaleString()}
-                    <span className="text-[10px] sm:text-[11px] font-normal text-white/40 ml-0.5">건</span>
+                    <span className="text-[11px] sm:text-xs font-medium text-white/45 ml-0.5">건</span>
                   </span>
                   <a
                     href={img.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 mt-0.5 text-[9.5px] sm:text-[10.5px] tracking-wide transition-colors duration-300 break-keep text-center"
-                    style={{ color: "rgba(212,184,150,0.75)", borderBottom: "1px solid rgba(212,184,150,0.35)", paddingBottom: 1 }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = GOLD; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(212,184,150,0.75)"; }}
+                    className="inline-flex items-center justify-center gap-1.5 mt-1.5 w-full px-2 py-2 rounded-md text-[12px] sm:text-[13px] font-bold tracking-wide transition-all duration-300 break-keep text-center"
+                    style={{
+                      color: "#1a1a1a",
+                      background: "linear-gradient(135deg, #d4b896, #c9a87a)",
+                      boxShadow: "0 2px 10px rgba(212,184,150,0.28)",
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 16px rgba(212,184,150,0.5)";
+                      (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-1px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 2px 10px rgba(212,184,150,0.28)";
+                      (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
+                    }}
                   >
                     원본 보기
-                    <ExternalLink size={9} />
+                    <ExternalLink size={13} />
                   </a>
                 </div>
               </div>
@@ -226,17 +237,22 @@ export default function ReviewSection() {
 
           {/* 합산 근거 */}
           <div
-            className="mt-5 mx-auto max-w-md rounded-lg py-3 px-4"
+            className="mt-6 mx-auto max-w-md rounded-lg py-4 px-5"
             style={{ background: "rgba(212,184,150,0.06)", border: "1px dashed rgba(212,184,150,0.35)" }}
           >
-            <p className="text-[11px] sm:text-xs text-white/50 tracking-wide break-keep leading-relaxed">
+            <p className="text-xs sm:text-sm text-white/55 tracking-wide break-keep leading-relaxed">
               <span className="text-white/70">625</span> + <span className="text-white/70">560</span> + <span className="text-white/70">931</span> ={" "}
               <span className="font-bold" style={{ color: GOLD, fontFamily: "'JetBrains Mono', monospace" }}>
                 {PROOF_TOTAL.toLocaleString()}건
               </span>
             </p>
-            <p className="mt-1 text-[10px] sm:text-[11px] text-white/30 break-keep leading-relaxed">
-              캡처는 클릭하면 크게, 각 출처의 <span className="text-white/50">원본 보기</span>로 실제 페이지에서 직접 확인하실 수 있습니다
+            <p className="mt-2.5 text-[11.5px] sm:text-xs break-keep leading-relaxed" style={{ color: "rgba(212,184,150,0.75)" }}>
+              위 캡처는 <span className="font-bold" style={{ color: GOLD }}>{PROOF_AS_OF} 기준</span>입니다
+            </p>
+            <p className="mt-1.5 text-[10.5px] sm:text-[11px] text-white/35 break-keep leading-relaxed">
+              후기는 계속 쌓이고 있어 현재 건수는 더 많습니다
+              <br />
+              <span className="text-white/55">원본 보기</span>로 실시간 수치를 확인하실 수 있습니다
             </p>
           </div>
 

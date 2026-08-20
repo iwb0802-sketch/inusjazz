@@ -10,6 +10,7 @@ const ADMIN_HOME = "http://bnsmusics.godohosting.com/bns/admin/event_list.php?sU
 
 type CeremonyType = "main" | "reception";
 type ScriptStyle = "classic" | "trendy" | "warm";
+type FamilyEntranceMode = "lighting_only" | "parents_and_lighting";
 type ScriptSection = { no: number; order: string; time: string; script: string; note: string };
 type GeneratedScript = { title: string; subtitle: string; sections: ScriptSection[]; review_flags: string[] };
 type RevisionMessage = { role: "user" | "assistant"; content: string; createdAt: string };
@@ -21,13 +22,13 @@ type WorkspaceTab = "generator" | "editor" | "guide";
 
 type FormValues = {
   groomName: string; brideName: string; mcName: string; ceremonyType: CeremonyType; style: ScriptStyle;
-  weddingDate: string; weddingTime: string; venue: string; duration: string;
+  weddingDate: string; weddingTime: string; venue: string; duration: string; familyEntranceMode: FamilyEntranceMode;
   customOrder: string; coupleStory: string; requests: string;
 };
 
 const defaultForm: FormValues = {
   groomName: "", brideName: "", mcName: "", ceremonyType: "main", style: "classic",
-  weddingDate: "", weddingTime: "12:00", venue: "", duration: "40분",
+  weddingDate: "", weddingTime: "12:00", venue: "", duration: "40분", familyEntranceMode: "lighting_only",
   customOrder: "", coupleStory: "", requests: "",
 };
 
@@ -51,7 +52,9 @@ const DEFAULT_COMPANY_GUIDE = `# 이너스뮤직 프리미엄 사회 대본 기�
 - 과장된 표현보다 따뜻하고 자연스러운 연결을 우선합니다.
 
 ## 기본 식순
-하객 입장 안내 → 오프닝 → 개식 선언 → 혼주님 입장/화촉점화 → 신랑 입장 → 신부 입장 → 맞절 → 혼인서약 → 반지 교환 → 성혼선언 → 축가·덕담·편지(있는 경우) → 양가 인사 → 내빈 인사 → 행진 → 폐회
+하객 입장 안내 → 오프닝 → 개식 선언 → 화촉점화 → 신랑 입장 → 신부 입장 → 맞절 → 혼인서약 → 반지 교환 → 성혼선언 → 축가·덕담·편지(있는 경우) → 양가 인사 → 내빈 인사 → 행진 → 폐회
+
+혼주님 입장은 기본 식순이 아닙니다. 대본 작성 화면에서 “혼주님 입장 + 화촉점화”를 선택한 경우에만 개식 선언 뒤에 혼주님 입장을 추가하고, 기본 선택인 “화촉점화만”에서는 혼주님 입장 식순을 만들지 않습니다.
 
 ## 반드시 지킬 사항
 - 제공되지 않은 첫 만남, 직업, 가족관계, 곡명, 관계를 만들지 않습니다.
@@ -723,6 +726,12 @@ export default function AiScript() {
               <div><FieldLabel optional>예식 시간</FieldLabel><select value={form.weddingTime} onChange={e => update("weddingTime", e.target.value)} style={{ boxSizing: "border-box", width: "100%", height: 44, border: `1px solid ${C.line}`, borderRadius: 9, padding: "0 10px", background: C.white, fontFamily: "inherit", color: C.text }}><option value="">시간 미정</option>{WEDDING_TIME_OPTIONS.map((time) => <option key={time} value={time}>{time.replace(":", "시 ")}분</option>)}</select><div style={{ color: C.muted, fontSize: 9, marginTop: 4 }}>10분 단위 · 기본 12시 00분</div></div>
               <div><FieldLabel>대본 유형</FieldLabel><select value={form.ceremonyType} onChange={e => update("ceremonyType", e.target.value as CeremonyType)} style={{ boxSizing: "border-box", width: "100%", height: 44, border: `1px solid ${C.line}`, borderRadius: 9, padding: "0 10px", background: C.white, fontFamily: "inherit", color: C.text }}><option value="main">본식</option><option value="reception">2부 피로연</option></select></div>
             </div>
+
+            <FieldLabel>혼주님 입장 · 화촉점화</FieldLabel>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 6 }}>
+              {([ ["lighting_only", "화촉점화만", "기본 · 혼주님 입장은 제외"], ["parents_and_lighting", "혼주님 입장 + 화촉점화", "혼주님 입장 후 화촉점화 진행"] ] as [FamilyEntranceMode, string, string][]).map(([key, label, description]) => <button key={key} onClick={() => update("familyEntranceMode", key)} style={{ border: form.familyEntranceMode === key ? `2px solid ${C.mint}` : `1px solid ${C.line}`, background: form.familyEntranceMode === key ? C.mintSoft : C.white, color: C.ink, borderRadius: 10, padding: "11px 8px", cursor: "pointer", fontFamily: "inherit", textAlign: "left" }}><div style={{ fontSize: 12, fontWeight: 900 }}>{label}</div><div style={{ color: C.muted, fontSize: 9, lineHeight: 1.45, marginTop: 3 }}>{description}</div></button>)}
+            </div>
+            <div style={{ color: C.muted, fontSize: 10, marginBottom: 18, lineHeight: 1.5 }}>기본은 화촉점화만입니다. 혼주님 입장 진행이 있는 예식만 두 번째 항목을 선택하세요.</div>
 
             <FieldLabel>대본 분위기</FieldLabel>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 20 }}>

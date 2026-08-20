@@ -4,6 +4,7 @@
  * 버밀리언은 선택 범위·재생·핵심 행동에만 사용한다.
  */
 import { ChangeEvent, PointerEvent, useCallback, useEffect, useRef, useState } from "react";
+import { upload } from "@vercel/blob/client";
 // MP3 인코더 API는 프로젝트 내부 선언 파일로 경계를 한정합니다.
 import lamejs from "lamejs";
 import {
@@ -17,6 +18,7 @@ import {
   Play,
   RotateCcw,
   Scissors,
+  Sparkles,
   Square,
   Upload,
   Volume2,
@@ -28,9 +30,13 @@ import { toast } from "sonner";
 type Range = { start: number; end: number };
 type Clip = Range;
 type ExportFormat = "wav" | "mp3";
+type MrState = "idle" | "uploading" | "separating" | "done" | "failed";
+type MrStems = { vocalsUrl: string; instrumentalUrl: string };
 
 const vermilion = "#F04D38";
 const sage = "#9BAA94";
+const MR_PASSWORD_KEY = "inus-audio-password";
+const MR_AUDIO_TYPES = ["audio/mpeg", "audio/mp3", "audio/wav", "audio/x-wav", "audio/flac", "audio/x-flac"];
 
 function formatTime(seconds: number) {
   if (!Number.isFinite(seconds)) return "00:00.00";
@@ -170,6 +176,14 @@ export default function Home() {
   const [fadeOut, setFadeOut] = useState(0);
   const [exportFormat, setExportFormat] = useState<ExportFormat>("wav");
   const [isExporting, setIsExporting] = useState(false);
+  const [mrOpen, setMrOpen] = useState(false);
+  const [mrPassword, setMrPassword] = useState(() => sessionStorage.getItem(MR_PASSWORD_KEY) ?? "");
+  const [mrFile, setMrFile] = useState<File | null>(null);
+  const [mrState, setMrState] = useState<MrState>("idle");
+  const [mrProgress, setMrProgress] = useState(0);
+  const [mrError, setMrError] = useState<string | null>(null);
+  const [mrStems, setMrStems] = useState<MrStems | null>(null);
+  const mrInputRef = useRef<HTMLInputElement>(null);
 
   const duration = audioBuffer?.duration ?? 0;
   const clipDuration = Math.max(0, clip.end - clip.start);
@@ -459,6 +473,90 @@ export default function Home() {
     setter(clamp(Number(value) || 0, 0, maximum));
   };
 
+  const chooseMrFile = (next?: File) => {
+    if (!next) return;
+    if (!MR_AUDIO_TYPES.includes(next.type)) {
+      toast.error("MR 분리는 MP3, WAV, FLAC 파일만 지원합니다.");
+      return;
+    }
+    if (next.size > 24 * 1024 * 1024) {
+      toast.error("MR 분리용 음원은 24MB 이하로 올려주세요.");
+      return;
+    }
+    setMrFile(next);
+    setMrError(null);
+    setMrStems(null);
+    setMrState("idle");
+    setMrProgress(0);
+  };
+
+  const callMrApi = async (path: string, body: object) => {
+    const response = await fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Inus-Audio-Password": mrPassword },
+      body: JSON.stringify(body),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const message = payload && typeof payload === "object" && "error" in payload && typeof (payload as { error?: unknown }).error === "string"
+        ? (payload as { error: string }).error
+        : "MR 분리 요청을 처리하지 못했습니다.";
+      throw new Error(message);
+    }
+    return payload;
+  };
+
+  const startMrSeparation = async () => {
+    if (!mrPassword.trim()) {
+      setMrError("공용 작업 비밀번호를 입력해 주세요.");
+      return;
+    }
+    if (!mrFile || mrState === "uploading" || mrState === "separating") return;
+
+    try {
+      sessionStorage.setItem(MR_PASSWORD_KEY, mrPassword);
+      setMrError(null);
+      setMrProgress(4);
+      setMrState("uploading");
+      const blob = await upload(`audio-source/${crypto.randomUUID()}-${mrFile.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`, mrFile, {
+        access: "public",
+        handleUploadUrl: "/api/audio-upload",
+        clientPayload: JSON.stringify({ password: mrPassword }),
+        onUploadProgress: ({ percentage }) => setMrProgress(Math.max(4, Math.round(percentage * 0.25))),
+      });
+      setMrProgress(28);
+      setMrState("separating");
+      const prediction = await callMrApi("/api/audio-split", { sourceUrl: blob.url }) as { id: string };
+      for (let attempt = 0; attempt < 120; attempt += 1) {
+        await new Promise((resolve) => window.setTimeout(resolve, 3000));
+        setMrProgress((value) => Math.min(value + (value < 72 ? 4 : 1), 94));
+        const status = await callMrApi("/api/audio-status", { predictionId: prediction.id }) as { status: string; error?: string; vocalsUrl?: string; instrumentalUrl?: string };
+        if (status.status === "succeeded" && status.vocalsUrl && status.instrumentalUrl) {
+          setMrStems({ vocalsUrl: status.vocalsUrl, instrumentalUrl: status.instrumentalUrl });
+          setMrProgress(100);
+          setMrState("done");
+          toast.success("보컬과 MR 트랙이 준비되었습니다.");
+          return;
+        }
+        if (status.status === "failed") throw new Error(status.error ?? "MR 분리 작업이 중단되었습니다.");
+      }
+      throw new Error("처리 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "MR 분리 요청을 시작하지 못했습니다.";
+      setMrError(message);
+      setMrState("failed");
+      toast.error(message);
+    }
+  };
+
+  const resetMrMaker = () => {
+    setMrFile(null);
+    setMrStems(null);
+    setMrError(null);
+    setMrState("idle");
+    setMrProgress(0);
+  };
+
   return (
     <div className="soundcut-shell">
       <input ref={inputRef} onChange={handleFileChange} type="file" accept="audio/*" className="sr-only" />
@@ -470,7 +568,11 @@ export default function Home() {
             <h1>이너스뮤직 <span>스튜디오</span></h1>
           </div>
         </div>
-        <div className="session-note"><span className="status-dot" /> 브라우저 안에서만 처리됩니다</div>
+        <div className="mr-menu-slot">
+          <span className="mr-menu-label">AI STEM TOOLS</span>
+          <button className="mr-menu-button" type="button" onClick={() => setMrOpen(true)}><Sparkles size={15} /> MR 만들기 <span>VOCAL / INST</span></button>
+        </div>
+        <div className="session-note"><span className="status-dot" /> 로컬 편집 + AI MR 분리</div>
         <button className="outline-button compact" type="button" onClick={() => inputRef.current?.click()}>
           <FolderOpen size={16} /> 파일 열기
         </button>
@@ -585,6 +687,37 @@ export default function Home() {
         <span><Headphones size={14} /> SINGLE-TRACK EDITOR</span>
         <span>v1.0 · DESIGNED FOR QUICK CUTS</span>
       </footer>
+
+      {mrOpen && <div className="mr-overlay" role="presentation">
+        <section className="mr-modal" role="dialog" aria-modal="true" aria-labelledby="mr-maker-title">
+          <button className="mr-close" type="button" onClick={() => setMrOpen(false)} aria-label="MR 만들기 창 닫기"><X size={18} /></button>
+          <div className="mr-modal-head"><div><p className="section-number">AI / STEM SEPARATION</p><h2 id="mr-maker-title">MR <span>만들기</span></h2><p>업로드한 음원에서 보컬과 반주를 각각의 트랙으로 분리합니다.</p></div><div className="mr-chip"><Sparkles size={15} /> HTDEMUCS</div></div>
+          <div className="mr-grid">
+            <div className="mr-input-panel">
+              <label className="mr-field-label" htmlFor="mr-password">작업 비밀번호</label>
+              <input id="mr-password" type="password" value={mrPassword} onChange={(event) => setMrPassword(event.target.value)} placeholder="공용 비밀번호 입력" />
+              <input ref={mrInputRef} onChange={(event) => chooseMrFile(event.target.files?.[0])} type="file" accept="audio/*" className="sr-only" />
+              <button type="button" className={`mr-dropzone ${mrFile ? "is-ready" : ""}`} onClick={() => mrInputRef.current?.click()}>
+                <Upload size={22} />
+                <b>{mrFile ? mrFile.name : "음원 파일을 선택하세요"}</b>
+                <span>{mrFile ? `${(mrFile.size / 1024 / 1024).toFixed(1)} MB · 클릭해 교체` : "MP3, WAV, FLAC · 최대 24MB"}</span>
+              </button>
+              <button type="button" className="mr-start-button" onClick={() => void startMrSeparation()} disabled={!mrFile || mrState === "uploading" || mrState === "separating"}>
+                {mrState === "uploading" || mrState === "separating" ? <RotateCcw size={16} className="spin" /> : <Scissors size={16} />}
+                {mrState === "uploading" ? "파일 업로드 중" : mrState === "separating" ? "보컬과 MR 분리 중" : "MR 분리 시작"}
+              </button>
+              <p className="mr-legal">업로드한 음원에 대한 이용 권한은 사용자에게 있어야 합니다.</p>
+            </div>
+            <div className="mr-result-panel">
+              <div className="mr-result-head"><span>RESULT</span><b>{mrState === "done" ? "COMPLETE" : mrState === "failed" ? "FAILED" : mrState === "uploading" || mrState === "separating" ? "PROCESSING" : "READY"}</b></div>
+              <div className="mr-progress"><i style={{ width: `${mrProgress}%` }} /></div>
+              <p className="mr-status-copy">{mrState === "idle" ? "파일과 비밀번호를 입력하면 분리를 시작합니다." : mrState === "uploading" ? "음원을 안전하게 업로드하고 있습니다." : mrState === "separating" ? "AI가 보컬과 반주를 분리하고 있습니다." : mrState === "done" ? "두 개의 스템을 재생하거나 저장하세요." : "작업을 완료하지 못했습니다."}</p>
+              {mrError && <p className="mr-error">{mrError}</p>}
+              {mrStems ? <div className="mr-stems"><article><div><span>VOCALS</span><b>보컬 트랙</b></div><a href={mrStems.vocalsUrl} download="inus-vocals.mp3"><Download size={15} /> 저장</a><audio controls preload="metadata" src={mrStems.vocalsUrl} /></article><article><div><span>INSTRUMENTAL</span><b>MR · 반주 트랙</b></div><a href={mrStems.instrumentalUrl} download="inus-mr.mp3"><Download size={15} /> 저장</a><audio controls preload="metadata" src={mrStems.instrumentalUrl} /></article><button type="button" className="mr-reset" onClick={resetMrMaker}><RotateCcw size={14} /> 새 MR 만들기</button></div> : <div className="mr-placeholder"><div><Volume2 size={16} /><span>VOCALS</span><b>보컬 트랙</b></div><div><Waves size={16} /><span>INSTRUMENTAL</span><b>MR · 반주 트랙</b></div></div>}
+            </div>
+          </div>
+        </section>
+      </div>}
     </div>
   );
 }

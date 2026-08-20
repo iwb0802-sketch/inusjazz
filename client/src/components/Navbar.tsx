@@ -16,7 +16,7 @@ const SERVICE_LINKS: { label: string; href: string; isNew?: boolean }[] = [
   { label: "축가", href: "https://inusmusic.kr/" },
   { label: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
   { label: "모바일 청첩장", href: "https://inuscard.com" },
-  { label: "음원편집", href: "https://www.inusmusic.com/audio", isNew: true },
+  { label: "음원편집", href: "/audio", isNew: true },
   { label: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
 ];
 

@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import Schedule from "./pages/Schedule";
 import PerformanceSchedule from "./pages/PerformanceSchedule";
 import AiScript from "./pages/AiScript";
+import AudioStudio from "./pages/AudioStudio";
 
 function Router() {
   return (
@@ -19,6 +20,7 @@ function Router() {
       <Route path={"/schedule"} component={Schedule} />
       <Route path={"/performance-schedule"} component={PerformanceSchedule} />
       <Route path={"/ai-script"} component={AiScript} />
+      <Route path={"/audio"} component={AudioStudio} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
@@ -28,13 +30,14 @@ function Router() {
 function App() {
   const [location] = useLocation();
   const isAiScript = location === "/ai-script";
+  const isAudioStudio = location === "/audio";
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
           <Router />
-          {!isAiScript && <AiConsultWidget bottomOffset={88} showAfterScroll />}
+          {!isAiScript && !isAudioStudio && <AiConsultWidget bottomOffset={88} showAfterScroll />}
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

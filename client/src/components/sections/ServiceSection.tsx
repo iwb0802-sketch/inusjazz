@@ -7,7 +7,7 @@ const EXTRAS: { icon: any; label: string; href: string; isNew?: boolean }[] = [
   { icon: MicVocal, label: "축가", href: "https://inusmusic.kr/" },
   { icon: Theater, label: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
   { icon: Smartphone, label: "모바일 청첩장", href: "https://inuscard.com" },
-  { icon: AudioWaveform, label: "음원편집", href: "https://www.inusmusic.com/audio", isNew: true },
+  { icon: AudioWaveform, label: "음원편집", href: "/audio", isNew: true },
   { icon: Package, label: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
 ];
 

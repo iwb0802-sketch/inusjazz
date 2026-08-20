@@ -28,10 +28,36 @@ const REVIEW_KING_MCS = [
 
 // 후기 2000+ 증빙 자료 (숨고 프로필, 홈페이지 후기게시판, 블로그 사회자 후기글)
 const PROOF_IMAGES = [
-  { src: "/images/proof/proof-soomgo.jpg", alt: "숨고 프로필 리뷰수 625건", label: "출처 · 숨고" },
-  { src: "/images/proof/proof-blog.jpg", alt: "홈페이지 후기게시판 Total 560건", label: "출처 · 홈페이지" },
-  { src: "/images/proof/proof-singer-blog.jpg", alt: "블로그 사회자 후기글 931건", label: "출처 · 블로그" },
+  {
+    src: "/images/proof/proof-soomgo.jpg",
+    alt: "숨고 프로필 리뷰수 625건",
+    label: "출처 · 숨고",
+    source: "숨고",
+    count: 625,
+    url: "https://soomgo.com/profile/users/4719699",
+    linkLabel: "숨고 프로필에서 확인",
+  },
+  {
+    src: "/images/proof/proof-blog.jpg",
+    alt: "홈페이지 후기게시판 Total 560건",
+    label: "출처 · 후기 게시판",
+    source: "후기 게시판",
+    count: 560,
+    url: "http://musicin.godohosting.com/bbs/board.php?bo_table=forum",
+    linkLabel: "후기 게시판에서 확인",
+  },
+  {
+    src: "/images/proof/proof-singer-blog.jpg",
+    alt: "블로그 사회자 후기글 931건",
+    label: "출처 · 블로그",
+    source: "블로그",
+    count: 931,
+    url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=71&parentCategoryNo=71",
+    linkLabel: "블로그 후기글에서 확인",
+  },
 ];
+
+const PROOF_TOTAL = PROOF_IMAGES.reduce((sum, p) => sum + p.count, 0);
 
 export default function ReviewSection() {
   const anim1 = useScrollAnimation();
@@ -39,7 +65,7 @@ export default function ReviewSection() {
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [lightbox, setLightbox] = useState<{ src: string; alt: string; label: string } | null>(null);
+  const [lightbox, setLightbox] = useState<(typeof PROOF_IMAGES)[number] | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
@@ -170,15 +196,49 @@ export default function ReviewSection() {
                     </span>
                   </div>
                 </button>
-                <span className="text-white/45 text-[10px] sm:text-xs tracking-wide">
-                  {img.label}
-                </span>
+                <div className="flex flex-col items-center gap-1">
+                  <span className="text-white/45 text-[10px] sm:text-xs tracking-wide break-keep text-center">
+                    {img.label}
+                  </span>
+                  <span
+                    className="text-sm sm:text-base font-bold tabular-nums"
+                    style={{ color: GOLD, fontFamily: "'JetBrains Mono', monospace" }}
+                  >
+                    {img.count.toLocaleString()}
+                    <span className="text-[10px] sm:text-[11px] font-normal text-white/40 ml-0.5">건</span>
+                  </span>
+                  <a
+                    href={img.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 mt-0.5 text-[9.5px] sm:text-[10.5px] tracking-wide transition-colors duration-300 break-keep text-center"
+                    style={{ color: "rgba(212,184,150,0.75)", borderBottom: "1px solid rgba(212,184,150,0.35)", paddingBottom: 1 }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = GOLD; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(212,184,150,0.75)"; }}
+                  >
+                    원본 보기
+                    <ExternalLink size={9} />
+                  </a>
+                </div>
               </div>
             ))}
           </div>
-          <p className="mt-3 text-white/25 text-[11px] sm:text-xs">
-            증빙 자료 · 클릭하면 크게 볼 수 있어요
-          </p>
+
+          {/* 합산 근거 */}
+          <div
+            className="mt-5 mx-auto max-w-md rounded-lg py-3 px-4"
+            style={{ background: "rgba(212,184,150,0.06)", border: "1px dashed rgba(212,184,150,0.35)" }}
+          >
+            <p className="text-[11px] sm:text-xs text-white/50 tracking-wide break-keep leading-relaxed">
+              <span className="text-white/70">625</span> + <span className="text-white/70">560</span> + <span className="text-white/70">931</span> ={" "}
+              <span className="font-bold" style={{ color: GOLD, fontFamily: "'JetBrains Mono', monospace" }}>
+                {PROOF_TOTAL.toLocaleString()}건
+              </span>
+            </p>
+            <p className="mt-1 text-[10px] sm:text-[11px] text-white/30 break-keep leading-relaxed">
+              캡처는 클릭하면 크게, 각 출처의 <span className="text-white/50">원본 보기</span>로 실제 페이지에서 직접 확인하실 수 있습니다
+            </p>
+          </div>
 
           {/* Decorative divider */}
           <div className="flex items-center justify-center gap-3 mt-6">
@@ -412,7 +472,7 @@ export default function ReviewSection() {
                 (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
               }}
             >
-              실제 고객 후기 전체보기
+              후기 게시판 원문 보기
               <ExternalLink size={15} />
             </a>
             <p className="text-white/25 text-xs tracking-wider">
@@ -500,13 +560,26 @@ export default function ReviewSection() {
           >
             ✕
           </button>
-          <img
-            src={lightbox.src}
-            alt={lightbox.alt}
-            className="max-w-full max-h-[85vh] object-contain rounded-lg"
-            style={{ border: "1px solid rgba(212,184,150,0.4)" }}
-            onClick={(e) => e.stopPropagation()}
-          />
+          <div className="flex flex-col items-center gap-4" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={lightbox.src}
+              alt={lightbox.alt}
+              className="max-w-full max-h-[74vh] object-contain rounded-lg"
+              style={{ border: "1px solid rgba(212,184,150,0.4)" }}
+            />
+            {lightbox.url && (
+              <a
+                href={lightbox.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-[#1a1a1a] text-[12.5px] sm:text-sm font-medium tracking-wide rounded-sm transition-all duration-300 break-keep text-center"
+                style={{ background: "linear-gradient(135deg, #d4b896, #c9a87a)", boxShadow: "0 4px 18px rgba(212,184,150,0.3)" }}
+              >
+                {lightbox.linkLabel}
+                <ExternalLink size={14} />
+              </a>
+            )}
+          </div>
         </div>
       )}
     </section>

@@ -11,8 +11,11 @@ function parseBody(body: unknown) {
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") return res.status(405).json({ error: "POST 요청만 허용됩니다." });
+  const blobToken = process.env.INUS_AUDIO_BLOB_READ_WRITE_TOKEN;
+  if (!blobToken) return res.status(500).json({ error: "INUS_AUDIO_BLOB_READ_WRITE_TOKEN 환경변수가 설정되지 않았습니다." });
   try {
     const json = await handleUpload({
+      token: blobToken,
       body: parseBody(req.body),
       request: req,
       onBeforeGenerateToken: async (pathname, clientPayload) => {
@@ -20,7 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const expected = process.env.INUS_AUDIO_PASSWORD ?? "";
         if (!expected || typeof payload.password !== "string" || !passwordsMatch(payload.password, expected)) throw new Error("작업 비밀번호가 올바르지 않습니다.");
         if (!pathname.startsWith("audio-source/")) throw new Error("허용되지 않은 업로드 경로입니다.");
-        return { allowedContentTypes: AUDIO_TYPES, addRandomSuffix: true };
+        return { allowedContentTypes: AUDIO_TYPES, maximumSizeInBytes: 24 * 1024 * 1024, addRandomSuffix: true };
       },
       onUploadCompleted: async () => {},
     });

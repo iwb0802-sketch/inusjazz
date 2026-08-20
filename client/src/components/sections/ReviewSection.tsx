@@ -227,7 +227,7 @@ export default function ReviewSection() {
                       (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
                     }}
                   >
-                    원본 보기
+                    직접 확인
                     <ExternalLink size={13} />
                   </a>
                 </div>
@@ -252,7 +252,7 @@ export default function ReviewSection() {
             <p className="mt-2 text-xs sm:text-[13px] font-medium text-white/70 break-keep leading-relaxed">
               후기는 계속 쌓이고 있어 <span className="font-bold text-white/95">현재 건수는 더 많습니다</span>
               <br />
-              <span className="font-bold" style={{ color: GOLD }}>원본 보기</span>로 실시간 수치를 확인하실 수 있습니다
+              <span className="font-bold" style={{ color: GOLD }}>직접 확인</span>으로 실시간 수치를 보실 수 있습니다
             </p>
           </div>
 

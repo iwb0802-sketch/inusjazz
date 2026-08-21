@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import ExcelJS from "exceljs";
 import * as XLSX from "xlsx";
+import { strFromU8, unzipSync } from "fflate";
 
 const API_URL = "/api/ai-script";
 const REVISION_API_URL = "/api/ai-script-revise";
@@ -105,27 +106,83 @@ function formatFilenamePart(value: string) {
 
 type ParsedExcelSheet = { rows: string[][]; getCell: (row: number, column: number) => string };
 
-function readExcelSheets(fileData: ArrayBuffer): ParsedExcelSheet[] {
-  const workbook = XLSX.read(fileData, { type: "array", cellText: true, cellFormula: false, cellDates: false, raw: false });
-  const cellText = (sheet: XLSX.WorkSheet, row: number, column: number) => {
-    const cell = sheet[XLSX.utils.encode_cell({ r: row, c: column })];
-    if (!cell) return "";
-    return String(cell.w ?? cell.v ?? "").trim();
-  };
+type ParsedCellRows = Map<number, Map<number, string>>;
 
-  return workbook.SheetNames.map((name) => {
-    const sheet = workbook.Sheets[name];
-    const range = sheet?.["!ref"] ? XLSX.utils.decode_range(sheet["!ref"]) : null;
-    const rows: string[][] = [];
-    if (range) {
-      for (let row = 0; row <= range.e.r; row += 1) {
-        const cells: string[] = [];
-        for (let column = 0; column <= range.e.c; column += 1) cells.push(cellText(sheet, row, column));
-        rows.push(cells);
-      }
+function decodeExcelXml(value: string) {
+  return value
+    .replace(/<[^>]*>/g, "")
+    .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"').replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) => String.fromCodePoint(parseInt(code, 16)));
+}
+
+function excelColumnIndex(letters: string) {
+  return letters.split("").reduce((total, char) => total * 26 + char.charCodeAt(0) - 64, 0) - 1;
+}
+
+function parsedSheetFromCells(cellsByRow: ParsedCellRows): ParsedExcelSheet {
+  const rowNumbers = Array.from(cellsByRow.keys());
+  const maxRow = rowNumbers.length ? Math.max(...rowNumbers) : -1;
+  const columnNumbers = rowNumbers.reduce<number[]>((result, row) => result.concat(Array.from(cellsByRow.get(row)?.keys() || [])), []);
+  const maxColumn = columnNumbers.length ? Math.max(...columnNumbers) : -1;
+  const rows = Array.from({ length: maxRow + 1 }, (_, row) => Array.from({ length: maxColumn + 1 }, (_, column) => cellsByRow.get(row)?.get(column) || ""));
+  return { rows, getCell: (row: number, column: number) => cellsByRow.get(row)?.get(column) || "" };
+}
+
+function readRawXlsxSheet(fileData: ArrayBuffer): ParsedExcelSheet[] {
+  const archive = unzipSync(new Uint8Array(fileData));
+  const readText = (path: string) => archive[path] ? strFromU8(archive[path]) : "";
+  const sharedXml = readText("xl/sharedStrings.xml");
+  const sharedStrings = Array.from(sharedXml.matchAll(/<(?:x:)?si\b[^>]*>([\s\S]*?)<\/(?:x:)?si>/g)).map((match) => decodeExcelXml(match[1]));
+  const worksheetFiles = Object.keys(archive).filter((path) => /^xl\/worksheets\/sheet\d+\.xml$/i.test(path)).sort();
+  if (!worksheetFiles.length) throw new Error("엑셀 워크시트를 찾지 못했습니다.");
+
+  return worksheetFiles.map((path) => {
+    const cellsByRow: ParsedCellRows = new Map();
+    const xml = readText(path);
+    for (const match of Array.from(xml.matchAll(/<(?:x:)?c\b([^>]*)>([\s\S]*?)<\/(?:x:)?c>/g))) {
+      const properties = match[1];
+      const body = match[2];
+      const address = properties.match(/\br=["']([^"']+)["']/)?.[1] || "";
+      const type = properties.match(/\bt=["']([^"']+)["']/)?.[1] || "";
+      const reference = address.match(/^([A-Z]+)(\d+)$/i);
+      if (!reference) continue;
+      const row = Number(reference[2]) - 1;
+      const column = excelColumnIndex(reference[1].toUpperCase());
+      const rawValue = body.match(/<(?:x:)?v[^>]*>([\s\S]*?)<\/(?:x:)?v>/)?.[1] || body.match(/<(?:x:)?t[^>]*>([\s\S]*?)<\/(?:x:)?t>/)?.[1] || "";
+      const value = type === "s" ? (sharedStrings[Number(rawValue)] || "") : decodeExcelXml(rawValue);
+      if (!cellsByRow.has(row)) cellsByRow.set(row, new Map());
+      cellsByRow.get(row)?.set(column, value.trim());
     }
-    return { rows, getCell: (row: number, column: number) => cellText(sheet, row, column) };
+    return parsedSheetFromCells(cellsByRow);
   });
+}
+
+function readExcelSheets(fileData: ArrayBuffer): ParsedExcelSheet[] {
+  try {
+    const workbook = XLSX.read(fileData, { type: "array", cellText: true, cellFormula: false, cellDates: false, raw: false });
+    const sheets = workbook.SheetNames.map((name) => {
+      const sheet = workbook.Sheets[name];
+      if (!sheet) return parsedSheetFromCells(new Map());
+      const range = sheet["!ref"] ? XLSX.utils.decode_range(sheet["!ref"]) : null;
+      const rows: string[][] = [];
+      if (range) {
+        for (let row = 0; row <= range.e.r; row += 1) {
+          const cells: string[] = [];
+          for (let column = 0; column <= range.e.c; column += 1) {
+            const cell = sheet[XLSX.utils.encode_cell({ r: row, c: column })];
+            cells.push(String(cell?.w ?? cell?.v ?? "").trim());
+          }
+          rows.push(cells);
+        }
+      }
+      return { rows, getCell: (row: number, column: number) => String(sheet[XLSX.utils.encode_cell({ r: row, c: column })]?.w ?? sheet[XLSX.utils.encode_cell({ r: row, c: column })]?.v ?? "").trim() };
+    });
+    if (sheets.some((sheet) => sheet.rows.some((row) => row.some(Boolean)))) return sheets;
+  } catch {
+    // 한컴 Excel 등 일부 프로그램의 확장 관계 XML은 SheetJS가 해석하지 못할 수 있습니다.
+  }
+  return readRawXlsxSheet(fileData);
 }
 
 function FieldLabel({ children, optional }: { children: React.ReactNode; optional?: boolean }) {

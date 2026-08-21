@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import ExcelJS from "exceljs";
-import JSZip from "jszip";
+import * as XLSX from "xlsx";
 
 const API_URL = "/api/ai-script";
 const REVISION_API_URL = "/api/ai-script-revise";
@@ -103,26 +103,29 @@ function formatFilenamePart(value: string) {
   return (value || "미정").replace(/[\\/:*?"<>|]/g, "").trim();
 }
 
-async function loadWorkbookSafely(fileData: ArrayBuffer) {
-  const load = async (data: ArrayBuffer) => {
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.load(data);
-    return workbook;
+type ParsedExcelSheet = { rows: string[][]; getCell: (row: number, column: number) => string };
+
+function readExcelSheets(fileData: ArrayBuffer): ParsedExcelSheet[] {
+  const workbook = XLSX.read(fileData, { type: "array", cellText: true, cellFormula: false, cellDates: false, raw: false });
+  const cellText = (sheet: XLSX.WorkSheet, row: number, column: number) => {
+    const cell = sheet[XLSX.utils.encode_cell({ r: row, c: column })];
+    if (!cell) return "";
+    return String(cell.w ?? cell.v ?? "").trim();
   };
 
-  try {
-    return await load(fileData);
-  } catch (initialError) {
-    const message = initialError instanceof Error ? initialError.message : String(initialError);
-    if (!/company|app\.xml/i.test(message)) throw initialError;
-
-    // 일부 Excel/모바일 편집기가 docProps/app.xml을 불완전하게 저장할 수 있습니다.
-    // 대본 내용과 무관한 문서 메타데이터만 제외한 뒤 다시 읽습니다.
-    const zip = await JSZip.loadAsync(fileData);
-    if (!zip.file("docProps/app.xml")) throw initialError;
-    zip.remove("docProps/app.xml");
-    return load(await zip.generateAsync({ type: "arraybuffer" }));
-  }
+  return workbook.SheetNames.map((name) => {
+    const sheet = workbook.Sheets[name];
+    const range = sheet?.["!ref"] ? XLSX.utils.decode_range(sheet["!ref"]) : null;
+    const rows: string[][] = [];
+    if (range) {
+      for (let row = 0; row <= range.e.r; row += 1) {
+        const cells: string[] = [];
+        for (let column = 0; column <= range.e.c; column += 1) cells.push(cellText(sheet, row, column));
+        rows.push(cells);
+      }
+    }
+    return { rows, getCell: (row: number, column: number) => cellText(sheet, row, column) };
+  });
 }
 
 function FieldLabel({ children, optional }: { children: React.ReactNode; optional?: boolean }) {
@@ -237,16 +240,13 @@ function GuideManager({ guide, patterns, versions, currentVersionId, password, l
     if (file.size > 3 * 1024 * 1024) throw new Error("예시 파일은 3MB 이하만 불러올 수 있습니다.");
     const filename = file.name.toLowerCase();
     if (filename.endsWith(".xlsx")) {
-      const workbook = await loadWorkbookSafely(await file.arrayBuffer());
-      const text = workbook.worksheets.map((sheet) => {
-        const rows: string[] = [];
-        sheet.eachRow((row) => {
-          const cells: string[] = [];
-          row.eachCell({ includeEmpty: false }, (cell) => cells.push(String(cell.text || cell.value || "").trim()));
-          if (cells.length) rows.push(cells.join(" | "));
-        });
-        return rows.join("\n");
-      }).join("\n\n");
+      const sheets = readExcelSheets(await file.arrayBuffer());
+      const text = sheets.map((sheet) => sheet.rows
+        .map((cells) => cells.filter(Boolean).join(" | "))
+        .filter(Boolean)
+        .join("\n"))
+        .filter(Boolean)
+        .join("\n\n");
       setExampleSource(text.slice(0, 45000));
     } else if (filename.endsWith(".txt") || filename.endsWith(".md") || filename.endsWith(".csv")) {
       setExampleSource((await file.text()).slice(0, 45000));
@@ -529,45 +529,42 @@ export default function AiScript() {
     if (file.size > 8 * 1024 * 1024) throw new Error("업로드 파일은 8MB 이하만 가능합니다.");
     setUploadLoading(true); setUploadError("");
     try {
-      const workbook = await loadWorkbookSafely(await file.arrayBuffer());
-      const worksheet = workbook.worksheets[0];
+      const worksheet = readExcelSheets(await file.arrayBuffer())[0];
       if (!worksheet) throw new Error("엑셀 시트를 찾지 못했습니다.");
       const normalizeHeader = (value: string) => value.replace(/\s+/g, "").replace(/[·:]/g, "").toLowerCase();
       const aliases: Record<string, string[]> = {
         no: ["번호", "no"], order: ["식순", "순서"], time: ["시간", "예식시간"], script: ["진행멘트", "멘트", "대본"], note: ["사회자참고비고", "비고", "참고사항"],
       };
-      let headerRowNumber = 0;
+      let headerRowIndex = -1;
       let columns: Record<string, number> = {};
-      for (let rowNumber = 1; rowNumber <= Math.min(worksheet.rowCount, 30); rowNumber += 1) {
-        const row = worksheet.getRow(rowNumber);
+      for (let rowIndex = 0; rowIndex < Math.min(worksheet.rows.length, 30); rowIndex += 1) {
         const candidate: Record<string, number> = {};
-        for (let columnNumber = 1; columnNumber <= Math.max(worksheet.columnCount, 5); columnNumber += 1) {
-          const text = normalizeHeader(String(row.getCell(columnNumber).text || ""));
-          Object.entries(aliases).forEach(([key, names]) => { if (names.includes(text)) candidate[key] = columnNumber; });
-        }
-        if (candidate.order && candidate.script) { headerRowNumber = rowNumber; columns = candidate; break; }
+        (worksheet.rows[rowIndex] || []).forEach((value, columnIndex) => {
+          const text = normalizeHeader(value);
+          Object.entries(aliases).forEach(([key, names]) => { if (names.includes(text)) candidate[key] = columnIndex; });
+        });
+        if (candidate.order !== undefined && candidate.script !== undefined) { headerRowIndex = rowIndex; columns = candidate; break; }
       }
-      if (!headerRowNumber) throw new Error("식순·진행 멘트 열을 찾지 못했습니다. 이너스뮤직에서 내려받은 대본 엑셀인지 확인해주세요.");
+      if (headerRowIndex < 0) throw new Error("식순·진행 멘트 열을 찾지 못했습니다. 이너스뮤직에서 내려받은 대본 엑셀인지 확인해주세요.");
       const sections: ScriptSection[] = [];
-      for (let rowNumber = headerRowNumber + 1; rowNumber <= worksheet.rowCount; rowNumber += 1) {
-        const row = worksheet.getRow(rowNumber);
-        const order = String(row.getCell(columns.order).text || "").trim();
-        const scriptText = String(row.getCell(columns.script).text || "").trim();
+      for (let rowIndex = headerRowIndex + 1; rowIndex < worksheet.rows.length; rowIndex += 1) {
+        const order = worksheet.getCell(rowIndex, columns.order);
+        const scriptText = worksheet.getCell(rowIndex, columns.script);
         if (!order && !scriptText) continue;
         if (/새로운시작|이너스뮤직/.test(`${order} ${scriptText}`) && !scriptText) continue;
         if (!order || !scriptText) continue;
-        const noText = columns.no ? String(row.getCell(columns.no).text || "") : "";
+        const noText = columns.no !== undefined ? worksheet.getCell(rowIndex, columns.no) : "";
         sections.push({
           no: Number(noText.replace(/[^0-9]/g, "")) || sections.length + 1,
           order,
-          time: columns.time ? String(row.getCell(columns.time).text || "").trim() : "",
+          time: columns.time !== undefined ? worksheet.getCell(rowIndex, columns.time) : "",
           script: scriptText,
-          note: columns.note ? String(row.getCell(columns.note).text || "").trim() : "",
+          note: columns.note !== undefined ? worksheet.getCell(rowIndex, columns.note) : "",
         });
       }
       if (!sections.length) throw new Error("수정할 대본 식순을 읽지 못했습니다. 엑셀 파일의 내용이 비어 있는지 확인해주세요.");
-      const title = String(worksheet.getCell("A1").text || "").trim() || "업로드한 결혼식 사회 대본";
-      const subtitle = String(worksheet.getCell("A2").text || "").trim();
+      const title = worksheet.getCell(0, 0) || "업로드한 결혼식 사회 대본";
+      const subtitle = worksheet.getCell(1, 0);
       setUploadedScript({ title, subtitle, sections, review_flags: [] });
       setUploadedFileName(file.name);
       setUploadRevisionMessages([]); setUploadRevisionInstruction(""); setUploadRevisionError("");

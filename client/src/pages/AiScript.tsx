@@ -533,9 +533,13 @@ export default function AiScript() {
       if (!worksheet) throw new Error("엑셀 시트를 찾지 못했습니다.");
       const normalizeHeader = (value: string) => value.replace(/\s+/g, "").replace(/[·:]/g, "").toLowerCase();
       const aliases: Record<string, string[]> = {
-        no: ["번호", "no"], order: ["식순", "순서"], time: ["시간", "예식시간"], script: ["진행멘트", "멘트", "대본"], note: ["사회자참고비고", "비고", "참고사항"],
+        no: ["번호", "no", "순번"],
+        order: ["식순", "순서", "진행순서", "행사순서", "예식순서"],
+        time: ["시간", "예식시간", "진행시간", "타임"],
+        script: ["진행멘트", "멘트", "대본", "진행내용", "사회멘트", "진행대본", "내용"],
+        note: ["사회자참고비고", "사회자참고", "참고비고", "비고", "참고사항", "사회자메모"],
       };
-      let headerRowIndex = -1;
+      let dataStartRowIndex = -1;
       let columns: Record<string, number> = {};
       for (let rowIndex = 0; rowIndex < Math.min(worksheet.rows.length, 30); rowIndex += 1) {
         const candidate: Record<string, number> = {};
@@ -543,11 +547,36 @@ export default function AiScript() {
           const text = normalizeHeader(value);
           Object.entries(aliases).forEach(([key, names]) => { if (names.includes(text)) candidate[key] = columnIndex; });
         });
-        if (candidate.order !== undefined && candidate.script !== undefined) { headerRowIndex = rowIndex; columns = candidate; break; }
+        if (candidate.order !== undefined && candidate.script !== undefined) {
+          dataStartRowIndex = rowIndex + 1;
+          columns = candidate;
+          break;
+        }
       }
-      if (headerRowIndex < 0) throw new Error("식순·진행 멘트 열을 찾지 못했습니다. 이너스뮤직에서 내려받은 대본 엑셀인지 확인해주세요.");
+
+      // Excel에서 다시 저장하면서 헤더가 합쳐지거나 문구가 바뀐 경우에도,
+      // 이너스뮤직 양식의 기본 열(번호·식순·시간·진행 멘트·비고)을 자동 인식합니다.
+      if (dataStartRowIndex < 0) {
+        // A열 앞에 빈 열이 추가된 Excel 저장본까지 고려해 0~3열 시작 양식을 검사합니다.
+        for (let startColumn = 0; startColumn <= 3 && dataStartRowIndex < 0; startColumn += 1) {
+          const defaultColumns = { no: startColumn, order: startColumn + 1, time: startColumn + 2, script: startColumn + 3, note: startColumn + 4 };
+          const firstScriptRow = worksheet.rows.findIndex((row, rowIndex) => {
+            if (rowIndex >= 120) return false;
+            const order = String(row?.[defaultColumns.order] || "").trim();
+            const scriptText = String(row?.[defaultColumns.script] || "").trim();
+            const noText = String(row?.[defaultColumns.no] || "").trim();
+            const timeText = String(row?.[defaultColumns.time] || "").trim();
+            return Boolean(order && scriptText.length >= 12 && (/\d/.test(noText) || /\d{1,2}[:시]/.test(timeText)));
+          });
+          if (firstScriptRow >= 0) {
+            columns = defaultColumns;
+            dataStartRowIndex = firstScriptRow;
+          }
+        }
+      }
+      if (dataStartRowIndex < 0) throw new Error("대본 식순을 자동 인식하지 못했습니다. 이너스뮤직에서 내려받은 대본 엑셀인지 확인해주세요.");
       const sections: ScriptSection[] = [];
-      for (let rowIndex = headerRowIndex + 1; rowIndex < worksheet.rows.length; rowIndex += 1) {
+      for (let rowIndex = dataStartRowIndex; rowIndex < worksheet.rows.length; rowIndex += 1) {
         const order = worksheet.getCell(rowIndex, columns.order);
         const scriptText = worksheet.getCell(rowIndex, columns.script);
         if (!order && !scriptText) continue;

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import ExcelJS from "exceljs";
+import JSZip from "jszip";
 
 const API_URL = "/api/ai-script";
 const REVISION_API_URL = "/api/ai-script-revise";
@@ -100,6 +101,28 @@ function toRichText(text: string) {
 
 function formatFilenamePart(value: string) {
   return (value || "미정").replace(/[\\/:*?"<>|]/g, "").trim();
+}
+
+async function loadWorkbookSafely(fileData: ArrayBuffer) {
+  const load = async (data: ArrayBuffer) => {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load(data);
+    return workbook;
+  };
+
+  try {
+    return await load(fileData);
+  } catch (initialError) {
+    const message = initialError instanceof Error ? initialError.message : String(initialError);
+    if (!/company|app\.xml/i.test(message)) throw initialError;
+
+    // 일부 Excel/모바일 편집기가 docProps/app.xml을 불완전하게 저장할 수 있습니다.
+    // 대본 내용과 무관한 문서 메타데이터만 제외한 뒤 다시 읽습니다.
+    const zip = await JSZip.loadAsync(fileData);
+    if (!zip.file("docProps/app.xml")) throw initialError;
+    zip.remove("docProps/app.xml");
+    return load(await zip.generateAsync({ type: "arraybuffer" }));
+  }
 }
 
 function FieldLabel({ children, optional }: { children: React.ReactNode; optional?: boolean }) {
@@ -214,8 +237,7 @@ function GuideManager({ guide, patterns, versions, currentVersionId, password, l
     if (file.size > 3 * 1024 * 1024) throw new Error("예시 파일은 3MB 이하만 불러올 수 있습니다.");
     const filename = file.name.toLowerCase();
     if (filename.endsWith(".xlsx")) {
-      const workbook = new ExcelJS.Workbook();
-      await workbook.xlsx.load(await file.arrayBuffer());
+      const workbook = await loadWorkbookSafely(await file.arrayBuffer());
       const text = workbook.worksheets.map((sheet) => {
         const rows: string[] = [];
         sheet.eachRow((row) => {
@@ -507,8 +529,7 @@ export default function AiScript() {
     if (file.size > 8 * 1024 * 1024) throw new Error("업로드 파일은 8MB 이하만 가능합니다.");
     setUploadLoading(true); setUploadError("");
     try {
-      const workbook = new ExcelJS.Workbook();
-      await workbook.xlsx.load(await file.arrayBuffer());
+      const workbook = await loadWorkbookSafely(await file.arrayBuffer());
       const worksheet = workbook.worksheets[0];
       if (!worksheet) throw new Error("엑셀 시트를 찾지 못했습니다.");
       const normalizeHeader = (value: string) => value.replace(/\s+/g, "").replace(/[·:]/g, "").toLowerCase();

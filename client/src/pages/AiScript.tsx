@@ -340,6 +340,7 @@ export default function AiScript() {
   const [uploadedFileName, setUploadedFileName] = useState("");
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
+  const [uploadDragActive, setUploadDragActive] = useState(false);
   const [uploadRevisionInstruction, setUploadRevisionInstruction] = useState("");
   const [uploadRevisionMessages, setUploadRevisionMessages] = useState<RevisionMessage[]>([]);
   const [uploadRevisionLoading, setUploadRevisionLoading] = useState(false);
@@ -552,6 +553,11 @@ export default function AiScript() {
     } finally { setUploadLoading(false); }
   };
 
+  const handleUploadedFile = (file?: File) => {
+    if (!file) return;
+    void uploadExistingScript(file).catch((error) => setUploadError(error instanceof Error ? error.message : "엑셀 파일을 불러오지 못했습니다."));
+  };
+
   const reviseUploadedScript = async () => {
     if (!uploadedScript || !uploadRevisionInstruction.trim() || uploadRevisionLoading) return;
     const userMessage: RevisionMessage = { role: "user", content: uploadRevisionInstruction.trim(), createdAt: new Date().toISOString() };
@@ -627,9 +633,9 @@ export default function AiScript() {
     });
 
     const sectionColors = [
-      { no: "FF8DDDD2", order: "FFC0F1EA", time: "FFE6F8F5", note: "FFF4FCFA" },
-      { no: "FF9EE3D8", order: "FFD0F4ED", time: "FFEAF9F6", note: "FFF6FCFB" },
-      { no: "FF80D4C8", order: "FFB9ECE4", time: "FFE2F6F2", note: "FFF2FBF9" },
+      { no: "FF8DDDD2", order: "FFC0F1EA", time: "FFE6F8F5", script: "FFEAF8F5", note: "FFF4FCFA" },
+      { no: "FF9EE3D8", order: "FFD0F4ED", time: "FFEAF9F6", script: "FFEEF9F6", note: "FFF6FCFB" },
+      { no: "FF80D4C8", order: "FFB9ECE4", time: "FFE2F6F2", script: "FFE5F6F2", note: "FFF2FBF9" },
     ];
 
     targetScript.sections.forEach((section, index) => {
@@ -646,7 +652,7 @@ export default function AiScript() {
       row.getCell(2).font = { name: fontName, size: 11, bold: true, color: { argb: "FF194F49" } };
       row.getCell(3).fill = solidFill(color.time);
       row.getCell(3).font = { name: fontName, size: 10, italic: true, color: { argb: "FF317D73" } };
-      row.getCell(4).fill = solidFill("FFFFFFFF");
+      row.getCell(4).fill = solidFill(color.script);
       row.getCell(5).fill = solidFill(color.note);
       row.getCell(5).font = { name: fontName, size: 9, italic: true, color: { argb: "FF3E625D" } };
 
@@ -712,9 +718,9 @@ export default function AiScript() {
         {!uploadedScript ? <section style={{ maxWidth: 760, background: C.white, border: `1px solid ${C.line}`, borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 25px rgba(19,36,59,.05)" }}>
           <div style={{ padding: "18px 20px", background: C.mintPale, borderBottom: `1px solid ${C.line}` }}><div style={{ fontSize: 14, fontWeight: 900, color: C.ink }}>01. 이전 대본 엑셀 불러오기</div><div style={{ fontSize: 11, color: C.muted, marginTop: 4 }}>대본 작성 화면에서 내려받은 `.xlsx` 파일을 선택해주세요.</div></div>
           <div style={{ padding: 22 }}>
-            <label style={{ minHeight: 150, border: `2px dashed ${C.mint}`, borderRadius: 12, background: C.mintPale, display: "grid", placeItems: "center", textAlign: "center", padding: 20, cursor: uploadLoading ? "wait" : "pointer", boxSizing: "border-box" }}>
-              <div><div style={{ color: C.ink, fontWeight: 900, fontSize: 15 }}>{uploadLoading ? "대본 엑셀을 읽는 중입니다…" : "대본 엑셀 파일 선택"}</div><div style={{ color: C.muted, fontSize: 11, marginTop: 7, lineHeight: 1.6 }}>지원 형식: `.xlsx` · 최대 8MB<br />식순·시간·진행 멘트·비고를 자동으로 읽어옵니다.</div></div>
-              <input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" disabled={uploadLoading} style={{ display: "none" }} onChange={(event) => { const file = event.target.files?.[0]; if (!file) return; void uploadExistingScript(file).catch((error) => setUploadError(error instanceof Error ? error.message : "엑셀 파일을 불러오지 못했습니다.")); event.currentTarget.value = ""; }} />
+            <label onDragEnter={(event) => { event.preventDefault(); if (!uploadLoading) setUploadDragActive(true); }} onDragOver={(event) => event.preventDefault()} onDragLeave={(event) => { event.preventDefault(); setUploadDragActive(false); }} onDrop={(event) => { event.preventDefault(); setUploadDragActive(false); handleUploadedFile(event.dataTransfer.files?.[0]); }} style={{ minHeight: 150, border: `2px dashed ${uploadDragActive ? C.ink : C.mint}`, borderRadius: 12, background: uploadDragActive ? "#D5F5EF" : C.mintPale, display: "grid", placeItems: "center", textAlign: "center", padding: 20, cursor: uploadLoading ? "wait" : "pointer", boxSizing: "border-box", transition: "background .15s ease, border-color .15s ease" }}>
+              <div><div style={{ color: C.ink, fontWeight: 900, fontSize: 15 }}>{uploadLoading ? "대본 엑셀을 읽는 중입니다…" : uploadDragActive ? "여기에 파일을 놓아주세요" : "대본 엑셀 파일 선택 또는 드래그"}</div><div style={{ color: C.muted, fontSize: 11, marginTop: 7, lineHeight: 1.6 }}>지원 형식: `.xlsx` · 최대 8MB<br />파일 선택 또는 이 영역에 끌어다 놓으면 식순·시간·진행 멘트·비고를 자동으로 읽어옵니다.</div></div>
+              <input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" disabled={uploadLoading} style={{ display: "none" }} onChange={(event) => { handleUploadedFile(event.target.files?.[0]); event.currentTarget.value = ""; }} />
             </label>
             {uploadError && <div style={{ marginTop: 14, padding: "11px 12px", borderRadius: 9, background: "#FFF2F2", border: "1px solid #F1C2C2", color: "#B53B3B", fontSize: 12, lineHeight: 1.6 }}>⚠️ {uploadError}</div>}
           </div>

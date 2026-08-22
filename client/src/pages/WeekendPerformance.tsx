@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const API_URL = "/api/performance-schedule";
 
@@ -45,7 +45,7 @@ function prettyDate(date: string) {
   return `${d.getMonth() + 1}월 ${d.getDate()}일`;
 }
 
-export default function PerformanceSchedule() {
+export default function WeekendPerformance() {
   const [date, setDate] = useState(todayString());
   const [data, setData] = useState<WeekData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ export default function PerformanceSchedule() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API_URL}?date=${encodeURIComponent(date)}`);
+      const res = await fetch(`${API_URL}?date=${encodeURIComponent(date)}&exclude_mc=1`);
       const json = await res.json();
       if (json.code !== 1) throw new Error(json.message || "조회에 실패했습니다.");
       setData(json);
@@ -72,40 +72,46 @@ export default function PerformanceSchedule() {
     const next = addDays(date, amount);
     setDate(next);
     setTimeout(() => {
-      const button = document.getElementById("performance-search-button");
+      const button = document.getElementById("weekend-performance-search-button");
       if (button) button.click();
     }, 0);
   };
+
+  useEffect(() => {
+    // 새 페이지는 접속 시 현재 주의 사회 제외 연주 편성을 바로 표시한다.
+    search();
+  }, []);
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Apple SD Gothic Neo','Noto Sans KR',sans-serif", paddingBottom: 84, overflowX: "hidden" }}>
       <header style={{ position: "sticky", top: 0, zIndex: 20, display: "flex", alignItems: "center", minHeight: 60, padding: "10px 16px", background: "rgba(11,20,38,0.94)", borderBottom: `1px solid ${C.cardBorder}`, backdropFilter: "blur(12px)" }}>
         <a href="/" style={{ flexShrink: 0, padding: "7px 10px", borderRadius: 8, color: C.mint, background: C.mintLight, border: `1px solid ${C.mintBorder}`, textDecoration: "none", fontSize: 12, fontWeight: 700 }}>← 메인</a>
-        <div style={{ flex: 1, textAlign: "center", fontSize: 15, fontWeight: 800 }}>주말 주요 연주 편성</div>
+        <div style={{ flex: 1, textAlign: "center", fontSize: 15, fontWeight: 800 }}>주말 연주 편성</div>
         <div style={{ width: 56 }} />
       </header>
 
       <main style={{ width: "100%", maxWidth: 720, margin: "0 auto", padding: "18px 14px 40px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 22 }}>
-          <a href="/schedule" style={{ textDecoration: "none", textAlign: "center", padding: "11px 8px", color: C.textSub, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 10, fontSize: 13, fontWeight: 700 }}>사회자 스케줄</a>
-          <a href="/performance-schedule" style={{ textDecoration: "none", textAlign: "center", padding: "11px 8px", color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, borderRadius: 10, fontSize: 13, fontWeight: 800 }}>주말 주요 편성</a>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 22 }}>
+          <a href="/schedule" style={{ textDecoration: "none", textAlign: "center", padding: "11px 6px", color: C.textSub, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 10, fontSize: 12, fontWeight: 700 }}>사회자 스케줄</a>
+          <a href="/performance-schedule" style={{ textDecoration: "none", textAlign: "center", padding: "11px 6px", color: C.textSub, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 10, fontSize: 12, fontWeight: 700 }}>주말 주요 편성</a>
+          <a href="/weekend-performance" style={{ textDecoration: "none", textAlign: "center", padding: "11px 6px", color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, borderRadius: 10, fontSize: 12, fontWeight: 800 }}>주말 연주 편성</a>
         </div>
 
         <section style={{ textAlign: "center", padding: "10px 10px 20px" }}>
           <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 3, color: C.mint, marginBottom: 9 }}>INUS MUSIC</div>
-          <h1 style={{ margin: 0, fontSize: 22, lineHeight: 1.4 }}>주말 주요 연주 편성</h1>
-          <p style={{ margin: "8px 0 0", fontSize: 13, color: C.textSub, lineHeight: 1.65 }}>주말에 많이 진행되는 실제 연주 사례를<br/>시간과 연주편성별로 확인할 수 있습니다.</p>
+          <h1 style={{ margin: 0, fontSize: 22, lineHeight: 1.4 }}>주말 연주 편성</h1>
+          <p style={{ margin: "8px 0 0", fontSize: 13, color: C.textSub, lineHeight: 1.65 }}>사회 진행이 포함된 예식은 제외하고<br/>주말 연주 편성만 확인할 수 있습니다.</p>
         </section>
 
         <section style={{ background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 16, padding: 16, marginBottom: 18 }}>
           <div style={{ fontSize: 12, color: C.textSub, fontWeight: 700, marginBottom: 9 }}>📅 기준 날짜 선택</div>
           <div style={{ display: "flex", gap: 8 }}>
             <input type="date" value={date} onChange={e => setDate(e.target.value)} onKeyDown={e => e.key === "Enter" && search()} style={{ minWidth: 0, flex: 1, height: 46, padding: "0 11px", borderRadius: 10, color: C.text, background: "rgba(255,255,255,0.07)", border: `1px solid ${C.cardBorder}`, outline: "none", fontSize: 15, fontFamily: "inherit" }} />
-            <button id="performance-search-button" onClick={search} style={{ flexShrink: 0, height: 46, padding: "0 20px", color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, border: 0, borderRadius: 10, cursor: "pointer", fontSize: 14, fontFamily: "inherit", fontWeight: 800 }}>조회</button>
+            <button id="weekend-performance-search-button" onClick={search} style={{ flexShrink: 0, height: 46, padding: "0 20px", color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, border: 0, borderRadius: 10, cursor: "pointer", fontSize: 14, fontFamily: "inherit", fontWeight: 800 }}>조회</button>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 7, marginTop: 10 }}>
             <button onClick={() => moveWeek(-7)} style={weekButtonStyle}>◀ 이전 주</button>
-            <button onClick={() => { setDate(todayString()); setTimeout(() => { const b = document.getElementById("performance-search-button"); if (b) b.click(); }, 0); }} style={weekButtonStyle}>이번 주</button>
+            <button onClick={() => { setDate(todayString()); setTimeout(() => { const b = document.getElementById("weekend-performance-search-button"); if (b) b.click(); }, 0); }} style={weekButtonStyle}>이번 주</button>
             <button onClick={() => moveWeek(7)} style={weekButtonStyle}>다음 주 ▶</button>
           </div>
         </section>
@@ -121,11 +127,11 @@ export default function PerformanceSchedule() {
         {data && (
           <section>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "13px 14px", marginBottom: 12, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 12 }}>
-              <span style={{ fontSize: 14, fontWeight: 800 }}><b style={{ color: C.mint }}>토요일 · 일요일</b> 주요 연주 편성</span>
-              <span style={{ flexShrink: 0, padding: "3px 8px", borderRadius: 20, color: C.mint, background: C.mintLight, fontSize: 11, fontWeight: 800 }}>주말 사례</span>
+              <span style={{ fontSize: 14, fontWeight: 800 }}><b style={{ color: C.mint }}>토요일 · 일요일</b> 연주 편성</span>
+              <span style={{ flexShrink: 0, padding: "3px 8px", borderRadius: 20, color: C.mint, background: C.mintLight, fontSize: 11, fontWeight: 800 }}>사회 제외</span>
             </div>
             <div style={{ margin: "0 2px 12px", padding: "10px 12px", borderRadius: 10, border: `1px solid ${C.mintBorder}`, background: C.mintLight, color: C.textSub, fontSize: 11, lineHeight: 1.65 }}>
-              ※ 토요일·일요일에 많이 진행되는 실제 연주편성 사례입니다. 장소는 지역 단위로, 신부 이름은 개인정보 보호를 위해 일부 마스킹하여 표시됩니다.
+              ※ 사회 진행이 포함된 행사를 제외한 토요일·일요일 연주편성입니다. 장소는 지역 단위로, 신부 이름은 개인정보 보호를 위해 일부 마스킹하여 표시됩니다.
             </div>
             {data.days.map(day => <DayCard key={day.date} day={day} />)}
           </section>

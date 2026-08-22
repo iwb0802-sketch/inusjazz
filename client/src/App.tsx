@@ -9,6 +9,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Schedule from "./pages/Schedule";
 import PerformanceSchedule from "./pages/PerformanceSchedule";
+import WeekendPerformance from "./pages/WeekendPerformance";
 import AiScript from "./pages/AiScript";
 import AudioStudio from "./pages/AudioStudio";
 
@@ -19,6 +20,7 @@ function Router() {
       <Route path={"/contest"} component={Contest} />
       <Route path={"/schedule"} component={Schedule} />
       <Route path={"/performance-schedule"} component={PerformanceSchedule} />
+      <Route path={"/weekend-performance"} component={WeekendPerformance} />
       <Route path={"/ai-script"} component={AiScript} />
       <Route path={"/audio"} component={AudioStudio} />
       <Route path={"/404"} component={NotFound} />

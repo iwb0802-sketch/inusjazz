@@ -85,7 +85,7 @@ export default function WeekendPerformance() {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Apple SD Gothic Neo','Noto Sans KR',sans-serif", paddingBottom: 84, overflowX: "hidden" }}>
       <header style={{ position: "sticky", top: 0, zIndex: 20, display: "flex", alignItems: "center", minHeight: 60, padding: "10px 16px", background: "rgba(11,20,38,0.94)", borderBottom: `1px solid ${C.cardBorder}`, backdropFilter: "blur(12px)" }}>
-        <a href="/" style={{ flexShrink: 0, padding: "7px 10px", borderRadius: 8, color: C.mint, background: C.mintLight, border: `1px solid ${C.mintBorder}`, textDecoration: "none", fontSize: 12, fontWeight: 700 }}>← 메인</a>
+        <a href="https://www.inusmusic.com" style={{ flexShrink: 0, padding: "7px 10px", borderRadius: 8, color: C.mint, background: C.mintLight, border: `1px solid ${C.mintBorder}`, textDecoration: "none", fontSize: 12, fontWeight: 700 }}>← 메인</a>
         <div style={{ flex: 1, textAlign: "center", fontSize: 15, fontWeight: 800 }}>주말 연주 편성</div>
         <div style={{ width: 56 }} />
       </header>

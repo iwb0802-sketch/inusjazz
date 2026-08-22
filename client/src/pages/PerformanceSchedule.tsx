@@ -94,7 +94,7 @@ export default function PerformanceSchedule() {
         <section style={{ textAlign: "center", padding: "10px 10px 20px" }}>
           <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 3, color: C.mint, marginBottom: 9 }}>INUS MUSIC</div>
           <h1 style={{ margin: 0, fontSize: 22, lineHeight: 1.4 }}>주말 주요 연주 편성</h1>
-          <p style={{ margin: "8px 0 0", fontSize: 13, color: C.textSub, lineHeight: 1.65 }}>주말에 많이 진행되는 실제 연주 사례를<br/>시간과 연주편성별로 확인할 수 있습니다.</p>
+          <p style={{ margin: "8px 0 0", fontSize: 13, color: C.textSub, lineHeight: 1.65 }}>주말에 진행되는 예식을<br/>시간과 연주편성별로 확인할 수 있습니다.</p>
         </section>
 
         <section style={{ background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 16, padding: 16, marginBottom: 18 }}>
@@ -123,9 +123,6 @@ export default function PerformanceSchedule() {
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "13px 14px", marginBottom: 12, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 12 }}>
               <span style={{ fontSize: 14, fontWeight: 800 }}><b style={{ color: C.mint }}>토요일 · 일요일</b> 주요 연주 편성</span>
               <span style={{ flexShrink: 0, padding: "3px 8px", borderRadius: 20, color: C.mint, background: C.mintLight, fontSize: 11, fontWeight: 800 }}>주말 사례</span>
-            </div>
-            <div style={{ margin: "0 2px 12px", padding: "10px 12px", borderRadius: 10, border: `1px solid ${C.mintBorder}`, background: C.mintLight, color: C.textSub, fontSize: 11, lineHeight: 1.65 }}>
-              ※ 토요일·일요일에 많이 진행되는 실제 연주편성 사례입니다. 장소는 지역 단위로, 신부 이름은 개인정보 보호를 위해 일부 마스킹하여 표시됩니다.
             </div>
             {data.days.map(day => <DayCard key={day.date} day={day} />)}
           </section>

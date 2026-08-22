@@ -91,10 +91,8 @@ export default function WeekendPerformance() {
       </header>
 
       <main style={{ width: "100%", maxWidth: 720, margin: "0 auto", padding: "18px 14px 40px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 22 }}>
-          <a href="/schedule" style={{ textDecoration: "none", textAlign: "center", padding: "11px 6px", color: C.textSub, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 10, fontSize: 12, fontWeight: 700 }}>사회자 스케줄</a>
-          <a href="/performance-schedule" style={{ textDecoration: "none", textAlign: "center", padding: "11px 6px", color: C.textSub, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 10, fontSize: 12, fontWeight: 700 }}>주말 주요 편성</a>
-          <a href="/weekend-performance" style={{ textDecoration: "none", textAlign: "center", padding: "11px 6px", color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, borderRadius: 10, fontSize: 12, fontWeight: 800 }}>주말 연주 편성</a>
+        <div style={{ marginBottom: 22 }}>
+          <a href="/weekend-performance" style={{ display: "block", textDecoration: "none", textAlign: "center", padding: "11px 8px", color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, borderRadius: 10, fontSize: 13, fontWeight: 800 }}>주말 연주 편성</a>
         </div>
 
         <section style={{ textAlign: "center", padding: "10px 10px 20px" }}>

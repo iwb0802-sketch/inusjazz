@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const API_URL = "/api/performance-schedule";
 
@@ -47,16 +47,19 @@ function prettyDate(date: string) {
 
 export default function PerformanceSchedule() {
   const [date, setDate] = useState(todayString());
+  const [activeTab, setActiveTab] = useState<"performance" | "all">("performance");
   const [data, setData] = useState<WeekData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const search = async () => {
-    if (!date) return;
+  const search = async (targetDate = date, targetTab = activeTab) => {
+    if (!targetDate) return;
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API_URL}?date=${encodeURIComponent(date)}`);
+      const params = new URLSearchParams({ date: targetDate });
+      if (targetTab === "performance") params.set("exclude_mc", "1");
+      const res = await fetch(`${API_URL}?${params.toString()}`);
       const json = await res.json();
       if (json.code !== 1) throw new Error(json.message || "조회에 실패했습니다.");
       setData(json);
@@ -71,11 +74,20 @@ export default function PerformanceSchedule() {
   const moveWeek = (amount: number) => {
     const next = addDays(date, amount);
     setDate(next);
-    setTimeout(() => {
-      const button = document.getElementById("performance-search-button");
-      if (button) button.click();
-    }, 0);
+    search(next, activeTab);
   };
+
+  const selectTab = (tab: "performance" | "all") => {
+    setActiveTab(tab);
+    search(date, tab);
+  };
+
+  useEffect(() => {
+    // 페이지에 들어오면 현재 주말의 사회 제외 연주 편성을 먼저 보여준다.
+    search(todayString(), "performance");
+  }, []);
+
+  const performanceOnly = activeTab === "performance";
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Apple SD Gothic Neo','Noto Sans KR',sans-serif", paddingBottom: 84, overflowX: "hidden" }}>
@@ -91,21 +103,26 @@ export default function PerformanceSchedule() {
           <a href="/performance-schedule" style={{ textDecoration: "none", textAlign: "center", padding: "11px 8px", color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, borderRadius: 10, fontSize: 13, fontWeight: 800 }}>주말 주요 편성</a>
         </div>
 
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, margin: "0 0 18px" }}>
+          <button onClick={() => selectTab("performance")} style={{ ...subTabStyle, ...(performanceOnly ? activeSubTabStyle : {}) }}>주말 연주 편성</button>
+          <button onClick={() => selectTab("all")} style={{ ...subTabStyle, ...(!performanceOnly ? activeSubTabStyle : {}) }}>전체 주요 편성</button>
+        </div>
+
         <section style={{ textAlign: "center", padding: "10px 10px 20px" }}>
           <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 3, color: C.mint, marginBottom: 9 }}>INUS MUSIC</div>
-          <h1 style={{ margin: 0, fontSize: 22, lineHeight: 1.4 }}>주말 주요 연주 편성</h1>
-          <p style={{ margin: "8px 0 0", fontSize: 13, color: C.textSub, lineHeight: 1.65 }}>주말에 많이 진행되는 실제 연주 사례를<br/>시간과 연주편성별로 확인할 수 있습니다.</p>
+          <h1 style={{ margin: 0, fontSize: 22, lineHeight: 1.4 }}>{performanceOnly ? "주말 연주 편성" : "주말 주요 연주 편성"}</h1>
+          <p style={{ margin: "8px 0 0", fontSize: 13, color: C.textSub, lineHeight: 1.65 }}>{performanceOnly ? <>사회 진행이 포함된 예식은 제외하고<br/>주말 연주 편성만 확인할 수 있습니다.</> : <>주말에 많이 진행되는 실제 연주 사례를<br/>시간과 연주편성별로 확인할 수 있습니다.</>}</p>
         </section>
 
         <section style={{ background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 16, padding: 16, marginBottom: 18 }}>
           <div style={{ fontSize: 12, color: C.textSub, fontWeight: 700, marginBottom: 9 }}>📅 기준 날짜 선택</div>
           <div style={{ display: "flex", gap: 8 }}>
             <input type="date" value={date} onChange={e => setDate(e.target.value)} onKeyDown={e => e.key === "Enter" && search()} style={{ minWidth: 0, flex: 1, height: 46, padding: "0 11px", borderRadius: 10, color: C.text, background: "rgba(255,255,255,0.07)", border: `1px solid ${C.cardBorder}`, outline: "none", fontSize: 15, fontFamily: "inherit" }} />
-            <button id="performance-search-button" onClick={search} style={{ flexShrink: 0, height: 46, padding: "0 20px", color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, border: 0, borderRadius: 10, cursor: "pointer", fontSize: 14, fontFamily: "inherit", fontWeight: 800 }}>조회</button>
+            <button id="performance-search-button" onClick={() => search()} style={{ flexShrink: 0, height: 46, padding: "0 20px", color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, border: 0, borderRadius: 10, cursor: "pointer", fontSize: 14, fontFamily: "inherit", fontWeight: 800 }}>조회</button>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 7, marginTop: 10 }}>
             <button onClick={() => moveWeek(-7)} style={weekButtonStyle}>◀ 이전 주</button>
-            <button onClick={() => { setDate(todayString()); setTimeout(() => { const b = document.getElementById("performance-search-button"); if (b) b.click(); }, 0); }} style={weekButtonStyle}>이번 주</button>
+            <button onClick={() => { const today = todayString(); setDate(today); search(today, activeTab); }} style={weekButtonStyle}>이번 주</button>
             <button onClick={() => moveWeek(7)} style={weekButtonStyle}>다음 주 ▶</button>
           </div>
         </section>
@@ -121,11 +138,11 @@ export default function PerformanceSchedule() {
         {data && (
           <section>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "13px 14px", marginBottom: 12, background: C.card, border: `1px solid ${C.cardBorder}`, borderRadius: 12 }}>
-              <span style={{ fontSize: 14, fontWeight: 800 }}><b style={{ color: C.mint }}>토요일 · 일요일</b> 주요 연주 편성</span>
-              <span style={{ flexShrink: 0, padding: "3px 8px", borderRadius: 20, color: C.mint, background: C.mintLight, fontSize: 11, fontWeight: 800 }}>주말 사례</span>
+              <span style={{ fontSize: 14, fontWeight: 800 }}><b style={{ color: C.mint }}>토요일 · 일요일</b> {performanceOnly ? "연주 편성" : "주요 연주 편성"}</span>
+              <span style={{ flexShrink: 0, padding: "3px 8px", borderRadius: 20, color: C.mint, background: C.mintLight, fontSize: 11, fontWeight: 800 }}>{performanceOnly ? "사회 제외" : "주말 사례"}</span>
             </div>
             <div style={{ margin: "0 2px 12px", padding: "10px 12px", borderRadius: 10, border: `1px solid ${C.mintBorder}`, background: C.mintLight, color: C.textSub, fontSize: 11, lineHeight: 1.65 }}>
-              ※ 토요일·일요일에 많이 진행되는 실제 연주편성 사례입니다. 장소는 지역 단위로, 신부 이름은 개인정보 보호를 위해 일부 마스킹하여 표시됩니다.
+              {performanceOnly ? "※ 사회 진행이 포함된 행사는 제외한 토요일·일요일 연주편성입니다. 장소는 지역 단위로, 신부 이름은 개인정보 보호를 위해 일부 마스킹하여 표시됩니다." : "※ 토요일·일요일에 많이 진행되는 실제 연주편성 사례입니다. 장소는 지역 단위로, 신부 이름은 개인정보 보호를 위해 일부 마스킹하여 표시됩니다."}
             </div>
             {data.days.map(day => <DayCard key={day.date} day={day} />)}
           </section>
@@ -134,6 +151,14 @@ export default function PerformanceSchedule() {
     </div>
   );
 }
+
+const subTabStyle: React.CSSProperties = {
+  minHeight: 44, padding: "10px 8px", borderRadius: 10, color: C.textSub, background: C.card, border: `1px solid ${C.cardBorder}`, cursor: "pointer", fontFamily: "inherit", fontSize: 13, fontWeight: 800, transition: "transform .16s ease, background .16s ease"
+};
+
+const activeSubTabStyle: React.CSSProperties = {
+  color: "#fff", background: `linear-gradient(135deg,#3D9E8C,${C.mint})`, borderColor: C.mint
+};
 
 const weekButtonStyle: React.CSSProperties = {
   height: 34, borderRadius: 8, border: `1px solid ${C.cardBorder}`, background: "rgba(255,255,255,0.04)", color: C.textSub, cursor: "pointer", fontFamily: "inherit", fontSize: 11, fontWeight: 700

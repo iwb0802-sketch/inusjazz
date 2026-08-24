@@ -22,7 +22,7 @@ interface McProfile {
 const MC_PROFILES: McProfile[] = [
   { name:"석재선",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-profile-3_33ff7a32.jpg",         url:"https://blog.naver.com/inusmusics/223822182933", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-jaesun.mp3" },
   { name:"이우영",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-lee-wooyoung-new_fa27e84d.webp", url:"https://blog.naver.com/inusmusics/220767962639", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-wooyoung.mp3", imgPos:"50% 55%" },
-  { name:"장윤태",  tier:"PREMIUM",  tierOrder:1, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/YIRjIXsBhCqAiMgE.jpg", url:"https://blog.naver.com/inusmusics/223246261228", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yuntae.mp3" },
+  { name:"장윤태",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-yuntae2.jpg", url:"https://blog.naver.com/inusmusics/223246261228", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yuntae.mp3" },
   { name:"최윤아",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-yuna.jpg",                       url:"https://blog.naver.com/inusmusics/224327229799", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yoona.mp3" },
   { name:"민준호",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-minjunho.webp", url:"https://blog.naver.com/inusmusics/223597460181", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-minjunho.mp3" },
   { name:"고승범",  tier:"BEST",     tierOrder:2, img:"/images/mc-profile-4_a9e52880.jpg",         url:"https://blog.naver.com/inusmusics/223235771542", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-seungbeom.mp3", imgPos:"50% 5%" },

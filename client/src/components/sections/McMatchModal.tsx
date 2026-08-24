@@ -72,7 +72,7 @@ const MCS = [
     name: "장윤태",
     tier: "PREMIUM",
     desc: "10년+ 경력",
-    image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/YIRjIXsBhCqAiMgE.jpg",
+    image: "/images/mc-yuntae-card.jpg",
     highlight: "안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",
     tags: ["품격", "감동", "대규모", "중간규모", "프리미엄"],

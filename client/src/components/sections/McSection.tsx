@@ -22,7 +22,7 @@ const MCS = [
     styles: ["품격형", "아나운서형"],
     youtubeId: "YmqVrha13G0",
     audioFile: "/audio/mc-minsu.mp3",
-    profileCardImg: "",
+    profileCardImg: "/images/mc-minsu-card.jpg",
   },
   {
     name: "고승범",
@@ -37,7 +37,7 @@ const MCS = [
     styles: ["품격형", "아나운서형"],
     youtubeId: "iKi77thkR4s",
     audioFile: "/audio/mc-seungbeom.mp3",
-    profileCardImg: "",
+    profileCardImg: "/images/mc-seungbeom-card.jpg",
   },
   {
     name: "이도영",
@@ -52,7 +52,7 @@ const MCS = [
     styles: ["품격형", "밝은형", "감동형"],
     youtubeId: "_WitF1Nxugs",
     audioFile: "/audio/mc-idoyoung.mp3",
-    profileCardImg: "",
+    profileCardImg: "/images/mc-idoyoung-card.jpg",
   },
   {
     name: "석재선",
@@ -67,7 +67,7 @@ const MCS = [
     styles: ["품격형", "감동형"],
     youtubeId: "PmtzbgT_PNw",
     audioFile: "/audio/mc-jaesun.mp3",
-    profileCardImg: "",
+    profileCardImg: "/images/mc-jaesun-card.jpg",
   },
   {
     name: "이우영",
@@ -82,7 +82,7 @@ const MCS = [
     styles: ["품격형", "밝은형", "감동형", "아나운서형"],
     youtubeId: "prhKZqfMjfM",
     audioFile: "/audio/mc-wooyoung.mp3",
-    profileCardImg: "",
+    profileCardImg: "/images/mc-wooyoung-card.jpg",
   },
   {
     name: "김선혁",
@@ -97,7 +97,7 @@ const MCS = [
     styles: ["품격형", "아나운서형"],
     youtubeId: "4Quvg9TIGAk",
     audioFile: "/audio/mc-sunhyuk.mp3",
-    profileCardImg: "",
+    profileCardImg: "/images/mc-sunhyuk-card.jpg",
   },
   {
     name: "장윤태",
@@ -112,7 +112,7 @@ const MCS = [
     styles: ["품격형", "감동형"],
     youtubeId: "U5cJiiF-WcY",
     audioFile: "/audio/mc-yuntae.mp3",
-    profileCardImg: "",
+    profileCardImg: "/images/mc-yuntae-card.jpg",
   },
   {
     name: "길상우",
@@ -127,7 +127,7 @@ const MCS = [
     styles: ["품격형", "밝은형"],
     youtubeId: "0Ske676aw84",
     audioFile: "/audio/mc-gilsangwoo.mp3",
-    profileCardImg: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FQxXzn6GslDFTyH_mp_7s7%2F2_NLo2VM.png",
+    profileCardImg: "/images/mc-gilsangwoo-card.jpg",
   },
   {
     name: "최윤아",

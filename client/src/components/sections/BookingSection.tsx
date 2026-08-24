@@ -1,7 +1,7 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Clock, CalendarDays, AlertTriangle } from "lucide-react";
 
-const AISLE_IMG = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/WQWWthCBbrekYBtP.jpg";
+const AISLE_IMG = "/images/hero-v2-option2.webp";
 
 export default function BookingSection() {
   const anim1 = useScrollAnimation();

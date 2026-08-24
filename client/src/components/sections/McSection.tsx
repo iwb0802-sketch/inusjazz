@@ -22,7 +22,7 @@ const MCS = [
     styles: ["품격형", "아나운서형"],
     youtubeId: "YmqVrha13G0",
     audioFile: "/audio/mc-minsu.mp3",
-    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/DyhPmZzlNmUwZcsY.png",
+    profileCardImg: "",
   },
   {
     name: "고승범",
@@ -37,7 +37,7 @@ const MCS = [
     styles: ["품격형", "아나운서형"],
     youtubeId: "iKi77thkR4s",
     audioFile: "/audio/mc-seungbeom.mp3",
-    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/SPAinOSuRkaiNJTx.png",
+    profileCardImg: "",
   },
   {
     name: "이도영",
@@ -52,7 +52,7 @@ const MCS = [
     styles: ["품격형", "밝은형", "감동형"],
     youtubeId: "_WitF1Nxugs",
     audioFile: "/audio/mc-idoyoung.mp3",
-    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/ppTgmcIFaCtGyINq.png",
+    profileCardImg: "",
   },
   {
     name: "석재선",
@@ -67,7 +67,7 @@ const MCS = [
     styles: ["품격형", "감동형"],
     youtubeId: "PmtzbgT_PNw",
     audioFile: "/audio/mc-jaesun.mp3",
-    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/RWSmnUABYYeEBdIF.png",
+    profileCardImg: "",
   },
   {
     name: "이우영",
@@ -82,7 +82,7 @@ const MCS = [
     styles: ["품격형", "밝은형", "감동형", "아나운서형"],
     youtubeId: "prhKZqfMjfM",
     audioFile: "/audio/mc-wooyoung.mp3",
-    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/COZSQEgdKVpfNtAZ.png",
+    profileCardImg: "",
   },
   {
     name: "김선혁",
@@ -97,7 +97,7 @@ const MCS = [
     styles: ["품격형", "아나운서형"],
     youtubeId: "4Quvg9TIGAk",
     audioFile: "/audio/mc-sunhyuk.mp3",
-    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/BNPzIkSNQIGLZEfs.png",
+    profileCardImg: "",
   },
   {
     name: "장윤태",
@@ -112,7 +112,7 @@ const MCS = [
     styles: ["품격형", "감동형"],
     youtubeId: "U5cJiiF-WcY",
     audioFile: "/audio/mc-yuntae.mp3",
-    profileCardImg: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/BzyEbfDYgsDXpYvx.png",
+    profileCardImg: "",
   },
   {
     name: "길상우",
@@ -346,20 +346,22 @@ function ProfileModal({ mc, onClose, onOpenIframe }: { mc: MC; onClose: () => vo
               </div>
             ) : (
               <img
-                src={mc.profileCardImg}
+                src={mc.profileCardImg || mc.image}
                 alt={`${mc.name} 프로필`}
                 className="w-full block"
+                onError={(e) => { const el = e.currentTarget; if (el.src !== mc.image) el.src = mc.image; }}
               />
             )}
           </div>
 
           {/* 영상 있는 경우 아래에 프로필 카드 이미지도 표시 */}
-          {mc.youtubeId && (
+          {mc.youtubeId && mc.profileCardImg && (
             <div className="w-full" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
               <img
-                src={mc.profileCardImg}
+                src={mc.profileCardImg || mc.image}
                 alt={`${mc.name} 프로필`}
                 className="w-full block"
+                onError={(e) => { const el = e.currentTarget; if (el.src !== mc.image) el.src = mc.image; }}
               />
             </div>
           )}

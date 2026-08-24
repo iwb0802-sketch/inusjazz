@@ -127,7 +127,7 @@ const MCS = [
     styles: ["품격형", "밝은형"],
     youtubeId: "0Ske676aw84",
     audioFile: "/audio/mc-gilsangwoo.mp3",
-    profileCardImg: "/images/mc-gilsangwoo-card.jpg",
+    profileCardImg: "",
   },
   {
     name: "최윤아",

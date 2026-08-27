@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { ChevronDown, Crown } from "lucide-react";
+import { Crown } from "lucide-react";
+import { VENUE_NAMES } from "@/data/venues";
 
 const HERO_BG = "/images/hero-v2-option2.webp";
 const HERO_BG_MOBILE = "/images/hero-mobile-v3.webp";
@@ -32,7 +33,7 @@ export default function HeroSection() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4 pb-28 sm:pb-24">
         <div
           className={`transition-all duration-1000 delay-300 ${
             loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
@@ -112,12 +113,50 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-        <a href="#intro" className="flex flex-col items-center gap-2 text-white/50 hover:text-white/80 transition-colors">
-          <span className="text-xs tracking-[0.2em]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>SCROLL</span>
-          <ChevronDown size={20} className="animate-bounce" />
-        </a>
+      {/* 진행 웨딩홀 실적 — Performed Venues 흡수 */}
+      <div
+        className={`absolute bottom-0 left-0 right-0 z-10 overflow-hidden transition-all duration-1000 delay-1000 ${
+          loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+        }`}
+        style={{
+          background: "linear-gradient(to top, rgba(8,8,8,0.92), rgba(8,8,8,0.55))",
+          borderTop: "1px solid rgba(212,184,150,0.18)",
+          backdropFilter: "blur(6px)",
+        }}
+      >
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 pt-3 pb-2 px-4 break-keep">
+          <span className="text-[10px] sm:text-xs tracking-[0.3em] uppercase" style={{ color: "#d4b896", fontFamily: "'Cormorant Garamond', serif" }}>
+            Performed Venues
+          </span>
+          <span className="hidden sm:inline w-8 h-px" style={{ background: "rgba(212,184,150,0.4)" }} />
+          <span className="flex items-baseline gap-1">
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, fontSize: "clamp(1.35rem,4.5vw,1.9rem)", color: "#d4b896", lineHeight: 1 }}>224</span>
+            <span style={{ color: "#5BB5A2", fontWeight: 700, fontSize: "0.95rem" }}>+</span>
+            <span className="text-xs sm:text-sm ml-1 whitespace-nowrap" style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'Noto Sans KR', sans-serif" }}>
+              진행 웨딩홀 · 호텔
+            </span>
+          </span>
+        </div>
+
+        {/* 웨딩홀 이름 마퀴 */}
+        <div className="relative pb-2.5">
+          <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none" style={{ background: "linear-gradient(to right, rgba(8,8,8,0.95), transparent)" }} />
+          <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none" style={{ background: "linear-gradient(to left, rgba(8,8,8,0.95), transparent)" }} />
+          <style>{`
+            @keyframes hero-venue-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+            .hero-venue-track { display: flex; width: max-content; animation: hero-venue-marquee 180s linear infinite; }
+            .hero-venue-track:hover { animation-play-state: paused; }
+            @media (prefers-reduced-motion: reduce) { .hero-venue-track { animation: none; } }
+          `}</style>
+          <div className="hero-venue-track">
+            {[...VENUE_NAMES, ...VENUE_NAMES].map((v, i) => (
+              <span key={i} className="flex items-center gap-3 px-4 text-[11px] sm:text-xs whitespace-nowrap" style={{ color: "rgba(255,255,255,0.42)" }}>
+                {v}
+                <span style={{ color: i % 2 === 0 ? "#d4b896" : "#5BB5A2", opacity: 0.4 }}>✦</span>
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

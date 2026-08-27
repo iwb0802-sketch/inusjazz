@@ -19,13 +19,6 @@ const REVIEW_IMAGES = [
 
 const GOLD = "#d4b896";
 
-// 후기 100건 이상 축적된 사회자 (블로그 후기 카테고리로 바로 연결)
-const REVIEW_KING_MCS = [
-  { name: "이우영", url: "https://blog.naver.com/PostList.naver?from=postList&blogId=inusmusics&categoryNo=80&currentPage=1" },
-  { name: "석재선", url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=137" },
-  { name: "장윤태", url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=133" },
-];
-
 // 후기 2000+ 증빙 자료 (숨고 프로필, 홈페이지 후기게시판, 블로그 사회자 후기글)
 const PROOF_IMAGES = [
   {
@@ -468,89 +461,13 @@ export default function ReviewSection() {
             </p>
           </div>
 
-          {/* CTA button — gold */}
-          <div className="mt-14 flex flex-col items-center gap-3">
-            <a
-              href="http://musicin.godohosting.com/bbs/board.php?bo_table=forum"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 text-[#1a1a1a] text-sm tracking-wider transition-all duration-300 rounded-sm font-medium"
-              style={{
-                background: "linear-gradient(135deg, #d4b896, #c9a87a)",
-                boxShadow: "0 4px 20px rgba(212,184,150,0.35)",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 28px rgba(212,184,150,0.55)";
-                (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-1px)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(212,184,150,0.35)";
-                (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
-              }}
-            >
-              후기 게시판 원문 보기
-              <ExternalLink size={15} />
-            </a>
+          {/* 후기 출처 안내 */}
+          <div className="mt-12 flex flex-col items-center gap-3">
             <p className="text-white/25 text-xs tracking-wider">
               카카오톡, 문자로 직접 받은 후기만 게재합니다
             </p>
           </div>
 
-          {/* 리뷰 100+ 사회자 — 블로그 후기 바로가기 */}
-          <div className="mt-16 pt-14 border-t border-white/10 max-w-3xl mx-auto text-center">
-            <h3
-              className="text-white text-lg sm:text-xl mb-2"
-              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-            >
-              후기 100+ <span style={{ color: GOLD }}>사회자</span>, 더 많은 이야기 보기
-            </h3>
-            <p className="text-white/65 text-sm sm:text-base leading-relaxed break-keep mb-8 max-w-md mx-auto">
-              단순히 후기 100건을 넘긴
-              <br className="sm:hidden" />
-              {" "}사회자를 소개하는 것으로,
-              <br />
-              다른 사회자들도 이에 못지않은
-              <br className="sm:hidden" />
-              {" "}후기와 실력을 갖추고 있습니다.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {REVIEW_KING_MCS.map((mc) => (
-                <a
-                  key={mc.name}
-                  href={mc.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center justify-between gap-3 px-5 py-4 rounded-xl transition-all duration-300"
-                  style={{
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(212,184,150,0.20)",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(212,184,150,0.08)";
-                    (e.currentTarget as HTMLAnchorElement).style.border = "1px solid rgba(212,184,150,0.45)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.03)";
-                    (e.currentTarget as HTMLAnchorElement).style.border = "1px solid rgba(212,184,150,0.20)";
-                  }}
-                >
-                  <div className="flex flex-col items-start gap-1">
-                    <span className="text-white text-sm sm:text-base font-medium" style={{ fontFamily: "'Noto Serif KR', serif" }}>
-                      {mc.name} 사회자
-                    </span>
-                    <span
-                      className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide"
-                      style={{ background: "rgba(212,184,150,0.12)", border: "1px solid rgba(212,184,150,0.4)", color: GOLD }}
-                    >
-                      100+ 후기
-                    </span>
-                  </div>
-                  <ExternalLink size={16} className="text-white/30 group-hover:text-[#d4b896] transition-colors duration-300 shrink-0" />
-                </a>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 

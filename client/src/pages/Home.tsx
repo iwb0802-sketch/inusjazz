@@ -34,10 +34,10 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <IntroSection />
+      <ReviewSection />
       <LiveBookingSection />
       <PackageSection />
       <ProcessSection />
-      <ReviewSection />
       {/* 순서: 사회자 이름 노출 전에 VOTE ON VOICE 블라인드 투표 유도 */}
       <VoteOnVoiceSection />
       <McSection />

@@ -95,6 +95,12 @@ export default function LiveBookingSection() {
           <p className="mt-4 text-white/50 text-sm sm:text-base">
             실제 예약금 입금 확인 내역입니다
           </p>
+          <p
+            className="mt-3 inline-block px-4 py-2 rounded-full text-xs sm:text-sm break-keep"
+            style={{ background: "rgba(212,184,150,0.08)", border: "1px solid rgba(212,184,150,0.28)", color: GOLD }}
+          >
+            주말 예식 · 인기 사회자는 <span className="whitespace-nowrap">평균 6개월~1년 전</span> 마감됩니다
+          </p>
         </div>
       </div>
 

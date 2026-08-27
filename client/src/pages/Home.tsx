@@ -16,7 +16,6 @@ import HiddenGemsSection from "@/components/sections/HiddenGemsSection";
 import VideoGuideSection from "@/components/sections/VideoGuideSection";
 import ReviewSection from "@/components/sections/ReviewSection";
 import QnaSection from "@/components/sections/QnaSection";
-import BookingSection from "@/components/sections/BookingSection";
 import ServiceSection from "@/components/sections/ServiceSection";
 import EventSection from "@/components/sections/EventSection";
 import QuickLinksSection from "@/components/sections/QuickLinksSection";
@@ -44,7 +43,6 @@ export default function Home() {
       <VideoGuideSection />
       <PackageSection />
       <ProcessSection />
-      <BookingSection />
       <PricingSection />
       {/* 이벤트 총정리 → 그 뒤에 바로가기 6종 */}
       <EventSection />

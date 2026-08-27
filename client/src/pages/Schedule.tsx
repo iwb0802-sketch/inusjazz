@@ -13,6 +13,10 @@ const ALL_EMCEES = [
   "김태우","최윤아"
 ];
 
+// 공개 스케줄에 표시하지 않는 사회자
+const HIDDEN_PUBLIC_EMCEES = ["김성환"];
+const isPublicEmcee = (name: string) => ALL_EMCEES.includes(name) && !HIDDEN_PUBLIC_EMCEES.includes(name);
+
 type Tier = "PREMIUM" | "BEST" | "STANDARD";
 interface McProfile {
   name: string; tier: Tier; tierOrder: number;
@@ -163,7 +167,7 @@ function getAssignedMap(slots: Record<string, any[]>) {
   const map: Record<string, number[]> = {};
   ["am","pm1","pm2","other"].forEach(k => {
     (slots[k]||[]).forEach((item: any) => {
-      if (item.assigned && item.mc_name !== "미지정") {
+      if (item.assigned && item.mc_name !== "미지정" && isPublicEmcee(item.mc_name)) {
         if (!map[item.mc_name]) map[item.mc_name] = [];
         map[item.mc_name].push(parseTimeToMin(item.time));
       }
@@ -469,7 +473,7 @@ export default function Schedule() {
         {/* 결과 */}
         {data && (() => {
           const assignedMap = getAssignedMap(data.slots);
-          const hasOther = (data.slots["other"]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정").length > 0;
+          const hasOther = (data.slots["other"]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정" && isPublicEmcee(i.mc_name)).length > 0;
           const tabs = hasOther ? ["am","pm1","pm2","other"] : ["am","pm1","pm2"];
 
           return (
@@ -481,7 +485,7 @@ export default function Schedule() {
               {/* 탭 */}
               <div style={{ display:"flex", gap:6, marginBottom:12, flexWrap:"nowrap", overflowX:"auto" }}>
                 {tabs.map(key => {
-                  const cnt = (data.slots[key]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정").length;
+                  const cnt = (data.slots[key]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정" && isPublicEmcee(i.mc_name)).length;
                   const isActive = activeTab===key;
                   return (
                     <button key={key} onClick={() => setActiveTab(key)}
@@ -501,7 +505,7 @@ export default function Schedule() {
               {/* 탭 내용 */}
               {tabs.map(key => {
                 if (activeTab !== key) return null;
-                const assignedItems = (data.slots[key]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정");
+                const assignedItems = (data.slots[key]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정" && isPublicEmcee(i.mc_name));
                 // 같은 이름끼리 합치기 (시간 여러 개 표시, 장소도 합치기)
                 const mergedMap: Record<string, any> = {};
                 assignedItems.forEach((i: any) => {

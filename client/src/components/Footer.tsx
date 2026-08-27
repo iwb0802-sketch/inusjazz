@@ -25,7 +25,7 @@ export default function Footer() {
               {[
                 { label: "메인", href: "#hero" },
                 { label: "사회자 소개", href: "#mc" },
-                { label: "서비스", href: "#service" },
+                { label: "추가 옵션", href: "#package" },
                 { label: "후기", href: "#review" },
                 { label: "견적 문의", href: "#package" },
               ].map((link) => (

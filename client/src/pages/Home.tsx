@@ -16,7 +16,6 @@ import HiddenGemsSection from "@/components/sections/HiddenGemsSection";
 import VideoGuideSection from "@/components/sections/VideoGuideSection";
 import ReviewSection from "@/components/sections/ReviewSection";
 import QnaSection from "@/components/sections/QnaSection";
-import ServiceSection from "@/components/sections/ServiceSection";
 import EventSection from "@/components/sections/EventSection";
 import CtaSection from "@/components/sections/CtaSection";
 import Footer from "@/components/Footer";
@@ -46,7 +45,6 @@ export default function Home() {
       <PackageSection />
       <ProcessSection />
       <QnaSection />
-      <ServiceSection />
       <CtaSection />
       <Footer />
       <FloatingButtons />

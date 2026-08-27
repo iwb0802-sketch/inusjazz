@@ -9,7 +9,7 @@ const KAKAO_URL = "https://pf.kakao.com/_wxovaM/chat";
 // 활동 사회자 명단
 const ALL_EMCEES = [
   "고승범","김민수","길상우","김범태","김선혁",
-  "민준호","이우영","장윤태","석재선","이도영","이도건","심비성",
+  "민준호","손진욱","이우영","장윤태","석재선","이도영","이도건","심비성",
   "김태우","최윤아"
 ];
 
@@ -34,6 +34,7 @@ const MC_PROFILES: McProfile[] = [
   { name:"김선혁",  tier:"BEST",     tierOrder:2, img:"/images/host_sunhyuk_1ed704ab.jpg",         url:"https://blog.naver.com/inusmusics/221025505211", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-sunhyuk.mp3" },
   { name: "김태우",  tier:"BEST",     tierOrder:2, img:"/images/mc-taewoo.webp", url:"https://m.blog.naver.com/inusmusics/224364756942", desc:"웨딩 사회 경력 5년+", audio:"/audio/mc-taewoo.mp3" },
   { name:"길상우",  tier:"BEST",     tierOrder:2, img:"/images/mc-gilsangwoo.jpg",                 url:"https://blog.naver.com/inusmusics/220802942529", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-gilsangwoo.mp3" },
+  { name:"손진욱",  tier:"STANDARD", tierOrder:3, img:"",                                              url:KAKAO_URL, desc:"웨딩 전문 사회자", audio:"" },
   { name:"이도영",  tier:"BEST",     tierOrder:2, img:"/images/mc-profile-2_f194877b.jpg",         url:"https://blog.naver.com/inusmusics/223845891681", desc:"웨딩 사회 경력 4년+",  audio:"/audio/mc-idoyoung.mp3" },
   { name:"김범태",  tier:"STANDARD", tierOrder:3, img:"/images/mc-beomtae.webp", url:"https://blog.naver.com/inusmusics/223192531041", desc:"웨딩 전문 사회자", audio:"/audio/mc-beomtae.mp3", imgPos:"50% 20%" },
   { name:"심비성",  tier:"STANDARD", tierOrder:3, img:"/images/mc-simbisung.webp", url:"https://blog.naver.com/inusmusics/224198308789", desc:"웨딩 전문 사회자", audio:"/audio/mc-simbisung.mp3", imgPos:"50% 20%" },

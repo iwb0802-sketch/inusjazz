@@ -1,33 +1,4 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { FileText, Heart, Music, Mic } from "lucide-react";
-
-const MATERIAL_GROUPS = [
-  {
-    icon: FileText,
-    category: "진행 자료",
-    items: [
-      { title: "식순 멘트지", desc: "맞춤 식순지 제공" },
-      { title: "식순 체크지 & 사전 질문지", desc: "맞춤형 사전 질문지 제공" },
-    ],
-  },
-  {
-    icon: Heart,
-    category: "서약 · 선언",
-    items: [
-      { title: "혼인서약서 샘플", desc: "8종" },
-      { title: "성혼선언문 샘플", desc: "8종" },
-      { title: "덕담 샘플", desc: "6종" },
-    ],
-  },
-  {
-    icon: Music,
-    category: "BGM",
-    items: [
-      { title: "BGM 약 100여곡 제공", desc: "상황별 맞춤 bgm" },
-      { title: "BGM 편집", desc: "원하시는 bgm 편집" },
-    ],
-  },
-];
 
 export default function PackageSection() {
   const anim1 = useScrollAnimation();
@@ -83,67 +54,10 @@ export default function PackageSection() {
           </a>
         </div>
 
-        {/* Divider */}
-        <div className="max-w-3xl mx-auto my-16 sm:my-20 flex items-center gap-6">
-          <div className="flex-1 h-px bg-[#ddd]" />
-          <span className="text-[#d4b896] text-xs tracking-[0.3em] uppercase" style={{ fontFamily: "'Cormorant Garamond', serif" }}>PROVIDED MATERIALS</span>
-          <div className="flex-1 h-px bg-[#ddd]" />
-        </div>
-
-        {/* Materials - Grouped Cards */}
         <div ref={anim2.ref} className={`fade-up ${anim2.isVisible ? "visible" : ""}`}>
           <div className="max-w-4xl mx-auto">
-            <h3
-              className="text-[#1a1a1a] text-lg sm:text-xl mb-10 text-center"
-              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 600 }}
-            >
-              예약 시 <span className="text-[#5BB5A2]">제공 자료</span> 안내
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {MATERIAL_GROUPS.map((group, gi) => {
-                const Icon = group.icon;
-                return (
-                  <div
-                    key={gi}
-                    className="bg-white border border-[#e8e4df] rounded-sm p-6 sm:p-7 hover:border-[#5BB5A2]/30 hover:shadow-md transition-all duration-500"
-                  >
-                    {/* Category Header */}
-                    <div className="flex items-center gap-3 mb-5 pb-4 border-b border-[#f0ece7]">
-                      <div className="w-9 h-9 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center flex-shrink-0">
-                        <Icon size={16} className="text-[#5BB5A2]" />
-                      </div>
-                      <span
-                        className="text-[#1a1a1a] text-base font-semibold"
-                        style={{ fontFamily: "'Noto Serif KR', serif" }}
-                      >
-                        {group.category}
-                      </span>
-                    </div>
-
-                    {/* Items */}
-                    <div className="space-y-3.5">
-                      {group.items.map((item, ii) => (
-                        <div key={ii} className="flex items-start gap-2.5">
-                          <span className="flex-shrink-0 w-4 h-4 rounded-full bg-[#5BB5A2] flex items-center justify-center mt-0.5">
-                            <svg width="8" height="6" viewBox="0 0 10 8" fill="none">
-                              <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                          </span>
-                          <div>
-                            <p className="text-[#1a1a1a] text-sm font-medium leading-snug">{item.title}</p>
-                            <p className="text-[#999] text-xs mt-0.5">{item.desc}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
             {/* 실시간 문의하기 버튼 */}
-            <div className="text-center mt-12">
+            <div className="text-center mt-16">
               <a
                 href="https://pf.kakao.com/_wxovaM/chat"
                 target="_blank"

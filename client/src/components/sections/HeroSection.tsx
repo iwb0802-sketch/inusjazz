@@ -130,7 +130,7 @@ export default function HeroSection() {
           </span>
           <span className="hidden sm:inline w-8 h-px" style={{ background: "rgba(212,184,150,0.4)" }} />
           <span className="flex items-baseline gap-1">
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, fontSize: "clamp(1.35rem,4.5vw,1.9rem)", color: "#d4b896", lineHeight: 1 }}>224</span>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, fontSize: "clamp(1.35rem,4.5vw,1.9rem)", color: "#d4b896", lineHeight: 1 }}>223</span>
             <span style={{ color: "#5BB5A2", fontWeight: 700, fontSize: "0.95rem" }}>+</span>
             <span className="text-xs sm:text-sm ml-1 whitespace-nowrap" style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'Noto Sans KR', sans-serif" }}>
               진행 웨딩홀 · 호텔
@@ -144,7 +144,7 @@ export default function HeroSection() {
           <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none" style={{ background: "linear-gradient(to left, rgba(8,8,8,0.95), transparent)" }} />
           <style>{`
             @keyframes hero-venue-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-            .hero-venue-track { display: flex; width: max-content; animation: hero-venue-marquee 180s linear infinite; }
+            .hero-venue-track { display: flex; width: max-content; animation: hero-venue-marquee 420s linear infinite; }
             .hero-venue-track:hover { animation-play-state: paused; }
             @media (prefers-reduced-motion: reduce) { .hero-venue-track { animation: none; } }
           `}</style>

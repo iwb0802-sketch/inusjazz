@@ -41,11 +41,11 @@ export default function Home() {
       {/* 숨은 강자 — 사회자 카드 직후에 배치 (맥락 연결) */}
       <HiddenGemsSection />
       <VideoGuideSection />
+      {/* 사회자 확인 직후 가격 → 이벤트로 가격 저항 완화 → 패키지 업셀 */}
+      <PricingSection />
+      <EventSection />
       <PackageSection />
       <ProcessSection />
-      <PricingSection />
-      {/* 이벤트 총정리 → 그 뒤에 바로가기 6종 */}
-      <EventSection />
       <QuickLinksSection />
       <QnaSection />
       <ServiceSection />

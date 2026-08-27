@@ -36,14 +36,14 @@ export default function Home() {
       <IntroSection />
       <ReviewSection />
       <LiveBookingSection />
-      <PackageSection />
-      <ProcessSection />
       {/* 순서: 사회자 이름 노출 전에 VOTE ON VOICE 블라인드 투표 유도 */}
       <VoteOnVoiceSection />
       <McSection />
       {/* 숨은 강자 — 사회자 카드 직후에 배치 (맥락 연결) */}
       <HiddenGemsSection />
       <VideoGuideSection />
+      <PackageSection />
+      <ProcessSection />
       <BookingSection />
       <PricingSection />
       {/* 이벤트 총정리 → 그 뒤에 바로가기 6종 */}

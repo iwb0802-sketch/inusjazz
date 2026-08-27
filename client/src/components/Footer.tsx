@@ -37,6 +37,21 @@ export default function Footer() {
                   {link.label}
                 </a>
               ))}
+              {[
+                { label: "예약 안내", href: "https://blog.naver.com/inusmusics/223023961320" },
+                { label: "진행 이력", href: "https://blog.naver.com/inusmusics/221231802647" },
+                { label: "주말 예약현황", href: "/weekend-performance" },
+              ].map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-white/40 text-sm hover:text-[#5BB5A2] transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
           </div>
 

@@ -18,7 +18,6 @@ import ReviewSection from "@/components/sections/ReviewSection";
 import QnaSection from "@/components/sections/QnaSection";
 import ServiceSection from "@/components/sections/ServiceSection";
 import EventSection from "@/components/sections/EventSection";
-import QuickLinksSection from "@/components/sections/QuickLinksSection";
 import CtaSection from "@/components/sections/CtaSection";
 import Footer from "@/components/Footer";
 import FloatingButtons from "@/components/FloatingButtons";
@@ -46,7 +45,6 @@ export default function Home() {
       <EventSection />
       <PackageSection />
       <ProcessSection />
-      <QuickLinksSection />
       <QnaSection />
       <ServiceSection />
       <CtaSection />

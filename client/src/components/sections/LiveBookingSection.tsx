@@ -41,7 +41,7 @@ const DEPOSITS: Deposit[] = [
   { name: "임*소", date: "12월 6일 예식", amount: "200,000원" },
 ];
 
-const BOOKING_STATUS_URL = "http://inusmusics.dothome.co.kr/xe/board_nOmW18/";
+const BOOKING_STATUS_URL = "https://www.inusmc.co.kr/weekend-performance";
 
 function DepositCard({ d }: { d: Deposit }) {
   return (

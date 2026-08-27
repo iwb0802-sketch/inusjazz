@@ -1,7 +1,7 @@
 /**
- * PricingSection - 사회자 가격표 + Included Service
+ * PricingSection - 사회자 가격표 + 예식 당일 안심 시스템
  * Design: Light background, two-column pricing cards + service icons grid
- * 지정 배정 vs 랜덤 배정 + 포함 서비스 안내
+ * 지정 배정 vs 랜덤 배정 (포함 서비스 항목은 EventSection으로 통합)
  */
 import { useState } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
@@ -11,13 +11,6 @@ import {
   Check,
   Shuffle,
   UserCheck,
-  Mic,
-  ClipboardList,
-  BookOpen,
-  Heart,
-  MessageSquareHeart,
-  Music,
-  Headphones,
   MapPin,
   ShieldCheck,
   FileText,
@@ -26,33 +19,6 @@ import {
   Award,
 } from "lucide-react";
 
-const serviceGroups = [
-  {
-    category: "진행 자료",
-    categoryIcon: FileText,
-    items: [
-      { icon: Mic, label: "식순 멘트지", sub: "제공" },
-      { icon: ClipboardList, label: "식순 체크지 & 사전 질문지", sub: "제공" },
-    ],
-  },
-  {
-    category: "서약 · 선언",
-    categoryIcon: Heart,
-    items: [
-      { icon: BookOpen, label: "혼인서약서 샘플", sub: "8종" },
-      { icon: BookOpen, label: "성혼선언문 샘플", sub: "8종" },
-      { icon: MessageSquareHeart, label: "덕담 샘플", sub: "6종" },
-    ],
-  },
-  {
-    category: "BGM",
-    categoryIcon: Music,
-    items: [
-      { icon: Music, label: "BGM 약 100곡", sub: "상황별 맞춤" },
-      { icon: Headphones, label: "맞춤형 BGM 편집", sub: "요청 시 지원" },
-    ],
-  },
-];
 
 export default function PricingSection() {
   const [showDiscount, setShowDiscount] = useState(false);
@@ -323,71 +289,10 @@ export default function PricingSection() {
           </p>
         </div>
 
-        {/* Included Service */}
-        <div ref={anim3.ref} className={`mt-20 sm:mt-28 fade-up ${anim3.isVisible ? "visible" : ""}`}>
-          {/* Divider */}
-          <div className="flex items-center justify-center mb-12">
-            <div className="h-px w-12 bg-[#d4b896]/40" />
-            <span className="mx-4 text-[#d4b896] text-lg">+</span>
-            <div className="h-px w-12 bg-[#d4b896]/40" />
-          </div>
-
-          {/* Title */}
-          <div className="text-center mb-12 sm:mb-16">
-            <Diamond size={28} className="text-[#d4b896] mx-auto mb-4" />
-            <h3
-              className="text-[#1a1a1a] text-xl sm:text-2xl md:text-3xl tracking-wider"
-              style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
-            >
-              [ Included Service ]
-            </h3>
-          </div>
-
-          {/* Service Groups - 3 Column Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
-            {serviceGroups.map((group, gi) => {
-              const CatIcon = group.categoryIcon;
-              return (
-                <div
-                  key={gi}
-                  className="bg-white border border-[#e8e4df] rounded-sm p-6 hover:border-[#d4b896]/50 hover:shadow-md transition-all duration-400"
-                >
-                  {/* Category Header */}
-                  <div className="flex items-center gap-3 mb-5 pb-4 border-b border-[#f0ece7]">
-                    <div className="w-9 h-9 rounded-full bg-[#d4b896]/10 flex items-center justify-center flex-shrink-0">
-                      <CatIcon size={16} className="text-[#d4b896]" />
-                    </div>
-                    <span
-                      className="text-[#1a1a1a] text-base font-semibold"
-                      style={{ fontFamily: "'Noto Serif KR', serif" }}
-                    >
-                      {group.category}
-                    </span>
-                  </div>
-                  {/* Items */}
-                  <div className="space-y-3">
-                    {group.items.map((item, ii) => {
-                      const ItemIcon = item.icon;
-                      return (
-                        <div key={ii} className="flex items-center gap-3 group/item">
-                          <div className="w-8 h-8 rounded-full bg-[#faf8f5] border border-[#d4b896]/20 flex items-center justify-center flex-shrink-0 group-hover/item:border-[#d4b896]/50 transition-colors duration-300">
-                            <ItemIcon size={14} className="text-[#d4b896]" strokeWidth={1.5} />
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-[#333] text-sm font-medium leading-snug">{item.label}</p>
-                            <p className="text-[#999] text-xs">{item.sub}</p>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
+        {/* 안내 문구 (Included Service 항목은 이벤트 섹션 '사회자 예약 시 혜택'으로 통합) */}
+        <div ref={anim3.ref} className={`mt-12 sm:mt-16 fade-up ${anim3.isVisible ? "visible" : ""}`}>
           {/* Notes */}
-          <div className="mt-12 sm:mt-14 space-y-3 max-w-3xl mx-auto">
+          <div className="space-y-3 max-w-3xl mx-auto">
             <p className="text-center text-[#777] text-xs sm:text-sm break-keep">
               ※ 랜덤 배정 / 지정 배정 모두 명시된 사항을 제외한 모든 혜택은 동일하게 제공됩니다.
             </p>

@@ -95,7 +95,7 @@ export default function QuickLinksSection() {
 
           {/* 이너스 예약현황 */}
           <a
-            href="http://inusmusics.dothome.co.kr/xe/board_nOmW18/"
+            href="https://www.inusmc.co.kr/weekend-performance"
             target="_blank"
             rel="noopener noreferrer"
             className="group bg-white border border-[#e8e4df] rounded-sm p-4 sm:p-6 text-center hover:border-[#5BB5A2]/40 hover:shadow-md transition-all duration-300"

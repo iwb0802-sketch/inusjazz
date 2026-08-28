@@ -26,7 +26,7 @@ const KAKAO_LINK = "https://pf.kakao.com/_wxovaM/chat";
 const AUDIO_TOOL =
   "https://www.inusmusic.com/audio?utm_source=home&utm_medium=freetool&utm_campaign=audio_open";
 
-// 혜택 카테고리 (총 15가지 · 25만원 상당)
+// 혜택 카테고리 (총 15가지 · 20만원 상당)
 const BENEFIT_GROUPS = [
   {
     icon: Smartphone,
@@ -34,7 +34,7 @@ const BENEFIT_GROUPS = [
     title: "청첩장 · 음원",
     color: "#c09a7e",
     items: [
-      { t: "모바일 청첩장 무료 제작", d: "예약 고객 한정 · 공유 권한 부여 (무한 수정)", w: "6만원 상당" },
+      { t: "모바일 청첩장 무료 제작", d: "예약 고객 한정 · 공유 권한 부여 (무한 수정)", w: "1만 5천원 상당" },
       {
         t: "셀프 음원 편집기 무료 이용",
         d: "입장곡 · 행진곡을 직접 자르고 이어붙이는 전용 도구",
@@ -160,7 +160,7 @@ export default function EventSection() {
           >
             <Gift size={14} className="text-[#3f9d8a] flex-shrink-0" />
             <span className="text-[#2f8b78] text-[12.5px] sm:text-[14px] font-bold break-keep whitespace-nowrap">
-              총 15가지 · 25만원 상당 무료 제공
+              총 15가지 · 20만원 상당 무료 제공
             </span>
           </div>
 

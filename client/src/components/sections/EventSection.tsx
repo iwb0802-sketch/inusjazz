@@ -264,19 +264,7 @@ export default function EventSection() {
                       <div className="flex items-start gap-2.5">
                         <Check size={15} className="text-[#5BB5A2] flex-shrink-0 mt-[3px]" />
                         <div className="min-w-0 flex-1">
-                          <div className="flex items-start justify-between gap-2">
-                            <p className="text-[#1a1a1a] text-[13px] sm:text-sm font-semibold break-keep">{it.t}</p>
-                            <span
-                              className="flex-shrink-0 text-[10.5px] font-bold px-1.5 py-0.5 rounded whitespace-nowrap"
-                              style={
-                                it.w === "포함"
-                                  ? { background: "#f2f1ee", color: "#999" }
-                                  : { background: "rgba(192,154,126,0.14)", color: "#a87b57" }
-                              }
-                            >
-                              {it.w}
-                            </span>
-                          </div>
+                          <p className="text-[#1a1a1a] text-[13px] sm:text-sm font-semibold break-keep">{it.t}</p>
                           <p className="text-[#777] text-[11.5px] sm:text-xs mt-1 leading-relaxed break-keep">{it.d}</p>
 
                           {"href" in it && it.href && (

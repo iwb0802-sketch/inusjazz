@@ -21,7 +21,7 @@ import {
 
 
 export default function PricingSection() {
-  const [showDiscount, setShowDiscount] = useState(false);
+  const [showDiscount, setShowDiscount] = useState(true);
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
   const anim3 = useScrollAnimation();
@@ -76,8 +76,16 @@ export default function PricingSection() {
                   <button
                     type="button"
                     onClick={() => setShowDiscount((v) => !v)}
-                    className="inline-flex w-full items-center justify-center gap-1.5 mt-4 px-5 py-3.5 rounded-full text-[13.5px] sm:text-[15px] font-bold tracking-wide text-white transition-all duration-300 hover:brightness-110 active:scale-[0.98]"
-                    style={{ background: "#1a1a1a", boxShadow: "0 4px 16px rgba(26,26,26,0.22)" }}
+                    className={`inline-flex w-full items-center justify-center gap-1.5 mt-4 rounded-full tracking-wide transition-all duration-300 active:scale-[0.98] ${
+                      showDiscount
+                        ? "px-4 py-2 text-[12px] font-semibold text-[#9a9a9a] hover:text-[#555]"
+                        : "px-5 py-3.5 text-[13.5px] sm:text-[15px] font-bold text-white hover:brightness-110"
+                    }`}
+                    style={
+                      showDiscount
+                        ? { background: "transparent" }
+                        : { background: "#1a1a1a", boxShadow: "0 4px 16px rgba(26,26,26,0.22)" }
+                    }
                   >
                     {showDiscount ? "할인가 닫기" : (
                       <>
@@ -197,8 +205,16 @@ export default function PricingSection() {
                   <button
                     type="button"
                     onClick={() => setShowDiscount((v) => !v)}
-                    className="inline-flex w-full items-center justify-center gap-1.5 mt-4 px-5 py-3.5 rounded-full text-[13.5px] sm:text-[15px] font-bold tracking-wide text-white transition-all duration-300 hover:brightness-110 active:scale-[0.98]"
-                    style={{ background: "#1a1a1a", boxShadow: "0 4px 16px rgba(26,26,26,0.22)" }}
+                    className={`inline-flex w-full items-center justify-center gap-1.5 mt-4 rounded-full tracking-wide transition-all duration-300 active:scale-[0.98] ${
+                      showDiscount
+                        ? "px-4 py-2 text-[12px] font-semibold text-[#9a9a9a] hover:text-[#555]"
+                        : "px-5 py-3.5 text-[13.5px] sm:text-[15px] font-bold text-white hover:brightness-110"
+                    }`}
+                    style={
+                      showDiscount
+                        ? { background: "transparent" }
+                        : { background: "#1a1a1a", boxShadow: "0 4px 16px rgba(26,26,26,0.22)" }
+                    }
                   >
                     {showDiscount ? "할인가 닫기" : (
                       <>

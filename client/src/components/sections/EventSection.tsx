@@ -62,7 +62,7 @@ const EXTRA = [
     icon: Sparkles,
     label: "HIDDEN GEMS",
     title: "1만원 추가 할인",
-    desc: "아직 덜 알려진 실력자 5인 예약 시",
+    desc: "아직 덜 알려진 실력자 6인 예약 시",
     href: "/#hidden-gems",
     color: "#5BB5A2",
   },

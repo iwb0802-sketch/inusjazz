@@ -64,6 +64,18 @@ const HIDDEN_GEMS = [
     audioFile: "/audio/mc-taewoo.mp3",
     url: "https://blog.naver.com/inusmusics/224364756942",
   },
+  {
+    name: "김한솔",
+    tier: "STANDARD",
+    badge: "행사·파티 전문 MC 출신",
+    career: "진행 300회 이상",
+    highlight: "부드럽고 편안한 진행과 센스있는 멘트로 분위기를 리드합니다.",
+    fit: "화기애애하고 편안한 분위기",
+    image: "/images/mc-kimhansol.jpg",
+    audioFile: "",
+    videoUrl: "https://youtu.be/cBBdRueVua8",
+    url: "https://blog.naver.com/inusmusics/224393408893",
+  },
 ];
 
 const tierStyle = (tier: string) =>
@@ -131,7 +143,7 @@ export default function HiddenGemsSection() {
               </span>
               <br className="sm:hidden" />{" "}
               <span className="whitespace-nowrap">
-                <span className="text-[#5BB5A2]">실력자 5인</span>을 따로 소개합니다.
+                <span className="text-[#5BB5A2]">실력자 6인</span>을 따로 소개합니다.
               </span>
             </h3>
 
@@ -216,6 +228,7 @@ export default function HiddenGemsSection() {
 
                   {/* 액션 */}
                   <div className="mt-auto flex items-center gap-1.5">
+                    {mc.audioFile ? (
                     <button
                       type="button"
                       onClick={() => togglePlay(mc.name, mc.audioFile)}
@@ -231,6 +244,19 @@ export default function HiddenGemsSection() {
                       <span className="whitespace-nowrap">{playing === mc.name ? "재생 중" : "목소리 듣기"}</span>
                       {playing === mc.name && <Volume2 size={12} className="animate-pulse" />}
                     </button>
+                    ) : (
+                      <a
+                        href={(mc as any).videoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${mc.name} 사회자 진행 영상 보기`}
+                        className="flex items-center justify-center gap-1 flex-1 basis-0 min-w-0 rounded-md py-[9px] sm:py-[10px] text-[11px] sm:text-[12px] font-semibold transition-all duration-300"
+                        style={{ background: "rgba(91,181,162,0.10)", color: "#7fd3c1", border: "1px solid rgba(91,181,162,0.4)" }}
+                      >
+                        <Play size={12} />
+                        <span className="whitespace-nowrap">영상 보기</span>
+                      </a>
+                    )}
 
                     <a
                       href={mc.url}

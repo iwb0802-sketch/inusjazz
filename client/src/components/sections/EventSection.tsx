@@ -17,6 +17,7 @@ import {
   ShieldCheck,
   MapPin,
   Ticket,
+  Coins,
   ExternalLink,
   ArrowRight,
 } from "lucide-react";
@@ -127,6 +128,15 @@ const DISCOUNTS = [
     href: "/#hidden-gems",
     external: false,
     color: "#5BB5A2",
+  },
+  {
+    icon: Coins,
+    label: "NAVER POINT",
+    title: "네이버 포인트 지급",
+    desc: "예식 후 네이버 리뷰 작성 시",
+    href: KAKAO_LINK,
+    external: true,
+    color: "#c09a7e",
   },
 ];
 
@@ -347,7 +357,7 @@ export default function EventSection() {
               className="text-[#1a1a1a] text-[17px] sm:text-xl break-keep"
               style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
             >
-              중복 적용되는 할인 <span className="text-[#c09a7e]">4가지 · 최대 5만원</span>
+              중복 적용되는 혜택 <span className="text-[#c09a7e]">5가지 · 할인 최대 5만원 + 포인트</span>
             </h3>
           </div>
 

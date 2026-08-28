@@ -152,16 +152,17 @@ export default function EventSection() {
         {/* Header */}
         <div ref={anim1.ref} className={`fade-up ${anim1.isVisible ? "visible" : ""} text-center mb-10 sm:mb-14`}>
           <span
-            className="text-[#d4b896] text-xs sm:text-sm tracking-[0.3em] uppercase"
+            className="text-[#a8814f] text-[11px] sm:text-[13px] font-semibold tracking-[0.22em] uppercase"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
             SPECIAL BENEFITS
           </span>
           <h2
-            className="mt-3 text-[#1a1a1a] text-[22px] min-[375px]:text-2xl sm:text-3xl md:text-4xl break-keep"
+            className="mt-3 text-[#1a1a1a] text-[23px] min-[375px]:text-[26px] sm:text-3xl md:text-4xl break-keep leading-[1.35]"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            이너스뮤직 <span className="text-[#5BB5A2]">특별 이벤트</span>
+            <span className="whitespace-nowrap">이너스뮤직</span>{" "}
+            <span className="text-[#2f8b78] whitespace-nowrap">특별 이벤트</span>
           </h2>
 
           <div
@@ -174,10 +175,12 @@ export default function EventSection() {
             </span>
           </div>
 
-          <p className="mt-4 text-[#666] text-[13px] sm:text-base leading-relaxed break-keep max-w-[20rem] sm:max-w-none mx-auto">
-            <span className="whitespace-nowrap">사회자 예약만 하셔도 아래 혜택이 전부 따라오고,</span>
-            <br className="sm:hidden" />{" "}
-            <span className="whitespace-nowrap">여기에 최대 5만원까지 추가 할인됩니다.</span>
+          <p className="mt-4 text-[#5a5a5a] text-[13.5px] sm:text-base leading-[1.75] break-keep max-w-[17.5rem] min-[375px]:max-w-[20rem] sm:max-w-none mx-auto">
+            <span className="whitespace-nowrap">사회자 예약만 하셔도</span>{" "}
+            <span className="whitespace-nowrap">아래 혜택이 전부 따라오고,</span>
+            <br className="sm:hidden" />
+            <span className="whitespace-nowrap">여기에 최대 5만원까지</span>{" "}
+            <span className="whitespace-nowrap">추가 할인됩니다.</span>
           </p>
         </div>
 

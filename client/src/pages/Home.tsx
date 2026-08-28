@@ -17,6 +17,7 @@ import VideoGuideSection from "@/components/sections/VideoGuideSection";
 import ReviewSection from "@/components/sections/ReviewSection";
 import QnaSection from "@/components/sections/QnaSection";
 import EventSection from "@/components/sections/EventSection";
+import SafetySection from "@/components/sections/SafetySection";
 import CtaSection from "@/components/sections/CtaSection";
 import Footer from "@/components/Footer";
 import FloatingButtons from "@/components/FloatingButtons";
@@ -42,6 +43,7 @@ export default function Home() {
       {/* 사회자 확인 직후 가격 → 이벤트로 가격 저항 완화 → 패키지 업셀 */}
       <PricingSection />
       <EventSection />
+      <SafetySection />
       <PackageSection />
       <ProcessSection />
       <QnaSection />

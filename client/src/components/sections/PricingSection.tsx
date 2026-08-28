@@ -1,5 +1,5 @@
 /**
- * PricingSection - 사회자 가격표 + 예식 당일 안심 시스템
+ * PricingSection - 사회자 가격표
  * Design: Light background, two-column pricing cards + service icons grid
  * 지정 배정 vs 랜덤 배정 (포함 서비스 항목은 EventSection으로 통합)
  */
@@ -12,11 +12,6 @@ import {
   Shuffle,
   UserCheck,
   MapPin,
-  ShieldCheck,
-  FileText,
-  Clock,
-  Users,
-  Award,
 } from "lucide-react";
 
 
@@ -25,7 +20,6 @@ export default function PricingSection() {
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
   const anim3 = useScrollAnimation();
-  const anim4 = useScrollAnimation();
 
   return (
     <section id="pricing" className="bg-[#f8f6f3] py-24 sm:py-32 lg:py-40">
@@ -325,115 +319,6 @@ export default function PricingSection() {
               <span>*서울 외 지역 출장비 별도</span>
             </div>
           </div>
-        </div>
-
-        {/* 예식 당일 안심 시스템 */}
-        <div ref={anim4.ref} className={`mt-20 sm:mt-28 fade-up ${anim4.isVisible ? "visible" : ""}`}>
-          {/* Divider */}
-          <div className="flex items-center justify-center mb-10">
-            <div className="h-px w-16 bg-[#d4b896]/40" />
-            <ShieldCheck size={24} className="mx-4 text-[#5BB5A2]" />
-            <div className="h-px w-16 bg-[#d4b896]/40" />
-          </div>
-
-          {/* Title */}
-          <div className="text-center mb-4">
-            <h3
-              className="text-[#1a1a1a] text-xl sm:text-2xl md:text-3xl"
-              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-            >
-              예식 당일, <span className="text-[#2f8b78]">가장 걱정되는 부분</span>
-            </h3>
-          </div>
-          <p className="text-center text-[#777] text-sm sm:text-base mb-3 break-keep">
-            혹시 모를 변수나
-          </p>
-          <p className="text-center text-[#777] text-sm sm:text-base mb-10 break-keep">
-            당일 진행에 대한 불안감
-          </p>
-
-          {/* Dots separator */}
-          <div className="flex items-center justify-center gap-1.5 mb-10">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#d4b896]"></span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#d4b896]"></span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#d4b896]"></span>
-          </div>
-
-          {/* Sub heading */}
-          <div className="text-center mb-12 sm:mb-14">
-            <h4
-              className="text-[#1a1a1a] text-lg sm:text-xl md:text-2xl break-keep"
-              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-            >
-              이너스뮤직은 <span className="text-[#2f8b78] underline underline-offset-4 decoration-[#2f8b78]/40 decoration-2">시스템</span>으로 대비합니다.
-            </h4>
-          </div>
-
-          {/* 3 Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 max-w-4xl mx-auto mb-10">
-            {/* Card 1 */}
-            <div className="bg-white border border-[#e8e4df] rounded-sm p-6 sm:p-8 text-center hover:shadow-lg hover:border-[#5BB5A2]/30 transition-all duration-500">
-              <div className="w-16 h-16 rounded-full border-2 border-[#d4b896]/30 flex items-center justify-center mx-auto mb-4">
-                <FileText size={28} className="text-[#d4b896]" strokeWidth={1.5} />
-              </div>
-              <div className="w-6 h-6 rounded-full bg-[#5BB5A2] flex items-center justify-center mx-auto mb-4">
-                <Check size={14} className="text-white" />
-              </div>
-              <p className="text-[#1a1a1a] text-base sm:text-lg font-semibold leading-relaxed break-keep">
-                전속 계약 진행으로
-              </p>
-              <p className="text-[#1a1a1a] text-base sm:text-lg font-semibold leading-relaxed break-keep">
-                No-show 걱정 없음
-              </p>
-            </div>
-
-            {/* Card 2 */}
-            <div className="bg-white border border-[#e8e4df] rounded-sm p-6 sm:p-8 text-center hover:shadow-lg hover:border-[#5BB5A2]/30 transition-all duration-500">
-              <div className="w-16 h-16 rounded-full border-2 border-[#d4b896]/30 flex items-center justify-center mx-auto mb-4">
-                <Clock size={28} className="text-[#d4b896]" strokeWidth={1.5} />
-              </div>
-              <div className="w-6 h-6 rounded-full bg-[#5BB5A2] flex items-center justify-center mx-auto mb-4">
-                <Check size={14} className="text-white" />
-              </div>
-              <p className="text-[#1a1a1a] text-base sm:text-lg font-semibold leading-relaxed break-keep">
-                예식 2시간 전 / 1시간 전
-              </p>
-              <p className="text-[#1a1a1a] text-base sm:text-lg font-semibold leading-relaxed break-keep">
-                이중 체크
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="bg-white border border-[#e8e4df] rounded-sm p-6 sm:p-8 text-center hover:shadow-lg hover:border-[#5BB5A2]/30 transition-all duration-500">
-              <div className="w-16 h-16 rounded-full border-2 border-[#d4b896]/30 flex items-center justify-center mx-auto mb-4">
-                <Users size={28} className="text-[#d4b896]" strokeWidth={1.5} />
-              </div>
-              <div className="w-6 h-6 rounded-full bg-[#5BB5A2] flex items-center justify-center mx-auto mb-4">
-                <Check size={14} className="text-white" />
-              </div>
-              <p className="text-[#1a1a1a] text-base sm:text-lg font-semibold leading-relaxed break-keep">
-                예비 인력 시스템
-              </p>
-              <p className="text-[#1a1a1a] text-base sm:text-lg font-semibold leading-relaxed break-keep">
-                상시 대기
-              </p>
-            </div>
-          </div>
-
-          {/* Bottom conclusion */}
-          <div className="max-w-lg mx-auto bg-white border border-[#d4b896]/30 rounded-sm p-6 sm:p-8 text-center">
-            <Award size={20} className="text-[#d4b896] mx-auto mb-3" />
-            <p className="text-[#555] text-sm leading-relaxed break-keep">
-              마지막까지 안정적으로
-            </p>
-            <p className="text-[#1a1a1a] text-base sm:text-lg font-bold leading-relaxed break-keep" style={{ fontFamily: "'Noto Serif KR', serif" }}>
-              <span className="text-[#2f8b78]">완성되는 예식</span>을
-            </p>
-            <p className="text-[#555] text-sm leading-relaxed break-keep">
-              직접 경험하실 수 있습니다.
-            </p>
-          </div>
-
         </div>
       </div>
     </section>

@@ -76,12 +76,16 @@ export default function PricingSection() {
                   <button
                     type="button"
                     onClick={() => setShowDiscount((v) => !v)}
-                    className="inline-flex items-center gap-1.5 mt-4 px-5 py-2.5 rounded-full text-[13px] sm:text-sm font-bold tracking-wide text-white transition-all duration-300 hover:opacity-90"
-                    style={{ background: "#c09a7e", boxShadow: "0 2px 10px rgba(192,154,126,0.28)" }}
+                    className="inline-flex w-full items-center justify-center gap-1.5 mt-4 px-5 py-3.5 rounded-full text-[13.5px] sm:text-[15px] font-bold tracking-wide text-white transition-all duration-300 hover:brightness-110 active:scale-[0.98]"
+                    style={{ background: "#1a1a1a", boxShadow: "0 4px 16px rgba(26,26,26,0.22)" }}
                   >
-                    {showDiscount ? "할인가 닫기" : "할인가 보기"}
+                    {showDiscount ? "할인가 닫기" : (
+                      <>
+                        <span className="text-[#f0d9a8]">최대 4만원</span> 할인가 보기
+                      </>
+                    )}
                     <ChevronDown
-                      size={15}
+                      size={16}
                       className={`transition-transform duration-300 ${showDiscount ? "rotate-180" : ""}`}
                     />
                   </button>
@@ -193,12 +197,16 @@ export default function PricingSection() {
                   <button
                     type="button"
                     onClick={() => setShowDiscount((v) => !v)}
-                    className="inline-flex items-center gap-1.5 mt-4 px-4 py-2 rounded-full text-[11.5px] sm:text-xs font-semibold tracking-wide transition-all duration-300 hover:opacity-80"
-                    style={{ background: "rgba(212,184,150,0.12)", color: "#a08a6f", border: "1px solid rgba(212,184,150,0.4)" }}
+                    className="inline-flex w-full items-center justify-center gap-1.5 mt-4 px-5 py-3.5 rounded-full text-[13.5px] sm:text-[15px] font-bold tracking-wide text-white transition-all duration-300 hover:brightness-110 active:scale-[0.98]"
+                    style={{ background: "#1a1a1a", boxShadow: "0 4px 16px rgba(26,26,26,0.22)" }}
                   >
-                    {showDiscount ? "할인가 닫기" : "할인가 보기"}
+                    {showDiscount ? "할인가 닫기" : (
+                      <>
+                        <span className="text-[#f0d9a8]">최대 4만원</span> 할인가 보기
+                      </>
+                    )}
                     <ChevronDown
-                      size={13}
+                      size={16}
                       className={`transition-transform duration-300 ${showDiscount ? "rotate-180" : ""}`}
                     />
                   </button>

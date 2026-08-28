@@ -133,7 +133,7 @@ const DISCOUNTS = [
     icon: Coins,
     label: "NAVER POINT",
     title: "네이버 포인트 지급",
-    desc: "예식 후 네이버 리뷰 작성 시",
+    desc: "상담 후기 작성 시",
     href: KAKAO_LINK,
     external: true,
     color: "#c09a7e",

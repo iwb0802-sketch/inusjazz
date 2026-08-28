@@ -33,7 +33,7 @@ export default function PricingSection() {
         {/* Header */}
         <div ref={anim1.ref} className={`text-center mb-16 sm:mb-20 fade-up ${anim1.isVisible ? "visible" : ""}`}>
           <span
-            className="text-[#d4b896] text-xs sm:text-sm tracking-[0.3em] uppercase"
+            className="text-[#a8814f] text-[11px] sm:text-[13px] font-semibold tracking-[0.22em] uppercase"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
             WEDDING MC PRICING
@@ -42,7 +42,7 @@ export default function PricingSection() {
             className="mt-4 text-[#1a1a1a] text-2xl sm:text-3xl md:text-4xl"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            사회자 <span className="text-[#5BB5A2]">가격 안내</span>
+            사회자 <span className="text-[#2f8b78]">가격 안내</span>
           </h2>
         </div>
 
@@ -278,7 +278,7 @@ export default function PricingSection() {
             style={{ background: "#fff", border: "1px solid rgba(212,184,150,0.3)" }}
           >
             <p className="text-center text-[#1a1a1a] text-[13px] sm:text-sm font-bold mb-4 break-keep">
-              할인은 <span className="text-[#5BB5A2]">중복 적용</span>됩니다 · 최대 4만원
+              할인은 <span className="text-[#2f8b78]">중복 적용</span>됩니다 · 최대 4만원
             </p>
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {[
@@ -342,7 +342,7 @@ export default function PricingSection() {
               className="text-[#1a1a1a] text-xl sm:text-2xl md:text-3xl"
               style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
             >
-              예식 당일, <span className="text-[#5BB5A2]">가장 걱정되는 부분</span>
+              예식 당일, <span className="text-[#2f8b78]">가장 걱정되는 부분</span>
             </h3>
           </div>
           <p className="text-center text-[#777] text-sm sm:text-base mb-3 break-keep">
@@ -365,7 +365,7 @@ export default function PricingSection() {
               className="text-[#1a1a1a] text-lg sm:text-xl md:text-2xl break-keep"
               style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
             >
-              이너스뮤직은 <span className="text-[#5BB5A2] underline underline-offset-4 decoration-[#5BB5A2]/40 decoration-2">시스템</span>으로 대비합니다.
+              이너스뮤직은 <span className="text-[#2f8b78] underline underline-offset-4 decoration-[#2f8b78]/40 decoration-2">시스템</span>으로 대비합니다.
             </h4>
           </div>
 
@@ -427,7 +427,7 @@ export default function PricingSection() {
               마지막까지 안정적으로
             </p>
             <p className="text-[#1a1a1a] text-base sm:text-lg font-bold leading-relaxed break-keep" style={{ fontFamily: "'Noto Serif KR', serif" }}>
-              <span className="text-[#5BB5A2]">완성되는 예식</span>을
+              <span className="text-[#2f8b78]">완성되는 예식</span>을
             </p>
             <p className="text-[#555] text-sm leading-relaxed break-keep">
               직접 경험하실 수 있습니다.

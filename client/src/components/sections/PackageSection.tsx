@@ -22,7 +22,7 @@ export default function PackageSection() {
         {/* Header */}
         <div ref={anim1.ref} className={`text-center mb-16 fade-up ${anim1.isVisible ? "visible" : ""}`}>
           <span
-            className="text-[#d4b896] text-xs sm:text-sm tracking-[0.3em] uppercase"
+            className="text-[#a8814f] text-[11px] sm:text-[13px] font-semibold tracking-[0.22em] uppercase"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
             WEDDING PACKAGE

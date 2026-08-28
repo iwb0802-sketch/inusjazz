@@ -232,7 +232,7 @@ export default function QnaSection() {
         {/* Header */}
         <div ref={anim1.ref} className={`text-center mb-16 sm:mb-20 fade-up ${anim1.isVisible ? "visible" : ""}`}>
           <span
-            className="text-[#d4b896] text-xs sm:text-sm tracking-[0.3em] uppercase"
+            className="text-[#a8814f] text-[11px] sm:text-[13px] font-semibold tracking-[0.22em] uppercase"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
             Q & A
@@ -241,7 +241,7 @@ export default function QnaSection() {
             className="mt-4 text-[#1a1a1a] text-2xl sm:text-3xl md:text-4xl"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            자주 묻는 <span className="text-[#5BB5A2]">질문</span>
+            자주 묻는 <span className="text-[#2f8b78]">질문</span>
           </h2>
         </div>
 

@@ -5,6 +5,7 @@
  */
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/sections/HeroSection";
+import AssuranceSection from "@/components/sections/AssuranceSection";
 import IntroSection from "@/components/sections/IntroSection";
 import LiveBookingSection from "@/components/sections/LiveBookingSection";
 import PackageSection from "@/components/sections/PackageSection";
@@ -31,6 +32,8 @@ export default function Home() {
       <InusCardPopup />
       <Navbar />
       <HeroSection />
+      {/* 히어로 직후 신뢰 증거(환불·사회자 공개·예약현황) 선노출 */}
+      <AssuranceSection />
       <IntroSection />
       <ReviewSection />
       <LiveBookingSection />

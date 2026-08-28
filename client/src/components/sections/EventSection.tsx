@@ -13,6 +13,9 @@ import {
   Crown,
   Music4,
   Smartphone,
+  PhoneCall,
+  Headset,
+  ReceiptText,
   ArrowRight,
 } from "lucide-react";
 
@@ -35,11 +38,22 @@ const COMMON = [
     title: "모바일청첩장 무료 제공",
     desc: "예약 고객에 한해 무료 제작 및\n공유 권한 부여 (무한 수정)",
   },
+  {
+    icon: Headset,
+    title: "대표 · 전문 코디네이터 전담 관리",
+    desc: "예약부터 예식 당일까지\n담당자가 끝까지 함께합니다",
+  },
+  {
+    icon: ReceiptText,
+    title: "세금계산서 · 현금영수증 발행",
+    desc: "요청 시 정식 증빙 발행",
+  },
 ];
 
 // 사회자 예약 시 혜택
 const MC_BENEFITS = [
   "두 사람의 이야기를 담은 맞춤형 대본 제작",
+  "지정 사회자와 사전 통화 & 식순 협의 진행",
   "식순 멘트지 · 식순 체크지 · 사전 질문지 제공",
   "예식 분위기에 맞는 식순별 BGM 100여 곡 제공",
   "요청 시 맞춤형 BGM 편집 지원",

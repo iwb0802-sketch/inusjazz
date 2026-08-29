@@ -42,8 +42,9 @@ export default function Home() {
       {/* 사회자 확인 직후 가격 → 이벤트로 가격 저항 완화 → 패키지 업셀 */}
       <PricingSection />
       <EventSection />
-      <PackageSection />
+      {/* 가격·혜택 직후 진행 방식으로 불안 해소 → 아웃링크가 많은 패키지는 뒤로 */}
       <ProcessSection />
+      <PackageSection />
       <QnaSection />
       <CtaSection />
       <Footer />

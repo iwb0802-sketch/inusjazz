@@ -99,7 +99,7 @@ const DISCOUNTS = [
     icon: Sparkles,
     label: "REVIEW",
     title: "2만원 할인",
-    desc: "숨고 상담 후기 작성 시",
+    desc: "네이버 혹은 숨고 상담 후기 작성 시",
     href: EVENT_LINK,
     external: true,
     color: "#c09a7e",

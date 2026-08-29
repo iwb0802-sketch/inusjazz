@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Crown } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { VENUE_NAMES } from "@/data/venues";
 
 const HERO_BG = "/images/hero-v2-option2.webp";
@@ -78,35 +78,82 @@ export default function HeroSection() {
           웨딩 전문 브랜드
         </p>
 
+        {/* 누적 후기 엠블럼 — 골드 헤어라인, CTA 직전 배치 */}
         <div
-          className={`mt-10 flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-900 ${
+          className={`mt-8 flex items-center justify-center gap-3 sm:gap-5 transition-all duration-1000 delay-[800ms] ${
             loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
+          <span
+            className="h-px w-7 sm:w-16 shrink-0"
+            style={{ background: "linear-gradient(to right, rgba(212,184,150,0), rgba(212,184,150,0.65))" }}
+          />
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="flex items-center gap-[3px]">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <Star key={i} size={11} strokeWidth={0} style={{ fill: "#d4b896" }} />
+              ))}
+            </span>
+            <span className="flex items-baseline gap-1 whitespace-nowrap">
+              <span
+                className="text-[11px] sm:text-sm"
+                style={{ color: "rgba(255,255,255,0.75)", fontFamily: "'Noto Sans KR', sans-serif" }}
+              >
+                누적 리뷰
+              </span>
+              <span
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 700,
+                  fontSize: "clamp(1.65rem,6vw,2.4rem)",
+                  color: "#d4b896",
+                  lineHeight: 1,
+                  letterSpacing: "0.01em",
+                }}
+              >
+                2,000
+              </span>
+              <span
+                className="text-[11px] sm:text-sm"
+                style={{ color: "rgba(255,255,255,0.75)", fontFamily: "'Noto Sans KR', sans-serif" }}
+              >
+                개
+              </span>
+              <span style={{ color: "#5BB5A2", fontWeight: 700, fontSize: "1.05rem" }}>+</span>
+            </span>
+            <span
+              className="text-[10px] sm:text-xs tracking-[0.22em] whitespace-nowrap"
+              style={{ color: "rgba(212,184,150,0.9)", fontFamily: "'Noto Sans KR', sans-serif" }}
+            >
+              업계 최다 수준
+            </span>
+          </div>
+          <span
+            className="h-px w-7 sm:w-16 shrink-0"
+            style={{ background: "linear-gradient(to left, rgba(212,184,150,0), rgba(212,184,150,0.65))" }}
+          />
+        </div>
+
+        <div
+          className={`mt-8 w-full max-w-[340px] sm:max-w-none flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 sm:gap-4 transition-all duration-1000 delay-900 ${
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          {/* 주 CTA — 단독 강조 */}
           <button
             onClick={() => {
               const el = document.getElementById('mc');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="px-8 py-4 bg-[#5BB5A2] text-white text-sm sm:text-base tracking-wider hover:bg-[#4da393] transition-all duration-300 rounded-sm"
+            className="group w-full sm:w-auto flex items-center justify-center gap-2 px-8 sm:px-10 py-4 sm:py-5 bg-[#5BB5A2] text-white text-base sm:text-lg font-bold tracking-wider hover:bg-[#4da393] transition-all duration-300 rounded-sm"
+            style={{ boxShadow: "0 12px 34px -10px rgba(91,181,162,0.75)", fontFamily: "'Noto Sans KR', sans-serif" }}
           >
             사회자 선택하기
-          </button>
-          <button
-            onClick={() => {
-              const el = document.getElementById('vote-on-voice');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-            aria-label="VOTE ON VOICE 이동"
-            className="flex items-center justify-center gap-2 px-6 py-4 border rounded-sm text-sm sm:text-base tracking-wider transition-all duration-300"
-            style={{ borderColor: "rgba(212,184,150,0.5)", color: "#d4b896", background: "rgba(212,184,150,0.08)" }}
-          >
-            <Crown size={16} />
-            V.O.V
+            <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
           </button>
           <a
             href="#intro"
-            className="px-8 py-4 border border-white/30 text-white text-sm sm:text-base tracking-wider hover:bg-white/10 transition-all duration-300 rounded-sm"
+            className="w-full sm:w-auto text-center px-8 py-3 sm:py-4 border border-white/25 text-white/80 text-sm tracking-wider hover:bg-white/10 hover:text-white transition-all duration-300 rounded-sm"
           >
             자세히 알아보기
           </a>

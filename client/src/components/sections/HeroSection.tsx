@@ -89,14 +89,14 @@ export default function HeroSection() {
             style={{ background: "linear-gradient(to right, rgba(212,184,150,0), rgba(212,184,150,0.65))" }}
           />
           <div className="flex flex-col items-center gap-1.5">
-            <span className="flex items-center gap-[3px]">
+            <span className="flex items-center gap-1">
               {[0, 1, 2, 3, 4].map((i) => (
-                <Star key={i} size={11} strokeWidth={0} style={{ fill: "#d4b896" }} />
+                <Star key={i} size={15} strokeWidth={0} style={{ fill: "#d4b896" }} />
               ))}
             </span>
             <span className="flex items-baseline gap-1 whitespace-nowrap">
               <span
-                className="text-[11px] sm:text-sm"
+                className="text-[15px] sm:text-lg"
                 style={{ color: "rgba(255,255,255,0.75)", fontFamily: "'Noto Sans KR', sans-serif" }}
               >
                 누적 리뷰
@@ -105,7 +105,7 @@ export default function HeroSection() {
                 style={{
                   fontFamily: "'Cormorant Garamond', serif",
                   fontWeight: 700,
-                  fontSize: "clamp(1.65rem,6vw,2.4rem)",
+                  fontSize: "clamp(2.5rem,9.5vw,3.6rem)",
                   color: "#d4b896",
                   lineHeight: 1,
                   letterSpacing: "0.01em",
@@ -114,15 +114,15 @@ export default function HeroSection() {
                 2,000
               </span>
               <span
-                className="text-[11px] sm:text-sm"
+                className="text-[15px] sm:text-lg"
                 style={{ color: "rgba(255,255,255,0.75)", fontFamily: "'Noto Sans KR', sans-serif" }}
               >
                 개
               </span>
-              <span style={{ color: "#5BB5A2", fontWeight: 700, fontSize: "1.05rem" }}>+</span>
+              <span style={{ color: "#5BB5A2", fontWeight: 700, fontSize: "1.5rem" }}>+</span>
             </span>
             <span
-              className="text-[10px] sm:text-xs tracking-[0.22em] whitespace-nowrap"
+              className="text-[13px] sm:text-base tracking-[0.22em] whitespace-nowrap"
               style={{ color: "rgba(212,184,150,0.9)", fontFamily: "'Noto Sans KR', sans-serif" }}
             >
               업계 최다 수준

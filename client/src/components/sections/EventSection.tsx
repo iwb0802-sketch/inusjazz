@@ -182,7 +182,7 @@ export default function EventSection() {
             <span className="whitespace-nowrap">사회자 예약만 하셔도</span>{" "}
             <span className="whitespace-nowrap">아래 혜택이 전부 따라오고,</span>
             <br className="sm:hidden" />
-            <span className="whitespace-nowrap">여기에 최대 5만원까지</span>{" "}
+            <span className="whitespace-nowrap">여기에 최대 4만원까지</span>{" "}
             <span className="whitespace-nowrap">추가 할인됩니다.</span>
           </p>
         </div>
@@ -339,7 +339,7 @@ export default function EventSection() {
                     { n: "사회 + 축가", p: "260,000원" },
                     { n: "피아노 3중주 + 축가 + 주례없는 사회", p: "480,000원" },
                     { n: "재즈 3중주 + 축가 + 주례없는 사회", p: "520,000원" },
-                    { n: "뮤지컬 2인 + 주례없는 사회", p: "450,000원부터" },
+                    { n: "뮤지컬 2인(축가 선택 가능) + 주례없는 사회", p: "450,000원부터" },
                   ].map((r, i) => (
                     <div
                       key={r.n}
@@ -400,19 +400,19 @@ export default function EventSection() {
               className="text-[#1a1a1a] text-[17px] sm:text-xl break-keep"
               style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
             >
-              중복 적용되는 혜택 <span className="text-[#c09a7e]">5가지 · 할인 최대 5만원 + 포인트</span>
+              중복 적용되는 혜택 <span className="text-[#c09a7e]">5가지 · 할인 최대 4만원 + 포인트</span>
             </h3>
             <p className="mt-2.5 text-[#6b6b6b] text-[12px] sm:text-[13px] leading-[1.75] break-keep max-w-[19rem] sm:max-w-lg mx-auto">
               <span className="whitespace-nowrap">기본 할인은</span>{" "}
               <span className="whitespace-nowrap">후기 2만원 + 지인 코드 1만원이고,</span>
               <br className="sm:hidden" />
-              <span className="whitespace-nowrap">여기에 <span className="font-bold text-[#2f8b78]">VOV 선정 사회자</span>·</span>{" "}
-              <span className="whitespace-nowrap"><span className="font-bold text-[#2f8b78]">히든젬 사회자</span>를 지정하시면</span>{" "}
-              <span className="whitespace-nowrap">각 1만원이 추가되어 최대 5만원까지 할인됩니다.</span>
+              <span className="whitespace-nowrap">여기에 <span className="font-bold text-[#2f8b78]">VOV 선정 사회자</span></span>{" "}
+              <span className="whitespace-nowrap">또는 <span className="font-bold text-[#2f8b78]">히든젬 사회자</span>를 지정하시면</span>{" "}
+              <span className="whitespace-nowrap">1만원이 추가되어 최대 4만원까지 할인됩니다.</span>
               <br />
               <span className="text-[#909090]">
-                <span className="whitespace-nowrap">요금표의 &lsquo;최대 4만원&rsquo;은</span>{" "}
-                <span className="whitespace-nowrap">두 선정 할인 중 한 가지만 적용한 기준입니다.</span>
+                <span className="whitespace-nowrap">VOV 선정 명단과 히든젬 명단은 서로 달라</span>{" "}
+                <span className="whitespace-nowrap">두 할인은 함께 적용되지 않습니다.</span>
               </span>
             </p>
           </div>

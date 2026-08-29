@@ -275,8 +275,8 @@ export default function PricingSection() {
               할인은 <span className="text-[#2f8b78]">중복 적용</span>됩니다 · 최대 4만원
             </p>
             <p className="text-center text-[#8a8a8a] text-[11.5px] sm:text-xs leading-[1.7] mb-4 break-keep">
-              <span className="whitespace-nowrap">VOV 선정 사회자 · 히든젬 사회자를</span>{" "}
-              <span className="whitespace-nowrap">함께 지정하시면 최대 5만원</span>
+              <span className="whitespace-nowrap">VOV 선정 사회자 또는 히든젬 사회자를</span>{" "}
+              <span className="whitespace-nowrap">지정하시면 1만원 추가 할인</span>
             </p>
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {[

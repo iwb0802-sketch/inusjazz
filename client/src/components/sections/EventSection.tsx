@@ -327,17 +327,42 @@ export default function EventSection() {
                   BUNDLE PACKAGE
                 </span>
                 <h3
-                  className="text-[#1a1a1a] text-[19px] min-[375px]:text-[21px] sm:text-[25px] leading-snug break-keep"
+                  className="text-[#1a1a1a] text-[18px] min-[375px]:text-[20px] sm:text-[24px] leading-snug break-keep"
                   style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
                 >
-                  <span className="whitespace-nowrap">사회 + 축가 함께 예약 시</span>{" "}
-                  <span className="text-[#5BB5A2] whitespace-nowrap">260,000원</span>
+                  <span className="whitespace-nowrap">함께 예약하면</span>{" "}
+                  <span className="text-[#5BB5A2] whitespace-nowrap">묶음 가격</span>
                 </h3>
 
-                <ul className="mt-4 space-y-2">
+                <div className="mt-3 rounded-lg overflow-hidden" style={{ border: "1px solid rgba(212,184,150,0.5)" }}>
                   {[
-                    "등급 상관없이 원하는 사회자 또는 싱어 1명 지정 가능",
-                    "연주 + 축가 + 사회 묶음도 등급 무관 아티스트 1명 지정",
+                    { n: "사회 + 축가", p: "260,000원" },
+                    { n: "피아노 3중주 + 축가 + 주례없는 사회", p: "480,000원" },
+                    { n: "재즈 3중주 + 축가 + 주례없는 사회", p: "520,000원" },
+                  ].map((r, i) => (
+                    <div
+                      key={r.n}
+                      className="flex items-center justify-between gap-3 px-3 py-2.5 sm:px-4"
+                      style={{
+                        background: i % 2 === 0 ? "rgba(212,184,150,0.09)" : "#fff",
+                        borderTop: i === 0 ? "none" : "1px solid rgba(212,184,150,0.35)",
+                      }}
+                    >
+                      <span className="text-[#3a3a3a] text-[12px] min-[375px]:text-[12.5px] sm:text-sm leading-snug break-keep font-medium">
+                        {r.n}
+                      </span>
+                      <span
+                        className="text-[#5BB5A2] text-[14px] min-[375px]:text-[15px] sm:text-base font-bold whitespace-nowrap flex-shrink-0"
+                      >
+                        {r.p}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <ul className="mt-3.5 space-y-2">
+                  {[
+                    "등급 상관없이 원하는 사회자 또는 아티스트 1명 지정 가능",
                     "패키지 예약 시 정가 대비 기본 3~5만원 할인 적용",
                     "같은 팀이 사전에 호흡을 맞춰 예식 흐름이 매끄럽습니다",
                   ].map((t) => (

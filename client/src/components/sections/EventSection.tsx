@@ -376,6 +376,19 @@ export default function EventSection() {
             >
               중복 적용되는 혜택 <span className="text-[#c09a7e]">5가지 · 할인 최대 5만원 + 포인트</span>
             </h3>
+            <p className="mt-2.5 text-[#6b6b6b] text-[12px] sm:text-[13px] leading-[1.75] break-keep max-w-[19rem] sm:max-w-lg mx-auto">
+              <span className="whitespace-nowrap">기본 할인은</span>{" "}
+              <span className="whitespace-nowrap">후기 2만원 + 지인 코드 1만원이고,</span>
+              <br className="sm:hidden" />
+              <span className="whitespace-nowrap">여기에 <span className="font-bold text-[#2f8b78]">VOV 선정 사회자</span>·</span>{" "}
+              <span className="whitespace-nowrap"><span className="font-bold text-[#2f8b78]">히든젬 사회자</span>를 지정하시면</span>{" "}
+              <span className="whitespace-nowrap">각 1만원이 추가되어 최대 5만원까지 할인됩니다.</span>
+              <br />
+              <span className="text-[#909090]">
+                <span className="whitespace-nowrap">요금표의 &lsquo;최대 4만원&rsquo;은</span>{" "}
+                <span className="whitespace-nowrap">두 선정 할인 중 한 가지만 적용한 기준입니다.</span>
+              </span>
+            </p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-4">

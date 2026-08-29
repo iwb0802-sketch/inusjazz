@@ -135,7 +135,7 @@ export default function HeroSection() {
         </div>
 
         <div
-          className={`mt-8 w-full max-w-[340px] sm:max-w-none flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 sm:gap-4 transition-all duration-1000 delay-900 ${
+          className={`mt-8 w-full max-w-[340px] sm:max-w-none flex flex-col sm:flex-row sm:items-stretch sm:justify-center gap-3 sm:gap-4 transition-all duration-1000 delay-900 ${
             loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -153,7 +153,7 @@ export default function HeroSection() {
           </button>
           <a
             href="#intro"
-            className="w-full sm:w-auto text-center px-8 py-3 sm:py-4 border border-white/25 text-white/80 text-sm tracking-wider hover:bg-white/10 hover:text-white transition-all duration-300 rounded-sm"
+            className="w-full sm:w-auto flex items-center justify-center text-center px-8 sm:px-10 py-3 sm:py-0 border border-white/25 text-white/80 text-sm sm:text-lg tracking-wider hover:bg-white/10 hover:text-white transition-all duration-300 rounded-sm"
           >
             자세히 알아보기
           </a>

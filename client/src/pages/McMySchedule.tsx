@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CalendarDays, ChevronDown, Clock3, LockKeyhole, MapPin, Music2, ShieldCheck, UserRound } from "lucide-react";
 
 type ScheduleItem = {
@@ -32,10 +32,46 @@ function formatDate(dateText: string) {
 export default function McMySchedule() {
   const [mcName, setMcName] = useState("");
   const [isNameMenuOpen, setIsNameMenuOpen] = useState(false);
+  const nameMenuAnchorRef = useRef<HTMLDivElement>(null);
+  const nameMenuPanelRef = useRef<HTMLDivElement>(null);
+  const [nameMenuPosition, setNameMenuPosition] = useState({ left: 0, top: 0, width: 0 });
   const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<ScheduleResponse | null>(null);
+  const [dateStart, setDateStart] = useState("");
+  const [dateEnd, setDateEnd] = useState("");
+  const [appliedDateStart, setAppliedDateStart] = useState("");
+  const [appliedDateEnd, setAppliedDateEnd] = useState("");
+
+  function updateNameMenuPosition() {
+    if (!nameMenuAnchorRef.current) return;
+    const rect = nameMenuAnchorRef.current.getBoundingClientRect();
+    setNameMenuPosition({ left: rect.left, top: rect.bottom + 8, width: rect.width });
+  }
+
+  function toggleNameMenu() {
+    if (!isNameMenuOpen) updateNameMenuPosition();
+    setIsNameMenuOpen((open) => !open);
+  }
+
+  useEffect(() => {
+    if (!isNameMenuOpen) return;
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      const target = event.target as Node;
+      const insideAnchor = nameMenuAnchorRef.current?.contains(target);
+      const insidePanel = nameMenuPanelRef.current?.contains(target);
+      if (!insideAnchor && !insidePanel) setIsNameMenuOpen(false);
+    };
+    window.addEventListener("mousedown", closeOnOutsideClick);
+    window.addEventListener("resize", updateNameMenuPosition);
+    window.addEventListener("scroll", updateNameMenuPosition, true);
+    return () => {
+      window.removeEventListener("mousedown", closeOnOutsideClick);
+      window.removeEventListener("resize", updateNameMenuPosition);
+      window.removeEventListener("scroll", updateNameMenuPosition, true);
+    };
+  }, [isNameMenuOpen]);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -63,10 +99,35 @@ export default function McMySchedule() {
     }
   };
 
+  const filteredItems = (result?.items || []).filter((item) => {
+    const afterStart = !appliedDateStart || item.date >= appliedDateStart;
+    const beforeEnd = !appliedDateEnd || item.date <= appliedDateEnd;
+    return afterStart && beforeEnd;
+  });
+
+  const applyDateFilter = () => {
+    if (dateStart && dateEnd && dateStart > dateEnd) {
+      setError("종료일은 시작일보다 빠를 수 없습니다.");
+      return;
+    }
+    setError("");
+    setAppliedDateStart(dateStart);
+    setAppliedDateEnd(dateEnd);
+  };
+
+  const clearDateFilter = () => {
+    setDateStart("");
+    setDateEnd("");
+    setAppliedDateStart("");
+    setAppliedDateEnd("");
+    setError("");
+  };
+
   const reset = () => {
     setResult(null);
     setPin("");
     setError("");
+    clearDateFilter();
   };
 
   return (
@@ -96,22 +157,22 @@ export default function McMySchedule() {
             </div>
 
             <form onSubmit={submit} className="space-y-5 px-6 py-7 sm:px-8 sm:py-8">
-              <div className="relative">
+              <div ref={nameMenuAnchorRef}>
                 <span className="mb-2 flex items-center gap-2 text-sm font-bold text-slate-100"><UserRound size={16} className="text-[#74dfcc]" /> 사회자 이름</span>
-                <button type="button" onClick={() => setIsNameMenuOpen((open) => !open)} aria-haspopup="listbox" aria-expanded={isNameMenuOpen} className="flex h-14 w-full items-center justify-between rounded-xl border border-white/15 bg-[#10283a] px-4 text-left text-base font-semibold text-white outline-none transition hover:border-[#70ddca]/65 focus:border-[#70ddca] focus:ring-2 focus:ring-[#70ddca]/25">
+                <button type="button" onClick={toggleNameMenu} aria-haspopup="listbox" aria-expanded={isNameMenuOpen} className="flex h-14 w-full items-center justify-between rounded-xl border border-white/15 bg-[#10283a] px-4 text-left text-base font-semibold text-white outline-none transition hover:border-[#70ddca]/65 focus:border-[#70ddca] focus:ring-2 focus:ring-[#70ddca]/25">
                   <span className={mcName ? "text-white" : "text-slate-300"}>{mcName || "이름을 선택해주세요"}</span>
                   <ChevronDown size={20} className={`shrink-0 text-[#88e8d7] transition ${isNameMenuOpen ? "rotate-180" : ""}`} />
                 </button>
-                {isNameMenuOpen && (
-                  <div role="listbox" className="absolute z-30 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-[#75dac9]/55 bg-[#14354a] p-1.5 shadow-2xl shadow-black/50">
-                    {EMCEE_NAMES.map((name) => (
-                      <button key={name} type="button" role="option" aria-selected={mcName === name} onClick={() => { setMcName(name); setIsNameMenuOpen(false); setError(""); }} className={`block w-full rounded-lg px-4 py-3 text-left text-[15px] font-bold transition ${mcName === name ? "bg-[#55cdb8] text-[#07202a]" : "text-white hover:bg-white/15 hover:text-[#a4f1e3]"}`}>
-                        {name}
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
+              {isNameMenuOpen && (
+                <div ref={nameMenuPanelRef} role="listbox" style={{ left: nameMenuPosition.left, top: nameMenuPosition.top, width: nameMenuPosition.width }} className="fixed z-[100] max-h-[72vh] overflow-y-auto rounded-xl border border-[#75dac9]/70 bg-[#14354a] p-1.5 shadow-2xl shadow-black/70">
+                  {EMCEE_NAMES.map((name) => (
+                    <button key={name} type="button" role="option" aria-selected={mcName === name} onClick={() => { setMcName(name); setIsNameMenuOpen(false); setError(""); }} className={`block w-full rounded-lg px-4 py-2.5 text-left text-[15px] font-bold leading-5 transition ${mcName === name ? "bg-[#55cdb8] text-[#07202a]" : "text-white hover:bg-white/15 hover:text-[#a4f1e3]"}`}>
+                      {name}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               <label className="block">
                 <span className="mb-2 flex items-center gap-2 text-sm font-bold text-slate-100"><LockKeyhole size={16} className="text-[#74dfcc]" /> 휴대폰 뒷자리 또는 관리자 번호</span>
@@ -129,26 +190,42 @@ export default function McMySchedule() {
           </section>
         ) : (
           <section>
-            <div className="mb-7 flex flex-col gap-4 border-b border-white/15 pb-6 sm:flex-row sm:items-end sm:justify-between">
+            <div className="mb-7 flex flex-col gap-5 border-b border-white/15 pb-6 xl:flex-row xl:items-end xl:justify-between">
               <div>
                 <p className="text-xs font-bold tracking-[0.16em] text-[#70ddca]">MY WEDDING SCHEDULE</p>
                 <h2 className="mt-2 text-3xl font-extrabold tracking-tight"><span className="text-[#7ce4d2]">{result.mc_name}</span> 사회자님의 예정 일정</h2>
                 <p className="mt-2 text-sm text-slate-300">오늘 이후 배정된 예식 일정입니다.</p>
               </div>
-              <button type="button" onClick={reset} className="rounded-lg border border-white/25 px-4 py-2.5 text-sm font-bold text-slate-200 transition hover:border-[#70ddca] hover:text-[#83e7d6]">다시 조회</button>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+                <div className="grid grid-cols-2 gap-2">
+                  <label className="block text-xs font-bold text-slate-300">시작일
+                    <input type="date" value={dateStart} onChange={(event) => setDateStart(event.target.value)} className="mt-1.5 h-10 w-full rounded-lg border border-white/15 bg-[#10283a] px-2 text-sm font-semibold text-white outline-none transition focus:border-[#70ddca]" />
+                  </label>
+                  <label className="block text-xs font-bold text-slate-300">종료일
+                    <input type="date" value={dateEnd} onChange={(event) => setDateEnd(event.target.value)} className="mt-1.5 h-10 w-full rounded-lg border border-white/15 bg-[#10283a] px-2 text-sm font-semibold text-white outline-none transition focus:border-[#70ddca]" />
+                  </label>
+                </div>
+                <div className="flex gap-2">
+                  <button type="button" onClick={applyDateFilter} className="h-10 whitespace-nowrap rounded-lg bg-[#53cdb7] px-3 text-sm font-extrabold text-[#07202a] transition hover:bg-[#7ae1ce]">기간 조회</button>
+                  {(appliedDateStart || appliedDateEnd) && <button type="button" onClick={clearDateFilter} className="h-10 whitespace-nowrap rounded-lg border border-white/25 px-3 text-sm font-bold text-slate-200 transition hover:border-[#70ddca] hover:text-[#83e7d6]">전체</button>}
+                  <button type="button" onClick={reset} className="h-10 whitespace-nowrap rounded-lg border border-white/25 px-3 text-sm font-bold text-slate-200 transition hover:border-[#70ddca] hover:text-[#83e7d6]">다시 조회</button>
+                </div>
+              </div>
             </div>
 
-            {!result.items?.length ? (
+            {error && <p role="alert" className="mb-5 rounded-xl border border-rose-300/30 bg-rose-400/10 px-4 py-3 text-sm font-medium leading-6 text-rose-200">{error}</p>}
+
+            {!filteredItems.length ? (
               <div className="rounded-3xl border border-white/12 bg-white/[0.04] px-6 py-18 text-center">
                 <Music2 className="mx-auto text-[#62ceb9]" size={38} />
-                <h3 className="mt-4 text-xl font-bold">예정된 배정 일정이 없습니다.</h3>
-                <p className="mt-2 text-sm text-slate-400">새로운 일정이 배정되면 이곳에서 확인할 수 있습니다.</p>
+                <h3 className="mt-4 text-xl font-bold">{appliedDateStart || appliedDateEnd ? "선택한 기간에 예정된 일정이 없습니다." : "예정된 배정 일정이 없습니다."}</h3>
+                <p className="mt-2 text-sm text-slate-400">{appliedDateStart || appliedDateEnd ? "기간을 변경하거나 전체 보기를 눌러 다시 확인해주세요." : "새로운 일정이 배정되면 이곳에서 확인할 수 있습니다."}</p>
               </div>
             ) : (
               <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04]">
-                <div className="border-b border-white/12 bg-[#0d2938] px-5 py-4 text-sm font-bold text-[#91eadb]">총 {result.items.length}건의 예정 일정</div>
+                <div className="border-b border-white/12 bg-[#0d2938] px-5 py-4 text-sm font-bold text-[#91eadb]">{appliedDateStart || appliedDateEnd ? "선택 기간 " : "총 "}{filteredItems.length}건의 예정 일정</div>
                 <div className="divide-y divide-white/10">
-                  {result.items.map((item, index) => (
+                  {filteredItems.map((item, index) => (
                     <article key={`${item.date}-${item.time}-${index}`} className="grid gap-4 px-5 py-5 sm:grid-cols-[180px_1fr] sm:px-7">
                       <div>
                         <p className="font-extrabold text-[#8be9d8]">{formatDate(item.date)}</p>

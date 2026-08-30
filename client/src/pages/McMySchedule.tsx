@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CalendarDays, Clock3, LockKeyhole, MapPin, Music2, ShieldCheck, UserRound } from "lucide-react";
+import { CalendarDays, ChevronDown, Clock3, LockKeyhole, MapPin, Music2, ShieldCheck, UserRound } from "lucide-react";
 
 type ScheduleItem = {
   date: string;
@@ -19,7 +19,7 @@ type ScheduleResponse = {
 const EMCEE_NAMES = [
   "강동우", "고승범", "구한림", "김민수", "김범태", "김선혁", "김태우", "김한솔", "김민중",
   "길상우", "민준호", "석재선", "손진욱", "심비성", "이도건", "이도영", "이우영",
-  "임원빈", "장윤태", "최윤아",
+  "장윤태", "최윤아",
 ];
 
 function formatDate(dateText: string) {
@@ -31,6 +31,7 @@ function formatDate(dateText: string) {
 
 export default function McMySchedule() {
   const [mcName, setMcName] = useState("");
+  const [isNameMenuOpen, setIsNameMenuOpen] = useState(false);
   const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -95,13 +96,22 @@ export default function McMySchedule() {
             </div>
 
             <form onSubmit={submit} className="space-y-5 px-6 py-7 sm:px-8 sm:py-8">
-              <label className="block">
+              <div className="relative">
                 <span className="mb-2 flex items-center gap-2 text-sm font-bold text-slate-100"><UserRound size={16} className="text-[#74dfcc]" /> 사회자 이름</span>
-                <select value={mcName} onChange={(event) => setMcName(event.target.value)} className="h-14 w-full rounded-xl border border-white/15 bg-[#10283a] px-4 text-base font-semibold text-white outline-none transition focus:border-[#70ddca] focus:ring-2 focus:ring-[#70ddca]/25" aria-label="사회자 이름 선택">
-                  <option value="" className="text-slate-700">이름을 선택해주세요</option>
-                  {EMCEE_NAMES.map((name) => <option key={name} value={name} className="text-slate-900">{name}</option>)}
-                </select>
-              </label>
+                <button type="button" onClick={() => setIsNameMenuOpen((open) => !open)} aria-haspopup="listbox" aria-expanded={isNameMenuOpen} className="flex h-14 w-full items-center justify-between rounded-xl border border-white/15 bg-[#10283a] px-4 text-left text-base font-semibold text-white outline-none transition hover:border-[#70ddca]/65 focus:border-[#70ddca] focus:ring-2 focus:ring-[#70ddca]/25">
+                  <span className={mcName ? "text-white" : "text-slate-300"}>{mcName || "이름을 선택해주세요"}</span>
+                  <ChevronDown size={20} className={`shrink-0 text-[#88e8d7] transition ${isNameMenuOpen ? "rotate-180" : ""}`} />
+                </button>
+                {isNameMenuOpen && (
+                  <div role="listbox" className="absolute z-30 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-[#75dac9]/55 bg-[#14354a] p-1.5 shadow-2xl shadow-black/50">
+                    {EMCEE_NAMES.map((name) => (
+                      <button key={name} type="button" role="option" aria-selected={mcName === name} onClick={() => { setMcName(name); setIsNameMenuOpen(false); setError(""); }} className={`block w-full rounded-lg px-4 py-3 text-left text-[15px] font-bold transition ${mcName === name ? "bg-[#55cdb8] text-[#07202a]" : "text-white hover:bg-white/15 hover:text-[#a4f1e3]"}`}>
+                        {name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               <label className="block">
                 <span className="mb-2 flex items-center gap-2 text-sm font-bold text-slate-100"><LockKeyhole size={16} className="text-[#74dfcc]" /> 휴대폰 뒷자리 또는 관리자 번호</span>

@@ -184,9 +184,9 @@ export default function McMySchedule() {
                 </button>
               </div>
               {isNameMenuOpen && (
-                <div ref={nameMenuPanelRef} role="listbox" style={{ left: nameMenuPosition.left, top: nameMenuPosition.top, width: nameMenuPosition.width, maxHeight: nameMenuPosition.maxHeight || "calc(100dvh - 24px)", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain", paddingBottom: "max(0.375rem, env(safe-area-inset-bottom))" }} className="fixed z-[100] overflow-y-scroll rounded-xl border border-[#75dac9]/70 bg-[#14354a] p-1.5 shadow-2xl shadow-black/70">
+                <div ref={nameMenuPanelRef} role="listbox" style={{ left: nameMenuPosition.left, top: nameMenuPosition.top, width: nameMenuPosition.width, maxHeight: nameMenuPosition.maxHeight || "calc(100dvh - 24px)", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain", paddingBottom: "max(0.375rem, env(safe-area-inset-bottom))" }} className="fixed z-[100] grid grid-cols-2 gap-1.5 overflow-y-scroll rounded-xl border border-[#75dac9]/70 bg-[#14354a] p-1.5 shadow-2xl shadow-black/70 sm:grid-cols-3">
                   {EMCEE_NAMES.map((name) => (
-                    <button key={name} type="button" role="option" aria-selected={mcName === name} onClick={() => { setMcName(name); setIsNameMenuOpen(false); setError(""); }} className={`block w-full rounded-lg px-4 py-2.5 text-left text-[15px] font-bold leading-5 transition ${mcName === name ? "bg-[#55cdb8] text-[#07202a]" : "text-white hover:bg-white/15 hover:text-[#a4f1e3]"}`}>
+                    <button key={name} type="button" role="option" aria-selected={mcName === name} onClick={() => { setMcName(name); setIsNameMenuOpen(false); setError(""); }} className={`min-h-[42px] w-full rounded-lg px-3 py-2 text-left text-[15px] font-bold leading-5 transition ${mcName === name ? "bg-[#55cdb8] text-[#07202a]" : "text-white hover:bg-white/15 hover:text-[#a4f1e3]"}`}>
                       {name}
                     </button>
                   ))}

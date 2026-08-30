@@ -34,7 +34,7 @@ export default function McMySchedule() {
   const [isNameMenuOpen, setIsNameMenuOpen] = useState(false);
   const nameMenuAnchorRef = useRef<HTMLDivElement>(null);
   const nameMenuPanelRef = useRef<HTMLDivElement>(null);
-  const [nameMenuPosition, setNameMenuPosition] = useState({ left: 0, top: 0, width: 0 });
+  const [nameMenuPosition, setNameMenuPosition] = useState({ left: 0, top: 0, width: 0, maxHeight: 0 });
   const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -47,7 +47,21 @@ export default function McMySchedule() {
   function updateNameMenuPosition() {
     if (!nameMenuAnchorRef.current) return;
     const rect = nameMenuAnchorRef.current.getBoundingClientRect();
-    setNameMenuPosition({ left: rect.left, top: rect.bottom + 8, width: rect.width });
+    const visualViewport = window.visualViewport;
+    const viewportTop = visualViewport?.offsetTop || 0;
+    const viewportHeight = visualViewport?.height || window.innerHeight;
+    const viewportBottom = viewportTop + viewportHeight;
+    const edge = 12;
+    const availableBelow = Math.max(0, viewportBottom - rect.bottom - edge);
+    const availableAbove = Math.max(0, rect.top - viewportTop - edge);
+    const preferredHeight = Math.min(520, Math.max(280, viewportHeight - edge * 2));
+    const openUpward = availableBelow < 260 && availableAbove > availableBelow;
+    const availableHeight = openUpward ? availableAbove : availableBelow;
+    const maxHeight = Math.min(preferredHeight, Math.max(190, availableHeight));
+    const top = openUpward ? Math.max(viewportTop + edge, rect.top - maxHeight - 8) : rect.bottom + 8;
+    const maxLeft = Math.max(edge, window.innerWidth - rect.width - edge);
+    const left = Math.min(Math.max(edge, rect.left), maxLeft);
+    setNameMenuPosition({ left, top, width: rect.width, maxHeight });
   }
 
   function toggleNameMenu() {
@@ -63,13 +77,18 @@ export default function McMySchedule() {
       const insidePanel = nameMenuPanelRef.current?.contains(target);
       if (!insideAnchor && !insidePanel) setIsNameMenuOpen(false);
     };
+    const visualViewport = window.visualViewport;
     window.addEventListener("mousedown", closeOnOutsideClick);
     window.addEventListener("resize", updateNameMenuPosition);
     window.addEventListener("scroll", updateNameMenuPosition, true);
+    visualViewport?.addEventListener("resize", updateNameMenuPosition);
+    visualViewport?.addEventListener("scroll", updateNameMenuPosition);
     return () => {
       window.removeEventListener("mousedown", closeOnOutsideClick);
       window.removeEventListener("resize", updateNameMenuPosition);
       window.removeEventListener("scroll", updateNameMenuPosition, true);
+      visualViewport?.removeEventListener("resize", updateNameMenuPosition);
+      visualViewport?.removeEventListener("scroll", updateNameMenuPosition);
     };
   }, [isNameMenuOpen]);
 
@@ -165,7 +184,7 @@ export default function McMySchedule() {
                 </button>
               </div>
               {isNameMenuOpen && (
-                <div ref={nameMenuPanelRef} role="listbox" style={{ left: nameMenuPosition.left, top: nameMenuPosition.top, width: nameMenuPosition.width }} className="fixed z-[100] max-h-[72vh] overflow-y-auto rounded-xl border border-[#75dac9]/70 bg-[#14354a] p-1.5 shadow-2xl shadow-black/70">
+                <div ref={nameMenuPanelRef} role="listbox" style={{ left: nameMenuPosition.left, top: nameMenuPosition.top, width: nameMenuPosition.width, maxHeight: nameMenuPosition.maxHeight || "calc(100dvh - 24px)", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain", paddingBottom: "max(0.375rem, env(safe-area-inset-bottom))" }} className="fixed z-[100] overflow-y-scroll rounded-xl border border-[#75dac9]/70 bg-[#14354a] p-1.5 shadow-2xl shadow-black/70">
                   {EMCEE_NAMES.map((name) => (
                     <button key={name} type="button" role="option" aria-selected={mcName === name} onClick={() => { setMcName(name); setIsNameMenuOpen(false); setError(""); }} className={`block w-full rounded-lg px-4 py-2.5 text-left text-[15px] font-bold leading-5 transition ${mcName === name ? "bg-[#55cdb8] text-[#07202a]" : "text-white hover:bg-white/15 hover:text-[#a4f1e3]"}`}>
                       {name}

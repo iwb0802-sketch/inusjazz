@@ -20,7 +20,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/contest"} component={Contest} />
       <Route path={"/schedule"} component={Schedule} />
-      <Route path={"/mc-schedule"} component={McMySchedule} />
+      <Route path={"/mclist"} component={McMySchedule} />
       <Route path={"/performance-schedule"} component={PerformanceSchedule} />
       <Route path={"/weekend-performance"} component={WeekendPerformance} />
       <Route path={"/ai-script"} component={AiScript} />
@@ -35,7 +35,7 @@ function App() {
   const [location] = useLocation();
   const isAiScript = location === "/ai-script";
   const isAudioStudio = location === "/audio";
-  const isMcMySchedule = location === "/mc-schedule";
+  const isMcMySchedule = location === "/mclist";
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">

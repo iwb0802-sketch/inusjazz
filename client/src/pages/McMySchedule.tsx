@@ -104,7 +104,7 @@ export default function McMySchedule() {
               </label>
 
               <label className="block">
-                <span className="mb-2 flex items-center gap-2 text-sm font-bold text-slate-100"><LockKeyhole size={16} className="text-[#74dfcc]" /> 휴대폰 번호 뒷자리</span>
+                <span className="mb-2 flex items-center gap-2 text-sm font-bold text-slate-100"><LockKeyhole size={16} className="text-[#74dfcc]" /> 휴대폰 뒷자리 또는 관리자 번호</span>
                 <input value={pin} onChange={(event) => setPin(event.target.value.replace(/\D/g, "").slice(0, 4))} inputMode="numeric" pattern="[0-9]{4}" autoComplete="one-time-code" maxLength={4} placeholder="숫자 4자리" className="h-14 w-full rounded-xl border border-white/15 bg-[#10283a] px-4 text-base font-semibold tracking-[0.28em] text-white outline-none transition placeholder:tracking-normal placeholder:text-slate-500 focus:border-[#70ddca] focus:ring-2 focus:ring-[#70ddca]/25" />
               </label>
 
@@ -114,7 +114,7 @@ export default function McMySchedule() {
                 <ShieldCheck size={19} />{loading ? "본인 확인 및 조회 중..." : "내 일정 확인"}
               </button>
 
-              <p className="flex items-start gap-2 text-xs leading-5 text-slate-400"><LockKeyhole size={14} className="mt-0.5 shrink-0 text-[#6dccbd]" />등록된 휴대폰 번호의 뒷자리로만 확인됩니다. 고객 성명과 연락처는 표시되지 않습니다.</p>
+              <p className="flex items-start gap-2 text-xs leading-5 text-slate-400"><LockKeyhole size={14} className="mt-0.5 shrink-0 text-[#6dccbd]" />사회자는 등록된 휴대폰 번호 뒷자리로 확인합니다. 관리자는 통합 비밀번호로 어느 사회자 일정이든 조회할 수 있습니다. 고객 성명과 연락처는 표시되지 않습니다.</p>
             </form>
           </section>
         ) : (

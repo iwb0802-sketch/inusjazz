@@ -110,7 +110,7 @@ const MCS = [
     highlight: "안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",
     styles: ["품격형", "감동형"],
-    youtubeId: "U5cJiiF-WcY",
+    youtubeId: "678oSi_riBg",
     audioFile: "/audio/mc-yuntae.mp3",
     profileCardImg: "/images/mc-yuntae-card.jpg",
   },

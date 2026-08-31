@@ -99,7 +99,7 @@ export const CONTESTANTS: Contestant[] = [
     profileUrl: "https://www.inusmusic.com/profile-yuntae.html",
     audioFile: "/audio/mc-yuntae.mp3",
     audioFileBlind: "/audio/mc-yuntae-blind.mp3",
-    videoId: "U5cJiiF-WcY",
+    videoId: "678oSi_riBg",
     styleTags: ["안정적인 진행", "젠틀한 진행"],
   },
   {

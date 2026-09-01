@@ -243,7 +243,12 @@ export default function ReviewSection() {
             style={{ background: "rgba(212,184,150,0.06)", border: "1px dashed rgba(212,184,150,0.35)" }}
           >
             <p className="text-xs sm:text-sm text-white/55 tracking-wide break-keep leading-relaxed">
-              <span className="text-white/70">625</span> + <span className="text-white/70">560</span> + <span className="text-white/70">931</span> ={" "}
+              {PROOF_IMAGES.map((p, i) => (
+                <span key={p.source}>
+                  {i > 0 && " + "}
+                  <span className="text-white/70">{p.count.toLocaleString()}</span>
+                </span>
+              ))}{" = "}
               <span className="font-bold" style={{ color: GOLD, fontFamily: "'JetBrains Mono', monospace" }}>
                 {PROOF_TOTAL.toLocaleString()}건
               </span>

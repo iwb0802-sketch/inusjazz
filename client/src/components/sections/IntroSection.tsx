@@ -52,7 +52,7 @@ export default function IntroSection() {
                 </>
               ),
               en: "Reviews",
-              label: "실제 본식 후기",
+              label: "실제 누적 후기",
             },
             {
               value: (

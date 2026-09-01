@@ -111,7 +111,7 @@ export default function HeroSection() {
                   letterSpacing: "0.01em",
                 }}
               >
-                2,000
+                2,500
               </span>
               <span
                 className="text-[15px] sm:text-lg"

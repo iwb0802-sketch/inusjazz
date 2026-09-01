@@ -163,9 +163,9 @@ export default function ReviewSection() {
             실제 예식을 진행하신 신랑, 신부님의<br className="hidden sm:block" /> 카카오톡, 문자 후기입니다
           </p>
           <p className="mt-2 text-white/35 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed break-keep">
-            숨고·블로그 등 모든 플랫폼 후기를 합산하면
+            숨고·네이버 스마트스토어·블로그 등 모든 플랫폼 후기를 합산하면
             <br className="sm:hidden" />
-            {" "}2,000건 이상 (사회자 개별 후기 포함)
+            {" "}2,500건 이상 (사회자 개별 후기 포함)
           </p>
 
           {/* 증빙 자료 — 숨고/홈페이지/블로그 실제 후기 캡처 */}

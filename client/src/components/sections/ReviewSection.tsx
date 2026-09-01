@@ -165,7 +165,7 @@ export default function ReviewSection() {
                 boxShadow: "0 0 16px rgba(212,184,150,0.25)",
               }}
             >
-              2000+ 후기
+              2500+ 후기
             </span>
           </div>
           <p className="mt-4 text-white/50 text-sm sm:text-base max-w-sm mx-auto leading-relaxed break-keep">

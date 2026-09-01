@@ -47,7 +47,7 @@ export default function IntroSection() {
             {
               value: (
                 <>
-                  <CountUpNumber targetNumber={2000} duration={2000} className="text-[#d4b896]" style={{ fontFamily: "'Cormorant Garamond', serif" }} />
+                  <CountUpNumber targetNumber={2500} duration={2000} className="text-[#d4b896]" style={{ fontFamily: "'Cormorant Garamond', serif" }} />
                   <span className="text-base sm:text-xl text-white/40 ml-0.5">+</span>
                 </>
               ),

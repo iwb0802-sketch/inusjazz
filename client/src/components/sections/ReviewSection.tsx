@@ -19,39 +19,48 @@ const REVIEW_IMAGES = [
 
 const GOLD = "#d4b896";
 
-// 후기 2000+ 증빙 자료 (숨고 프로필, 홈페이지 후기게시판, 블로그 사회자 후기글)
+// 후기 2500+ 증빙 자료 (숨고 프로필, 홈페이지 후기게시판, 블로그 사회자 후기글, 네이버 스마트스토어)
 const PROOF_IMAGES = [
   {
     src: "/images/proof/proof-soomgo.jpg",
-    alt: "숨고 프로필 리뷰수 625건",
+    alt: "숨고 프로필 리뷰수 733건",
     label: "출처 · 숨고",
     source: "숨고",
-    count: 625,
+    count: 733,
     url: "https://soomgo.com/profile/users/4719699",
     linkLabel: "숨고 프로필에서 확인",
   },
   {
     src: "/images/proof/proof-blog.jpg",
-    alt: "홈페이지 후기게시판 Total 560건",
+    alt: "홈페이지 후기게시판 Total 575건",
     label: "출처 · 후기 게시판",
     source: "후기 게시판",
-    count: 560,
+    count: 575,
     url: "http://musicin.godohosting.com/bbs/board.php?bo_table=forum",
     linkLabel: "후기 게시판에서 확인",
   },
   {
     src: "/images/proof/proof-singer-blog.jpg",
-    alt: "블로그 사회자 후기글 931건",
+    alt: "블로그 사회자 후기글 965건",
     label: "출처 · 블로그",
     source: "블로그",
-    count: 931,
+    count: 965,
     url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=71&parentCategoryNo=71",
     linkLabel: "블로그 후기글에서 확인",
+  },
+  {
+    src: "/images/proof/proof-smartstore.jpg",
+    alt: "네이버 스마트스토어 리뷰 245건",
+    label: "출처 · 스마트스토어",
+    source: "네이버 스마트스토어",
+    count: 245,
+    url: "https://smartstore.naver.com/inus_store/products/5466083565",
+    linkLabel: "스마트스토어에서 확인",
   },
 ];
 
 const PROOF_TOTAL = PROOF_IMAGES.reduce((sum, p) => sum + p.count, 0);
-const PROOF_AS_OF = "2026.07.27";
+const PROOF_AS_OF = "2026.09.01";
 
 export default function ReviewSection() {
   const anim1 = useScrollAnimation();
@@ -168,8 +177,8 @@ export default function ReviewSection() {
             {" "}2,500건 이상 (사회자 개별 후기 포함)
           </p>
 
-          {/* 증빙 자료 — 숨고/홈페이지/블로그 실제 후기 캡처 */}
-          <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3 max-w-lg mx-auto">
+          {/* 증빙 자료 — 숨고/홈페이지/블로그/스마트스토어 실제 후기 캡처 */}
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 max-w-lg sm:max-w-2xl mx-auto">
             {PROOF_IMAGES.map((img) => (
               <div key={img.src} className="flex flex-col items-center gap-1.5">
                 <button

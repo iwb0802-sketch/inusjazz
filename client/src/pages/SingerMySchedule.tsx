@@ -152,7 +152,7 @@ export default function SingerMySchedule() {
     <div className="min-h-screen bg-[#071624] text-white">
       <header className="border-b border-white/10 bg-[#0c1d2f]">
         <div className="mx-auto flex min-h-[74px] max-w-5xl items-center justify-between gap-4 px-5 sm:px-8">
-          <a href="/" className="text-sm font-bold text-[#7be2d0] transition hover:text-white">← 메인으로</a>
+          <a href="https://www.inusmusic.com" className="text-sm font-bold text-[#7be2d0] transition hover:text-white">← 메인으로</a>
           <div className="text-right">
             <p className="text-[10px] font-bold tracking-[0.3em] text-[#6ed1c0]">INUS MUSIC</p>
             <h1 className="mt-1 text-base font-extrabold sm:text-lg">싱어 스케줄 확인</h1>

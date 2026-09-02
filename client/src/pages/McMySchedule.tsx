@@ -204,7 +204,6 @@ export default function McMySchedule() {
                 <ShieldCheck size={19} />{loading ? "본인 확인 및 조회 중..." : "내 일정 확인"}
               </button>
 
-              <p className="flex items-start gap-2 text-xs leading-5 text-slate-400"><LockKeyhole size={14} className="mt-0.5 shrink-0 text-[#6dccbd]" />사회자는 등록된 휴대폰 번호 뒷자리로 확인합니다. 관리자는 통합 비밀번호로 어느 사회자 일정이든 조회할 수 있습니다. 고객 성명과 연락처는 표시되지 않습니다.</p>
             </form>
           </section>
         ) : (
@@ -260,7 +259,6 @@ export default function McMySchedule() {
               </div>
             )}
 
-            <p className="mt-5 flex items-start gap-2 text-xs leading-5 text-slate-400"><LockKeyhole size={14} className="mt-0.5 shrink-0 text-[#6dccbd]" />조회 화면에는 고객 성명·연락처가 포함되지 않으며, 본인 배정 행사만 표시됩니다.</p>
           </section>
         )}
       </main>

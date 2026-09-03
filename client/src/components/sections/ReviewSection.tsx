@@ -256,6 +256,9 @@ export default function ReviewSection() {
             <p className="mt-2.5 text-[11.5px] sm:text-xs break-keep leading-relaxed" style={{ color: "rgba(212,184,150,0.75)" }}>
               위 캡처는 <span className="font-bold" style={{ color: GOLD }}>{PROOF_AS_OF} 기준</span>입니다
             </p>
+            <p className="mt-2.5 text-xs sm:text-[13px] text-white/50 break-keep leading-relaxed">
+              ※ 실제 이용 고객이 직접 남긴 후기만 집계하며, 그 외 게시물은 제외합니다. 채널별 게시 건수 합계 기준입니다.
+            </p>
             <p className="mt-2 text-xs sm:text-[13px] font-medium text-white/70 break-keep leading-relaxed">
               후기는 계속 쌓이고 있어 <span className="font-bold text-white/95">현재 건수는 더 많습니다</span>
               <br />

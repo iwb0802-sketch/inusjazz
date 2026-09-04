@@ -140,7 +140,7 @@ const MCS = [
     highlight: "세련된 진행과 따뜻한 톤으로 순간의 가치를 빛내는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/224327229799",
     styles: ["품격형", "아나운서형"],
-    youtubeId: "wuwAiKu9HbU",
+    youtubeId: "GA3NZ5GER5g",
     audioFile: "/audio/mc-yoona.mp3",
     profileCardImg: "",
   },

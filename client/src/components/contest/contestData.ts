@@ -123,7 +123,7 @@ export const CONTESTANTS: Contestant[] = [
     profileUrl: "https://www.inusmusic.com/profile-yuna.html",
     audioFile: "/audio/mc-yoona.mp3",
     audioFileBlind: "/audio/mc-yoona.mp3",
-    videoId: "wuwAiKu9HbU",
+    videoId: "GA3NZ5GER5g",
     styleTags: ["세련된 진행", "감동적인 멘트"],
   },
 ];

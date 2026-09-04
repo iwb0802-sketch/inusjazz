@@ -266,6 +266,38 @@ export default function ReviewSection() {
             </p>
           </div>
 
+          {/* 네이버 고객 게시물 (집계 제외) */}
+          <div className="mt-5 flex flex-col items-center">
+            <a
+              href="https://search.naver.com/search.naver?ssc=tab.blog.all&sm=tab_jum&query=%EC%9D%B4%EB%84%88%EC%8A%A4%EB%AE%A4%EC%A7%81"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center justify-center gap-2.5 px-6 sm:px-9 py-3.5 sm:py-4 rounded-full transition-all duration-300 break-keep text-center hover:scale-[1.03]"
+              style={{
+                background: `linear-gradient(135deg, ${GOLD} 0%, #e6cfae 100%)`,
+                color: "#141414",
+                boxShadow: "0 6px 24px rgba(212,184,150,0.35)",
+              }}
+            >
+              <span
+                className="inline-flex items-center justify-center rounded-[5px] font-bold"
+                style={{ width: 20, height: 20, backgroundColor: "#03C75A", color: "#fff", fontSize: 13, lineHeight: 1 }}
+              >
+                N
+              </span>
+              <span
+                className="text-[14px] sm:text-[16px] font-bold"
+                style={{ letterSpacing: "0.14em", fontFamily: "'Cormorant Garamond', serif" }}
+              >
+                NAVER CUSTOMER VOICE
+              </span>
+              <ExternalLink size={15} />
+            </a>
+            <p className="mt-3 text-xs sm:text-[13px] text-white/50 break-keep leading-relaxed text-center max-w-md mx-auto">
+              <span className="font-bold" style={{ color: GOLD }}>681건</span>의 고객님들의 네이버 게시물은 2,500+ 집계에 포함하지 않습니다.
+            </p>
+          </div>
+
           {/* Decorative divider */}
           <div className="flex items-center justify-center gap-3 mt-6">
             <div className="w-12 h-px bg-[#d4b896]/30" />

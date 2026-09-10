@@ -17,6 +17,21 @@ const ALL_EMCEES = [
 const HIDDEN_PUBLIC_EMCEES = ["김성환"];
 const isPublicEmcee = (name: string) => ALL_EMCEES.includes(name) && !HIDDEN_PUBLIC_EMCEES.includes(name);
 
+// 운영 DB에 기존 이름(공백준) 또는 현재 공개 이름(고명준)으로 저장된 배정을
+// 하나의 공개 프로필과 예약 가능 여부로 통합한다.
+const DB_EMCEE_NAME_ALIASES: Record<string, string> = {
+  "공백준": "고명준",
+  "고명준": "고명준",
+};
+function resolvePublicEmceeName(name?: string): string {
+  const cleaned = (name || "").trim();
+  return DB_EMCEE_NAME_ALIASES[cleaned] || cleaned;
+}
+function isPublicScheduleItem(item: any): boolean {
+  const publicName = resolvePublicEmceeName(item?.mc_name);
+  return Boolean(item?.assigned && publicName && publicName !== "미지정" && isPublicEmcee(publicName));
+}
+
 type Tier = "PREMIUM" | "BEST" | "STANDARD";
 interface McProfile {
   name: string; tier: Tier; tierOrder: number;
@@ -169,9 +184,10 @@ function getAssignedMap(slots: Record<string, any[]>) {
   const map: Record<string, number[]> = {};
   ["am","pm1","pm2","other"].forEach(k => {
     (slots[k]||[]).forEach((item: any) => {
-      if (item.assigned && item.mc_name !== "미지정" && isPublicEmcee(item.mc_name)) {
-        if (!map[item.mc_name]) map[item.mc_name] = [];
-        map[item.mc_name].push(parseTimeToMin(item.time));
+      const publicName = resolvePublicEmceeName(item.mc_name);
+      if (isPublicScheduleItem(item)) {
+        if (!map[publicName]) map[publicName] = [];
+        map[publicName].push(parseTimeToMin(item.time));
       }
     });
   });
@@ -475,7 +491,7 @@ export default function Schedule() {
         {/* 결과 */}
         {data && (() => {
           const assignedMap = getAssignedMap(data.slots);
-          const hasOther = (data.slots["other"]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정" && isPublicEmcee(i.mc_name)).length > 0;
+          const hasOther = (data.slots["other"]||[]).filter(isPublicScheduleItem).length > 0;
           const tabs = hasOther ? ["am","pm1","pm2","other"] : ["am","pm1","pm2"];
 
           return (
@@ -487,7 +503,7 @@ export default function Schedule() {
               {/* 탭 */}
               <div style={{ display:"flex", gap:6, marginBottom:12, flexWrap:"nowrap", overflowX:"auto" }}>
                 {tabs.map(key => {
-                  const cnt = (data.slots[key]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정" && isPublicEmcee(i.mc_name)).length;
+                  const cnt = (data.slots[key]||[]).filter(isPublicScheduleItem).length;
                   const isActive = activeTab===key;
                   return (
                     <button key={key} onClick={() => setActiveTab(key)}
@@ -507,7 +523,9 @@ export default function Schedule() {
               {/* 탭 내용 */}
               {tabs.map(key => {
                 if (activeTab !== key) return null;
-                const assignedItems = (data.slots[key]||[]).filter((i: any) => i.assigned && i.mc_name !== "미지정" && isPublicEmcee(i.mc_name));
+                const assignedItems = (data.slots[key]||[])
+                  .filter(isPublicScheduleItem)
+                  .map((i: any) => ({ ...i, mc_name: resolvePublicEmceeName(i.mc_name) }));
                 // 같은 이름끼리 합치기 (시간 여러 개 표시, 장소도 합치기)
                 const mergedMap: Record<string, any> = {};
                 assignedItems.forEach((i: any) => {

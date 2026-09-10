@@ -126,6 +126,18 @@ export const CONTESTANTS: Contestant[] = [
     videoId: "GA3NZ5GER5g",
     styleTags: ["세련된 진행", "감동적인 멘트"],
   },
+  {
+    name: "고명준",
+    tier: "PREMIUM",
+    desc: "10년+ 경력",
+    image: "/images/mc-myeongjun.jpg",
+    highlight: "밝은 에너지와 유연한 진행으로 예식의 분위기를 자연스럽게 이끄는 사회자입니다.",
+    profileUrl: "https://www.inusmusic.com/profile-myeongjun.html",
+    audioFile: "/audio/mc-myeongjun.mp3",
+    audioFileBlind: "/audio/mc-myeongjun.mp3",
+    videoId: "ljYtiqS5158",
+    styleTags: ["밝은 에너지", "유연한 진행"],
+  },
 ];
 
 // ---------------------------------------------------------------------------

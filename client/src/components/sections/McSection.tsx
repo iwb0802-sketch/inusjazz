@@ -675,11 +675,11 @@ export default function McSection() {
           </div>
 
           {/* Grid Layout */}
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="flex flex-wrap justify-start lg:justify-center gap-4 sm:gap-6">
             {filteredMcs.map((mc, mcIndex) => (
               <div
                 key={mc.name}
-                className="group relative bg-[#161616] rounded-sm transition-all duration-500 cursor-pointer flex flex-col hover:-translate-y-1"
+                className="group relative bg-[#161616] rounded-sm transition-all duration-500 cursor-pointer flex flex-col hover:-translate-y-1 w-[calc(50%-8px)] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
                 style={{
                   border: "1px solid rgba(212,184,150,0.18)",
                   boxShadow: "0 4px 20px rgba(0,0,0,0.4)",

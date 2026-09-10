@@ -144,6 +144,21 @@ const MCS = [
     audioFile: "/audio/mc-yoona.mp3",
     profileCardImg: "",
   },
+  {
+    name: "고명준",
+    role: "",
+    tier: "PREMIUM",
+    desc: "10년+ 경력",
+    image: "/images/mc-myeongjun.jpg",
+    reviewKeywords: ["밝고편안한예식분위기", "유쾌한분위기리드", "자연스러운분위기리드", "유연한상황대처", "몰입도높은진행", "감동적인멘트진행"],
+    tags: ["웨딩사회 경력 10년+", "누적 진행 1000건+"],
+    highlight: "밝은 에너지와 유연한 진행으로 예식의 분위기를 자연스럽게 이끄는 사회자입니다.",
+    profileUrl: "https://blog.naver.com/inusmusics/224407344980",
+    styles: ["품격형", "밝은형", "감동형"],
+    youtubeId: "ljYtiqS5158",
+    audioFile: "/audio/mc-myeongjun.mp3",
+    profileCardImg: "",
+  },
 ];
 
 const STYLE_FILTERS = ["전체", "품격형", "밝은형", "감동형", "아나운서형"];
@@ -688,6 +703,7 @@ export default function McSection() {
                     "김민수": "/profile-minsu.html",
                     "길상우": "/profile-gilsangwoo.html",
                     "최윤아": "/profile-yuna.html",
+                    "고명준": "/profile-myeongjun.html",
                   };
                   if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
                   else setSelectedMc(mc);
@@ -894,7 +910,8 @@ export default function McSection() {
                         "석재선": "/profile-jaesun.html",
                         "김민수": "/profile-minsu.html",
                         "길상우": "/profile-gilsangwoo.html",
-                    "최윤아": "/profile-yuna.html",
+                        "최윤아": "/profile-yuna.html",
+                        "고명준": "/profile-myeongjun.html",
                       };
                       if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
                       else setSelectedMc(mc);

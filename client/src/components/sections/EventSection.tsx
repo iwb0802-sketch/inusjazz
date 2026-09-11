@@ -178,9 +178,9 @@ export default function EventSection() {
             </span>
           </div>
 
-          <p className="mt-3 text-[#7a6248] text-[12.5px] sm:text-[13.5px] leading-[1.7] break-keep max-w-[18rem] min-[375px]:max-w-[22rem] sm:max-w-none mx-auto">
+          <p className="mt-3 text-[#3d2e1f] text-[14px] sm:text-[15.5px] font-semibold leading-[1.7] break-keep max-w-[18rem] min-[375px]:max-w-[22rem] sm:max-w-none mx-auto">
             <span className="whitespace-nowrap">그중 맞춤 대본 · 음원 편집기 · 모바일 청첩장은</span>{" "}
-            <span className="whitespace-nowrap font-bold">예약만 하면 무조건 드립니다.</span>
+            <span className="whitespace-nowrap text-[#1f6b58] font-extrabold">예약만 하면 무조건 드립니다.</span>
           </p>
 
           <p className="mt-4 text-[#5a5a5a] text-[13.5px] sm:text-base leading-[1.75] break-keep max-w-[17.5rem] min-[375px]:max-w-[20rem] sm:max-w-none mx-auto">

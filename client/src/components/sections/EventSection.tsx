@@ -29,7 +29,7 @@ const KAKAO_LINK = "https://pf.kakao.com/_wxovaM/chat";
 const AUDIO_TOOL =
   "https://www.inusmusic.com/audio?utm_source=home&utm_medium=freetool&utm_campaign=audio_open";
 
-// 혜택 카테고리 (총 15가지 · 20만원 상당)
+// 혜택 카테고리 (총 15가지 · 23만원 상당)
 const BENEFIT_GROUPS = [
   {
     icon: Smartphone,
@@ -37,7 +37,7 @@ const BENEFIT_GROUPS = [
     title: "청첩장 · 음원",
     color: "#c09a7e",
     items: [
-      { t: "모바일 청첩장 무료 제작", d: "예약 고객 한정 · 공유 권한 부여 (무한 수정)", w: "1만 5천원 상당" },
+      { t: "모바일 청첩장 무료 제작", d: "예약 고객 한정 · 공유 권한 부여 (무한 수정)", w: "4만원 상당" },
       {
         t: "셀프 음원 편집기 무료 이용",
         d: "입장곡 · 행진곡을 직접 자르고 이어붙이는 전용 도구",
@@ -174,9 +174,14 @@ export default function EventSection() {
           >
             <Gift size={14} className="text-[#3f9d8a] flex-shrink-0" />
             <span className="text-[#2f8b78] text-[12.5px] sm:text-[14px] font-bold break-keep whitespace-nowrap">
-              총 15가지 · 20만원 상당 무료 제공
+              총 15가지 · 23만원 상당 무료 제공
             </span>
           </div>
+
+          <p className="mt-3 text-[#7a6248] text-[12.5px] sm:text-[13.5px] leading-[1.7] break-keep max-w-[18rem] min-[375px]:max-w-[22rem] sm:max-w-none mx-auto">
+            <span className="whitespace-nowrap">그중 맞춤 대본 · 음원 편집기 · 모바일 청첩장은</span>{" "}
+            <span className="whitespace-nowrap font-bold">예약만 하면 무조건 드립니다.</span>
+          </p>
 
           <p className="mt-4 text-[#5a5a5a] text-[13.5px] sm:text-base leading-[1.75] break-keep max-w-[17.5rem] min-[375px]:max-w-[20rem] sm:max-w-none mx-auto">
             <span className="whitespace-nowrap">사회자 예약만 하셔도</span>{" "}

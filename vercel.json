@@ -3,5 +3,8 @@
   "outputDirectory": "dist/public",
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
+  "crons": [
+    { "path": "/api/happycall-scheduler", "schedule": "0 1 * * *" }
   ]
 }

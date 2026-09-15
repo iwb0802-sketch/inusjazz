@@ -719,6 +719,7 @@ export default function McSection() {
                     "길상우": "/profile-gilsangwoo.html",
                     "최윤아": "/profile-yuna.html",
                     "고명준": "/profile-myeongjun.html",
+                    "이상운": "/profile-sangwoon.html",
                   };
                   if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
                   else setSelectedMc(mc);
@@ -927,6 +928,7 @@ export default function McSection() {
                         "길상우": "/profile-gilsangwoo.html",
                         "최윤아": "/profile-yuna.html",
                         "고명준": "/profile-myeongjun.html",
+                        "이상운": "/profile-sangwoon.html",
                       };
                       if (profileMap[mc.name]) setIframeUrl(profileMap[mc.name]);
                       else setSelectedMc(mc);

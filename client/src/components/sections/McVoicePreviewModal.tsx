@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const MC_LIST = [
-  { name: "김민수", tier: "BEST", styles: ["품격형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FBYRtfbYIzXNdsFB6amBgH%2Fmc-minsu.jpg", audio: "/audio/mc-minsu.mp3" },
+  { name: "김민수", tier: "PREMIUM", styles: ["품격형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FBYRtfbYIzXNdsFB6amBgH%2Fmc-minsu.jpg", audio: "/audio/mc-minsu.mp3" },
   { name: "고승범", tier: "BEST", styles: ["품격형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FBwzFRGzJA1Kfhq7jlJAKC%2Fmc-seungbeom.jpg", audio: "/audio/mc-seungbeom.mp3" },
   { name: "이도영", tier: "BEST", styles: ["품격형", "밝은형", "감동형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FiuXMGK12MuFdSRk7uE0pN%2Fmc-idoyoung.jpg", audio: "/audio/mc-idoyoung.mp3" },
   { name: "석재선", tier: "PREMIUM", styles: ["품격형", "감동형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FJz0RRPbGQ0vJOZ9gDMPDH%2Fmc-jaesun.jpg", audio: "/audio/mc-jaesun.mp3" },

@@ -9,7 +9,7 @@ import html2canvas from "html2canvas";
 const MCS = [
   {
     name: "김민수",
-    tier: "BEST",
+    tier: "PREMIUM",
     desc: "5년+ 경력",
     image: "/images/mc-profile-1_33531819.jpg",
     highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",

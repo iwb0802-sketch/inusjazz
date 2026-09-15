@@ -167,7 +167,7 @@ const MCS = [
     image: "/images/mc-sangwoon.jpg",
     reviewKeywords: ["매력적인중저음보이스", "신뢰감있는목소리톤", "깔끔하고정돈된진행", "차분하고안정적인진행", "매끄러운예식리드", "편안하고자연스러운진행"],
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500회 이상"],
-    highlight: "중저음의 신뢰감 있는 목소리와 안정적인 진행력으로 호텔·대형 웨딩홀 예식을 매끄럽게 이끄는 사회자입니다.",
+    highlight: "편안하게 스며드는 중저음의 목소리와 세련된 진행으로 두 분의 소중한 순간을 더욱 깊이 있게 완성합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/224413060093",
     styles: ["품격형", "아나운서형"],
     youtubeId: "ZUI46lW1TTs",

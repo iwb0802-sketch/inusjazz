@@ -138,6 +138,18 @@ export const CONTESTANTS: Contestant[] = [
     videoId: "ljYtiqS5158",
     styleTags: ["밝은 에너지", "유연한 진행"],
   },
+  {
+    name: "이상운",
+    tier: "BEST",
+    desc: "5년+ 경력",
+    image: "/images/mc-sangwoon.jpg",
+    highlight: "편안하게 스며드는 중저음의 목소리와 세련된 진행으로 두 분의 소중한 순간을 더욱 깊이 있게 완성합니다.",
+    profileUrl: "https://www.inusmusic.com/profile-sangwoon.html",
+    audioFile: "/audio/mc-sangwoon.mp3",
+    audioFileBlind: "/audio/mc-sangwoon.mp3",
+    videoId: "ZUI46lW1TTs",
+    styleTags: ["중저음 보이스", "신뢰감 있는 진행"],
+  },
 ];
 
 // ---------------------------------------------------------------------------

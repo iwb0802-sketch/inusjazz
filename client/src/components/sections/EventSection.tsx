@@ -178,10 +178,32 @@ export default function EventSection() {
             </span>
           </div>
 
-          <p className="mt-3 text-[#3d2e1f] text-[14px] sm:text-[15.5px] font-semibold leading-[1.7] break-keep max-w-[18rem] min-[375px]:max-w-[22rem] sm:max-w-none mx-auto">
-            <span className="whitespace-nowrap">그중 맞춤 대본 · 음원 편집기 · 모바일 청첩장은</span>{" "}
-            <span className="whitespace-nowrap text-[#1f6b58] font-extrabold">예약만 하면 무조건 드립니다.</span>
-          </p>
+          <div className="mt-4 mx-auto max-w-[19rem] min-[375px]:max-w-[23rem] sm:max-w-xl">
+            <div
+              className="flex items-start gap-2.5 px-4 py-3.5 sm:px-5 sm:py-4 rounded-xl text-left"
+              style={{
+                background: "linear-gradient(135deg, rgba(31,107,88,0.10) 0%, rgba(212,184,150,0.16) 100%)",
+                border: "1.5px solid rgba(31,107,88,0.38)",
+                boxShadow: "0 4px 16px rgba(31,107,88,0.12)",
+              }}
+            >
+              <Sparkles size={18} className="text-[#1f6b58] flex-shrink-0 mt-[3px]" />
+              <p className="text-[#2b241a] text-[13.5px] sm:text-[15.5px] font-bold leading-[1.75] break-keep">
+                <span className="whitespace-nowrap">그중 맞춤 대본 · 음원 편집기 ·</span>{" "}
+                <span className="whitespace-nowrap">모바일 청첩장은</span>{" "}
+                <span
+                  className="whitespace-nowrap font-extrabold"
+                  style={{
+                    backgroundImage: "linear-gradient(180deg, transparent 60%, rgba(212,184,150,0.65) 60%)",
+                    color: "#14453a",
+                    padding: "0 2px",
+                  }}
+                >
+                  예약만 하면 무조건 드립니다.
+                </span>
+              </p>
+            </div>
+          </div>
 
           <p className="mt-4 text-[#5a5a5a] text-[13.5px] sm:text-base leading-[1.75] break-keep max-w-[17.5rem] min-[375px]:max-w-[20rem] sm:max-w-none mx-auto">
             <span className="whitespace-nowrap">사회자 예약만 하셔도</span>{" "}

@@ -80,7 +80,7 @@ const MCS = [
     highlight: "편안한 아나운서 톤과 안정적인 진행력으로 위트 있고 깔끔한 예식을 완성하는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/220767962639",
     styles: ["품격형", "밝은형", "감동형", "아나운서형"],
-    youtubeId: "prhKZqfMjfM",
+    youtubeId: "s8ixiiTzfvY",
     audioFile: "/audio/mc-wooyoung.mp3",
     profileCardImg: "/images/mc-wooyoung-card.jpg",
   },

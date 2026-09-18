@@ -735,11 +735,16 @@ export default function McSection() {
                   {/* 이미지 클립 컨테이너 */}
                   <div className="absolute inset-0 overflow-hidden rounded-t-sm">
                     {mc.image ? (
-                      <img
-                        src={(mc as any).cardImage || mc.image}
-                        alt={mc.name}
-                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                      />
+                      <picture>
+                        {(mc as any).cardImage && (
+                          <source media="(max-width: 639px)" srcSet={(mc as any).cardImage} />
+                        )}
+                        <img
+                          src={mc.image}
+                          alt={mc.name}
+                          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </picture>
                     ) : (
                       <div
                         className="w-full h-full flex flex-col items-center justify-center"

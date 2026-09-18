@@ -15,6 +15,7 @@ const MCS = [
     tier: "PREMIUM",
     desc: "8년+ 경력",
     image: "/images/mc-profile-1_33531819.jpg",
+    cardImage: "/images/mc-minsu-headroom.jpg",
     reviewKeywords: ["깔끔한진행", "원하는분위기맞춤진행", "안정감있는진행", "돌발상황대응력", "자연스러운분위기리드", "몰입도높은진행"],
     tags: ["웨딩 사회 경력 8년+", "누적 진행 800회 이상"],
     highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",
@@ -30,6 +31,7 @@ const MCS = [
     tier: "BEST",
     desc: "5년+ 경력",
     image: "/images/mc-profile-4_a9e52880.jpg",
+    cardImage: "/images/mc-seungbeom-headroom.jpg",
     reviewKeywords: ["세심한준비와멘트진행", "친절하고깔끔한진행", "몰입도높은진행", "정돈된목소리톤", "자연스럽고매끄러운진행", "센스있는분위기리드"],
     tags: ["웨딩 사회 경력 5년+", "누적 진행 500건+"],
     highlight: "자연스럽고 세련된 진행 스타일이 특징입니다.",
@@ -60,6 +62,7 @@ const MCS = [
     tier: "PREMIUM",
     desc: "10년+ 경력",
     image: "/images/mc-profile-3_33ff7a32.jpg",
+    cardImage: "/images/mc-jaesun-headroom.jpg",
     reviewKeywords: ["깔끔한진행", "자연스러운강약조절", "집중도높은목소리톤", "세심한멘트진행", "자연스러운분위기리드", "몰입도높은진행"],
     tags: ["웨딩 사회 경력 10년+", "누적 진행 1000회 이상"],
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",
@@ -135,6 +138,7 @@ const MCS = [
     tier: "PREMIUM",
     desc: "10년+ 경력",
     image: "/images/mc-yuna.jpg",
+    cardImage: "/images/mc-yuna-headroom.jpg",
     reviewKeywords: ["정확한전달력", "깔끔한진행톤", "호텔웨딩분위기맞춤", "센스있는진행", "안정적인진행", "부드러운목소리"],
     tags: ["웨딩 사회 경력10년+", "누적진행 700건+"],
     highlight: "세련된 진행과 따뜻한 톤으로 순간의 가치를 빛내는 사회자입니다.",
@@ -150,6 +154,7 @@ const MCS = [
     tier: "PREMIUM",
     desc: "10년+ 경력",
     image: "/images/mc-myeongjun.jpg",
+    cardImage: "/images/mc-myeongjun-headroom.jpg",
     reviewKeywords: ["밝고편안한예식분위기", "유쾌한분위기리드", "자연스러운분위기리드", "유연한상황대처", "몰입도높은진행", "감동적인멘트진행"],
     tags: ["웨딩사회 경력 10년+", "누적 진행 1000건+"],
     highlight: "밝은 에너지와 유연한 진행으로 예식의 분위기를 자연스럽게 이끄는 사회자입니다.",
@@ -731,7 +736,7 @@ export default function McSection() {
                   <div className="absolute inset-0 overflow-hidden rounded-t-sm">
                     {mc.image ? (
                       <img
-                        src={mc.image}
+                        src={(mc as any).cardImage || mc.image}
                         alt={mc.name}
                         className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                       />

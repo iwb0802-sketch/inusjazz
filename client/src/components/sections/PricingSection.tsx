@@ -16,7 +16,7 @@ import {
 
 
 export default function PricingSection() {
-  const [showDiscount, setShowDiscount] = useState(true);
+  const [showDiscount, setShowDiscount] = useState(false);
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
   const anim3 = useScrollAnimation();

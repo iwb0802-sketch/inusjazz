@@ -62,9 +62,9 @@ export default function PricingSection() {
                 <div className="text-center mb-6">
                   <p className="text-[#8a8a8a] text-[12px] sm:text-[13px] font-semibold tracking-[0.1em] mb-1.5">정가</p>
                   <p className="text-[#1a1a1a] text-2xl sm:text-3xl font-bold tracking-tight break-keep">
-                    <span className="whitespace-nowrap">160,000<span className="text-base font-normal text-[#666]">원</span></span>
-                    <span className="text-[#ccc] font-normal mx-1.5">~</span>
                     <span className="whitespace-nowrap">220,000<span className="text-base font-normal text-[#666]">원</span></span>
+                    <span className="text-[#ccc] font-normal mx-1.5">~</span>
+                    <span className="whitespace-nowrap">160,000<span className="text-base font-normal text-[#666]">원</span></span>
                   </p>
 
                   <button
@@ -102,9 +102,9 @@ export default function PricingSection() {
                     >
                       <p className="text-[13px] sm:text-sm font-bold tracking-wide mb-1.5 break-keep" style={{ color: "#a87b57" }}>이벤트 참여 시</p>
                       <p className="text-[#1a1a1a] text-2xl sm:text-3xl font-bold tracking-tight break-keep">
-                        <span className="whitespace-nowrap">120,000<span className="text-base font-normal text-[#666]">원</span></span>
-                        <span className="text-[#c9b49c] font-normal mx-1.5">~</span>
                         <span className="whitespace-nowrap">180,000<span className="text-base font-normal text-[#666]">원</span></span>
+                        <span className="text-[#c9b49c] font-normal mx-1.5">~</span>
+                        <span className="whitespace-nowrap">120,000<span className="text-base font-normal text-[#666]">원</span></span>
                       </p>
                       <p className="text-[#777] text-[11.5px] sm:text-xs font-medium mt-2.5 break-keep leading-relaxed">
                         이벤트 중복 참여 시 <span className="font-bold text-[#a87b57]">최대 4만원 할인</span>
@@ -122,12 +122,12 @@ export default function PricingSection() {
                   <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
                     <div className="flex items-center gap-2">
                       <Diamond size={14} className="text-[#d4b896]" />
-                      <span className="text-[#333] text-base font-semibold">일반 등급</span>
+                      <span className="text-[#333] text-base font-semibold">프리미엄 등급</span>
                     </div>
                     <span className="flex items-baseline gap-1.5">
-                      <span className="text-[#1a1a1a] text-base font-bold">160,000원</span>
+                      <span className="text-[#1a1a1a] text-base font-bold">220,000원</span>
                       {showDiscount && (
-                        <span className="text-[#a87b57] text-[13px] font-bold">/ 120,000원</span>
+                        <span className="text-[#a87b57] text-[13px] font-bold">/ 180,000원</span>
                       )}
                     </span>
                   </div>
@@ -146,12 +146,12 @@ export default function PricingSection() {
                   <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
                     <div className="flex items-center gap-2">
                       <Diamond size={14} className="text-[#d4b896]" />
-                      <span className="text-[#333] text-base font-semibold">프리미엄 등급</span>
+                      <span className="text-[#333] text-base font-semibold">일반 등급</span>
                     </div>
                     <span className="flex items-baseline gap-1.5">
-                      <span className="text-[#1a1a1a] text-base font-bold">220,000원</span>
+                      <span className="text-[#1a1a1a] text-base font-bold">160,000원</span>
                       {showDiscount && (
-                        <span className="text-[#a87b57] text-[13px] font-bold">/ 180,000원</span>
+                        <span className="text-[#a87b57] text-[13px] font-bold">/ 120,000원</span>
                       )}
                     </span>
                   </div>

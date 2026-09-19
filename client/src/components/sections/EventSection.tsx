@@ -22,10 +22,12 @@ import {
   ExternalLink,
   ArrowRight,
   ChevronDown,
+  Gem,
 } from "lucide-react";
 
 const EVENT_LINK = "https://blog.naver.com/inusmusics/220652958346";
 const KAKAO_LINK = "https://pf.kakao.com/_wxovaM/chat";
+const PACKAGE_LINK = "https://blog.naver.com/inusmusics/220652965646";
 const AUDIO_TOOL =
   "https://www.inusmusic.com/audio?utm_source=home&utm_medium=freetool&utm_campaign=audio_open";
 
@@ -144,6 +146,54 @@ const DISCOUNTS = [
     href: KAKAO_LINK,
     external: true,
     color: "#c09a7e",
+  },
+];
+
+// 완성형 웨딩 패키지 등급 (SIGNATURE → PRESTIGE → CLASSIC → ESSENTIAL)
+const PACKAGE_TIERS = [
+  {
+    key: "SIGNATURE",
+    icon: Crown,
+    label: "SIGNATURE",
+    badge: "가장 완성도 높은 선택",
+    name: "프리미엄 콜렉트",
+    rows: [{ n: "뮤지컬 4인(5곡) + 피아노 독주 + 주례없는 사회", p: "950,000원" }],
+    color: "#cba55f",
+    featured: true,
+  },
+  {
+    key: "PRESTIGE",
+    icon: Sparkles,
+    label: "PRESTIGE",
+    badge: "고급형",
+    name: "프레스티지",
+    rows: [{ n: "뮤지컬 4인(3곡) + 주례없는 사회", p: "680,000원" }],
+    color: "#5BB5A2",
+    featured: false,
+  },
+  {
+    key: "CLASSIC",
+    icon: Music4,
+    label: "CLASSIC",
+    badge: "스탠다드형",
+    name: "클래식",
+    rows: [
+      { n: "뮤지컬 2인(3곡) + 주례없는 사회", p: "450,000원" },
+      { n: "피아노 3중주 + 축가 + 주례없는 사회", p: "480,000원" },
+      { n: "재즈 3중주 + 축가 + 주례없는 사회", p: "520,000원" },
+    ],
+    color: "#c09a7e",
+    featured: false,
+  },
+  {
+    key: "ESSENTIAL",
+    icon: Gem,
+    label: "ESSENTIAL",
+    badge: "실속형",
+    name: "에센셜",
+    rows: [{ n: "축가 + 주례없는 사회", p: "260,000원" }],
+    color: "#999",
+    featured: false,
   },
 ];
 
@@ -347,81 +397,124 @@ export default function EventSection() {
           </div>
         </div>
 
-        {/* 사회 + 축가 패키지 */}
+        {/* 완성형 웨딩 패키지 */}
         <div ref={anim3.ref} className={`fade-up ${anim3.isVisible ? "visible" : ""} mt-4 sm:mt-5`}>
-          <div
-            className="rounded-xl p-6 sm:p-8"
-            style={{ background: "#fff", border: "2px solid rgba(212,184,150,0.55)", boxShadow: "0 4px 20px rgba(192,154,126,0.1)" }}
-          >
-            <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8">
-              <div className="flex-1 min-w-0">
-                <span className="block text-[#c09a7e] text-[10px] font-bold tracking-[0.16em] mb-1.5">
-                  BUNDLE PACKAGE
-                </span>
-                <h3
-                  className="text-[#1a1a1a] text-[18px] min-[375px]:text-[20px] sm:text-[24px] leading-snug break-keep"
-                  style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-                >
-                  <span className="whitespace-nowrap">함께 예약하면</span>{" "}
-                  <span className="text-[#5BB5A2] whitespace-nowrap">묶음 가격</span>
-                </h3>
+          <div className="text-center mb-6 sm:mb-8">
+            <span className="block text-[#c09a7e] text-[10px] sm:text-[11px] font-bold tracking-[0.2em] mb-2">
+              INNERS MUSIC PACKAGES
+            </span>
+            <h3
+              className="text-[#1a1a1a] text-[20px] sm:text-[26px] leading-snug break-keep"
+              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+            >
+              완성형 <span className="text-[#5BB5A2]">웨딩 패키지</span>
+            </h3>
+            <p className="mt-2.5 text-[#777] text-[12px] sm:text-sm leading-relaxed break-keep">
+              등급 상관없이 원하는 사회자 또는 아티스트 지정 가능 · 같은 팀이 사전에 호흡을 맞춰 예식이 매끄럽습니다
+            </p>
+          </div>
 
-                <div className="mt-3 rounded-lg overflow-hidden" style={{ border: "1px solid rgba(212,184,150,0.5)" }}>
-                  {[
-                    { n: "사회 + 축가", p: "260,000원" },
-                    { n: "피아노 3중주 + 축가 + 주례없는 사회", p: "480,000원" },
-                    { n: "재즈 3중주 + 축가 + 주례없는 사회", p: "520,000원" },
-                    { n: "뮤지컬 2인(축가 선택 가능) + 주례없는 사회", p: "450,000원부터" },
-                  ].map((r, i) => (
-                    <div
-                      key={r.n}
-                      className="flex items-center justify-between gap-3 px-3 py-2.5 sm:px-4"
-                      style={{
-                        background: i % 2 === 0 ? "rgba(212,184,150,0.09)" : "#fff",
-                        borderTop: i === 0 ? "none" : "1px solid rgba(212,184,150,0.35)",
-                      }}
-                    >
-                      <span className="text-[#3a3a3a] text-[12px] min-[375px]:text-[12.5px] sm:text-sm leading-snug break-keep font-medium">
-                        {r.n}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            {PACKAGE_TIERS.map((tier) => (
+              <div
+                key={tier.key}
+                className={`relative rounded-xl overflow-hidden ${tier.featured ? "sm:col-span-2" : ""}`}
+                style={
+                  tier.featured
+                    ? { background: "#1a1a1a", border: "2px solid #cba55f", boxShadow: "0 8px 28px rgba(203,165,95,0.25)" }
+                    : { background: "#fff", border: "1px solid rgba(212,184,150,0.4)", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }
+                }
+              >
+                <div className={`p-5 sm:p-7 ${tier.featured ? "sm:flex sm:items-center sm:gap-8" : ""}`}>
+                  <div className={tier.featured ? "sm:flex-1 min-w-0" : ""}>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <div
+                        className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                        style={{ background: tier.featured ? "rgba(203,165,95,0.18)" : `${tier.color}1f` }}
+                      >
+                        <tier.icon size={16} style={{ color: tier.featured ? "#e0c188" : tier.color }} />
+                      </div>
+                      <span
+                        className="text-[10px] sm:text-[11px] font-bold tracking-[0.16em]"
+                        style={{ color: tier.featured ? "#e0c188" : tier.color }}
+                      >
+                        {tier.label}
                       </span>
                       <span
-                        className="text-[#5BB5A2] text-[14px] min-[375px]:text-[15px] sm:text-base font-bold whitespace-nowrap flex-shrink-0"
+                        className="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-full"
+                        style={
+                          tier.featured
+                            ? { background: "rgba(203,165,95,0.18)", color: "#e0c188" }
+                            : { background: "#f5f2ee", color: "#999" }
+                        }
                       >
-                        {r.p}
+                        {tier.badge}
                       </span>
                     </div>
-                  ))}
+                    <h4
+                      className={`${tier.featured ? "text-white" : "text-[#1a1a1a]"} text-[17px] sm:text-[19px] font-bold break-keep`}
+                      style={{ fontFamily: "'Noto Serif KR', serif" }}
+                    >
+                      {tier.name}
+                    </h4>
+                  </div>
+
+                  <div className={`mt-3.5 rounded-lg overflow-hidden ${tier.featured ? "sm:mt-0 sm:flex-1" : ""}`} style={{ border: tier.featured ? "1px solid rgba(203,165,95,0.35)" : "1px solid rgba(212,184,150,0.35)" }}>
+                    {tier.rows.map((r, i) => (
+                      <div
+                        key={r.n}
+                        className="flex items-center justify-between gap-3 px-3 py-2.5 sm:px-4"
+                        style={{
+                          background: tier.featured
+                            ? i % 2 === 0 ? "rgba(255,255,255,0.04)" : "transparent"
+                            : i % 2 === 0 ? "rgba(212,184,150,0.08)" : "#fff",
+                          borderTop: i === 0 ? "none" : tier.featured ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(212,184,150,0.3)",
+                        }}
+                      >
+                        <span
+                          className={`${tier.featured ? "text-[#e8e8e8]" : "text-[#3a3a3a]"} text-[12px] sm:text-[13px] leading-snug break-keep font-medium`}
+                        >
+                          {r.n}
+                        </span>
+                        <span
+                          className="text-[14px] sm:text-[15px] font-bold whitespace-nowrap flex-shrink-0"
+                          style={{ color: tier.featured ? "#e0c188" : "#5BB5A2" }}
+                        >
+                          {r.p}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-
-                <ul className="mt-3.5 space-y-2">
-                  {[
-                    "등급 상관없이 원하는 사회자 또는 아티스트 1명 지정 가능",
-                    "패키지 예약 시 정가 대비 기본 3~5만원 할인 적용",
-                    "같은 팀이 사전에 호흡을 맞춰 예식 흐름이 매끄럽습니다",
-                  ].map((t) => (
-                    <li key={t} className="flex items-start gap-2 text-[#555] text-[12.5px] sm:text-sm leading-relaxed break-keep">
-                      <Check size={14} className="text-[#5BB5A2] flex-shrink-0 mt-[3px]" />
-                      <span>{t}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
+            ))}
+          </div>
 
-              <a
-                href={KAKAO_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-center gap-1.5 flex-shrink-0 rounded-lg px-5 py-3.5 text-[13px] sm:text-sm font-bold transition-all duration-300 hover:-translate-y-[2px]"
-                style={{
-                  background: "linear-gradient(135deg,#e0c188,#cba55f)",
-                  color: "#1a1a1a",
-                  boxShadow: "0 6px 18px rgba(203,165,95,0.28)",
-                }}
-              >
-                <span className="whitespace-nowrap">패키지 문의하기</span>
-                <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
-            </div>
+          <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href={PACKAGE_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center justify-center gap-1.5 w-full sm:w-auto rounded-lg px-5 py-3.5 text-[13px] sm:text-sm font-bold text-[#555] transition-all duration-300 hover:-translate-y-[2px]"
+              style={{ background: "#fff", border: "1px solid #ddd" }}
+            >
+              <span className="whitespace-nowrap">더 자세한 패키지 보기</span>
+              <ExternalLink size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
+            <a
+              href={KAKAO_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center justify-center gap-1.5 w-full sm:w-auto rounded-lg px-5 py-3.5 text-[13px] sm:text-sm font-bold transition-all duration-300 hover:-translate-y-[2px]"
+              style={{
+                background: "linear-gradient(135deg,#e0c188,#cba55f)",
+                color: "#1a1a1a",
+                boxShadow: "0 6px 18px rgba(203,165,95,0.28)",
+              }}
+            >
+              <span className="whitespace-nowrap">패키지 문의하기</span>
+              <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
           </div>
         </div>
 

@@ -1,5 +1,5 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Music, Mic, Theater, MicVocal, Package, Smartphone, AudioWaveform } from "lucide-react";
+import { Music, Mic, Theater, MicVocal, Smartphone, AudioWaveform } from "lucide-react";
 
 const EXTRAS: { icon: any; label: string; href: string; isNew?: boolean }[] = [
   { icon: Music, label: "클래식 연주", href: "https://inusclassic.kr/" },
@@ -8,7 +8,6 @@ const EXTRAS: { icon: any; label: string; href: string; isNew?: boolean }[] = [
   { icon: Theater, label: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
   { icon: Smartphone, label: "모바일 청첩장", href: "https://inuscard.com" },
   { icon: AudioWaveform, label: "음원편집", href: "/audio", isNew: true },
-  { icon: Package, label: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
 ];
 
 export default function PackageSection() {
@@ -47,7 +46,7 @@ export default function PackageSection() {
 
         {/* 추가 옵션 서비스 (구 ServiceSection 흡수) */}
         <div ref={anim3.ref} className={`fade-up ${anim3.isVisible ? "visible" : ""}`}>
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             {EXTRAS.map((item, i) => {
               const Icon = item.icon;
               return (

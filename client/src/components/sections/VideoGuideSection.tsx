@@ -8,6 +8,13 @@ import { Crown, Star, Mic, Play } from "lucide-react";
 
 const TIERS = [
   {
+    name: "시그니처",
+    sub: "SIGNATURE",
+    icon: Crown,
+    link: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=146",
+    signature: true,
+  },
+  {
     name: "프리미엄",
     sub: "PREMIUM",
     icon: Crown,
@@ -62,7 +69,7 @@ export default function VideoGuideSection() {
         </div>
 
         {/* Tier Rows */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2.5 sm:gap-4">
           {TIERS.map((tier) => {
             const Icon = tier.icon;
             return (
@@ -71,15 +78,26 @@ export default function VideoGuideSection() {
                 href={tier.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-3 sm:flex-col sm:gap-2 sm:text-center bg-[#141414] border border-[#d4b896]/20 rounded-lg px-4 py-3.5 sm:py-5 transition-all duration-300 hover:border-[#d4b896]/50 active:scale-[0.99]"
+                className={`group flex items-center gap-3 sm:flex-col sm:gap-2 sm:text-center rounded-lg px-4 py-3.5 sm:py-5 transition-all duration-300 active:scale-[0.99] ${
+                  tier.signature
+                    ? "bg-black border border-[#c9a961]/50 hover:border-[#c9a961]"
+                    : "bg-[#141414] border border-[#d4b896]/20 hover:border-[#d4b896]/50"
+                }`}
+                style={tier.signature ? { boxShadow: "0 0 20px rgba(201,169,97,0.08)" } : undefined}
               >
-                <div className="w-9 h-9 rounded-full bg-[#0d0d0d] border border-[#d4b896]/30 flex items-center justify-center flex-shrink-0 transition-colors duration-300 group-hover:border-[#d4b896]/60">
-                  <Icon size={16} className="text-[#d4b896]" />
+                <div
+                  className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${
+                    tier.signature
+                      ? "bg-[#0a0a0a] border border-[#c9a961]/60 group-hover:border-[#c9a961]"
+                      : "bg-[#0d0d0d] border border-[#d4b896]/30 group-hover:border-[#d4b896]/60"
+                  }`}
+                >
+                  <Icon size={16} className={tier.signature ? "text-[#c9a961]" : "text-[#d4b896]"} />
                 </div>
 
                 <div className="min-w-0 flex-1 sm:flex-none text-left sm:text-center">
                   <p
-                    className="text-[#d4b896]/55 text-[9px] tracking-[0.24em] uppercase"
+                    className={`text-[9px] tracking-[0.24em] uppercase ${tier.signature ? "text-[#c9a961]/70" : "text-[#d4b896]/55"}`}
                     style={{ fontFamily: "'Cormorant Garamond', serif" }}
                   >
                     {tier.sub}

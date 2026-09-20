@@ -1,5 +1,5 @@
 /**
- * HiddenGemsSection - 아직 저평가된 숨은 강자 사회자 소개
+ * HiddenGemsSection - 각자 다른 강점을 가진 스페셜리스트 사회자 라인업
  * Design: Premium dark + mint accent / 매거진형 프로필 카드
  * Brand: Mint (#5BB5A2) + Gold (#d4b896)
  */
@@ -125,10 +125,9 @@ export default function HiddenGemsSection() {
               style={{ background: "rgba(91,181,162,0.10)", border: "1px solid rgba(91,181,162,0.35)" }}
             >
               <Sparkles size={13} className="text-[#5BB5A2]" />
-              <span className="text-[#5BB5A2] text-xs font-semibold tracking-[0.15em] uppercase">Hidden Gems</span>
+              <span className="text-[#5BB5A2] text-xs font-semibold tracking-[0.15em] uppercase">Specialist Lineup</span>
             </div>
 
-            {/* 규모(17명) 전달 + TOP 9와 우열 뉘앙스 제거 (기준 축: 인기 vs 인지도 대비 실력) */}
             <h3
               className="text-white text-[17px] min-[375px]:text-[19px] leading-snug sm:text-2xl mb-3 break-keep max-w-[19rem] sm:max-w-none mx-auto"
               style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
@@ -138,21 +137,23 @@ export default function HiddenGemsSection() {
               </span>
               <br className="sm:hidden" />{" "}
               <span className="whitespace-nowrap">
-                그중 <span className="text-[#5BB5A2]">아직 덜 알려진</span>
+                각자의 결이 다른
               </span>
               <br className="sm:hidden" />{" "}
               <span className="whitespace-nowrap">
-                <span className="text-[#5BB5A2]">실력자 6인</span>을 따로 소개합니다.
+                <span className="text-[#5BB5A2]">스페셜리스트 6인</span>을 소개합니다.
               </span>
             </h3>
 
             <p className="text-white/50 text-xs sm:text-sm leading-relaxed break-keep max-w-[19rem] sm:max-w-xl mx-auto">
               <span className="whitespace-nowrap">검증 기준은 위 TOP 사회자와 똑같습니다.</span>
               <br className="sm:hidden" />{" "}
-              <span className="whitespace-nowrap">다른 건 인지도뿐입니다.</span>
+              <span className="whitespace-nowrap">
+                쇼호스트, 코미디언, 음향감독 출신까지 —
+              </span>
               <br className="sm:hidden" />{" "}
               <span className="whitespace-nowrap">
-                그래서 지금 예약하시면 <span className="text-[#d4b896] font-semibold">1만원 추가 할인</span>을 드려요.
+                예식의 결에 맞는 <span className="text-[#d4b896] font-semibold">전문성</span>으로 골라보세요.
               </span>
             </p>
           </div>
@@ -216,14 +217,6 @@ export default function HiddenGemsSection() {
                     <span className="text-[9px] sm:text-[10px] text-white/35 flex-shrink-0 mt-[1px]">이런 예식에</span>
                     <span className="text-[10px] sm:text-[11px] text-white/80 font-medium break-keep leading-snug">{mc.fit}</span>
                   </div>
-
-                  {/* 할인 배지 */}
-                  <span
-                    className="self-start text-[9px] sm:text-[10px] font-semibold px-2 py-[3px] rounded-md mb-2.5"
-                    style={{ background: "rgba(212,184,150,0.12)", color: "#d4b896", border: "1px dashed rgba(212,184,150,0.4)" }}
-                  >
-                    1만원 추가 할인
-                  </span>
 
                   {/* 액션 */}
                   <div className="mt-auto flex items-center gap-1.5">

@@ -17,7 +17,6 @@ import {
   Headset,
   ShieldCheck,
   MapPin,
-  Ticket,
   Coins,
   ExternalLink,
   ArrowRight,
@@ -128,15 +127,6 @@ const DISCOUNTS = [
     href: "/contest",
     external: false,
     color: "#d4b896",
-  },
-  {
-    icon: Ticket,
-    label: "HIDDEN GEMS",
-    title: "1만원 할인",
-    desc: "아직 덜 알려진 실력자 6인 예약 시",
-    href: "/#hidden-gems",
-    external: false,
-    color: "#5BB5A2",
   },
   {
     icon: Coins,
@@ -525,20 +515,15 @@ export default function EventSection() {
               className="text-[#1a1a1a] text-[17px] sm:text-xl break-keep"
               style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
             >
-              중복 적용되는 혜택 <span className="text-[#c09a7e]">5가지 · 할인 최대 4만원 + 포인트</span>
+              중복 적용되는 혜택 <span className="text-[#c09a7e]">4가지 · 할인 최대 4만원 + 포인트</span>
             </h3>
             <p className="mt-2.5 text-[#6b6b6b] text-[12px] sm:text-[13px] leading-[1.75] break-keep max-w-[19rem] sm:max-w-lg mx-auto">
               <span className="whitespace-nowrap">기본 할인은</span>{" "}
               <span className="whitespace-nowrap">후기 2만원 + 지인 코드 1만원이고,</span>
               <br className="sm:hidden" />
-              <span className="whitespace-nowrap">여기에 <span className="font-bold text-[#2f8b78]">VOV 선정 사회자</span></span>{" "}
-              <span className="whitespace-nowrap">또는 <span className="font-bold text-[#2f8b78]">히든젬 사회자</span>를 지정하시면</span>{" "}
-              <span className="whitespace-nowrap">1만원이 추가되어 최대 4만원까지 할인됩니다.</span>
-              <br />
-              <span className="text-[#909090]">
-                <span className="whitespace-nowrap">VOV 선정 명단과 히든젬 명단은 서로 달라</span>{" "}
-                <span className="whitespace-nowrap">두 할인은 함께 적용되지 않습니다.</span>
-              </span>
+              <span className="whitespace-nowrap">여기에 <span className="font-bold text-[#2f8b78]">VOV 선정 사회자</span>를</span>{" "}
+              <span className="whitespace-nowrap">지정하시면 1만원이 추가되어</span>{" "}
+              <span className="whitespace-nowrap">최대 4만원까지 할인됩니다.</span>
             </p>
           </div>
 

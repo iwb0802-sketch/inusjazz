@@ -133,15 +133,14 @@ export default function HiddenGemsSection() {
               style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
             >
               <span className="whitespace-nowrap">
-                소속 사회자 <span className="text-[#d4b896]">17명</span>.
+                같은 <span className="text-[#d4b896]">검증</span>,
+              </span>{" "}
+              <span className="whitespace-nowrap">
+                다른 <span className="text-[#5BB5A2]">결</span>.
               </span>
               <br className="sm:hidden" />{" "}
               <span className="whitespace-nowrap">
-                각자의 결이 다른
-              </span>
-              <br className="sm:hidden" />{" "}
-              <span className="whitespace-nowrap">
-                <span className="text-[#5BB5A2]">스페셜리스트 6인</span>을 소개합니다.
+                <span className="text-[#5BB5A2]">스페셜리스트 6인</span>
               </span>
             </h3>
 
@@ -149,11 +148,11 @@ export default function HiddenGemsSection() {
               <span className="whitespace-nowrap">검증 기준은 위 TOP 사회자와 똑같습니다.</span>
               <br className="sm:hidden" />{" "}
               <span className="whitespace-nowrap">
-                쇼호스트, 코미디언, 음향감독 출신까지 —
+                쇼호스트, 코미디언, 음향감독 출신 —
               </span>
               <br className="sm:hidden" />{" "}
               <span className="whitespace-nowrap">
-                예식의 결에 맞는 <span className="text-[#d4b896] font-semibold">전문성</span>으로 골라보세요.
+                저마다 다른 색깔의 <span className="text-[#d4b896] font-semibold">전문성</span>을 가졌습니다.
               </span>
             </p>
           </div>

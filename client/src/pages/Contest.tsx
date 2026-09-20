@@ -197,6 +197,10 @@ export default function Contest() {
   const label = roundSetup ? roundLabel(roundSetup.playersIn.length) : "";
 
   const championData = champion ? getContestant(champion) : undefined;
+  // SIGNATURE 등급(회사 대표 사회자)은 이미 최상위 등급이라 VOV 1위 지정예약 1만원 할인 대상에서 제외
+  const lastMonthChampionData = lastMonthChampion ? getContestant(lastMonthChampion.name) : undefined;
+  const isLastMonthChampionSignature = lastMonthChampionData?.tier === "SIGNATURE";
+  const isChampionSignature = championData?.tier === "SIGNATURE";
 
   // 결과 화면의 2~5위 미니 랭킹: 이번 회차에서 승리(부전승 포함)로 다음 라운드에
   // 진출한 횟수가 많은 순으로 정렬 (챔피언 제외). 진출 횟수가 같으면 공동 순위로 표시.
@@ -622,17 +626,35 @@ export default function Contest() {
                   >
                     이달의 혜택
                   </span>
-                  <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
-                    <span className="inline-block">지난달 </span>
-                    <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
-                    <span className="inline-block">&nbsp;사회자를</span>{" "}
-                    <span className="inline-block">이번 달 지정 예약하시면</span>
-                  </p>
-                  <p className="mt-1 text-[15px] font-bold tracking-wide break-keep" style={{ color: GOLD }}>
-                    1만 원 할인
-                    <span className="text-white/70 font-medium text-[13px]"> 혜택 제공</span>
-                  </p>
-                  <p className="mt-1.5 text-[11px] text-white/40 break-keep">다른 이벤트와 중복 적용 가능</p>
+                  {isLastMonthChampionSignature ? (
+                    <>
+                      <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
+                        <span className="inline-block">지난달 </span>
+                        <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
+                        <span className="inline-block">&nbsp;사회자는</span>{" "}
+                        <span className="inline-block font-semibold" style={{ color: GOLD }}>SIGNATURE</span>
+                        <span className="inline-block">&nbsp;등급이라</span>
+                      </p>
+                      <p className="mt-1 text-[14px] font-bold tracking-wide break-keep text-white/80">
+                        VOV 지정예약 할인 대상에서 제외됩니다
+                      </p>
+                      <p className="mt-1.5 text-[11px] text-white/40 break-keep">SIGNATURE 등급 사회자는 이미 최상위 등급으로 별도 지정예약 할인이 적용되지 않아요</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
+                        <span className="inline-block">지난달 </span>
+                        <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
+                        <span className="inline-block">&nbsp;사회자를</span>{" "}
+                        <span className="inline-block">이번 달 지정 예약하시면</span>
+                      </p>
+                      <p className="mt-1 text-[15px] font-bold tracking-wide break-keep" style={{ color: GOLD }}>
+                        1만 원 할인
+                        <span className="text-white/70 font-medium text-[13px]"> 혜택 제공</span>
+                      </p>
+                      <p className="mt-1.5 text-[11px] text-white/40 break-keep">다른 이벤트와 중복 적용 가능 (SIGNATURE 등급 사회자는 제외)</p>
+                    </>
+                  )}
                 </div>
               </motion.div>
             </div>
@@ -671,17 +693,35 @@ export default function Contest() {
               >
                 이달의 혜택
               </span>
-              <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
-                <span className="inline-block">지난달 </span>
-                <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
-                <span className="inline-block">&nbsp;사회자를</span>{" "}
-                <span className="inline-block">이번 달 지정 예약하시면</span>
-              </p>
-              <p className="mt-1 text-[15px] font-bold tracking-wide break-keep" style={{ color: GOLD }}>
-                1만 원 할인
-                <span className="text-white/70 font-medium text-[13px]"> 혜택 제공</span>
-              </p>
-              <p className="mt-1.5 text-[11px] text-white/40 break-keep">다른 이벤트와 중복 적용 가능</p>
+              {isLastMonthChampionSignature ? (
+                <>
+                  <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
+                    <span className="inline-block">지난달 </span>
+                    <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
+                    <span className="inline-block">&nbsp;사회자는</span>{" "}
+                    <span className="inline-block font-semibold" style={{ color: GOLD }}>SIGNATURE</span>
+                    <span className="inline-block">&nbsp;등급이라</span>
+                  </p>
+                  <p className="mt-1 text-[14px] font-bold tracking-wide break-keep text-white/80">
+                    VOV 지정예약 할인 대상에서 제외됩니다
+                  </p>
+                  <p className="mt-1.5 text-[11px] text-white/40 break-keep">SIGNATURE 등급 사회자는 이미 최상위 등급으로 별도 지정예약 할인이 적용되지 않아요</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
+                    <span className="inline-block">지난달 </span>
+                    <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
+                    <span className="inline-block">&nbsp;사회자를</span>{" "}
+                    <span className="inline-block">이번 달 지정 예약하시면</span>
+                  </p>
+                  <p className="mt-1 text-[15px] font-bold tracking-wide break-keep" style={{ color: GOLD }}>
+                    1만 원 할인
+                    <span className="text-white/70 font-medium text-[13px]"> 혜택 제공</span>
+                  </p>
+                  <p className="mt-1.5 text-[11px] text-white/40 break-keep">다른 이벤트와 중복 적용 가능 (SIGNATURE 등급 사회자는 제외)</p>
+                </>
+              )}
             </div>
           </div>
         </div>

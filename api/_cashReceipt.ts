@@ -193,10 +193,11 @@ export function validateIssueInput(body: Record<string, unknown>): IssueInput {
 
   let recipientValue = "";
   if (type === "PHONE") {
-    recipientValue = stringValue(recipientRecord.value, 30);
-    if (!/^010-[0-9]{4}-[0-9]{4}$/.test(recipientValue)) {
-      throw new Error("휴대폰번호는 010-0000-0000 형식으로 입력해주세요.");
+    const phoneDigits = onlyDigits(stringValue(recipientRecord.value, 30));
+    if (!/^010[0-9]{8}$/.test(phoneDigits)) {
+      throw new Error("휴대폰번호는 010으로 시작하는 11자리 번호를 입력해주세요.");
     }
+    recipientValue = `${phoneDigits.slice(0, 3)}-${phoneDigits.slice(3, 7)}-${phoneDigits.slice(7, 11)}`;
   }
   if (type === "BUSINESS_REGISTRATION_NUMBER") {
     recipientValue = onlyDigits(stringValue(recipientRecord.value, 20));

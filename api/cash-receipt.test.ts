@@ -22,10 +22,20 @@ describe("cash receipt validation", () => {
     expect(parsed.amount.supplyAmount + parsed.amount.vatAmount).toBe(110000);
   });
 
+  it("formats an 11-digit phone number without hyphens", () => {
+    const parsed = validateIssueInput({
+      mstSeq: "101", dtlSeq: "202", custSeq: "303", itemName: "웨딩 행사 진행비",
+      recipient: { type: "PHONE", value: "01012345678" },
+      amount: { supplyAmount: 100000, vatAmount: 0, taxFreeAmount: 0 },
+    });
+
+    expect(parsed.recipient).toEqual({ type: "PHONE", value: "010-1234-5678" });
+  });
+
   it("rejects malformed recipient identifiers and zero totals", () => {
     expect(() => validateIssueInput({
       mstSeq: "101", dtlSeq: "202", custSeq: "303", itemName: "테스트",
-      recipient: { type: "PHONE", value: "01012345678" },
+      recipient: { type: "PHONE", value: "0101234567" },
       amount: { supplyAmount: 100, vatAmount: 10, taxFreeAmount: 0 },
     })).toThrow("휴대폰번호");
 

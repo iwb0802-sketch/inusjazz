@@ -265,48 +265,7 @@ export default function PricingSection() {
             </div>
           </div>
 
-          {/* Bottom Note */}
-          {/* 할인 구성 안내 */}
-          <div
-            className="mt-8 rounded-lg p-5 sm:p-6"
-            style={{ background: "#fff", border: "1px solid rgba(212,184,150,0.3)" }}
-          >
-            <p className="text-center text-[#1a1a1a] text-[13px] sm:text-sm font-bold mb-1.5 break-keep">
-              할인은 <span className="text-[#2f8b78]">중복 적용</span>됩니다 · 최대 4만원
-            </p>
-            <p className="text-center text-[#8a8a8a] text-[11.5px] sm:text-xs leading-[1.7] mb-4 break-keep">
-              <span className="whitespace-nowrap">VOV 선정 사회자를</span>{" "}
-              <span className="whitespace-nowrap">지정하시면 1만원 추가 할인</span>
-            </p>
-            <div className="grid grid-cols-3 gap-2 sm:gap-3">
-              {[
-                { t: "상담 후기 작성", v: "2만원" },
-                { t: "지인 할인 코드", v: "1만원" },
-                { t: "블로그 상담 후기 게시", v: "" },
-              ].map((d) => (
-                <div
-                  key={d.t}
-                  className="text-center rounded-md py-2.5 px-2 flex flex-col justify-center"
-                  style={{ background: "#faf9f7", border: "1px solid #eee" }}
-                >
-                  <p className="text-[#666] text-[10.5px] sm:text-[11px] break-keep leading-snug">{d.t}</p>
-                  {d.v ? (
-                    <p className="text-[#c09a7e] text-[13px] sm:text-sm font-bold mt-0.5">-{d.v}</p>
-                  ) : (
-                    <p className="text-[#c09a7e] text-[11px] sm:text-xs font-bold mt-0.5 break-keep">추가 할인</p>
-                  )}
-                </div>
-              ))}
-            </div>
-            <p className="text-center text-[#999] text-[10.5px] sm:text-xs mt-4 break-keep leading-relaxed">
-              <span className="whitespace-nowrap">위 이벤트가는 각 이벤트에 참여하셨을 경우</span>{" "}
-              <span className="whitespace-nowrap">적용되는 금액입니다.</span>
-              <br className="sm:hidden" />{" "}
-              <span className="whitespace-nowrap">참여 여부·적용 가능 항목은 상담 시 안내드립니다.</span>
-            </p>
-          </div>
-
-          <p className="text-center text-[#999] text-xs mt-5">
+          <p className="text-center text-[#999] text-xs mt-8">
             ※ 모든 가격은 부가세 포함 금액입니다. 자세한 내용은 카카오톡 상담을 통해 확인해주세요.
           </p>
         </div>

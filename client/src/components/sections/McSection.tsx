@@ -12,7 +12,7 @@ const MCS = [
   {
     name: "김민수",
     role: "",
-    tier: "PREMIUM",
+    tier: "SIGNATURE",
     desc: "8년+ 경력",
     image: "/images/mc-profile-1_33531819.jpg",
     cardImage: "/images/mc-minsu-headroom.jpg",
@@ -59,7 +59,7 @@ const MCS = [
   {
     name: "석재선",
     role: "",
-    tier: "PREMIUM",
+    tier: "SIGNATURE",
     desc: "10년+ 경력",
     image: "/images/mc-profile-3_33ff7a32.jpg",
     cardImage: "/images/mc-jaesun-headroom.jpg",
@@ -75,7 +75,7 @@ const MCS = [
   {
     name: "이우영",
     role: "",
-    tier: "PREMIUM",
+    tier: "SIGNATURE",
     desc: "10년+ 경력",
     image: "/images/mc-lee-wooyoung-new_fa27e84d.webp",
     reviewKeywords: ["유쾌한분위기리드", "깔끔한진행톤", "원하는분위기맞춤진행", "밝고편안한예식분위기", "돌발상황대응력", "안정감있는진행"],
@@ -135,7 +135,7 @@ const MCS = [
   {
     name: "최윤아",
     role: "",
-    tier: "PREMIUM",
+    tier: "SIGNATURE",
     desc: "10년+ 경력",
     image: "/images/mc-yuna.jpg",
     cardImage: "/images/mc-yuna-headroom.jpg",
@@ -334,7 +334,9 @@ function ProfileModal({ mc, onClose, onOpenIframe }: { mc: MC; onClose: () => vo
     };
   }, [mc]);
 
-  const tierColor = mc.tier === "PREMIUM"
+  const tierColor = mc.tier === "SIGNATURE"
+    ? { border: "border-[#c9a961]/60", text: "text-[#c9a961]", bg: "bg-black/40" }
+    : mc.tier === "PREMIUM"
     ? { border: "border-[#d4b896]/60", text: "text-[#d4b896]", bg: "bg-[#d4b896]/10" }
     : { border: "border-[#5BB5A2]/60", text: "text-[#5BB5A2]", bg: "bg-[#5BB5A2]/10" };
 
@@ -767,7 +769,22 @@ export default function McSection() {
 
 
                   <div className="absolute top-3 left-3">
-                    {mc.tier === "PREMIUM" ? (
+                    {mc.tier === "SIGNATURE" ? (
+                      <span
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] tracking-[0.25em] uppercase"
+                        style={{
+                          fontFamily: "'Cormorant Garamond', serif",
+                          background: "linear-gradient(135deg, #0a0a0a 0%, #000000 100%)",
+                          border: "1px solid #c9a961",
+                          color: "#c9a961",
+                          fontWeight: 700,
+                          boxShadow: "0 2px 14px rgba(201,169,97,0.3), inset 0 1px 0 rgba(201,169,97,0.15)",
+                        }}
+                      >
+                        <Crown size={11} className="shrink-0" style={{ color: "#c9a961" }} />
+                        SIGNATURE
+                      </span>
+                    ) : mc.tier === "PREMIUM" ? (
                       <span
                         className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] tracking-[0.25em] uppercase"
                         style={{

@@ -12,6 +12,7 @@ import {
   Shuffle,
   UserCheck,
   MapPin,
+  Crown,
 } from "lucide-react";
 
 
@@ -62,7 +63,7 @@ export default function PricingSection() {
                 <div className="text-center mb-6">
                   <p className="text-[#8a8a8a] text-[12px] sm:text-[13px] font-semibold tracking-[0.1em] mb-1.5">정가</p>
                   <p className="text-[#1a1a1a] text-2xl sm:text-3xl font-bold tracking-tight break-keep">
-                    <span className="whitespace-nowrap">220,000<span className="text-base font-normal text-[#666]">원</span></span>
+                    <span className="whitespace-nowrap">250,000<span className="text-base font-normal text-[#666]">원</span></span>
                     <span className="text-[#ccc] font-normal mx-1.5">~</span>
                     <span className="whitespace-nowrap">160,000<span className="text-base font-normal text-[#666]">원</span></span>
                   </p>
@@ -102,12 +103,13 @@ export default function PricingSection() {
                     >
                       <p className="text-[13px] sm:text-sm font-bold tracking-wide mb-1.5 break-keep" style={{ color: "#a87b57" }}>이벤트 참여 시</p>
                       <p className="text-[#1a1a1a] text-2xl sm:text-3xl font-bold tracking-tight break-keep">
-                        <span className="whitespace-nowrap">180,000<span className="text-base font-normal text-[#666]">원</span></span>
+                        <span className="whitespace-nowrap">220,000<span className="text-base font-normal text-[#666]">원</span></span>
                         <span className="text-[#c9b49c] font-normal mx-1.5">~</span>
                         <span className="whitespace-nowrap">120,000<span className="text-base font-normal text-[#666]">원</span></span>
                       </p>
                       <p className="text-[#777] text-[11.5px] sm:text-xs font-medium mt-2.5 break-keep leading-relaxed">
                         이벤트 중복 참여 시 <span className="font-bold text-[#a87b57]">최대 4만원 할인</span>
+                        <span className="block mt-0.5 text-[10.5px] text-[#999]">(SIGNATURE 등급은 최대 3만원 할인)</span>
                       </p>
                     </div>
                   </div>
@@ -119,6 +121,18 @@ export default function PricingSection() {
                   <span className="text-[#999] text-[11.5px] font-semibold tracking-wide">{showDiscount ? "정가 / 이벤트 참여가" : "정가"}</span>
                 </div>
                 <div className="space-y-3 mb-8">
+                  <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
+                    <div className="flex items-center gap-2">
+                      <Crown size={14} className="text-[#c9a961]" />
+                      <span className="text-[#333] text-base font-semibold">시그니처 등급</span>
+                    </div>
+                    <span className="flex items-baseline gap-1.5">
+                      <span className="text-[#1a1a1a] text-base font-bold">250,000원</span>
+                      {showDiscount && (
+                        <span className="text-[#a87b57] text-[13px] font-bold">/ 220,000원</span>
+                      )}
+                    </span>
+                  </div>
                   <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
                     <div className="flex items-center gap-2">
                       <Diamond size={14} className="text-[#d4b896]" />

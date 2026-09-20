@@ -139,12 +139,13 @@ const DISCOUNTS = [
   },
 ];
 
-// 완성형 웨딩 패키지 등급 (SIGNATURE → PRESTIGE → CLASSIC → ESSENTIAL)
+// 완성형 웨딩 패키지 등급 (GRAND → PRESTIGE → CLASSIC → ESSENTIAL)
+// 주의: "SIGNATURE"는 사회자 최상위 등급명(McSection)으로 별도 사용 중이므로 패키지 쪽엔 쓰지 않음
 const PACKAGE_TIERS = [
   {
-    key: "SIGNATURE",
+    key: "GRAND",
     icon: Crown,
-    label: "SIGNATURE",
+    label: "GRAND",
     badge: "가장 완성도 높은 선택",
     name: "프리미엄 콜렉트",
     rows: [{ n: "뮤지컬 4인(5곡) + 피아노 독주 + 주례없는 사회", p: "950,000원" }],
@@ -524,6 +525,8 @@ export default function EventSection() {
               <span className="whitespace-nowrap">여기에 <span className="font-bold text-[#2f8b78]">VOV 선정 사회자</span>를</span>{" "}
               <span className="whitespace-nowrap">지정하시면 1만원이 추가되어</span>{" "}
               <span className="whitespace-nowrap">최대 4만원까지 할인됩니다.</span>
+              <br />
+              <span className="text-[11px] text-[#999]">(SIGNATURE 등급은 VOV 할인 제외, 최대 3만원)</span>
             </p>
           </div>
 

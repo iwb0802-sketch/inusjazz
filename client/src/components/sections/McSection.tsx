@@ -786,7 +786,7 @@ export default function McSection() {
                       </span>
                     ) : mc.tier === "PREMIUM" ? (
                       <span
-                        className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] tracking-[0.25em] uppercase"
+                        className="inline-flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 text-[8.5px] sm:text-[10px] tracking-[0.05em] sm:tracking-[0.25em] uppercase whitespace-nowrap"
                         style={{
                           fontFamily: "'Cormorant Garamond', serif",
                           background: "linear-gradient(135deg, rgba(212,184,150,0.95) 0%, rgba(190,155,110,0.95) 100%)",

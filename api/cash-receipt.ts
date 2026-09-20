@@ -219,10 +219,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         await client.query(`UPDATE cash_receipts SET bolta_issuance_key = $2, status = 'PENDING' WHERE id = $1`, [created.id, issuanceKey]);
         const saved = await client.query(`SELECT * FROM cash_receipts WHERE id = $1`, [created.id]);
         await client.query("COMMIT");
+        const receiptLabel = mode === "live" ? "현금영수증" : "테스트 현금영수증";
         res.status(202).json({
           ok: true,
           pending: true,
-          message: "테스트 현금영수증 발행 요청을 접수했습니다. 최종 결과는 자동으로 갱신됩니다.",
+          message: `${receiptLabel} 발행 요청을 접수했습니다. 최종 결과는 자동으로 갱신됩니다.`,
           receipt: serializeReceipt(saved.rows[0] as ReceiptRow),
         });
         return;
@@ -302,10 +303,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       await client.query(`UPDATE cash_receipts SET bolta_issuance_key = $2 WHERE id = $1`, [created.id, issuanceKey]);
       const saved = await client.query(`SELECT * FROM cash_receipts WHERE id = $1`, [created.id]);
       await client.query("COMMIT");
+      const receiptLabel = mode === "live" ? "현금영수증" : "테스트 현금영수증";
       res.status(202).json({
         ok: true,
         pending: true,
-        message: "테스트 현금영수증 취소 요청을 접수했습니다. 최종 결과는 자동으로 갱신됩니다.",
+        message: `${receiptLabel} 취소 요청을 접수했습니다. 최종 결과는 자동으로 갱신됩니다.`,
         receipt: serializeReceipt(saved.rows[0] as ReceiptRow),
       });
       return;

@@ -403,6 +403,9 @@ export default function EventSection() {
             <p className="mt-2.5 text-[#777] text-[12px] sm:text-sm leading-relaxed break-keep">
               등급 상관없이 원하는 사회자 또는 아티스트 지정 가능 · 같은 팀이 사전에 호흡을 맞춰 예식이 매끄럽습니다
             </p>
+            <p className="mt-1.5 text-[#a8814f] text-[11px] sm:text-xs leading-relaxed break-keep">
+              ※ 시그니처 등급 사회자 지정 시 추가 비용이 발생합니다
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">

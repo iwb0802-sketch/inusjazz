@@ -30,8 +30,8 @@ const MCS = [
   },
   {
     name: "이도영",
-    tier: "BEST",
-    desc: "4년+ 경력",
+    tier: "PREMIUM",
+    desc: "8년+ 경력",
     image: "/images/mc-profile-2_f194877b.jpg",
     highlight: "따뜻하고 안정적인 진행으로 신랑신부님의 이야기를 감동적으로 전달합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",

@@ -768,10 +768,10 @@ export default function McSection() {
 
 
 
-                  <div className="absolute top-3 left-3">
+                  <div className="absolute top-3 left-3 max-w-[62%]">
                     {mc.tier === "SIGNATURE" ? (
                       <span
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] tracking-[0.25em] uppercase"
+                        className="inline-flex items-center gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 text-[8.5px] sm:text-[10px] tracking-[0.08em] sm:tracking-[0.2em] uppercase whitespace-nowrap"
                         style={{
                           fontFamily: "'Cormorant Garamond', serif",
                           background: "linear-gradient(135deg, #0a0a0a 0%, #000000 100%)",
@@ -781,7 +781,7 @@ export default function McSection() {
                           boxShadow: "0 2px 14px rgba(201,169,97,0.3), inset 0 1px 0 rgba(201,169,97,0.15)",
                         }}
                       >
-                        <Crown size={11} className="shrink-0" style={{ color: "#c9a961" }} />
+                        <Crown size={10} className="shrink-0" style={{ color: "#c9a961" }} />
                         SIGNATURE
                       </span>
                     ) : mc.tier === "PREMIUM" ? (

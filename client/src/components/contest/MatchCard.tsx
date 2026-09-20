@@ -90,7 +90,11 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
         {!blind && (
           <span
             className={`absolute top-3 left-3 text-[10px] tracking-wider px-2 py-1 rounded-full font-medium ${
-              contestant.tier === "PREMIUM" ? "bg-[#d4b896] text-black" : "bg-[#5BB5A2] text-black"
+              contestant.tier === "SIGNATURE"
+                ? "bg-[#c9a961] text-black"
+                : contestant.tier === "PREMIUM"
+                ? "bg-[#d4b896] text-black"
+                : "bg-[#5BB5A2] text-black"
             }`}
           >
             {contestant.tier}

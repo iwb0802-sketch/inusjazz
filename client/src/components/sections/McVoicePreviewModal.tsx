@@ -2,11 +2,11 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const MC_LIST = [
-  { name: "김민수", tier: "PREMIUM", styles: ["품격형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FBYRtfbYIzXNdsFB6amBgH%2Fmc-minsu.jpg", audio: "/audio/mc-minsu.mp3" },
+  { name: "김민수", tier: "SIGNATURE", styles: ["품격형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FBYRtfbYIzXNdsFB6amBgH%2Fmc-minsu.jpg", audio: "/audio/mc-minsu.mp3" },
   { name: "고승범", tier: "BEST", styles: ["품격형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FBwzFRGzJA1Kfhq7jlJAKC%2Fmc-seungbeom.jpg", audio: "/audio/mc-seungbeom.mp3" },
   { name: "이도영", tier: "BEST", styles: ["품격형", "밝은형", "감동형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FiuXMGK12MuFdSRk7uE0pN%2Fmc-idoyoung.jpg", audio: "/audio/mc-idoyoung.mp3" },
-  { name: "석재선", tier: "PREMIUM", styles: ["품격형", "감동형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FJz0RRPbGQ0vJOZ9gDMPDH%2Fmc-jaesun.jpg", audio: "/audio/mc-jaesun.mp3" },
-  { name: "이우영", tier: "PREMIUM", styles: ["품격형", "밝은형", "감동형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2F1mW9tqg_svTMqRhA_gFkh%2Fmc-wooyoung.jpg", audio: "/audio/mc-wooyoung.mp3" },
+  { name: "석재선", tier: "SIGNATURE", styles: ["품격형", "감동형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FJz0RRPbGQ0vJOZ9gDMPDH%2Fmc-jaesun.jpg", audio: "/audio/mc-jaesun.mp3" },
+  { name: "이우영", tier: "SIGNATURE", styles: ["품격형", "밝은형", "감동형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2F1mW9tqg_svTMqRhA_gFkh%2Fmc-wooyoung.jpg", audio: "/audio/mc-wooyoung.mp3" },
   { name: "김선혁", tier: "BEST", styles: ["품격형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FD3R6VD-jz9M3e2d3a9ygH%2Fmc-sunhyuk.jpg", audio: "/audio/mc-sunhyuk.mp3" },
   { name: "장윤태", tier: "PREMIUM", styles: ["품격형", "감동형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FpFD_oxjPfRdpyQbVVCi4D%2Fmc-yuntae.jpg", audio: "/audio/mc-yuntae.mp3" },
   { name: "길상우", tier: "BEST", styles: ["품격형", "밝은형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FPcvLRqLzT-JnfPrulzmCo%2Fmc-gilsangwoo.jpg", audio: "/audio/mc-gilsangwoo.mp3" },
@@ -308,7 +308,7 @@ export default function McVoicePreviewModal({ isOpen, onClose }: McVoicePreviewM
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
                           <span style={{ fontSize: "14px", fontWeight: 600, color: selectedMc === mc.name ? "#d6b16b" : "#fff" }}>{mc.name}</span>
-                          <span style={{ fontSize: "9px", padding: "2px 6px", border: `1px solid ${mc.tier === "PREMIUM" ? "#d6b16b" : "rgba(255,255,255,0.2)"}`, color: mc.tier === "PREMIUM" ? "#d6b16b" : "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>{mc.tier}</span>
+                          <span style={{ fontSize: "9px", padding: "2px 6px", border: `1px solid ${mc.tier === "SIGNATURE" ? "#c9a961" : mc.tier === "PREMIUM" ? "#d6b16b" : "rgba(255,255,255,0.2)"}`, color: mc.tier === "SIGNATURE" ? "#c9a961" : mc.tier === "PREMIUM" ? "#d6b16b" : "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>{mc.tier}</span>
                         </div>
                         <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
                           {mc.styles.map(s => (

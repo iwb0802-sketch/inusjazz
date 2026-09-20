@@ -5,7 +5,7 @@
 
 export interface Contestant {
   name: string;
-  tier: "BEST" | "PREMIUM";
+  tier: "SIGNATURE" | "BEST" | "PREMIUM";
   desc: string;
   image: string;
   highlight: string;
@@ -20,7 +20,7 @@ export interface Contestant {
 export const CONTESTANTS: Contestant[] = [
   {
     name: "김민수",
-    tier: "PREMIUM",
+    tier: "SIGNATURE",
     desc: "5년+ 경력",
     image: "/images/mc-profile-1_33531819.jpg",
     highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",
@@ -56,7 +56,7 @@ export const CONTESTANTS: Contestant[] = [
   },
   {
     name: "석재선",
-    tier: "PREMIUM",
+    tier: "SIGNATURE",
     desc: "10년+ 경력",
     image: "/images/mc-profile-3_33ff7a32.jpg",
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",
@@ -68,7 +68,7 @@ export const CONTESTANTS: Contestant[] = [
   },
   {
     name: "이우영",
-    tier: "PREMIUM",
+    tier: "SIGNATURE",
     desc: "10년+ 경력",
     image: "/images/mc-lee-wooyoung-new_fa27e84d.webp",
     highlight: "편안한 아나운서 톤과 안정적인 진행력으로 위트 있고 깔끔한 예식을 완성하는 사회자입니다.",
@@ -116,7 +116,7 @@ export const CONTESTANTS: Contestant[] = [
   },
   {
     name: "최윤아",
-    tier: "PREMIUM",
+    tier: "SIGNATURE",
     desc: "10년+ 경력",
     image: "/images/mc-yuna.jpg",
     highlight: "세련된 진행과 따뜻한 톤으로 순간의 가치를 빛내는 사회자입니다.",

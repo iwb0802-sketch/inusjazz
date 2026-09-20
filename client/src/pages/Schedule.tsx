@@ -32,21 +32,21 @@ function isPublicScheduleItem(item: any): boolean {
   return Boolean(item?.assigned && publicName && publicName !== "미지정" && isPublicEmcee(publicName));
 }
 
-type Tier = "PREMIUM" | "BEST" | "STANDARD";
+type Tier = "SIGNATURE" | "PREMIUM" | "BEST" | "STANDARD";
 interface McProfile {
   name: string; tier: Tier; tierOrder: number;
   img: string; url: string; desc: string; audio: string; imgPos?: string;
 }
 
 const MC_PROFILES: McProfile[] = [
-  { name:"석재선",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-profile-3_33ff7a32.jpg",         url:"https://blog.naver.com/inusmusics/223822182933", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-jaesun.mp3" },
-  { name:"이우영",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-lee-wooyoung-new_fa27e84d.webp", url:"https://blog.naver.com/inusmusics/220767962639", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-wooyoung.mp3", imgPos:"50% 55%" },
+  { name:"석재선",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-3_33ff7a32.jpg",         url:"https://blog.naver.com/inusmusics/223822182933", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-jaesun.mp3" },
+  { name:"이우영",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-lee-wooyoung-new_fa27e84d.webp", url:"https://blog.naver.com/inusmusics/220767962639", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-wooyoung.mp3", imgPos:"50% 55%" },
   { name:"장윤태",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-yuntae2.jpg", url:"https://blog.naver.com/inusmusics/223246261228", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yuntae.mp3" },
-  { name:"최윤아",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-yuna.jpg",                       url:"https://blog.naver.com/inusmusics/224327229799", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yoona.mp3" },
+  { name:"최윤아",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-yuna.jpg",                       url:"https://blog.naver.com/inusmusics/224327229799", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yoona.mp3" },
   { name:"민준호",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-minjunho.webp", url:"https://blog.naver.com/inusmusics/223597460181", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-minjunho.mp3" },
   { name:"고명준",  tier:"PREMIUM",  tierOrder:1, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cbMnodzCSYqHlMtn.webp", url:"https://m.blog.naver.com/inusmusics/224407344980", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/ZObjnFnQqOmaHGvg.mp3", imgPos:"50% 15%" },
   { name:"고승범",  tier:"BEST",     tierOrder:2, img:"/images/mc-profile-4_a9e52880.jpg",         url:"https://blog.naver.com/inusmusics/223235771542", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-seungbeom.mp3", imgPos:"50% 5%" },
-  { name:"김민수",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-profile-1_33531819.jpg",         url:"https://blog.naver.com/inusmusics/223996383838", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-minsu.mp3" },
+  { name:"김민수",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-1_33531819.jpg",         url:"https://blog.naver.com/inusmusics/223996383838", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-minsu.mp3" },
   { name:"김선혁",  tier:"BEST",     tierOrder:2, img:"/images/host_sunhyuk_1ed704ab.jpg",         url:"https://blog.naver.com/inusmusics/221025505211", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-sunhyuk.mp3" },
   { name: "김태우",  tier:"BEST",     tierOrder:2, img:"/images/mc-taewoo.webp", url:"https://m.blog.naver.com/inusmusics/224364756942", desc:"웨딩 사회 경력 5년+", audio:"/audio/mc-taewoo.mp3" },
   { name:"이상운",  tier:"BEST",     tierOrder:2, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/wgoNWOqnhecIESbf.webp", url:"https://m.blog.naver.com/inusmusics/224413060093", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/kgSWJrpcDmugppgm.mp3", imgPos:"50% 23%" },
@@ -261,6 +261,7 @@ const C = {
   card:"rgba(255,255,255,0.05)", cardBorder:"rgba(255,255,255,0.08)",
   mint:"#5BB5A2", mintLight:"rgba(91,181,162,0.15)", mintBorder:"rgba(91,181,162,0.3)",
   gold:"#d4b896", goldLight:"rgba(212,184,150,0.15)", goldBorder:"rgba(212,184,150,0.3)",
+  signature:"#c9a961", signatureLight:"rgba(201,169,97,0.15)", signatureBorder:"rgba(201,169,97,0.4)",
   text:"#e2e8f0", textMuted:"#64748b", textSub:"#94a3b8",
 };
 
@@ -297,6 +298,7 @@ function McCard({ name }: { name: string }) {
   const p = MC_MAP[name];
   const [imgErr, setImgErr] = useState(false);
   const tierStyles: Record<Tier, React.CSSProperties> = {
+    SIGNATURE: { background: C.signatureLight, color: C.signature, border: `1px solid ${C.signatureBorder}` },
     PREMIUM:  { background: C.goldLight, color: C.gold, border: `1px solid ${C.goldBorder}` },
     BEST:     { background: C.mintLight, color: C.mint, border: `1px solid ${C.mintBorder}` },
     STANDARD: { background: "rgba(148,163,184,0.1)", color: "#94a3b8", border: "1px solid rgba(148,163,184,0.2)" },
@@ -339,6 +341,7 @@ function AssignedCard({ item, slotKey, assignedMap }: { item: any; slotKey: stri
   const otherAvail = getAvailableSlots(item.mc_name, slotKey, assignedMap);
   const tier: Tier = p?.tier || "STANDARD";
   const tierStyles: Record<Tier, React.CSSProperties> = {
+    SIGNATURE: { background: C.signatureLight, color: C.signature, border: `1px solid ${C.signatureBorder}` },
     PREMIUM:  { background: C.goldLight, color: C.gold, border: `1px solid ${C.goldBorder}` },
     BEST:     { background: C.mintLight, color: C.mint, border: `1px solid ${C.mintBorder}` },
     STANDARD: { background: "rgba(148,163,184,0.1)", color: "#94a3b8", border: "1px solid rgba(148,163,184,0.2)" },

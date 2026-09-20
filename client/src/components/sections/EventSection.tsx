@@ -219,7 +219,7 @@ export default function EventSection() {
           >
             <Gift size={14} className="text-[#3f9d8a] flex-shrink-0" />
             <span className="text-[#2f8b78] text-[12.5px] sm:text-[14px] font-bold break-keep whitespace-nowrap">
-              총 15가지 · 23만원 상당 무료 제공
+              예약 하나로, 준비할 게 없어집니다
             </span>
           </div>
 
@@ -234,7 +234,7 @@ export default function EventSection() {
             >
               <Sparkles size={18} className="text-[#1f6b58] flex-shrink-0 mt-[3px]" />
               <p className="text-[#2b241a] text-[13.5px] sm:text-[15.5px] font-bold leading-[1.75] break-keep">
-                <span className="whitespace-nowrap">그중 맞춤 대본 · 음원 편집기 ·</span>{" "}
+                <span className="whitespace-nowrap">맞춤 대본 · 음원 편집기 ·</span>{" "}
                 <span className="whitespace-nowrap">모바일 청첩장은</span>{" "}
                 <span
                   className="whitespace-nowrap font-extrabold"
@@ -244,7 +244,7 @@ export default function EventSection() {
                     padding: "0 2px",
                   }}
                 >
-                  예약만 하면 무조건 드립니다.
+                  별도 비용 없이 포함됩니다.
                 </span>
               </p>
             </div>
@@ -252,7 +252,7 @@ export default function EventSection() {
 
           <p className="mt-4 text-[#5a5a5a] text-[13.5px] sm:text-base leading-[1.75] break-keep max-w-[17.5rem] min-[375px]:max-w-[20rem] sm:max-w-none mx-auto">
             <span className="whitespace-nowrap">사회자 예약만 하셔도</span>{" "}
-            <span className="whitespace-nowrap">아래 혜택이 전부 따라오고,</span>
+            <span className="whitespace-nowrap">아래 혜택이 함께 준비되고,</span>
             <br className="sm:hidden" />
             <span className="whitespace-nowrap">여기에 최대 4만원까지</span>{" "}
             <span className="whitespace-nowrap">추가 할인됩니다.</span>

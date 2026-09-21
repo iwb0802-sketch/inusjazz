@@ -10,7 +10,7 @@ const MC_LIST = [
   { name: "김선혁", tier: "BEST", styles: ["품격형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FD3R6VD-jz9M3e2d3a9ygH%2Fmc-sunhyuk.jpg", audio: "/audio/mc-sunhyuk.mp3" },
   { name: "장윤태", tier: "PREMIUM", styles: ["품격형", "감동형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FpFD_oxjPfRdpyQbVVCi4D%2Fmc-yuntae.jpg", audio: "/audio/mc-yuntae.mp3" },
   { name: "길상우", tier: "BEST", styles: ["품격형", "밝은형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FPcvLRqLzT-JnfPrulzmCo%2Fmc-gilsangwoo.jpg", audio: "/audio/mc-gilsangwoo.mp3" },
-  { name: "손진욱", tier: "BEST", styles: ["품격형", "아나운서형"], image: "/images/mc-sonjinwook.jpg", audio: "/audio/mc-sonjinwook.mp3" },
+  { name: "손진욱", tier: "BEST", styles: ["품격형", "아나운서형"], image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/szGhyZuWuLcNjQKb.webp", audio: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cMMUGxQiWJMRRtWI.mp3" },
 ];
 
 const STYLES = ["품격형", "밝은형", "감동형"];

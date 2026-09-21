@@ -56,7 +56,7 @@ const MC_PROFILES: McProfile[] = [
   { name:"김범태",  tier:"STANDARD", tierOrder:3, img:"/images/mc-beomtae.webp", url:"https://blog.naver.com/inusmusics/223192531041", desc:"웨딩 전문 사회자", audio:"/audio/mc-beomtae.mp3", imgPos:"50% 20%" },
   { name:"심비성",  tier:"STANDARD", tierOrder:3, img:"/images/mc-simbisung.webp", url:"https://blog.naver.com/inusmusics/224198308789", desc:"웨딩 전문 사회자", audio:"/audio/mc-simbisung.mp3", imgPos:"50% 20%" },
   { name:"이도건",  tier:"STANDARD", tierOrder:3, img:"/images/mc-idogeon.jpg", url:"https://blog.naver.com/inusmusics/224099418463", desc:"웨딩 전문 사회자", audio:"/audio/mc-idogeon.mp3" },
-  { name:"손진욱",  tier:"BEST",     tierOrder:2, img:"/images/mc-sonjinwook.jpg", url:"https://blog.naver.com/inusmusics/224418630247", desc:"웨딩 사회 경력 5년+", audio:"/audio/mc-sonjinwook.mp3" },
+  { name:"손진욱",  tier:"BEST",     tierOrder:2, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/szGhyZuWuLcNjQKb.webp", url:"https://blog.naver.com/inusmusics/224418630247", desc:"웨딩 사회 경력 5년+", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cMMUGxQiWJMRRtWI.mp3", imgPos:"50% 15%" },
 ];
 const MC_MAP: Record<string, McProfile> = {};
 MC_PROFILES.forEach(p => { MC_MAP[p.name] = p; });

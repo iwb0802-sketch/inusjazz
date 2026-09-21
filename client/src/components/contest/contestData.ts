@@ -150,6 +150,18 @@ export const CONTESTANTS: Contestant[] = [
     videoId: "ZUI46lW1TTs",
     styleTags: ["중저음 보이스", "신뢰감 있는 진행"],
   },
+  {
+    name: "손진욱",
+    tier: "BEST",
+    desc: "5년+ 경력",
+    image: "/images/mc-sonjinwook.jpg",
+    highlight: "매력적인 중저음 보이스와 세련된 진행으로 예식의 흐름을 안정감 있게 이끌어가는 사회자입니다.",
+    profileUrl: "https://www.inusmusic.com/profile-sonjinwook.html",
+    audioFile: "/audio/mc-sonjinwook.mp3",
+    audioFileBlind: "/audio/mc-sonjinwook.mp3",
+    videoId: "RgUrMxApjPU",
+    styleTags: ["중저음 보이스", "세련된 진행"],
+  },
 ];
 
 // ---------------------------------------------------------------------------

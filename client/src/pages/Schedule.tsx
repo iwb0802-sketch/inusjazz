@@ -10,7 +10,7 @@ const KAKAO_URL = "https://pf.kakao.com/_wxovaM/chat";
 const ALL_EMCEES = [
   "고명준","고승범","김민수","김한솔","길상우","김범태","김선혁",
   "민준호","이우영","장윤태","석재선","이도영","이도건","심비성",
-  "김태우","최윤아","이상운"
+  "김태우","최윤아","이상운","손진욱"
 ];
 
 // 공개 스케줄에 표시하지 않는 사회자
@@ -56,6 +56,7 @@ const MC_PROFILES: McProfile[] = [
   { name:"김범태",  tier:"STANDARD", tierOrder:3, img:"/images/mc-beomtae.webp", url:"https://blog.naver.com/inusmusics/223192531041", desc:"웨딩 전문 사회자", audio:"/audio/mc-beomtae.mp3", imgPos:"50% 20%" },
   { name:"심비성",  tier:"STANDARD", tierOrder:3, img:"/images/mc-simbisung.webp", url:"https://blog.naver.com/inusmusics/224198308789", desc:"웨딩 전문 사회자", audio:"/audio/mc-simbisung.mp3", imgPos:"50% 20%" },
   { name:"이도건",  tier:"STANDARD", tierOrder:3, img:"/images/mc-idogeon.jpg", url:"https://blog.naver.com/inusmusics/224099418463", desc:"웨딩 전문 사회자", audio:"/audio/mc-idogeon.mp3" },
+  { name:"손진욱",  tier:"BEST",     tierOrder:2, img:"/images/mc-sonjinwook.jpg", url:"https://blog.naver.com/inusmusics/224418630247", desc:"웨딩 사회 경력 5년+", audio:"/audio/mc-sonjinwook.mp3" },
 ];
 const MC_MAP: Record<string, McProfile> = {};
 MC_PROFILES.forEach(p => { MC_MAP[p.name] = p; });

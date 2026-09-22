@@ -1,5 +1,5 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { ShieldCheck, ScrollText, Zap } from "lucide-react";
+import { ShieldCheck, ScrollText, Zap, Palette, BookHeart, Gift, Wallet } from "lucide-react";
 import CountUpNumber from "@/components/CountUpNumber";
 
 const GOLD = "#d4b896";
@@ -7,6 +7,7 @@ const GOLD = "#d4b896";
 export default function IntroSection() {
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
+  const anim3 = useScrollAnimation();
 
   return (
     <section id="intro" className="bg-[#0d0d0d] py-16 sm:py-20 lg:py-24 relative">
@@ -31,10 +32,66 @@ export default function IntroSection() {
             <span className="text-[#5BB5A2]"> 이너스뮤직</span>입니다.
           </h2>
           <p className="mt-4 text-white/55 text-[13px] sm:text-base leading-relaxed max-w-xl mx-auto break-keep">
-            <strong className="text-white font-semibold">300회 이상</strong> 실전 경험을 갖춘 전문 사회자만 엄선해
+            <strong className="text-white font-semibold">300회 이상</strong> 실전 경험을 갖춘
+            <strong className="text-white font-semibold"> 18인</strong>의 전문 사회자가 각자의 색깔로{" "}
             <br className="hidden sm:block" />
-            <span className="whitespace-nowrap"> 예식의 흐름과 분위기</span>를 완성합니다.
+            하우스웨딩부터 호텔, 스몰웨딩까지 예식에 맞는 진행을 완성합니다.
           </p>
+        </div>
+
+        {/* 이너스뮤직만의 이유 — 4가지 강점 카드 */}
+        <div ref={anim3.ref} className={`mt-10 sm:mt-14 fade-up ${anim3.isVisible ? "visible" : ""}`}>
+          <span
+            className="text-[#d4b896] text-[11px] sm:text-xs tracking-[0.3em] uppercase"
+            style={{ fontFamily: "'Cormorant Garamond', serif" }}
+          >
+            Why INUSMUSIC
+          </span>
+          <h3
+            className="mt-3 text-white text-lg sm:text-2xl leading-snug break-keep"
+            style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+          >
+            예식마다 다른 분위기, <span className="text-[#5BB5A2]">사회자도 달라야 합니다</span>
+          </h3>
+
+          <div className="mt-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {[
+              {
+                Icon: Palette,
+                title: "예식별 맞춤 매칭",
+                desc: "하우스웨딩 · 호텔 · 웨딩홀 · 스몰웨딩, 예식 형태에 맞는 사회자를 배정합니다",
+              },
+              {
+                Icon: BookHeart,
+                title: "두 사람만의 대본",
+                desc: "신랑신부의 이야기를 담은 맞춤형 대본을 제작해 드립니다",
+              },
+              {
+                Icon: Gift,
+                title: "다양한 예약 혜택",
+                desc: "지정 예약 시 여러 할인과 리워드를 중복으로 받을 수 있습니다",
+              },
+              {
+                Icon: Wallet,
+                title: "예산별 선택",
+                desc: "원하는 예산과 스타일에 맞춰 사회자를 직접 선택할 수 있습니다",
+              },
+            ].map(({ Icon, title, desc }, i) => (
+              <div
+                key={i}
+                className="text-left px-5 py-6 rounded-sm"
+                style={{ background: "linear-gradient(145deg, rgba(212,184,150,0.06) 0%, rgba(212,184,150,0.02) 100%)", border: "1px solid rgba(212,184,150,0.14)" }}
+              >
+                <Icon size={22} style={{ color: "#5BB5A2" }} className="shrink-0" />
+                <p className="mt-3 text-white text-[14px] sm:text-[15px] font-semibold break-keep" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+                  {title}
+                </p>
+                <p className="mt-1.5 text-white/50 text-[12px] sm:text-[13px] leading-relaxed break-keep">
+                  {desc}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* 숫자 3종 — 한 줄 압축 */}

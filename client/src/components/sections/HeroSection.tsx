@@ -73,9 +73,9 @@ export default function HeroSection() {
           }`}
           style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
         >
-          실제 본식 영상으로 완성도를 증명하는
+          18인의 각기 다른 색깔, 하우스웨딩·호텔·웨딩홀·스몰웨딩까지{" "}
           <br className="hidden sm:block" />
-          웨딩 전문 브랜드
+          예식에 맞는 사회자를 예산 안에서 직접 선택하세요
         </p>
 
         {/* 누적 후기 엠블럼 — 골드 헤어라인, CTA 직전 배치 */}

@@ -56,13 +56,13 @@ export default function HeroSection() {
             className="block text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            예식마다, 어울리는
+            예식마다 어울리는
           </span>
           <span
             className="block text-[#5BB5A2] text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-2 leading-tight"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 900 }}
           >
-            사회자가<span className="text-white"> 다릅니다.</span>
+            사회자가<span className="text-white"> 있습니다.</span>
           </span>
         </h1>
 

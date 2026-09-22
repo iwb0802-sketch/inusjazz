@@ -35,7 +35,7 @@ export default function IntroSection() {
             <strong className="text-white font-semibold">300회 이상</strong> 실전 경험을 갖춘
             <strong className="text-white font-semibold"> 18인</strong>의 전문 사회자가 각자의 색깔로{" "}
             <br className="hidden sm:block" />
-            하우스웨딩부터 호텔, 스몰웨딩까지 예식에 맞는 진행을 완성합니다.
+            하우스웨딩부터 호텔, 웨딩홀, 스몰웨딩까지 예식에 맞는 진행을 완성합니다.
           </p>
         </div>
 

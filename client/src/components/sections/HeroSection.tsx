@@ -56,7 +56,7 @@ export default function HeroSection() {
             className="block text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            18인 중,
+            사회자 18인 중,
           </span>
           <span
             className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-2 leading-tight"

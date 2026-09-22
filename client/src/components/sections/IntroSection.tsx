@@ -59,7 +59,7 @@ export default function IntroSection() {
               {
                 Icon: Palette,
                 title: "예식별 맞춤 매칭",
-                desc: "하우스웨딩 · 호텔 · 웨딩홀 · 스몰웨딩, 예식 형태에 맞는 사회자를 배정합니다",
+                desc: "하우스웨딩 · 호텔 · 웨딩홀 · 스몰웨딩, 예식 형태에 맞는 사회자를 지정합니다",
               },
               {
                 Icon: BookHeart,

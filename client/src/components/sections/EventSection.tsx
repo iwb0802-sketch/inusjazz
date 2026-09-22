@@ -295,7 +295,7 @@ export default function EventSection() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                 {[
                   { icon: ShieldCheck, t: "계약금 100% 환불", d: "예식 전주까지 취소 시 위약금 없이 전액 반환" },
-                  { icon: Mic2, t: "사회자 17인 전원 공개", d: "목소리 · 진행 영상까지 예약 전에 직접 확인" },
+                  { icon: Mic2, t: "사회자 18인 전원 공개", d: "목소리 · 진행 영상까지 예약 전에 직접 확인" },
                   { icon: MapPin, t: "주말 예약현황 공개", d: "서울 · 경기 · 인천 진행 (지역에 따라 출장비 별도)" },
                 ].map((b) => (
                   <div

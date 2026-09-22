@@ -56,13 +56,14 @@ export default function HeroSection() {
             className="block text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            예식마다 어울리는
+            18인 중,
           </span>
           <span
-            className="block text-[#5BB5A2] text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-2 leading-tight"
+            className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-2 leading-tight"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 900 }}
           >
-            사회자가<span className="text-white"> 있습니다.</span>
+            <span className="text-white">당신의 예식에 맞는 </span>
+            <span className="text-[#5BB5A2] whitespace-nowrap">한 사람.</span>
           </span>
         </h1>
 
@@ -72,9 +73,9 @@ export default function HeroSection() {
           }`}
           style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
         >
-          하우스웨딩·호텔·웨딩홀·스몰웨딩, 18인의 전문 사회자 중{" "}
+          하우스웨딩·호텔·웨딩홀·스몰웨딩,{" "}
           <br className="hidden sm:block" />
-          예식에 어울리는 한 사람을 예산 안에서 직접 선택하세요
+          목소리와 진행 영상까지 확인하고 예산 안에서 직접 선택하세요
         </p>
 
         {/* 누적 후기 엠블럼 — 골드 헤어라인, CTA 직전 배치 */}

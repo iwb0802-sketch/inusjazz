@@ -23,44 +23,44 @@ const GOLD = "#d4b896";
 const PROOF_IMAGES = [
   {
     src: "/images/proof/proof-soomgo.jpg",
-    alt: "숨고 프로필 리뷰수 733건",
+    alt: "숨고 프로필 리뷰수 804건",
     label: "출처 · 숨고",
     source: "숨고",
-    count: 733,
+    count: 804,
     url: "https://soomgo.com/profile/users/4719699",
     linkLabel: "숨고 프로필에서 확인",
   },
   {
     src: "/images/proof/proof-blog.jpg",
-    alt: "홈페이지 후기게시판 Total 575건",
+    alt: "홈페이지 후기게시판 Total 582건",
     label: "출처 · 후기 게시판",
     source: "후기 게시판",
-    count: 575,
+    count: 582,
     url: "http://musicin.godohosting.com/bbs/board.php?bo_table=forum",
     linkLabel: "후기 게시판에서 확인",
   },
   {
     src: "/images/proof/proof-singer-blog.jpg",
-    alt: "블로그 사회자 후기글 965건",
+    alt: "블로그 사회자 후기글 979건",
     label: "출처 · 블로그",
     source: "블로그",
-    count: 965,
+    count: 979,
     url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=71&parentCategoryNo=71",
     linkLabel: "블로그 후기글에서 확인",
   },
   {
     src: "/images/proof/proof-smartstore.jpg",
-    alt: "네이버 스마트스토어 리뷰 245건",
+    alt: "네이버 스마트스토어 리뷰 377건",
     label: "출처 · 스마트스토어",
     source: "네이버 스마트스토어",
-    count: 245,
+    count: 377,
     url: "https://smartstore.naver.com/inus_store/products/5466083565",
     linkLabel: "스마트스토어에서 확인",
   },
 ];
 
 const PROOF_TOTAL = PROOF_IMAGES.reduce((sum, p) => sum + p.count, 0);
-const PROOF_AS_OF = "2026.09.01";
+const PROOF_AS_OF = "2026.09.23";
 
 export default function ReviewSection() {
   const anim1 = useScrollAnimation();
@@ -165,7 +165,7 @@ export default function ReviewSection() {
                 boxShadow: "0 0 16px rgba(212,184,150,0.25)",
               }}
             >
-              2500+ 후기
+              2700+ 후기
             </span>
           </div>
           <p className="mt-4 text-white/50 text-sm sm:text-base max-w-sm mx-auto leading-relaxed break-keep">
@@ -174,7 +174,7 @@ export default function ReviewSection() {
           <p className="mt-2 text-white/35 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed break-keep">
             숨고·네이버 스마트스토어·블로그 등 모든 플랫폼 후기를 합산하면
             <br className="sm:hidden" />
-            {" "}2,500건 이상 (사회자 개별 후기 포함)
+            {" "}2,700건 이상 (사회자 개별 후기 포함)
           </p>
 
           {/* 증빙 자료 — 숨고/홈페이지/블로그/스마트스토어 실제 후기 캡처 */}
@@ -294,7 +294,7 @@ export default function ReviewSection() {
               <ExternalLink size={15} />
             </a>
             <p className="mt-3 text-xs sm:text-[13px] text-white/50 break-keep leading-relaxed text-center max-w-md mx-auto">
-              <span className="font-bold" style={{ color: GOLD }}>681건</span>의 고객님들의 네이버 게시물은 2,500+ 집계에 포함하지 않습니다.
+              <span className="font-bold" style={{ color: GOLD }}>681건</span>의 고객님들의 네이버 게시물은 2,700+ 집계에 포함하지 않습니다.
             </p>
           </div>
 

@@ -270,7 +270,7 @@ export default function PricingSection() {
                   </div>
                   <div className="flex items-start gap-3 py-3 border-b border-[#f0ece7]">
                     <Check size={16} className="text-[#d4b896] flex-shrink-0 mt-0.5" />
-                    <span className="text-[#888] text-xs italic">사전 질문지 및 맞춤형 대본제작은 지정 사회자 선택시 제공</span>
+                    <span className="text-[#888] text-xs italic">사전 질문지·정보체크지 및 맞춤형 대본제작은 지정 사회자 선택시 제공</span>
                   </div>
                 </div>
 

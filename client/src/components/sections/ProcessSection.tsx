@@ -52,12 +52,14 @@ const PHASES = [
         num: "03",
         icon: Mail,
         title: "대본 내용 회신",
-        desc: "예식 2~3주 전, 전하고 싶은 메시지와 스토리 정리",
+        desc: "예식 2~3주 전까지, 전하고 싶은 메시지와 스토리 정리",
+        note: "질문지·체크리스트를 미리 보내주실수록 맞춤 대본 제작이 더 빨라집니다",
       },
       {
         num: "04",
         icon: PenTool,
         title: "대표 맞춤 대본 제작",
+        badge: "무제한 수정 가능",
         desc: "10년+ 경력 대표가 직접 맞춤 대본 제작 (3~5일)",
       },
       {
@@ -189,8 +191,20 @@ export default function ProcessSection() {
                           </span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-white/90 text-sm font-medium leading-snug">
+                          <p className="text-white/90 text-sm font-medium leading-snug flex items-center gap-1.5 flex-wrap">
                             {step.title}
+                            {"badge" in step && step.badge && (
+                              <span
+                                className="text-[10px] font-semibold px-1.5 py-0.5 rounded-sm tracking-wide"
+                                style={{
+                                  color: GOLD,
+                                  backgroundColor: "rgba(212,184,150,0.15)",
+                                  border: "1px solid rgba(212,184,150,0.4)",
+                                }}
+                              >
+                                {step.badge}
+                              </span>
+                            )}
                           </p>
                           <p className="text-white/65 text-xs mt-1 leading-relaxed">
                             {step.desc}

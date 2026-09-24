@@ -389,7 +389,7 @@ export default function EventSection() {
         </div>
 
         {/* 완성형 웨딩 패키지 */}
-        <div ref={anim3.ref} className={`fade-up ${anim3.isVisible ? "visible" : ""} mt-16 sm:mt-24 pt-12 sm:pt-16 border-t border-[#eee]`}>
+        <div ref={anim3.ref} className={`fade-up ${anim3.isVisible ? "visible" : ""} mt-10 sm:mt-16 pt-8 sm:pt-10 border-t border-[#eee]`}>
           <div className="text-center mb-6 sm:mb-8">
             <span className="block text-[#c09a7e] text-[10px] sm:text-[11px] font-bold tracking-[0.2em] mb-2">
               INNERS MUSIC PACKAGES
@@ -513,7 +513,7 @@ export default function EventSection() {
         </div>
 
         {/* 중복 적용 가능한 할인 */}
-        <div ref={anim4.ref} className={`fade-up ${anim4.isVisible ? "visible" : ""} mt-16 sm:mt-24 pt-12 sm:pt-16 border-t border-[#eee]`}>
+        <div ref={anim4.ref} className={`fade-up ${anim4.isVisible ? "visible" : ""} mt-10 sm:mt-16 pt-8 sm:pt-10 border-t border-[#eee]`}>
           <div className="text-center mb-5">
             <h3
               className="text-[#1a1a1a] text-[17px] sm:text-xl break-keep"

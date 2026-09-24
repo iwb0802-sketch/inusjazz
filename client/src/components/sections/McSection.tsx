@@ -601,7 +601,7 @@ export default function McSection() {
 
   return (
     <>
-      <section id="mc" className="bg-[#0d0d0d] py-24 sm:py-32 lg:py-40 overflow-hidden">
+      <section id="mc" className="bg-[#0d0d0d] pt-16 pb-24 sm:pt-24 sm:pb-32 lg:pt-32 lg:pb-40 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div ref={anim1.ref} className={`text-center mb-12 sm:mb-16 fade-up ${anim1.isVisible ? "visible" : ""}`}>
@@ -644,21 +644,28 @@ export default function McSection() {
               고객님들이 가장 많이 선택한 TOP 사회자들입니다
             </p>
 
-            <div className="mt-8 flex overflow-x-auto no-scrollbar justify-start sm:justify-center gap-2 sm:gap-3 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
-              {STYLE_FILTERS.map((filter) => (
-                <button
-                  key={filter}
-                  onClick={() => handleFilterChange(filter)}
-                  className={`flex-shrink-0 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm tracking-wider transition-all duration-300 border ${
-                    activeFilter === filter
-                      ? "bg-[#5BB5A2] border-[#5BB5A2] text-white shadow-lg shadow-[#5BB5A2]/20"
-                      : "bg-transparent border-white/20 text-white/60 hover:border-[#5BB5A2]/50 hover:text-white/90"
-                  }`}
-                  style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
-                >
-                  {filter}
-                </button>
-              ))}
+            <div className="relative mt-8 -mx-4 px-4 sm:mx-0 sm:px-0">
+              <div className="flex overflow-x-auto no-scrollbar justify-start sm:justify-center gap-2 sm:gap-3 pb-2">
+                {STYLE_FILTERS.map((filter) => (
+                  <button
+                    key={filter}
+                    onClick={() => handleFilterChange(filter)}
+                    className={`flex-shrink-0 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm tracking-wider transition-all duration-300 border ${
+                      activeFilter === filter
+                        ? "bg-[#5BB5A2] border-[#5BB5A2] text-white shadow-lg shadow-[#5BB5A2]/20"
+                        : "bg-transparent border-white/20 text-white/60 hover:border-[#5BB5A2]/50 hover:text-white/90"
+                    }`}
+                    style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+                  >
+                    {filter}
+                  </button>
+                ))}
+              </div>
+              {/* 모바일 가로 스크롤 힌트 - 오른쪽 끝 페이드 */}
+              <div
+                className="sm:hidden pointer-events-none absolute top-0 right-0 h-full w-10"
+                style={{ background: "linear-gradient(90deg, transparent 0%, #0d0d0d 90%)" }}
+              />
             </div>
 
             <div className="mt-4 h-6 flex items-center justify-center">

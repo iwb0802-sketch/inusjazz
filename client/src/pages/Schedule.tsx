@@ -35,28 +35,28 @@ function isPublicScheduleItem(item: any): boolean {
 type Tier = "SIGNATURE" | "PREMIUM" | "BEST" | "STANDARD";
 interface McProfile {
   name: string; tier: Tier; tierOrder: number;
-  img: string; url: string; desc: string; audio: string; imgPos?: string;
+  img: string; url: string; desc: string; audio: string; styles: string[]; imgPos?: string;
 }
 
 const MC_PROFILES: McProfile[] = [
-  { name:"석재선",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-3_33ff7a32.jpg",         url:"https://blog.naver.com/inusmusics/223822182933", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-jaesun.mp3" },
-  { name:"이우영",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-lee-wooyoung-new_fa27e84d.webp", url:"https://blog.naver.com/inusmusics/220767962639", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-wooyoung.mp3", imgPos:"50% 55%" },
-  { name:"장윤태",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-yuntae2.jpg", url:"https://blog.naver.com/inusmusics/223246261228", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yuntae.mp3" },
-  { name:"최윤아",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-yuna.jpg",                       url:"https://blog.naver.com/inusmusics/224327229799", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yoona.mp3" },
-  { name:"민준호",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-minjunho.webp", url:"https://blog.naver.com/inusmusics/223597460181", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-minjunho.mp3" },
-  { name:"고명준",  tier:"PREMIUM",  tierOrder:1, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cbMnodzCSYqHlMtn.webp", url:"https://m.blog.naver.com/inusmusics/224407344980", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/ZObjnFnQqOmaHGvg.mp3", imgPos:"50% 15%" },
-  { name:"고승범",  tier:"BEST",     tierOrder:2, img:"/images/mc-profile-4_a9e52880.jpg",         url:"https://blog.naver.com/inusmusics/223235771542", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-seungbeom.mp3", imgPos:"50% 5%" },
-  { name:"김민수",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-1_33531819.jpg",         url:"https://blog.naver.com/inusmusics/223996383838", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-minsu.mp3" },
-  { name:"김선혁",  tier:"BEST",     tierOrder:2, img:"/images/host_sunhyuk_1ed704ab.jpg",         url:"https://blog.naver.com/inusmusics/221025505211", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-sunhyuk.mp3" },
-  { name: "김태우",  tier:"BEST",     tierOrder:2, img:"/images/mc-taewoo.webp", url:"https://m.blog.naver.com/inusmusics/224364756942", desc:"웨딩 사회 경력 5년+", audio:"/audio/mc-taewoo.mp3" },
-  { name:"이상운",  tier:"BEST",     tierOrder:2, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/wgoNWOqnhecIESbf.webp", url:"https://m.blog.naver.com/inusmusics/224413060093", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/kgSWJrpcDmugppgm.mp3", imgPos:"50% 23%" },
-  { name:"길상우",  tier:"BEST",     tierOrder:2, img:"/images/mc-gilsangwoo.jpg",                 url:"https://blog.naver.com/inusmusics/220802942529", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-gilsangwoo.mp3" },
-  { name:"김한솔",  tier:"STANDARD", tierOrder:3, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/lJGBLeMCavGuGJBJ.png", url:"https://blog.naver.com/inusmusics/224393408893", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/SwWITRqBhTiSlunE.mp3", imgPos:"50% 15%" },
-  { name:"이도영",  tier:"PREMIUM", tierOrder:1, img:"/images/mc-profile-2_f194877b.jpg",         url:"https://blog.naver.com/inusmusics/223845891681", desc:"웨딩 사회 경력 8년+",  audio:"/audio/mc-idoyoung.mp3" },
-  { name:"김범태",  tier:"STANDARD", tierOrder:3, img:"/images/mc-beomtae.webp", url:"https://blog.naver.com/inusmusics/223192531041", desc:"웨딩 전문 사회자", audio:"/audio/mc-beomtae.mp3", imgPos:"50% 20%" },
-  { name:"심비성",  tier:"STANDARD", tierOrder:3, img:"/images/mc-simbisung.webp", url:"https://blog.naver.com/inusmusics/224198308789", desc:"웨딩 전문 사회자", audio:"/audio/mc-simbisung.mp3", imgPos:"50% 20%" },
-  { name:"이도건",  tier:"STANDARD", tierOrder:3, img:"/images/mc-idogeon.jpg", url:"https://blog.naver.com/inusmusics/224099418463", desc:"웨딩 전문 사회자", audio:"/audio/mc-idogeon.mp3" },
-  { name:"손진욱",  tier:"BEST",     tierOrder:2, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/szGhyZuWuLcNjQKb.webp", url:"https://blog.naver.com/inusmusics/224418630247", desc:"웨딩 사회 경력 5년+", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cMMUGxQiWJMRRtWI.mp3", imgPos:"50% 15%" },
+  { name:"석재선",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-3_33ff7a32.jpg",         url:"https://blog.naver.com/inusmusics/223822182933", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-jaesun.mp3", styles:["품격형","아나운서형"] },
+  { name:"이우영",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-lee-wooyoung-new_fa27e84d.webp", url:"https://blog.naver.com/inusmusics/220767962639", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-wooyoung.mp3", styles:["아나운서형","유쾌형"], imgPos:"50% 55%" },
+  { name:"장윤태",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-yuntae2.jpg", url:"https://blog.naver.com/inusmusics/223246261228", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yuntae.mp3", styles:["품격형","감성형"] },
+  { name:"최윤아",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-yuna.jpg",                       url:"https://blog.naver.com/inusmusics/224327229799", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yoona.mp3", styles:["감성형","아나운서형"] },
+  { name:"민준호",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-minjunho.webp", url:"https://blog.naver.com/inusmusics/223597460181", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-minjunho.mp3", styles:["품격형","아나운서형"] },
+  { name:"고명준",  tier:"PREMIUM",  tierOrder:1, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cbMnodzCSYqHlMtn.webp", url:"https://m.blog.naver.com/inusmusics/224407344980", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/ZObjnFnQqOmaHGvg.mp3", styles:["유쾌형","감성형"], imgPos:"50% 15%" },
+  { name:"고승범",  tier:"BEST",     tierOrder:2, img:"/images/mc-profile-4_a9e52880.jpg",         url:"https://blog.naver.com/inusmusics/223235771542", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-seungbeom.mp3", styles:["품격형"], imgPos:"50% 5%" },
+  { name:"김민수",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-1_33531819.jpg",         url:"https://blog.naver.com/inusmusics/223996383838", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-minsu.mp3", styles:["품격형","아나운서형"] },
+  { name:"김선혁",  tier:"BEST",     tierOrder:2, img:"/images/host_sunhyuk_1ed704ab.jpg",         url:"https://blog.naver.com/inusmusics/221025505211", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-sunhyuk.mp3", styles:["아나운서형"] },
+  { name: "김태우",  tier:"BEST",     tierOrder:2, img:"/images/mc-taewoo.webp", url:"https://m.blog.naver.com/inusmusics/224364756942", desc:"웨딩 사회 경력 5년+", audio:"/audio/mc-taewoo.mp3", styles:["유쾌형"] },
+  { name:"이상운",  tier:"BEST",     tierOrder:2, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/wgoNWOqnhecIESbf.webp", url:"https://m.blog.naver.com/inusmusics/224413060093", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/kgSWJrpcDmugppgm.mp3", styles:["품격형","감성형"], imgPos:"50% 23%" },
+  { name:"길상우",  tier:"BEST",     tierOrder:2, img:"/images/mc-gilsangwoo.jpg",                 url:"https://blog.naver.com/inusmusics/220802942529", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-gilsangwoo.mp3", styles:["유쾌형"] },
+  { name:"김한솔",  tier:"STANDARD", tierOrder:3, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/lJGBLeMCavGuGJBJ.png", url:"https://blog.naver.com/inusmusics/224393408893", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/SwWITRqBhTiSlunE.mp3", styles:["감성형","유쾌형"], imgPos:"50% 15%" },
+  { name:"이도영",  tier:"PREMIUM", tierOrder:1, img:"/images/mc-profile-2_f194877b.jpg",         url:"https://blog.naver.com/inusmusics/223845891681", desc:"웨딩 사회 경력 8년+",  audio:"/audio/mc-idoyoung.mp3", styles:["감성형","아나운서형"] },
+  { name:"김범태",  tier:"STANDARD", tierOrder:3, img:"/images/mc-beomtae.webp", url:"https://blog.naver.com/inusmusics/223192531041", desc:"웨딩 전문 사회자", audio:"/audio/mc-beomtae.mp3", styles:["감성형","유쾌형"], imgPos:"50% 20%" },
+  { name:"심비성",  tier:"STANDARD", tierOrder:3, img:"/images/mc-simbisung.webp", url:"https://blog.naver.com/inusmusics/224198308789", desc:"웨딩 전문 사회자", audio:"/audio/mc-simbisung.mp3", styles:["아나운서형"], imgPos:"50% 20%" },
+  { name:"이도건",  tier:"STANDARD", tierOrder:3, img:"/images/mc-idogeon.jpg", url:"https://blog.naver.com/inusmusics/224099418463", desc:"웨딩 전문 사회자", audio:"/audio/mc-idogeon.mp3", styles:["아나운서형"] },
+  { name:"손진욱",  tier:"BEST",     tierOrder:2, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/szGhyZuWuLcNjQKb.webp", url:"https://blog.naver.com/inusmusics/224418630247", desc:"웨딩 사회 경력 5년+", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cMMUGxQiWJMRRtWI.mp3", styles:["품격형","아나운서형"], imgPos:"50% 15%" },
 ];
 const MC_MAP: Record<string, McProfile> = {};
 MC_PROFILES.forEach(p => { MC_MAP[p.name] = p; });
@@ -327,6 +327,15 @@ function McCard({ name }: { name: string }) {
           <div style={{ display:"flex", alignItems:"center", gap:4, flexWrap:"wrap" }}>
             <span style={{ fontSize:9, fontWeight:700, padding:"2px 6px", borderRadius:4, ...tierStyles[tier] }}>{tier}</span>
           </div>
+          {p?.styles?.length ? (
+            <div style={{ display:"flex", alignItems:"center", gap:3, flexWrap:"wrap", marginTop:5 }}>
+              {p.styles.map((style) => (
+                <span key={style} style={{ fontSize:8, fontWeight:600, padding:"2px 4px", borderRadius:4, background:"rgba(91,181,162,0.12)", color:"#a7d9d0", border:`1px solid ${C.mintBorder}` }}>
+                  {style}
+                </span>
+              ))}
+            </div>
+          ) : null}
         </div>
       </a>
     </div>

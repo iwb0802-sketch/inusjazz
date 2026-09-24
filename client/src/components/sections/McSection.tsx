@@ -18,7 +18,7 @@ const MCS = [
     cardImage: "/images/mc-minsu-headroom.jpg",
     reviewKeywords: ["깔끔한진행", "원하는분위기맞춤진행", "안정감있는진행", "돌발상황대응력", "자연스러운분위기리드", "몰입도높은진행"],
     tags: ["웨딩 사회 경력 8년+", "누적 진행 800회 이상"],
-    highlight: "안정적인 진행력과 맞춤 대본으로 예식의 전체 흐름을 설계합니다.",
+    highlight: "아나운서 톤의 안정적인 전달력으로 깔끔하고 세련된 진행을 완성하는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223996383838",
     styles: ["품격형", "아나운서형"],
     youtubeId: "YmqVrha13G0",

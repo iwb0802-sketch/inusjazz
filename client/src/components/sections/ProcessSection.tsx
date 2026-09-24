@@ -66,7 +66,7 @@ const PHASES = [
         num: "05",
         icon: Headphones,
         title: "본사 최종 안내",
-        desc: "화요일, 전문 상담 직원이 일정과 진행사항 최종 체크",
+        desc: "예식주 화요일, 전문 상담 직원이 일정과 진행사항 최종 체크",
       },
     ],
   },
@@ -79,7 +79,7 @@ const PHASES = [
         num: "06",
         icon: MessageSquare,
         title: "사회자 최종 확인",
-        desc: "수요일, 완성 대본 기반 최종 확인 및 세밀 조율",
+        desc: "예식주 수요일, 이미 전달받은 대본을 사회자가 한 번 더 다듬는 최종 점검",
       },
       {
         num: "07",

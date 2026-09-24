@@ -326,7 +326,6 @@ function McCard({ name }: { name: string }) {
           <div style={{ fontSize:13, fontWeight:700, color:C.text, marginBottom:4 }}>{name}</div>
           <div style={{ display:"flex", alignItems:"center", gap:4, flexWrap:"wrap" }}>
             <span style={{ fontSize:9, fontWeight:700, padding:"2px 6px", borderRadius:4, ...tierStyles[tier] }}>{tier}</span>
-            <span style={{ fontSize:9, fontWeight:600, padding:"2px 6px", borderRadius:4, background:"rgba(91,181,162,0.15)", color:C.mint, border:`1px solid ${C.mintBorder}` }}>서울 기준 가능</span>
           </div>
         </div>
       </a>

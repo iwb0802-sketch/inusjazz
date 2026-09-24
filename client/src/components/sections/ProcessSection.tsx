@@ -191,7 +191,7 @@ export default function ProcessSection() {
                           </span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-white/90 text-sm font-medium leading-snug flex items-center gap-1.5 flex-wrap">
+                          <p className="text-white/90 text-sm font-medium leading-snug flex items-center gap-1.5 flex-wrap break-keep">
                             {step.title}
                             {"badge" in step && step.badge && (
                               <span

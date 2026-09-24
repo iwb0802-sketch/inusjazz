@@ -124,7 +124,7 @@ const MCS = [
     desc: "5년+ 경력",
     image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FPcvLRqLzT-JnfPrulzmCo%2Fmc-gilsangwoo.jpg",
     reviewKeywords: ["세심한예식준비", "정확한딕션과전달력", "프로페셔널한진행", "위트있는분위기리드", "안정감있는진행", "센스있는분위기리드"],
-    tags: ["웨딩 사회 경력 5년+", "품격과 유쾌함을 동시에"],
+    tags: ["웨딩 사회 경력 5년+", "누적 진행 600회 이상"],
     highlight: "센스와 위트를 겸비한 진행력이 강점인 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/220802942529",
     styles: ["유쾌형"],

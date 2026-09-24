@@ -73,8 +73,8 @@ export default function IntroSection() {
               },
               {
                 Icon: Wallet,
-                title: "예산별 선택",
-                desc: "원하는 예산과 스타일에 맞춰 사회자를 직접 선택할 수 있습니다",
+                title: "등급별 선택",
+                desc: "원하는 스타일과 등급에 맞춰 사회자를 직접 선택할 수 있습니다",
               },
             ].map(({ Icon, title, desc }, i) => (
               <div
@@ -86,7 +86,7 @@ export default function IntroSection() {
                 <p className="mt-3 text-white text-[14px] sm:text-[15px] font-semibold break-keep" style={{ fontFamily: "'Noto Serif KR', serif" }}>
                   {title}
                 </p>
-                <p className="mt-1.5 text-white/50 text-[12px] sm:text-[13px] leading-relaxed break-keep">
+                <p className="mt-1.5 text-white/65 text-[12.5px] sm:text-[13.5px] leading-relaxed break-keep">
                   {desc}
                 </p>
               </div>

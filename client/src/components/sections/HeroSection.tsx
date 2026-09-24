@@ -73,9 +73,11 @@ export default function HeroSection() {
           }`}
           style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
         >
-          하우스웨딩·호텔·웨딩홀·스몰웨딩,{" "}
-          <br className="hidden sm:block" />
-          목소리와 진행 영상까지 확인하고 예산 안에서 직접 선택하세요
+          하우스웨딩·호텔·웨딩홀·스몰웨딩,
+          <br />
+          목소리와 진행 영상 확인부터 예식 당일까지
+          <br />
+          이너스뮤직의 체계로 완성합니다.
         </p>
 
         {/* 누적 후기 엠블럼 — 골드 헤어라인, CTA 직전 배치 */}

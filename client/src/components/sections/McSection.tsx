@@ -51,7 +51,7 @@ const MCS = [
     tags: ["웨딩 사회 경력 8년+", "누적 진행 800회 이상"],
     highlight: "따뜻하고 안정적인 진행으로 신랑신부님의 이야기를 감동적으로 전달합니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223845891681",
-    styles: ["품격형", "밝은형", "감동형"],
+    styles: ["품격형", "유쾌형", "감성형"],
     youtubeId: "_WitF1Nxugs",
     audioFile: "/audio/mc-idoyoung.mp3",
     profileCardImg: "/images/mc-idoyoung-card.jpg",
@@ -67,7 +67,7 @@ const MCS = [
     tags: ["웨딩 사회 경력 10년+", "누적 진행 1000회 이상"],
     highlight: "차분하면서도 격식 있는 진행으로 품격 있는 예식을 만들어드립니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223822182933",
-    styles: ["품격형", "감동형"],
+    styles: ["품격형", "감성형"],
     youtubeId: "PmtzbgT_PNw",
     audioFile: "/audio/mc-jaesun.mp3",
     profileCardImg: "/images/mc-jaesun-card.jpg",
@@ -82,7 +82,7 @@ const MCS = [
     tags: ["웨딩 사회 경력 10년+", "누적 진행 1000회 이상"],
     highlight: "편안한 아나운서 톤과 안정적인 진행력으로 위트 있고 깔끔한 예식을 완성하는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/220767962639",
-    styles: ["품격형", "밝은형", "감동형", "아나운서형"],
+    styles: ["품격형", "유쾌형", "감성형", "아나운서형"],
     youtubeId: "s8ixiiTzfvY",
     audioFile: "/audio/mc-wooyoung.mp3",
     profileCardImg: "/images/mc-wooyoung-card.jpg",
@@ -112,7 +112,7 @@ const MCS = [
     tags: ["웨딩 사회 경력 10년+", "누적 진행 1000회 이상"],
     highlight: "안정적인 진행력과 젠틀한 진행으로 예식의 완성도를 높입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/223246261228",
-    styles: ["품격형", "감동형"],
+    styles: ["품격형", "감성형"],
     youtubeId: "678oSi_riBg",
     audioFile: "/audio/mc-yuntae.mp3",
     profileCardImg: "/images/mc-yuntae-card.jpg",
@@ -127,7 +127,7 @@ const MCS = [
     tags: ["웨딩 사회 경력 5년+", "품격과 유쾌함을 동시에"],
     highlight: "센스와 위트를 겸비한 진행력이 강점인 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/220802942529",
-    styles: ["품격형", "밝은형"],
+    styles: ["품격형", "유쾌형"],
     youtubeId: "0Ske676aw84",
     audioFile: "/audio/mc-gilsangwoo.mp3",
     profileCardImg: "",
@@ -159,7 +159,7 @@ const MCS = [
     tags: ["웨딩사회 경력 10년+", "누적 진행 1000건+"],
     highlight: "밝은 에너지와 유연한 진행으로 예식의 분위기를 자연스럽게 이끄는 사회자입니다.",
     profileUrl: "https://blog.naver.com/inusmusics/224407344980",
-    styles: ["품격형", "밝은형", "감동형"],
+    styles: ["품격형", "유쾌형", "감성형"],
     youtubeId: "ljYtiqS5158",
     audioFile: "/audio/mc-myeongjun.mp3",
     profileCardImg: "",
@@ -196,12 +196,12 @@ const MCS = [
   },
 ];
 
-const STYLE_FILTERS = ["전체", "품격형", "밝은형", "감동형", "아나운서형"];
+const STYLE_FILTERS = ["전체", "품격형", "유쾌형", "감성형", "아나운서형"];
 
 const STYLE_DESCRIPTIONS: Record<string, string> = {
   "품격형": "차분하고 격식 있는 호텔·채플 예식에 어울리는 사회자입니다.",
-  "밝은형": "자연스럽고 유쾌한 분위기로 하객 반응을 살리는 사회자입니다.",
-  "감동형": "신랑신부의 이야기와 부모님 감사 순서를 따뜻하게 전달하는 사회자입니다.",
+  "유쾌형": "자연스럽고 유쾌한 텐션으로 하객 반응을 살리는 사회자입니다.",
+  "감성형": "따뜻한 톤으로 신랑신부의 이야기와 부모님 감사 순서를 전달하는 사회자입니다.",
   "아나운서형": "정확한 발성, 안정적인 톤, 깔끔한 식순 진행에 강한 사회자입니다.",
 };
 

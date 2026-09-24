@@ -4,16 +4,16 @@ import { motion, AnimatePresence } from "framer-motion";
 const MC_LIST = [
   { name: "김민수", tier: "SIGNATURE", styles: ["품격형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FBYRtfbYIzXNdsFB6amBgH%2Fmc-minsu.jpg", audio: "/audio/mc-minsu.mp3" },
   { name: "고승범", tier: "BEST", styles: ["품격형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FBwzFRGzJA1Kfhq7jlJAKC%2Fmc-seungbeom.jpg", audio: "/audio/mc-seungbeom.mp3" },
-  { name: "이도영", tier: "PREMIUM", styles: ["품격형", "밝은형", "감동형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FiuXMGK12MuFdSRk7uE0pN%2Fmc-idoyoung.jpg", audio: "/audio/mc-idoyoung.mp3" },
-  { name: "석재선", tier: "SIGNATURE", styles: ["품격형", "감동형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FJz0RRPbGQ0vJOZ9gDMPDH%2Fmc-jaesun.jpg", audio: "/audio/mc-jaesun.mp3" },
-  { name: "이우영", tier: "SIGNATURE", styles: ["품격형", "밝은형", "감동형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2F1mW9tqg_svTMqRhA_gFkh%2Fmc-wooyoung.jpg", audio: "/audio/mc-wooyoung.mp3" },
+  { name: "이도영", tier: "PREMIUM", styles: ["품격형", "유쾌형", "감성형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FiuXMGK12MuFdSRk7uE0pN%2Fmc-idoyoung.jpg", audio: "/audio/mc-idoyoung.mp3" },
+  { name: "석재선", tier: "SIGNATURE", styles: ["품격형", "감성형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FJz0RRPbGQ0vJOZ9gDMPDH%2Fmc-jaesun.jpg", audio: "/audio/mc-jaesun.mp3" },
+  { name: "이우영", tier: "SIGNATURE", styles: ["품격형", "유쾌형", "감성형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2F1mW9tqg_svTMqRhA_gFkh%2Fmc-wooyoung.jpg", audio: "/audio/mc-wooyoung.mp3" },
   { name: "김선혁", tier: "BEST", styles: ["품격형", "아나운서형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FD3R6VD-jz9M3e2d3a9ygH%2Fmc-sunhyuk.jpg", audio: "/audio/mc-sunhyuk.mp3" },
-  { name: "장윤태", tier: "PREMIUM", styles: ["품격형", "감동형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FpFD_oxjPfRdpyQbVVCi4D%2Fmc-yuntae.jpg", audio: "/audio/mc-yuntae.mp3" },
-  { name: "길상우", tier: "BEST", styles: ["품격형", "밝은형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FPcvLRqLzT-JnfPrulzmCo%2Fmc-gilsangwoo.jpg", audio: "/audio/mc-gilsangwoo.mp3" },
+  { name: "장윤태", tier: "PREMIUM", styles: ["품격형", "감성형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FpFD_oxjPfRdpyQbVVCi4D%2Fmc-yuntae.jpg", audio: "/audio/mc-yuntae.mp3" },
+  { name: "길상우", tier: "BEST", styles: ["품격형", "유쾌형"], image: "https://storage.googleapis.com/runable-templates/cli-uploads%2FeblzJGDjOG2vKrak7NizAO4MJKnCG921%2FPcvLRqLzT-JnfPrulzmCo%2Fmc-gilsangwoo.jpg", audio: "/audio/mc-gilsangwoo.mp3" },
   { name: "손진욱", tier: "BEST", styles: ["품격형", "아나운서형"], image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/szGhyZuWuLcNjQKb.webp", audio: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cMMUGxQiWJMRRtWI.mp3" },
 ];
 
-const STYLES = ["품격형", "밝은형", "감동형"];
+const STYLES = ["품격형", "유쾌형", "감성형"];
 
 type Step = "form" | "mc" | "generating" | "result";
 
@@ -67,9 +67,9 @@ export default function McVoicePreviewModal({ isOpen, onClose }: McVoicePreviewM
 
   const getScript = (style: string, groom: string, bride: string) => {
     switch (style) {
-      case "감동형":
+      case "감성형":
         return `지금부터 두 분의 아름다운 예식을 시작하겠습니다. 신랑 ${groom} 님께서는 이 자리에서 가장 사랑하는 분을 만나기 위해 먼저 입장해 주시겠습니다. 신랑 ${groom} 님 입장입니다. 이제 오늘의 주인공, 신부 ${bride} 님께서 입장하시겠습니다. 모든 분들의 마음 속에 영원히 기억될 아름다운 순간입니다. 신부 ${bride} 님 입장입니다.`;
-      case "밝은형":
+      case "유쾌형":
         return `안녕하세요! 오늘 이 아름다운 자리에 와주신 모든 분들께 진심으로 감사드립니다. 자, 이제 오늘의 주인공 신랑 ${groom} 님께서 입장하십니다! 힘차고 따뜻한 박수로 맞이해 주세요! 신랑 ${groom} 님 입장! 자, 잠시 후 오늘의 가장 아름다운 순간이 펼쳐집니다. 신부 ${bride} 님께서 입장하십니다! 신부 ${bride} 님 입장!`;
       default:
         return `오늘 귀한 시간을 내어주신 모든 분들께 깊은 감사를 드립니다. 신랑 ${groom} 님의 입장을 안내해 드리겠습니다. 신랑 ${groom} 님, 입장해 주십시오. 이어서 신부 ${bride} 님의 입장이 있겠습니다. 신부 ${bride} 님, 행복한 걸음으로 입장해 주십시오.`;
@@ -401,9 +401,9 @@ export default function McVoicePreviewModal({ isOpen, onClose }: McVoicePreviewM
                 <div style={{ padding: "16px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", marginBottom: "20px" }}>
                   <div style={{ fontSize: "11px", color: "#d6b16b", letterSpacing: "0.1em", marginBottom: "10px" }}>입장 멘트 미리보기</div>
                   <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)", lineHeight: 1.9, margin: 0 }}>
-                    {selectedStyle === "감동형"
+                    {selectedStyle === "감성형"
                       ? `지금부터 두 분의 아름다운 예식을 시작하겠습니다.\n\n신랑 ${groomName} 님 입장입니다.\n\n신부 ${brideName} 님 입장입니다.`
-                      : selectedStyle === "밝은형"
+                      : selectedStyle === "유쾌형"
                       ? `신랑 ${groomName} 님 입장! 신부 ${brideName} 님 입장!`
                       : `신랑 ${groomName} 님, 입장해 주십시오.\n\n신부 ${brideName} 님, 입장해 주십시오.`}
                   </p>

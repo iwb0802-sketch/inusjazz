@@ -46,9 +46,9 @@ async function startServer() {
       // 분위기별 멘트 템플릿
       const getScript = (style: string) => {
         switch (style) {
-          case "감동형":
+          case "감성형":
             return `지금부터 두 분의 아름다운 예식을 시작하겠습니다.\n\n신랑 ${groomName} 님께서는 이 자리에서 가장 사랑하는 분을 만나기 위해 먼저 입장해 주시겠습니다. 신랑 ${groomName} 님 입장입니다.\n\n이제 오늘의 주인공, 신부 ${brideName} 님께서 입장하시겠습니다. 모든 분들의 마음 속에 영원히 기억될 아름다운 순간입니다. 신부 ${brideName} 님 입장입니다.`;
-          case "밝은형":
+          case "유쾌형":
             return `안녕하세요! 오늘 이 아름다운 자리에 와주신 모든 분들께 진심으로 감사드립니다.\n\n자, 이제 오늘의 주인공 신랑 ${groomName} 님께서 입장하십니다! 힘차고 따뜻한 박수로 맞이해 주세요! 신랑 ${groomName} 님 입장!\n\n자, 잠시 후 오늘의 가장 아름다운 순간이 펼쳐집니다. 평생 기억될 이 순간, 신부 ${brideName} 님께서 입장하십니다! 신부 ${brideName} 님 입장!`;
           default: // 품격형
             return `오늘 귀한 시간을 내어주신 모든 분들께 깊은 감사를 드립니다.\n\n신랑 ${groomName} 님의 입장을 안내해 드리겠습니다. 신랑 ${groomName} 님, 입장해 주십시오.\n\n이어서 신부 ${brideName} 님의 입장이 있겠습니다. 신부 ${brideName} 님, 행복한 걸음으로 입장해 주십시오.`;

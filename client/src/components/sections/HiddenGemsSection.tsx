@@ -4,7 +4,7 @@
  * Brand: Mint (#5BB5A2) + Gold (#d4b896)
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Sparkles, ChevronRight, Play, Pause, Volume2 } from "lucide-react";
+import { Sparkles, ChevronRight, Play, Pause, Volume2, X, ExternalLink } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 // 아직 널리 알려지지 않았지만 실력이 확실한 사회자 (숨은 강자)
@@ -19,6 +19,7 @@ const HIDDEN_GEMS = [
     styles: ["품격형", "아나운서형"],
     image: "/images/mc-minjunho.jpg",
     audioFile: "/audio/mc-minjunho.mp3",
+    youtubeId: "xDXwvifOQgY",
     url: "https://blog.naver.com/inusmusics/223597460181",
   },
   {
@@ -31,6 +32,7 @@ const HIDDEN_GEMS = [
     styles: ["아나운서형"],
     image: "/images/mc-simbiseong.jpg",
     audioFile: "/audio/mc-simbisung.mp3",
+    youtubeId: "CmBugj0mAj8",
     url: "https://blog.naver.com/inusmusics/224198308789",
   },
   {
@@ -43,6 +45,7 @@ const HIDDEN_GEMS = [
     styles: ["아나운서형"],
     image: "/images/mc-idogeon.jpg",
     audioFile: "/audio/mc-idogeon.mp3",
+    youtubeId: "TD9j7fjHf-s",
     url: "https://blog.naver.com/inusmusics/224099418463",
   },
   {
@@ -55,6 +58,7 @@ const HIDDEN_GEMS = [
     styles: ["감성형", "유쾌형"],
     image: "/images/mc-kimbeomtae.jpg",
     audioFile: "/audio/mc-beomtae.mp3",
+    youtubeId: "sUvNrivuSvw",
     url: "https://blog.naver.com/inusmusics/223192531041",
   },
   {
@@ -67,6 +71,7 @@ const HIDDEN_GEMS = [
     styles: ["유쾌형"],
     image: "/images/mc-kimtaewoo.jpg",
     audioFile: "/audio/mc-taewoo.mp3",
+    youtubeId: "GuQkCskr0dA",
     url: "https://blog.naver.com/inusmusics/224364756942",
   },
   {
@@ -79,6 +84,7 @@ const HIDDEN_GEMS = [
     styles: ["감성형", "유쾌형"],
     image: "/images/mc-kimhansol.jpg",
     audioFile: "/audio/mc-kimhansol.mp3",
+    youtubeId: "cBBdRueVua8",
     url: "https://blog.naver.com/inusmusics/224393408893",
   },
 ];
@@ -90,9 +96,142 @@ const tierStyle = (tier: string) =>
     ? { background: "rgba(91,181,162,0.18)", color: "#7fd3c1", border: "1px solid rgba(91,181,162,0.45)" }
     : { background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.18)" };
 
+type Gem = typeof HIDDEN_GEMS[0];
+
+// 스페셜리스트 프로필 모달 - 메인 사회자 모달과 동일한 구성(영상 상단 + 정보 + 하단 링크 버튼)
+function GemModal({ mc, onClose }: { mc: Gem; onClose: () => void }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
+      style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(8px)" }}
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-3xl overflow-hidden shadow-2xl"
+        style={{
+          animation: "fadeInUpGem 0.35s cubic-bezier(0.23,1,0.32,1)",
+          maxHeight: "92vh",
+          background: "linear-gradient(145deg, #161616 0%, #0d0d0d 100%)",
+          border: "1px solid rgba(255,255,255,0.07)",
+          borderRadius: "12px",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 닫기 버튼 */}
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 z-10 w-9 h-9 flex items-center justify-center rounded-full text-white hover:scale-110 transition-all duration-200"
+          style={{ background: "rgba(0,0,0,0.7)", border: "1.5px solid rgba(255,255,255,0.3)", boxShadow: "0 2px 8px rgba(0,0,0,0.5)" }}
+        >
+          <X size={17} strokeWidth={2.5} />
+        </button>
+
+        {/* 스크롤 영역 */}
+        <div className="overflow-y-auto relative" style={{ maxHeight: "calc(92vh - 76px)" }}>
+          {/* 영상 */}
+          <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+            <iframe
+              src={`https://www.youtube.com/embed/${mc.youtubeId}?autoplay=1&mute=0&rel=0&playsinline=1&modestbranding=1`}
+              title={`${mc.name} 진행 영상`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+              style={{ border: 0 }}
+            />
+          </div>
+
+          {/* 정보 */}
+          <div className="px-5 py-4 sm:px-6 sm:py-5">
+            <div className="flex items-center gap-2 mb-2">
+              <span
+                className="text-[9px] sm:text-[10px] font-bold tracking-[0.12em] px-2 py-[3px] rounded-full"
+                style={tierStyle(mc.tier)}
+              >
+                {mc.tier}
+              </span>
+              <span
+                className="text-[9px] sm:text-[10px] font-semibold px-2 py-[3px] rounded-md break-keep"
+                style={{ background: "rgba(91,181,162,0.12)", color: "#7fd3c1", border: "1px solid rgba(91,181,162,0.28)" }}
+              >
+                {mc.badge}
+              </span>
+            </div>
+
+            <p className="text-white text-lg sm:text-xl font-bold" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+              {mc.name} 사회자
+            </p>
+            <p className="text-[#d4b896]/85 text-[11px] sm:text-xs font-medium mt-1 mb-2.5 break-keep">{mc.career}</p>
+
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {mc.styles.map((style) => (
+                <span
+                  key={style}
+                  className="inline-flex items-center px-2 py-[3px] rounded-[4px]"
+                  style={{
+                    fontSize: "10px",
+                    letterSpacing: "0.02em",
+                    background: "rgba(212,184,150,0.10)",
+                    border: "1px solid rgba(212,184,150,0.35)",
+                    color: "#d4b896",
+                  }}
+                >
+                  {style}
+                </span>
+              ))}
+            </div>
+
+            <p className="text-white/70 text-[13px] sm:text-sm leading-relaxed break-keep">{mc.highlight}</p>
+
+            <div className="flex items-start gap-1.5 mt-3">
+              <span className="text-[10px] sm:text-[11px] text-white/35 flex-shrink-0 mt-[1px]">이런 예식에</span>
+              <span className="text-[11px] sm:text-xs text-white/80 font-medium break-keep leading-snug">{mc.fit}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* 하단 고정 버튼 */}
+        <div className="px-4 py-3 flex flex-row gap-2" style={{ borderTop: "1px solid rgba(91,181,162,0.2)", background: "rgba(0,0,0,0.6)", flexShrink: 0 }}>
+          <a
+            href={mc.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative flex items-center justify-center gap-2 flex-1 py-3.5 overflow-hidden group transition-all duration-300"
+            style={{
+              fontFamily: "'Noto Sans KR', sans-serif",
+              fontSize: "13px",
+              letterSpacing: "0.05em",
+              fontWeight: 500,
+              background: "linear-gradient(135deg, rgba(212,184,150,0.15) 0%, rgba(212,184,150,0.05) 100%)",
+              border: "1px solid rgba(212,184,150,0.5)",
+              color: "#d6b16b",
+            }}
+          >
+            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "linear-gradient(135deg, rgba(212,184,150,0.3) 0%, rgba(212,184,150,0.1) 100%)" }} />
+            <span className="relative">사회자 프로필 자세히 보기</span>
+            <ExternalLink size={13} className="relative" />
+          </a>
+        </div>
+      </div>
+
+      <style>{`@keyframes fadeInUpGem { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+    </div>
+  );
+}
+
 export default function HiddenGemsSection() {
   const anim3 = useScrollAnimation();
   const [playing, setPlaying] = useState<string | null>(null);
+  const [selectedGem, setSelectedGem] = useState<Gem | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -260,10 +399,14 @@ export default function HiddenGemsSection() {
                       {playing === mc.name && <Volume2 size={12} className="animate-pulse" />}
                     </button>
 
-                    <a
-                      href={mc.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      type="button"
+                      onClick={() => {
+                        audioRef.current?.pause();
+                        audioRef.current = null;
+                        setPlaying(null);
+                        setSelectedGem(mc);
+                      }}
                       className="mc-gem-profile flex items-center justify-center gap-0.5 flex-1 basis-0 min-w-0 rounded-md py-[9px] sm:py-[10px] text-[11px] sm:text-[12px] font-bold transition-all duration-300"
                       style={{
                         background: "rgba(212,184,150,0.10)",
@@ -271,19 +414,19 @@ export default function HiddenGemsSection() {
                         border: "1px solid rgba(212,184,150,0.45)",
                       }}
                       onMouseEnter={(e) => {
-                        const t = e.currentTarget as HTMLAnchorElement;
+                        const t = e.currentTarget as HTMLButtonElement;
                         t.style.background = "rgba(212,184,150,0.22)";
                         t.style.color = "#f2e0c2";
                       }}
                       onMouseLeave={(e) => {
-                        const t = e.currentTarget as HTMLAnchorElement;
+                        const t = e.currentTarget as HTMLButtonElement;
                         t.style.background = "rgba(212,184,150,0.10)";
                         t.style.color = "#e5cba3";
                       }}
                     >
                       <span className="whitespace-nowrap">프로필 보기</span>
                       <ChevronRight size={12} />
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -291,6 +434,11 @@ export default function HiddenGemsSection() {
           </div>
         </div>
       </div>
+
+      {/* 프로필 모달 */}
+      {selectedGem && (
+        <GemModal mc={selectedGem} onClose={() => setSelectedGem(null)} />
+      )}
     </section>
   );
 }

@@ -16,6 +16,7 @@ const HIDDEN_GEMS = [
     career: "경력 10년+ · 진행 1000회 이상",
     highlight: "부드러운 딕션과 안정적인 진행력으로 완성도 높은 예식을 만듭니다.",
     fit: "격식 있는 호텔·하우스 예식",
+    styles: ["품격형", "아나운서형"],
     image: "/images/mc-minjunho.jpg",
     audioFile: "/audio/mc-minjunho.mp3",
     url: "https://blog.naver.com/inusmusics/223597460181",
@@ -27,6 +28,7 @@ const HIDDEN_GEMS = [
     career: "경력 3년+ · 진행 300회 이상",
     highlight: "현장 흐름을 꿰뚫는 세심한 체크와 깔끔한 진행톤이 강점입니다.",
     fit: "군더더기 없이 깔끔한 예식",
+    styles: ["아나운서형"],
     image: "/images/mc-simbiseong.jpg",
     audioFile: "/audio/mc-simbisung.mp3",
     url: "https://blog.naver.com/inusmusics/224198308789",
@@ -38,6 +40,7 @@ const HIDDEN_GEMS = [
     career: "경력 3년+ · 진행 350회 이상",
     highlight: "정확한 딕션과 세심한 준비로 예식을 안정감 있게 이끕니다.",
     fit: "전달력과 정확함이 중요한 예식",
+    styles: ["아나운서형"],
     image: "/images/mc-idogeon.jpg",
     audioFile: "/audio/mc-idogeon.mp3",
     url: "https://blog.naver.com/inusmusics/224099418463",
@@ -49,6 +52,7 @@ const HIDDEN_GEMS = [
     career: "경력 4년+ · 진행 320회 이상",
     highlight: "라디오DJ 같은 부드러운 목소리에 재치 있는 순발력을 더합니다.",
     fit: "화기애애하고 편안한 분위기",
+    styles: ["감성형", "유쾌형"],
     image: "/images/mc-kimbeomtae.jpg",
     audioFile: "/audio/mc-beomtae.mp3",
     url: "https://blog.naver.com/inusmusics/223192531041",
@@ -60,6 +64,7 @@ const HIDDEN_GEMS = [
     career: "경력 6년+ · 진행 500회 이상",
     highlight: "유쾌한 입담과 뛰어난 순발력, 문학으로 다진 표현력이 돋보입니다.",
     fit: "웃음 많고 활기찬 예식",
+    styles: ["유쾌형"],
     image: "/images/mc-kimtaewoo.jpg",
     audioFile: "/audio/mc-taewoo.mp3",
     url: "https://blog.naver.com/inusmusics/224364756942",
@@ -71,6 +76,7 @@ const HIDDEN_GEMS = [
     career: "진행 300회 이상",
     highlight: "부드럽고 편안한 진행과 센스있는 멘트로 분위기를 리드합니다.",
     fit: "화기애애하고 편안한 분위기",
+    styles: ["감성형", "유쾌형"],
     image: "/images/mc-kimhansol.jpg",
     audioFile: "/audio/mc-kimhansol.mp3",
     url: "https://blog.naver.com/inusmusics/224393408893",
@@ -208,6 +214,25 @@ export default function HiddenGemsSection() {
                     {mc.name} 사회자
                   </p>
                   <p className="text-[#d4b896]/85 text-[10px] sm:text-[11px] font-medium mt-1 mb-2 break-keep">{mc.career}</p>
+
+                  {/* 스타일 태그 */}
+                  <div className="flex flex-wrap gap-1 mb-2">
+                    {mc.styles.map((style) => (
+                      <span
+                        key={style}
+                        className="inline-flex items-center px-1.5 py-[2px] rounded-[3px]"
+                        style={{
+                          fontSize: "9px",
+                          letterSpacing: "0.02em",
+                          background: "rgba(212,184,150,0.10)",
+                          border: "1px solid rgba(212,184,150,0.35)",
+                          color: "#d4b896",
+                        }}
+                      >
+                        {style}
+                      </span>
+                    ))}
+                  </div>
 
                   <p className="text-white/55 text-[11px] sm:text-[12px] leading-relaxed break-keep">{mc.highlight}</p>
 

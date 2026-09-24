@@ -17,10 +17,45 @@ import {
   Pencil,
   PartyPopper,
   Sparkles,
+  ShieldCheck,
+  FileEdit,
+  RefreshCw,
+  Crown,
 } from "lucide-react";
 import ScriptPreviewModal from "./ScriptPreviewModal";
 
 const GOLD = "#d4b896";
+
+const TRUST_POINTS = [
+  {
+    num: "01",
+    icon: ShieldCheck,
+    label: "검증된 사회자",
+    title: "18인 전원, 예약 전에 직접 확인",
+    desc: "목소리와 진행 영상을 예약 전 미리 확인하고 지정합니다. 현장에서 처음 만나는 사회자는 없습니다.",
+  },
+  {
+    num: "02",
+    icon: FileEdit,
+    label: "맞춤 대본",
+    title: "두 분의 이야기로 만든 대본",
+    desc: "10년+ 경력 대표가 두 분의 스토리를 담아 직접 제작하고, 마음에 드실 때까지 무제한 수정해드립니다.",
+  },
+  {
+    num: "03",
+    icon: RefreshCw,
+    label: "이중 점검 시스템",
+    title: "예식주, 두 번 다시 확인합니다",
+    desc: "화요일 본사 최종 체크, 수요일엔 사회자가 신랑신부님께 직접 연락드려 이미 전달받은 대본을 한 번 더 점검합니다.",
+  },
+  {
+    num: "04",
+    icon: Crown,
+    label: "대표 상시 대기",
+    title: "돌발 변수까지 책임집니다",
+    desc: "예비 사회자 상시 대기는 물론, 대표가 예식 당일까지 직접 함께해 현장 변수도 그 자리에서 바로 잡습니다.",
+  },
+];
 
 const PHASES = [
   {
@@ -267,6 +302,67 @@ export default function ProcessSection() {
             <Sparkles size={15} />
             대본 제작 과정 맛보기
           </button>
+        </div>
+
+        {/* Final Step - 예약 결정 전 신뢰 포인트 */}
+        <div className="mt-20 sm:mt-28 pt-14 sm:pt-16 border-t" style={{ borderColor: "rgba(212,184,150,0.15)" }}>
+          <div className="text-center mb-10 sm:mb-14">
+            <span
+              className="text-[#d4b896] text-xs sm:text-sm tracking-[0.3em] uppercase"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
+              FINAL STEP
+            </span>
+            <h3
+              className="mt-4 text-white text-xl sm:text-2xl md:text-3xl break-keep"
+              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+            >
+              예약 <span style={{ color: GOLD }}>결정</span> 전,
+              <br className="sm:hidden" /> 꼭 확인하시면 좋은 것
+            </h3>
+            <p className="mt-4 text-white/50 text-sm sm:text-base break-keep">
+              결혼식은 단 한 번뿐입니다. 이너스뮤직은 그 무게를 시스템으로 지킵니다.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+            {TRUST_POINTS.map((point, ti) => {
+              const PointIcon = point.icon;
+              return (
+                <div
+                  key={ti}
+                  className="flex items-start gap-4 px-6 py-6 rounded-sm bg-[#141414] transition-all duration-500"
+                  style={{ border: "1px solid rgba(212,184,150,0.18)" }}
+                >
+                  <div
+                    className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
+                    style={{
+                      backgroundColor: "rgba(212,184,150,0.12)",
+                      border: "1px solid rgba(212,184,150,0.35)",
+                    }}
+                  >
+                    <PointIcon size={19} style={{ color: GOLD }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[11px] tracking-[0.1em]" style={{ color: GOLD }}>
+                      <span style={{ fontFamily: "'Cormorant Garamond', serif" }}>{point.num}</span>
+                      {" · "}
+                      {point.label}
+                    </span>
+                    <p
+                      className="mt-1.5 text-white text-base sm:text-lg font-semibold leading-snug break-keep"
+                      style={{ fontFamily: "'Noto Serif KR', serif" }}
+                    >
+                      {point.title}
+                    </p>
+                    <p className="mt-1.5 text-white/60 text-xs sm:text-sm leading-relaxed break-keep">
+                      {point.desc}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 

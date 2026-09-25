@@ -850,7 +850,7 @@ export default function Contest() {
                 <div className="rounded-2xl border border-[#f4e2b8]/30 bg-gradient-to-b from-[#f4e2b8]/10 to-transparent px-5 py-4">
                   <div className="flex items-center gap-1.5 mb-2.5">
                     <Gift size={14} className="text-[#f4e2b8] shrink-0" />
-                    <p className="text-[11px] font-bold tracking-wide text-[#f4e2b8]">지금 상담하면 바로 드리는 혜택</p>
+                    <p className="text-[11px] font-bold tracking-wide text-[#f4e2b8]">예약 시 바로 드리는 혜택</p>
                   </div>
                   <ul className="space-y-1.5 mb-2.5">
                     <li className="flex items-start gap-2 text-[12.5px] text-white/80 leading-relaxed break-keep">
@@ -861,6 +861,10 @@ export default function Contest() {
                       <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
                       결혼식 준비 체크리스트 &amp; 웨딩가이드 자료 무료 제공
                     </li>
+                    <li className="flex items-start gap-2 text-[12.5px] text-white/80 leading-relaxed break-keep">
+                      <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
+                      모바일 청첩장 무료 제작
+                    </li>
                     {championIsRealVov && (
                       <li className="flex items-start gap-2 text-[12.5px] text-white/80 leading-relaxed break-keep">
                         <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
@@ -869,7 +873,7 @@ export default function Contest() {
                     )}
                   </ul>
                   <p className="text-[11px] text-white/45 break-keep">
-                    ⏱ 카카오 상담 시 <span className="text-white/70 font-medium">"VOV 콘테스트 참여자"</span>라고 말씀해주시면 혜택이 바로 적용돼요
+                    ⏱ 카카오 상담 후 예약 시 <span className="text-white/70 font-medium">"VOV 콘테스트 참여자"</span>라고 말씀해주시면 혜택이 바로 적용돼요
                   </p>
                 </div>
               </div>

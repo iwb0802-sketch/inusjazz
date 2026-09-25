@@ -62,6 +62,42 @@ const PROOF_IMAGES = [
 const PROOF_TOTAL = PROOF_IMAGES.reduce((sum, p) => sum + p.count, 0);
 const PROOF_AS_OF = "2026.09.23";
 
+// 네이버 블로그 후기 원문 발췌 — 아이디 마스킹, 본문 일부만 노출, 원문 링크 제공
+const BLOG_REVIEWS = [
+  {
+    tag: "펑크 걱정 제로",
+    nickname: "hz9***",
+    date: "2026.07.05",
+    excerpt:
+      "친오빠 결혼식 때 사회자님과 연락이 잘 되지 않았고, 예식 시간이 다가오는데도 도착하지 않아 정말 식장이 긴장감으로 가득했던 기억이 있었거든요. 그런데 이너스뮤직은 예식 2시간 전 사회자 준비 상태 1차 확인, 1시간 전 현장 도착 여부 2차 확인, 만일의 상황을 대비한 예비 사회자 대기까지 시스템이 잘 갖춰져 있어서 정말 안심이 되더라고요...",
+    url: "https://blog.naver.com/hz950504/224337188781",
+  },
+  {
+    tag: "환불정책 신뢰감",
+    nickname: "wis***",
+    date: "2026.09.21",
+    excerpt:
+      "예식 전주까지 취소하면 계약금 100% 환불 가능이래요. 웨딩업계는 계약금 내는 순간부터 환불 시 차감되는 경우가 많은데, 이너스 뮤직은 기업 느낌이 날 정도로 이런 서비스적인 부분들이 잘 되어있어서 좋았...",
+    url: "https://blog.naver.com/wis___dom/224418708547",
+  },
+  {
+    tag: "10분 이내 응대",
+    nickname: "nya***",
+    date: "2026.08.16",
+    excerpt:
+      "문의 남겨놓고 하루 종일 답장 기다리는 거 정말 스트레스인데, 이너스뮤직은 답장 속도가 거의 10분을 넘지 않아요. 질문할 때마다 친절하고 시원시원하게 바로 답변해주셔서 준비하는 내내 마음이 정말 편했...",
+    url: "https://blog.naver.com/nyamnyamreview/224380471284",
+  },
+  {
+    tag: "목소리로 비교",
+    nickname: "yeo***",
+    date: "2026.08.01",
+    excerpt:
+      "사회자마다 진행 스타일, 분위기, 특징은 물론 실제 목소리 샘플까지 바로 들어볼 수 있게 정리되어 있어서 비교하기가 편했어요. 사진 옆 플레이 버튼만 누르면 바로 음성을 들을 수 있어서 저희 예식 분위기와 가장 잘 어울리는 사회자를 고르기 수월했...",
+    url: "https://blog.naver.com/yeoljeongmansour/224364990445",
+  },
+];
+
 export default function ReviewSection() {
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
@@ -532,6 +568,80 @@ export default function ReviewSection() {
           <div className="mt-12 flex flex-col items-center gap-3">
             <p className="text-white/25 text-xs tracking-wider">
               카카오톡, 문자로 직접 받은 후기만 게재합니다
+            </p>
+          </div>
+
+          {/* 네이버 블로그 후기 원문 발췌 카드 */}
+          <div className="mt-20 sm:mt-24">
+            <div className="flex flex-col items-center mb-8 sm:mb-10">
+              <span
+                className="text-[#d4b896] text-[11px] sm:text-xs tracking-[0.25em] uppercase mb-3"
+                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              >
+                From Naver Blog
+              </span>
+              <h3
+                className="text-white text-xl sm:text-2xl text-center break-keep"
+                style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+              >
+                신랑신부님이 직접 남긴 <span style={{ color: GOLD }}>블로그 후기</span>
+              </h3>
+              <p className="mt-3 text-white/45 text-xs sm:text-sm text-center max-w-md break-keep leading-relaxed">
+                본문 일부만 발췌했습니다. 전체 내용은 원문에서 직접 확인하실 수 있습니다
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 max-w-4xl mx-auto">
+              {BLOG_REVIEWS.map((r) => (
+                <div
+                  key={r.url}
+                  className="relative flex flex-col rounded-xl p-5 sm:p-6"
+                  style={{
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(212,184,150,0.18)",
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span
+                      className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide"
+                      style={{
+                        background: "rgba(212,184,150,0.14)",
+                        border: "1px solid rgba(212,184,150,0.35)",
+                        color: GOLD,
+                      }}
+                    >
+                      {r.tag}
+                    </span>
+                    <span className="text-white/30 text-[11px] tracking-wide" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                      {r.date}
+                    </span>
+                  </div>
+
+                  <p className="text-white/70 text-[13.5px] sm:text-sm leading-relaxed break-keep flex-1">
+                    "{r.excerpt}"
+                  </p>
+
+                  <div className="flex items-center justify-between mt-4 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                    <span className="text-white/35 text-xs tracking-wide">
+                      네이버 블로그 · <span style={{ color: "rgba(212,184,150,0.8)" }}>{r.nickname}</span>
+                    </span>
+                    <a
+                      href={r.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-bold tracking-wide transition-colors duration-300"
+                      style={{ color: GOLD }}
+                    >
+                      원문 보기
+                      <ExternalLink size={12} />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-6 text-center text-white/25 text-[11px] sm:text-xs tracking-wide break-keep">
+              ※ 개인정보 보호를 위해 아이디는 일부 마스킹 처리했습니다. 본문은 원문 그대로이며 편집·가공하지 않았습니다.
             </p>
           </div>
 

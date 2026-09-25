@@ -31,11 +31,19 @@ export default function IntroSection() {
             <br className="sm:hidden" />
             <span className="text-[#5BB5A2]"> 이너스뮤직</span>입니다.
           </h2>
-          <p className="mt-4 text-white/55 text-[13px] sm:text-base leading-relaxed max-w-xl mx-auto break-keep">
-            <strong className="text-white font-semibold">300회 이상</strong> 실전 경험을 갖춘
-            <strong className="text-white font-semibold"> 18인</strong>의 전문 사회자가 각자의 색깔로{" "}
+          <p
+            className="mt-5 text-white text-[14px] sm:text-lg leading-relaxed max-w-xl mx-auto break-keep"
+            style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 600 }}
+          >
+            사회자 한 명을 정하는 게 아니라,
             <br className="hidden sm:block" />
-            하우스웨딩부터 호텔, 웨딩홀, 스몰웨딩까지 예식에 맞는 진행을 완성합니다.
+            <span className="text-[#5BB5A2]"> 예식에 맞는 한 명을 찾는 것.</span>
+          </p>
+          <p className="mt-3 text-white/55 text-[13px] sm:text-base leading-relaxed max-w-xl mx-auto break-keep">
+            <strong className="text-white font-semibold">300회 이상</strong> 실전 경험을 갖춘
+            <strong className="text-white font-semibold"> 18인</strong>의 목소리와 진행 영상을 직접 비교하고,{" "}
+            <br className="hidden sm:block" />
+            하우스웨딩부터 호텔, 웨딩홀, 스몰웨딩까지 꼭 맞는 사회자를 선택하세요.
           </p>
         </div>
 

@@ -1,7 +1,7 @@
 /**
  * 사회자 스케줄 현황 페이지 - /schedule
  */
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const API_URL = "/api/schedule";
 const KAKAO_URL = "https://pf.kakao.com/_wxovaM/chat";
@@ -35,28 +35,28 @@ function isPublicScheduleItem(item: any): boolean {
 type Tier = "SIGNATURE" | "PREMIUM" | "BEST" | "STANDARD";
 interface McProfile {
   name: string; tier: Tier; tierOrder: number;
-  img: string; url: string; desc: string; audio: string; styles: string[]; imgPos?: string;
+  img: string; url: string; profilePath: string; desc: string; audio: string; styles: string[]; imgPos?: string;
 }
 
 const MC_PROFILES: McProfile[] = [
-  { name:"석재선",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-3_33ff7a32.jpg",         url:"https://blog.naver.com/inusmusics/223822182933", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-jaesun.mp3", styles:["품격형","아나운서형"] },
-  { name:"이우영",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-lee-wooyoung-new_fa27e84d.webp", url:"https://blog.naver.com/inusmusics/220767962639", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-wooyoung.mp3", styles:["아나운서형","유쾌형"], imgPos:"50% 55%" },
-  { name:"장윤태",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-yuntae2.jpg", url:"https://blog.naver.com/inusmusics/223246261228", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yuntae.mp3", styles:["품격형","감성형"] },
-  { name:"최윤아",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-yuna.jpg",                       url:"https://blog.naver.com/inusmusics/224327229799", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yoona.mp3", styles:["감성형","아나운서형"] },
-  { name:"민준호",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-minjunho.webp", url:"https://blog.naver.com/inusmusics/223597460181", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-minjunho.mp3", styles:["품격형","아나운서형"] },
-  { name:"고명준",  tier:"PREMIUM",  tierOrder:1, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cbMnodzCSYqHlMtn.webp", url:"https://m.blog.naver.com/inusmusics/224407344980", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/ZObjnFnQqOmaHGvg.mp3", styles:["유쾌형","감성형"], imgPos:"50% 15%" },
-  { name:"고승범",  tier:"BEST",     tierOrder:2, img:"/images/mc-profile-4_a9e52880.jpg",         url:"https://blog.naver.com/inusmusics/223235771542", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-seungbeom.mp3", styles:["품격형"], imgPos:"50% 5%" },
-  { name:"김민수",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-1_33531819.jpg",         url:"https://blog.naver.com/inusmusics/223996383838", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-minsu.mp3", styles:["품격형","아나운서형"] },
-  { name:"김선혁",  tier:"BEST",     tierOrder:2, img:"/images/host_sunhyuk_1ed704ab.jpg",         url:"https://blog.naver.com/inusmusics/221025505211", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-sunhyuk.mp3", styles:["아나운서형"] },
-  { name: "김태우",  tier:"BEST",     tierOrder:2, img:"/images/mc-taewoo.webp", url:"https://m.blog.naver.com/inusmusics/224364756942", desc:"웨딩 사회 경력 5년+", audio:"/audio/mc-taewoo.mp3", styles:["유쾌형"] },
-  { name:"이상운",  tier:"BEST",     tierOrder:2, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/wgoNWOqnhecIESbf.webp", url:"https://m.blog.naver.com/inusmusics/224413060093", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/kgSWJrpcDmugppgm.mp3", styles:["품격형","감성형"], imgPos:"50% 23%" },
-  { name:"길상우",  tier:"BEST",     tierOrder:2, img:"/images/mc-gilsangwoo.jpg",                 url:"https://blog.naver.com/inusmusics/220802942529", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-gilsangwoo.mp3", styles:["유쾌형"] },
-  { name:"김한솔",  tier:"STANDARD", tierOrder:3, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/lJGBLeMCavGuGJBJ.png", url:"https://blog.naver.com/inusmusics/224393408893", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/SwWITRqBhTiSlunE.mp3", styles:["감성형","유쾌형"], imgPos:"50% 15%" },
-  { name:"이도영",  tier:"PREMIUM", tierOrder:1, img:"/images/mc-profile-2_f194877b.jpg",         url:"https://blog.naver.com/inusmusics/223845891681", desc:"웨딩 사회 경력 8년+",  audio:"/audio/mc-idoyoung.mp3", styles:["감성형","아나운서형"] },
-  { name:"김범태",  tier:"STANDARD", tierOrder:3, img:"/images/mc-beomtae.webp", url:"https://blog.naver.com/inusmusics/223192531041", desc:"웨딩 전문 사회자", audio:"/audio/mc-beomtae.mp3", styles:["감성형","유쾌형"], imgPos:"50% 20%" },
-  { name:"심비성",  tier:"STANDARD", tierOrder:3, img:"/images/mc-simbisung.webp", url:"https://blog.naver.com/inusmusics/224198308789", desc:"웨딩 전문 사회자", audio:"/audio/mc-simbisung.mp3", styles:["아나운서형"], imgPos:"50% 20%" },
-  { name:"이도건",  tier:"STANDARD", tierOrder:3, img:"/images/mc-idogeon.jpg", url:"https://blog.naver.com/inusmusics/224099418463", desc:"웨딩 전문 사회자", audio:"/audio/mc-idogeon.mp3", styles:["아나운서형"] },
-  { name:"손진욱",  tier:"BEST",     tierOrder:2, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/szGhyZuWuLcNjQKb.webp", url:"https://blog.naver.com/inusmusics/224418630247", desc:"웨딩 사회 경력 5년+", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cMMUGxQiWJMRRtWI.mp3", styles:["품격형","아나운서형"], imgPos:"50% 15%" },
+  { name:"석재선",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-3_33ff7a32.jpg",         url:"https://blog.naver.com/inusmusics/223822182933", profilePath:"/profile-jaesun.html", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-jaesun.mp3", styles:["품격형","아나운서형"] },
+  { name:"이우영",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-lee-wooyoung-new_fa27e84d.webp", url:"https://blog.naver.com/inusmusics/220767962639", profilePath:"/profile-wooyoung.html", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-wooyoung.mp3", styles:["아나운서형","유쾌형"], imgPos:"50% 55%" },
+  { name:"장윤태",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-yuntae2.jpg", url:"https://blog.naver.com/inusmusics/223246261228", profilePath:"/profile-yuntae.html", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yuntae.mp3", styles:["품격형","감성형"] },
+  { name:"최윤아",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-yuna.jpg",                       url:"https://blog.naver.com/inusmusics/224327229799", profilePath:"/profile-yuna.html", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-yoona.mp3", styles:["감성형","아나운서형"] },
+  { name:"민준호",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-minjunho.webp", url:"https://blog.naver.com/inusmusics/223597460181", profilePath:"/profile-minjunho.html", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-minjunho.mp3", styles:["품격형","아나운서형"] },
+  { name:"고명준",  tier:"PREMIUM",  tierOrder:1, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cbMnodzCSYqHlMtn.webp", url:"https://m.blog.naver.com/inusmusics/224407344980", profilePath:"/profile-myeongjun.html", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/ZObjnFnQqOmaHGvg.mp3", styles:["유쾌형","감성형"], imgPos:"50% 15%" },
+  { name:"고승범",  tier:"BEST",     tierOrder:2, img:"/images/mc-profile-4_a9e52880.jpg",         url:"https://blog.naver.com/inusmusics/223235771542", profilePath:"/profile-seungbeom.html", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-seungbeom.mp3", styles:["품격형"], imgPos:"50% 5%" },
+  { name:"김민수",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-1_33531819.jpg",         url:"https://blog.naver.com/inusmusics/223996383838", profilePath:"/profile-minsu.html", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-minsu.mp3", styles:["품격형","아나운서형"] },
+  { name:"김선혁",  tier:"BEST",     tierOrder:2, img:"/images/host_sunhyuk_1ed704ab.jpg",         url:"https://blog.naver.com/inusmusics/221025505211", profilePath:"/profile-sunhyuk.html", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-sunhyuk.mp3", styles:["아나운서형"] },
+  { name: "김태우",  tier:"BEST",     tierOrder:2, img:"/images/mc-taewoo.webp", url:"https://m.blog.naver.com/inusmusics/224364756942", profilePath:"/profile-kimtaewoo.html", desc:"웨딩 사회 경력 5년+", audio:"/audio/mc-taewoo.mp3", styles:["유쾌형"] },
+  { name:"이상운",  tier:"BEST",     tierOrder:2, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/wgoNWOqnhecIESbf.webp", url:"https://m.blog.naver.com/inusmusics/224413060093", profilePath:"/profile-sangwoon.html", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/kgSWJrpcDmugppgm.mp3", styles:["품격형","감성형"], imgPos:"50% 23%" },
+  { name:"길상우",  tier:"BEST",     tierOrder:2, img:"/images/mc-gilsangwoo.jpg",                 url:"https://blog.naver.com/inusmusics/220802942529", profilePath:"/profile-gilsangwoo.html", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-gilsangwoo.mp3", styles:["유쾌형"] },
+  { name:"김한솔",  tier:"STANDARD", tierOrder:3, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/lJGBLeMCavGuGJBJ.png", url:"https://blog.naver.com/inusmusics/224393408893", profilePath:"/profile-kimhansol.html", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/SwWITRqBhTiSlunE.mp3", styles:["감성형","유쾌형"], imgPos:"50% 15%" },
+  { name:"이도영",  tier:"PREMIUM", tierOrder:1, img:"/images/mc-profile-2_f194877b.jpg",         url:"https://blog.naver.com/inusmusics/223845891681", profilePath:"/profile-idoyoung.html", desc:"웨딩 사회 경력 8년+",  audio:"/audio/mc-idoyoung.mp3", styles:["감성형","아나운서형"] },
+  { name:"김범태",  tier:"STANDARD", tierOrder:3, img:"/images/mc-beomtae.webp", url:"https://blog.naver.com/inusmusics/223192531041", profilePath:"/profile-kimbeomtae.html", desc:"웨딩 전문 사회자", audio:"/audio/mc-beomtae.mp3", styles:["감성형","유쾌형"], imgPos:"50% 20%" },
+  { name:"심비성",  tier:"STANDARD", tierOrder:3, img:"/images/mc-simbisung.webp", url:"https://blog.naver.com/inusmusics/224198308789", profilePath:"/profile-simbiseong.html", desc:"웨딩 전문 사회자", audio:"/audio/mc-simbisung.mp3", styles:["아나운서형"], imgPos:"50% 20%" },
+  { name:"이도건",  tier:"STANDARD", tierOrder:3, img:"/images/mc-idogeon.jpg", url:"https://blog.naver.com/inusmusics/224099418463", profilePath:"/profile-idogeon.html", desc:"웨딩 전문 사회자", audio:"/audio/mc-idogeon.mp3", styles:["아나운서형"] },
+  { name:"손진욱",  tier:"BEST",     tierOrder:2, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/szGhyZuWuLcNjQKb.webp", url:"https://blog.naver.com/inusmusics/224418630247", profilePath:"/profile-sonjinwook.html", desc:"웨딩 사회 경력 5년+", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cMMUGxQiWJMRRtWI.mp3", styles:["품격형","아나운서형"], imgPos:"50% 15%" },
 ];
 const MC_MAP: Record<string, McProfile> = {};
 MC_PROFILES.forEach(p => { MC_MAP[p.name] = p; });
@@ -294,8 +294,71 @@ function AudioBtn({ audioSrc, size = 28 }: { audioSrc: string; size?: number }) 
   );
 }
 
+// 메인 홈페이지와 동일한 내부 프로필 페이지를 현재 화면 위 모달로 표시한다.
+function McProfileModal({ profile, onClose }: { profile: McProfile; onClose: () => void }) {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${profile.name} 사회자 프로필`}
+      onClick={onClose}
+      style={{ position:"fixed", inset:0, zIndex:500, display:"flex", alignItems:"center", justifyContent:"center", padding:16, background:"rgba(2,6,23,0.82)", backdropFilter:"blur(7px)" }}
+    >
+      <div
+        onClick={(event) => event.stopPropagation()}
+        style={{ width:"100%", maxWidth:720, height:"min(86dvh,760px)", display:"flex", flexDirection:"column", overflow:"hidden", borderRadius:16, background:"#0b0b0b", border:"1px solid rgba(212,184,150,0.34)", boxShadow:"0 24px 70px rgba(0,0,0,0.56)" }}
+      >
+        <div style={{ flexShrink:0, display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, padding:"12px 14px 12px 18px", background:"rgba(11,11,11,0.98)", borderBottom:"1px solid rgba(212,184,150,0.24)" }}>
+          <div>
+            <div style={{ fontSize:10, letterSpacing:2, color:C.gold, fontWeight:700, marginBottom:2 }}>INUS MUSIC</div>
+            <div style={{ fontSize:14, color:"#fff", fontWeight:700 }}>{profile.name} 사회자 프로필</div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="프로필 닫기"
+            style={{ width:34, height:34, borderRadius:"50%", border:"1px solid rgba(255,255,255,0.22)", background:"rgba(255,255,255,0.08)", color:"#fff", fontSize:20, lineHeight:1, cursor:"pointer" }}
+          >
+            ×
+          </button>
+        </div>
+        <div style={{ position:"relative", flex:1, minHeight:0, background:"#0b0b0b" }}>
+          {!loaded && (
+            <div style={{ position:"absolute", inset:0, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:12, color:C.gold, zIndex:1 }}>
+              <div style={{ width:30, height:30, borderRadius:"50%", border:"2px solid rgba(212,184,150,0.2)", borderTopColor:C.gold, animation:"scheduleProfileSpin 0.8s linear infinite" }} />
+              <span style={{ fontSize:11, letterSpacing:2 }}>PROFILE LOADING</span>
+            </div>
+          )}
+          <iframe
+            src={profile.profilePath}
+            title={`${profile.name} 사회자 프로필`}
+            onLoad={() => setLoaded(true)}
+            style={{ width:"100%", height:"100%", border:0, display:loaded ? "block" : "none", background:"#0b0b0b" }}
+          />
+        </div>
+      </div>
+      <style>{`@keyframes scheduleProfileSpin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  );
+}
+
 // 가능한 사회자 카드
-function McCard({ name }: { name: string }) {
+function McCard({ name, onOpenProfile }: { name: string; onOpenProfile: (profile: McProfile) => void }) {
   const p = MC_MAP[name];
   const [imgErr, setImgErr] = useState(false);
   const tierStyles: Record<Tier, React.CSSProperties> = {
@@ -305,7 +368,6 @@ function McCard({ name }: { name: string }) {
     STANDARD: { background: "rgba(148,163,184,0.1)", color: "#94a3b8", border: "1px solid rgba(148,163,184,0.2)" },
   };
   const tier: Tier = p?.tier || "STANDARD";
-  const url = p?.url || KAKAO_URL;
   return (
     <div style={{ background:C.card, border:`1px solid ${C.cardBorder}`, borderRadius:12, overflow:"hidden", position:"relative" }}>
       {p?.audio && (
@@ -313,7 +375,19 @@ function McCard({ name }: { name: string }) {
           <AudioBtn audioSrc={p.audio} size={26} />
         </div>
       )}
-      <a href={url} target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"block" }}>
+      <div
+        role="button"
+        tabIndex={p ? 0 : -1}
+        aria-label={`${name} 사회자 프로필 보기`}
+        onClick={() => p && onOpenProfile(p)}
+        onKeyDown={(event) => {
+          if (p && (event.key === "Enter" || event.key === " ")) {
+            event.preventDefault();
+            onOpenProfile(p);
+          }
+        }}
+        style={{ display:"block", cursor:p ? "pointer" : "default" }}
+      >
         {p?.img && !imgErr ? (
           <img src={p.img} alt={name} onError={() => setImgErr(true)}
             style={{ width:"100%", height:110, objectFit:"cover", objectPosition:p.imgPos||"50% 15%", display:"block" }} />
@@ -337,13 +411,13 @@ function McCard({ name }: { name: string }) {
             </div>
           ) : null}
         </div>
-      </a>
+      </div>
     </div>
   );
 }
 
 // 배정완료 사회자 카드
-function AssignedCard({ item, slotKey, assignedMap }: { item: any; slotKey: string; assignedMap: Record<string, number[]> }) {
+function AssignedCard({ item, slotKey, assignedMap, onOpenProfile }: { item: any; slotKey: string; assignedMap: Record<string, number[]>; onOpenProfile: (profile: McProfile) => void }) {
   const p = MC_MAP[item.mc_name];
   const [imgErr, setImgErr] = useState(false);
   const sameSlotAvail = getAvailableTimeInSlot(item.mc_name, slotKey, assignedMap);
@@ -355,7 +429,6 @@ function AssignedCard({ item, slotKey, assignedMap }: { item: any; slotKey: stri
     BEST:     { background: C.mintLight, color: C.mint, border: `1px solid ${C.mintBorder}` },
     STANDARD: { background: "rgba(148,163,184,0.1)", color: "#94a3b8", border: "1px solid rgba(148,163,184,0.2)" },
   };
-  const avatarUrl = p?.url || KAKAO_URL;
   const hasAvail = sameSlotAvail || otherAvail.length > 0;
   // 지역 정보
   // API의 place_region 우선 사용, 없으면 클라이언트 extractRegion 폴백
@@ -363,7 +436,13 @@ function AssignedCard({ item, slotKey, assignedMap }: { item: any; slotKey: stri
 
   return (
     <div style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.4)", borderRadius:14, padding:"14px 16px", marginBottom:10, display:"flex", alignItems:"flex-start", gap:14 }}>
-      <a href={avatarUrl} target="_blank" rel="noopener noreferrer" style={{ flexShrink:0 }}>
+      <button
+        type="button"
+        disabled={!p}
+        onClick={() => p && onOpenProfile(p)}
+        aria-label={`${item.mc_name} 사회자 프로필 보기`}
+        style={{ flexShrink:0, padding:0, border:0, background:"transparent", cursor:p ? "pointer" : "default" }}
+      >
         {p?.img && !imgErr ? (
           <img src={p.img} alt={item.mc_name} onError={() => setImgErr(true)}
             style={{ width:48, height:48, borderRadius:"50%", objectFit:"cover", objectPosition:p.imgPos||"50% 15%", border:`2px solid ${C.mintBorder}` }} />
@@ -372,10 +451,17 @@ function AssignedCard({ item, slotKey, assignedMap }: { item: any; slotKey: stri
             {item.mc_name.charAt(0)}
           </div>
         )}
-      </a>
+      </button>
       <div style={{ flex:1, minWidth:0 }}>
         <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4, flexWrap:"wrap" }}>
-          <a href={avatarUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize:15, fontWeight:700, color:C.text, textDecoration:"none" }}>{item.mc_name}</a>
+          <button
+            type="button"
+            disabled={!p}
+            onClick={() => p && onOpenProfile(p)}
+            style={{ padding:0, border:0, background:"transparent", color:C.text, fontSize:15, fontWeight:700, cursor:p ? "pointer" : "default", fontFamily:"inherit" }}
+          >
+            {item.mc_name}
+          </button>
           <span style={{ fontSize:9, fontWeight:700, padding:"2px 6px", borderRadius:4, ...tierStyles[tier] }}>{tier}</span>
           <span style={{ fontSize:10, fontWeight:700, background:"rgba(239,68,68,0.2)", color:"#f87171", padding:"2px 7px", borderRadius:20, border:"1px solid rgba(239,68,68,0.3)" }}>배정완료</span>
           {p?.audio && <AudioBtn audioSrc={p.audio} size={26} />}
@@ -415,6 +501,7 @@ export default function Schedule() {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("am");
+  const [selectedProfile, setSelectedProfile] = useState<McProfile | null>(null);
 
   const search = async () => {
     if (!date) return;
@@ -561,7 +648,7 @@ export default function Schedule() {
                         <div style={{ fontSize:24, marginBottom:8 }}>✅</div>이 시간대에 배정된 사회자가 없습니다.
                       </div>
                     ) : sortedItems.map((item: any, i: number) => (
-                      <AssignedCard key={i} item={item} slotKey={key} assignedMap={assignedMap} />
+                      <AssignedCard key={i} item={item} slotKey={key} assignedMap={assignedMap} onOpenProfile={setSelectedProfile} />
                     ))}
 
                     {/* 가능한 사회자 섹션 (other 탭 제외) */}
@@ -584,7 +671,7 @@ export default function Schedule() {
                           <div style={{ padding:16, textAlign:"center", color:C.textMuted, fontSize:12, background:C.card, borderRadius:10 }}>이 시간대에 가능한 사회자가 없습니다.</div>
                         ) : (
                           <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10 }}>
-                            {availableMcs.map(name => <McCard key={name} name={name} />)}
+                            {availableMcs.map(name => <McCard key={name} name={name} onOpenProfile={setSelectedProfile} />)}
                           </div>
                         )}
                       </div>
@@ -608,6 +695,8 @@ export default function Schedule() {
           );
         })()}
       </div>
+
+      {selectedProfile && <McProfileModal profile={selectedProfile} onClose={() => setSelectedProfile(null)} />}
 
       {/* 카카오톡 플로팅 버튼 - 하단 고정 (AI 챗봇 제거, 단일 버튼) */}
       <a href={KAKAO_URL} target="_blank" rel="noopener noreferrer"

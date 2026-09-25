@@ -293,15 +293,17 @@ export default function ReviewSection() {
               </span>
               <ExternalLink size={15} />
             </a>
-            <p className="mt-3 text-xs sm:text-[13px] text-white/50 break-keep leading-relaxed text-center max-w-md mx-auto">
-              <span className="font-bold" style={{ color: GOLD }}>600건 이상</span>의 고객님들의 네이버 게시물은 2,700+ 집계에 포함하지 않습니다.
+            <p className="mt-3 text-xs sm:text-[13px] text-white/50 break-keep leading-relaxed text-center max-w-[16rem] sm:max-w-md mx-auto">
+              <span className="font-bold" style={{ color: GOLD }}>600건 이상</span>의 고객님들의 네이버 게시물은
+              <br />
+              2,700+ 집계에 포함하지 않습니다.
             </p>
             <p className="mt-2.5 text-[13px] sm:text-sm text-white/70 break-keep leading-[1.7] text-center max-w-[19rem] sm:max-w-md mx-auto">
-              고객님의 네이버 블로그 후기글·카페는
+              고객님의 네이버 블로그 후기글·카페에 남겨주신 후기는
               <br />
-              검색 결과에 정확한 건수가 표시되지 않아
+              검색 결과에 정확한 건수가 표시되지 않아,
               <br />
-              확인이 불가능한 숫자는 집계에 포함하지 않습니다.
+              집계에서 제외했습니다.
               <br />
               <br />
               저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>2,700+ 건</span>은

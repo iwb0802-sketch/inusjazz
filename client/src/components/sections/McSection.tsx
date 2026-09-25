@@ -668,14 +668,20 @@ export default function McSection() {
               />
             </div>
 
-            <div className="mt-4 h-6 flex items-center justify-center">
+            <div
+              className={`mt-4 flex justify-center transition-all duration-400 ${
+                activeFilter !== "전체" && STYLE_DESCRIPTIONS[activeFilter]
+                  ? "opacity-100 translate-y-0 max-h-20"
+                  : "opacity-0 -translate-y-1 max-h-0 overflow-hidden"
+              }`}
+            >
               <p
-                className={`text-white/50 text-xs sm:text-sm transition-all duration-400 ${
-                  activeFilter !== "전체" && STYLE_DESCRIPTIONS[activeFilter]
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 -translate-y-1"
-                }`}
-                style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+                className="text-white/80 text-[13px] sm:text-sm leading-relaxed max-w-md px-5 py-2.5 rounded-2xl text-center break-keep"
+                style={{
+                  fontFamily: "'Noto Sans KR', sans-serif",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(91,181,162,0.25)",
+                }}
               >
                 {STYLE_DESCRIPTIONS[activeFilter] || ""}
               </p>

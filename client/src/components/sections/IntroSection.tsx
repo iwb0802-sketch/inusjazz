@@ -59,7 +59,9 @@ export default function IntroSection() {
             className="mt-3 text-white text-lg sm:text-2xl leading-snug break-keep"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            예식마다 다른 분위기, <span className="text-[#5BB5A2]">사회자도 달라야 합니다</span>
+            예식마다 다른 분위기,
+            <br />
+            <span className="text-[#5BB5A2]">사회자도 달라야 합니다</span>
           </h3>
 
           <div className="mt-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

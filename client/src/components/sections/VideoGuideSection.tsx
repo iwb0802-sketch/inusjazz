@@ -12,6 +12,7 @@ const TIERS = [
     name: "시그니처",
     sub: "SIGNATURE",
     icon: Crown,
+    criteria: "결혼식 사회자 경력 8년+ 인지도",
     link: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=146",
     signature: true,
     members: [
@@ -25,6 +26,7 @@ const TIERS = [
     name: "프리미엄",
     sub: "PREMIUM",
     icon: Crown,
+    criteria: "결혼식 사회자 경력 8년+",
     link: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=59",
     members: [
       { name: "이도영", image: "/images/mc-profile-2_f194877b.jpg" },
@@ -37,6 +39,7 @@ const TIERS = [
     name: "베스트",
     sub: "BEST",
     icon: Star,
+    criteria: "결혼식 사회자 경력 5년+",
     link: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=69",
     members: [
       { name: "고승범", image: "/images/mc-profile-4_a9e52880.jpg" },
@@ -51,6 +54,7 @@ const TIERS = [
     name: "스탠다드",
     sub: "STANDARD",
     icon: Mic,
+    criteria: "결혼식 사회자 경력 3년 이상",
     link: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=62",
     members: [
       { name: "심비성", image: "/images/mc-simbiseong.jpg" },
@@ -123,6 +127,16 @@ function TierRosterModal({ tier, onClose }: { tier: Tier; onClose: () => void })
               {tier.name} 등급 사회자
             </h3>
             <p className="text-white/40 text-xs mt-1.5">아래 {tier.members.length}명이 {tier.name} 등급으로 진행합니다</p>
+            <p
+              className="text-[11px] mt-2 inline-block px-2.5 py-1 rounded-full"
+              style={{
+                color: tier.signature ? "rgba(201,169,97,0.85)" : "rgba(214,177,107,0.75)",
+                background: tier.signature ? "rgba(201,169,97,0.08)" : "rgba(214,177,107,0.06)",
+                border: tier.signature ? "1px solid rgba(201,169,97,0.25)" : "1px solid rgba(214,177,107,0.18)",
+              }}
+            >
+              선정 기준 · {tier.criteria}
+            </p>
           </div>
 
           {/* 명단 그리드 */}

@@ -4,7 +4,7 @@
  * Brand: Mint (#5BB5A2) + Gold (#d4b896)
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Sparkles, ChevronRight, Play, Pause, Volume2, X, ExternalLink, ChevronDown } from "lucide-react";
+import { Sparkles, ChevronRight, Play, Pause, Volume2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 // 아직 널리 알려지지 않았지만 실력이 확실한 사회자 (숨은 강자)
@@ -102,13 +102,20 @@ const tierStyle = (tier: string) =>
     ? { background: "rgba(91,181,162,0.18)", color: "#7fd3c1", border: "1px solid rgba(91,181,162,0.45)" }
     : { background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.18)" };
 
-type Gem = typeof HIDDEN_GEMS[0];
+// 스페셜리스트 6인 → 각자 전용 풀페이지 프로필(HTML)로 연결
+// 메인 12인의 profileMap과 완전히 동일한 방식: 이름별 전용 HTML 페이지를 IframeModal로 풀스크린 표시
+const GEM_PROFILE_MAP: Record<string, string> = {
+  "민준호": "/profile-minjunho.html",
+  "심비성": "/profile-simbiseong.html",
+  "이도건": "/profile-idogeon.html",
+  "김범태": "/profile-kimbeomtae.html",
+  "김태우": "/profile-kimtaewoo.html",
+  "김한솔": "/profile-kimhansol.html",
+};
 
-// 스페셜리스트 프로필 모달 - 메인 12인 ProfileModal과 완전히 동일한 구조
-// (영상 → 스크롤 유도 힌트 → 리뷰 키워드 배지 → 프로필 링크 + 카카오 상담 버튼)
-function GemModal({ mc, onClose }: { mc: Gem; onClose: () => void }) {
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  const [showScrollHint, setShowScrollHint] = useState(true);
+// iframe 프로필 모달 - 메인 12인 IframeModal과 완전히 동일한 구조
+function IframeModal({ url, onClose }: { url: string; onClose: () => void }) {
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -120,150 +127,61 @@ function GemModal({ mc, onClose }: { mc: Gem; onClose: () => void }) {
     };
   }, [onClose]);
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    const checkScroll = () => {
-      const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
-      const scrollable = el.scrollHeight > el.clientHeight + 24;
-      setShowScrollHint(scrollable && !atBottom);
-    };
-
-    checkScroll();
-    el.addEventListener("scroll", checkScroll);
-    const timer = setTimeout(checkScroll, 200);
-    return () => {
-      el.removeEventListener("scroll", checkScroll);
-      clearTimeout(timer);
-    };
-  }, [mc]);
-
   return (
-    <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
-      style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(8px)" }}
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-[300] flex flex-col" style={{ background: "#0b0b0b" }}>
+      {/* 닫기 바 */}
       <div
-        className="relative w-full max-w-3xl overflow-hidden shadow-2xl"
-        style={{
-          animation: "fadeInUpGem 0.35s cubic-bezier(0.23,1,0.32,1)",
-          maxHeight: "92vh",
-          background: "linear-gradient(145deg, #161616 0%, #0d0d0d 100%)",
-          border: "1px solid rgba(255,255,255,0.07)",
-          borderRadius: "12px",
-        }}
-        onClick={(e) => e.stopPropagation()}
+        className="flex items-center justify-between px-4 py-3 flex-shrink-0"
+        style={{ borderBottom: "1px solid rgba(214,177,107,0.2)", background: "rgba(11,11,11,0.98)" }}
       >
-        {/* 닫기 버튼 */}
+        <span className="text-sm tracking-widest" style={{ fontFamily: "'Cormorant Garamond', serif", color: "#d6b16b" }}>
+          INUSMUSIC PROFILE
+        </span>
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 z-10 w-9 h-9 flex items-center justify-center rounded-full text-white hover:scale-110 transition-all duration-200"
-          style={{ background: "rgba(0,0,0,0.7)", border: "1.5px solid rgba(255,255,255,0.3)", boxShadow: "0 2px 8px rgba(0,0,0,0.5)" }}
+          className="w-8 h-8 flex items-center justify-center rounded-full text-white/60 hover:text-white transition-colors"
+          style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}
         >
-          <X size={17} strokeWidth={2.5} />
+          <X size={15} />
         </button>
-
-        {/* 스크롤 영역 */}
-        <div ref={scrollRef} className="overflow-y-auto relative" style={{ maxHeight: "calc(92vh - 80px)" }}>
-          {/* 영상 */}
-          <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
-            <iframe
-              src={`https://www.youtube.com/embed/${mc.youtubeId}?autoplay=1&mute=0&rel=0&playsinline=1&modestbranding=1`}
-              title={`${mc.name} 진행 영상`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0 w-full h-full"
-              style={{ border: 0 }}
-            />
-          </div>
-        </div>
-
-        {/* 스크롤 유도 힌트 */}
-        {showScrollHint && (
-          <div
-            className="absolute left-0 right-0 flex justify-center pointer-events-none"
-            style={{
-              bottom: "80px",
-              background: "linear-gradient(to top, rgba(13,13,13,0.9) 20%, rgba(13,13,13,0))",
-              paddingTop: "28px",
-              paddingBottom: "10px",
-            }}
-          >
-            <div
-              className="flex items-center gap-1 text-[11px] sm:text-xs"
-              style={{ color: "#d6b16b", animation: "mcScrollBounceGem 1.4s ease-in-out infinite" }}
-            >
-              <span>스크롤해서 더보기</span>
-              <ChevronDown size={14} />
-            </div>
-          </div>
-        )}
-
-        {/* 리뷰 키워드 배지 - 항상 노출되는 고정 영역 */}
-        {mc.reviewKeywords && mc.reviewKeywords.length > 0 && (
-          <div
-            className="px-4 py-3 flex flex-wrap items-center justify-center gap-2"
-            style={{ borderTop: "1px solid rgba(214,177,107,0.12)", background: "rgba(214,177,107,0.04)", flexShrink: 0 }}
-          >
-            {mc.reviewKeywords.map((kw, i) => (
-              <span
-                key={i}
-                className="text-[11px] sm:text-xs font-medium px-2.5 py-1 rounded-full"
-                style={{ color: "#d6b16b", background: "rgba(214,177,107,0.1)", border: "1px solid rgba(214,177,107,0.3)" }}
-              >
-                #{kw}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* 하단 고정 버튼 영역 */}
-        <div className="px-4 py-3 flex flex-row gap-2" style={{ borderTop: "1px solid rgba(214,177,107,0.2)", background: "rgba(0,0,0,0.6)", flexShrink: 0 }}>
-          <a
-            href={mc.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative flex items-center justify-center gap-2 flex-1 py-3.5 overflow-hidden group transition-all duration-300"
-            style={{
-              fontFamily: "'Noto Sans KR', sans-serif",
-              fontSize: "13px",
-              letterSpacing: "0.05em",
-              fontWeight: 500,
-              background: "linear-gradient(135deg, rgba(214,177,107,0.15) 0%, rgba(214,177,107,0.05) 100%)",
-              border: "1px solid rgba(214,177,107,0.5)",
-              color: "#d6b16b",
-            }}
-          >
-            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "linear-gradient(135deg, rgba(214,177,107,0.3) 0%, rgba(214,177,107,0.1) 100%)" }} />
-            <span className="relative">사회자 프로필 자세히 보기</span>
-            <ExternalLink size={13} className="relative" />
-          </a>
-          <a
-            href="https://pf.kakao.com/_wxovaM/chat"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 flex-1 py-3 text-white text-sm font-semibold tracking-wide transition-all duration-300 hover:opacity-90 rounded-sm"
-            style={{ background: "#5BB5A2", fontFamily: "'Noto Sans KR', sans-serif" }}
-          >
-            💬 카카오 상담하기
-          </a>
-        </div>
       </div>
-
-      <style>{`
-        @keyframes fadeInUpGem { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes mcScrollBounceGem { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
-      `}</style>
+      {/* 로딩 스피너 */}
+      {!loaded && (
+        <div className="flex-1 flex items-center justify-center" style={{ background: "#0b0b0b" }}>
+          <div style={{ textAlign: "center" }}>
+            <div
+              style={{
+                width: 40, height: 40,
+                border: "2px solid rgba(214,177,107,0.2)",
+                borderTop: "2px solid #d6b16b",
+                borderRadius: "50%",
+                animation: "spinGem 0.8s linear infinite",
+                margin: "0 auto 16px",
+              }}
+            />
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 13, letterSpacing: "0.3em", color: "rgba(214,177,107,0.6)" }}>LOADING</p>
+          </div>
+        </div>
+      )}
+      {/* iframe */}
+      <iframe
+        src={url}
+        className="flex-1 w-full"
+        style={{ border: 0, display: loaded ? "block" : "none" }}
+        title="사회자 프로필"
+        onLoad={() => setLoaded(true)}
+      />
+      <style>{`@keyframes spinGem { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
 
+
+
 export default function HiddenGemsSection() {
   const anim3 = useScrollAnimation();
   const [playing, setPlaying] = useState<string | null>(null);
-  const [selectedGem, setSelectedGem] = useState<Gem | null>(null);
+  const [iframeUrl, setIframeUrl] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -437,7 +355,7 @@ export default function HiddenGemsSection() {
                         audioRef.current?.pause();
                         audioRef.current = null;
                         setPlaying(null);
-                        setSelectedGem(mc);
+                        if (GEM_PROFILE_MAP[mc.name]) setIframeUrl(GEM_PROFILE_MAP[mc.name]);
                       }}
                       className="mc-gem-profile flex items-center justify-center gap-0.5 flex-1 basis-0 min-w-0 rounded-md py-[9px] sm:py-[10px] text-[11px] sm:text-[12px] font-bold transition-all duration-300"
                       style={{
@@ -468,8 +386,8 @@ export default function HiddenGemsSection() {
       </div>
 
       {/* 프로필 모달 */}
-      {selectedGem && (
-        <GemModal mc={selectedGem} onClose={() => setSelectedGem(null)} />
+      {iframeUrl && (
+        <IframeModal url={iframeUrl} onClose={() => setIframeUrl(null)} />
       )}
     </section>
   );

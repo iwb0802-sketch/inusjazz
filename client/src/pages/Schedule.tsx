@@ -46,7 +46,7 @@ const MC_PROFILES: McProfile[] = [
   { name:"민준호",  tier:"PREMIUM",  tierOrder:1, img:"/images/mc-minjunho.webp", url:"https://blog.naver.com/inusmusics/223597460181", profilePath:"/profile-minjunho.html", desc:"웨딩 사회 경력 10년+", audio:"/audio/mc-minjunho.mp3", styles:["품격형","아나운서형"] },
   { name:"고명준",  tier:"PREMIUM",  tierOrder:1, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/cbMnodzCSYqHlMtn.webp", url:"https://m.blog.naver.com/inusmusics/224407344980", profilePath:"/profile-myeongjun.html", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/ZObjnFnQqOmaHGvg.mp3", styles:["유쾌형","감성형"], imgPos:"50% 15%" },
   { name:"고승범",  tier:"BEST",     tierOrder:2, img:"/images/mc-profile-4_a9e52880.jpg",         url:"https://blog.naver.com/inusmusics/223235771542", profilePath:"/profile-seungbeom.html", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-seungbeom.mp3", styles:["품격형"], imgPos:"50% 5%" },
-  { name:"김민수",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-1_33531819.jpg",         url:"https://blog.naver.com/inusmusics/223996383838", profilePath:"/profile-minsu.html", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-minsu.mp3", styles:["품격형","아나운서형"] },
+  { name:"김민수",  tier:"SIGNATURE", tierOrder:0, img:"/images/mc-profile-1_33531819.jpg",         url:"https://blog.naver.com/inusmusics/223996383838", profilePath:"/profile-minsu.html", desc:"웨딩 사회 경력 8년+",  audio:"/audio/mc-minsu.mp3", styles:["품격형","아나운서형"] },
   { name:"김선혁",  tier:"BEST",     tierOrder:2, img:"/images/host_sunhyuk_1ed704ab.jpg",         url:"https://blog.naver.com/inusmusics/221025505211", profilePath:"/profile-sunhyuk.html", desc:"웨딩 사회 경력 5년+",  audio:"/audio/mc-sunhyuk.mp3", styles:["아나운서형"] },
   { name: "김태우",  tier:"BEST",     tierOrder:2, img:"/images/mc-taewoo.webp", url:"https://m.blog.naver.com/inusmusics/224364756942", profilePath:"/profile-kimtaewoo.html", desc:"웨딩 사회 경력 5년+", audio:"/audio/mc-taewoo.mp3", styles:["유쾌형"] },
   { name:"이상운",  tier:"BEST",     tierOrder:2, img:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/wgoNWOqnhecIESbf.webp", url:"https://m.blog.naver.com/inusmusics/224413060093", profilePath:"/profile-sangwoon.html", desc:"웨딩 전문 사회자", audio:"https://files.manuscdn.com/user_upload_by_module/session_file/310519663604364385/kgSWJrpcDmugppgm.mp3", styles:["품격형","감성형"], imgPos:"50% 23%" },
@@ -450,22 +450,38 @@ function AssignedCard({ item, slotKey, assignedMap, onOpenProfile }: { item: any
 
   return (
     <div style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.4)", borderRadius:14, padding:"14px 16px", marginBottom:10, display:"flex", alignItems:"flex-start", gap:14 }}>
-      <button
-        type="button"
-        disabled={!p}
-        onClick={() => p && onOpenProfile(p)}
-        aria-label={`${item.mc_name} 사회자 프로필 보기`}
-        style={{ flexShrink:0, padding:0, border:0, background:"transparent", cursor:p ? "pointer" : "default" }}
-      >
-        {p?.img && !imgErr ? (
-          <img src={p.img} alt={item.mc_name} onError={() => setImgErr(true)}
-            style={{ width:48, height:48, borderRadius:"50%", objectFit:"cover", objectPosition:p.imgPos||"50% 15%", border:`2px solid ${C.mintBorder}` }} />
-        ) : (
-          <div style={{ width:48, height:48, borderRadius:"50%", background:C.mintLight, border:`2px solid ${C.mintBorder}`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, fontWeight:700, color:C.mint }}>
-            {item.mc_name.charAt(0)}
-          </div>
+      <div style={{ flexShrink:0, width:56, display:"flex", flexDirection:"column", alignItems:"center", gap:5 }}>
+        <button
+          type="button"
+          disabled={!p}
+          onClick={() => p && onOpenProfile(p)}
+          aria-label={`${item.mc_name} 사회자 프로필 보기`}
+          style={{ padding:0, border:0, background:"transparent", cursor:p ? "pointer" : "default" }}
+        >
+          {p?.img && !imgErr ? (
+            <img src={p.img} alt={item.mc_name} onError={() => setImgErr(true)}
+              style={{ width:48, height:48, borderRadius:"50%", objectFit:"cover", objectPosition:p.imgPos||"50% 15%", border:`2px solid ${C.mintBorder}` }} />
+          ) : (
+            <div style={{ width:48, height:48, borderRadius:"50%", background:C.mintLight, border:`2px solid ${C.mintBorder}`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, fontWeight:700, color:C.mint }}>
+              {item.mc_name.charAt(0)}
+            </div>
+          )}
+        </button>
+        {p && (
+          <button
+            type="button"
+            onClick={() => onOpenProfile(p)}
+            aria-label={`${item.mc_name} 사회자 프로필 보기`}
+            style={{ width:56, height:19, display:"inline-flex", alignItems:"center", justifyContent:"center", gap:3, padding:0, borderRadius:20, border:"1px solid rgba(212,184,150,0.52)", background:"rgba(15,23,42,0.72)", color:"#ead5b0", fontSize:8, fontWeight:700, letterSpacing:"0.05px", whiteSpace:"nowrap", cursor:"pointer", fontFamily:"inherit", boxShadow:"0 1px 5px rgba(0,0,0,0.22)" }}
+          >
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
+              <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
+              <circle cx="12" cy="12" r="2.5" />
+            </svg>
+            프로필 보기
+          </button>
         )}
-      </button>
+      </div>
       <div style={{ flex:1, minWidth:0 }}>
         <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4, flexWrap:"wrap" }}>
           <button

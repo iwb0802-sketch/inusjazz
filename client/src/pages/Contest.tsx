@@ -900,23 +900,25 @@ export default function Contest() {
               </a>
               <br />
 
-              {/* 항목4: 날짜만으로 예약 가능 여부를 먼저 확인하는 노터치 경로 (상담 신청 전 이탈 방지) */}
-              <a
-                href="https://inusmc.co.kr/schedule"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent("schedule_check_click", championData.name)}
-                className="inline-flex items-center gap-1.5 text-[12px] font-medium text-white/55 hover:text-white/85 underline underline-offset-4 decoration-white/20 transition-colors mb-5"
-              >
-                <CalendarSearch size={13} /> 우리 예식일에 예약 가능한지 먼저 확인하기 →
-              </a>
+              <div className="flex flex-col items-center gap-3 mb-6">
+                {/* 항목4: 날짜만으로 예약 가능 여부를 먼저 확인하는 노터치 경로 (상담 신청 전 이탈 방지) */}
+                <a
+                  href="https://inusmc.co.kr/schedule"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent("schedule_check_click", championData.name)}
+                  className="inline-flex items-center gap-1.5 text-[12px] font-medium text-white/55 hover:text-white/85 underline underline-offset-4 decoration-white/20 transition-colors"
+                >
+                  <CalendarSearch size={13} /> 우리 예식일에 예약 가능한지 먼저 확인하기 →
+                </a>
 
-              {/* 항목3: 실제 후기 규모를 채널별로 세분화해 신뢰 신호 제공 */}
-              <p className="inline-flex items-center gap-1.5 text-[11px] text-white/45 mb-6 max-w-xs mx-auto text-center break-keep">
-                <Star size={11} className="text-[#d4b896] shrink-0" />
-                실제 고객 후기 2,700건+
-                <span className="text-white/30">(숨고 804·후기게시판 582·블로그 979·스마트스토어 377)</span>
-              </p>
+                {/* 항목3: 실제 후기 규모를 채널별로 세분화해 신뢰 신호 제공 */}
+                <p className="flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-white/45 max-w-xs mx-auto text-center break-keep">
+                  <Star size={11} className="text-[#d4b896] shrink-0" />
+                  <span>실제 고객 후기 2,700건+</span>
+                  <span className="text-white/30">(숨고 804·후기게시판 582·블로그 979·스마트스토어 377)</span>
+                </p>
+              </div>
 
               <p className="text-xs text-white/55 mb-1.5">
                 {championData.name} 사회자는 이번 달 현재까지 총{" "}

@@ -265,13 +265,19 @@ export default function VideoGuideSection() {
           })}
         </div>
 
-        <p className="mt-6 text-center text-white/40 text-[12.5px] sm:text-sm leading-relaxed break-keep">
+        <p className="mt-6 text-center text-white/70 text-[13px] sm:text-[15px] font-medium leading-relaxed break-keep">
           <span className="whitespace-nowrap">등급은 진행 실력이 아닌,</span>{" "}
-          <span className="text-[#d4b896]/90 whitespace-nowrap">경력 연차를 기준</span>으로{" "}
+          <span className="text-[#d4b896] whitespace-nowrap">경력 연차를 기준</span>으로{" "}
           <span className="whitespace-nowrap">나눴습니다.</span>
           <br />
           <span className="whitespace-nowrap">오래 진행할수록, 더 다양한 예식을</span>{" "}
           <span className="whitespace-nowrap">겪어본 경험이 쌓이니까요.</span>
+          <br />
+          <span className="mt-2 inline-block text-white/50 text-[11.5px] sm:text-[13px] font-normal">
+            <span className="whitespace-nowrap">단, 시그니처 등급은 경력과 함께</span>{" "}
+            <span className="text-[#5BB5A2] whitespace-nowrap">대중적 인지도</span>까지{" "}
+            <span className="whitespace-nowrap">갖춘 사회자만 해당됩니다.</span>
+          </span>
         </p>
       </div>
 

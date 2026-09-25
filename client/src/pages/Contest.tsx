@@ -6,7 +6,8 @@
  */
 import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX, UserRound, Download, Mic2, ListChecks, Music4, ShieldCheck, Camera, Share2, TrendingUp, Medal } from "lucide-react";
+import confetti from "canvas-confetti";
+import { Crown, RotateCcw, MessageCircle, ArrowLeft, Heart, Sparkles, Play, Volume2, VolumeX, UserRound, Download, Mic2, ListChecks, Music4, ShieldCheck, Camera, Share2, TrendingUp, Medal, Gift, CalendarSearch, Star } from "lucide-react";
 import {
   CONTESTANTS,
   getContestant,
@@ -196,11 +197,28 @@ export default function Contest() {
   const totalMatchesThisRound = roundSetup?.matches.length ?? 0;
   const label = roundSetup ? roundLabel(roundSetup.playersIn.length) : "";
 
+  // 항목1: 챔피언 확정 순간 컨페티 리워드 애니메이션 (경쟁사 벤치마킹 - 결과 공개 시 시각적 임팩트 강화)
+  useEffect(() => {
+    if (phase !== "champion") return;
+    const colors = ["#d4b896", "#f4e2b8", "#5BB5A2", "#ffffff"];
+    const fire = (opts: confetti.Options) =>
+      confetti({ colors, disableForReducedMotion: true, ...opts });
+    fire({ particleCount: 90, spread: 70, startVelocity: 45, origin: { x: 0.5, y: 0.35 } });
+    const t1 = setTimeout(() => {
+      fire({ particleCount: 50, spread: 60, startVelocity: 35, origin: { x: 0.15, y: 0.4 } });
+      fire({ particleCount: 50, spread: 60, startVelocity: 35, origin: { x: 0.85, y: 0.4 } });
+    }, 250);
+    return () => clearTimeout(t1);
+  }, [phase]);
+
   const championData = champion ? getContestant(champion) : undefined;
   // SIGNATURE 등급(회사 대표 사회자)은 이미 최상위 등급이라 VOV 1위 지정예약 1만원 할인 대상에서 제외
   const lastMonthChampionData = lastMonthChampion ? getContestant(lastMonthChampion.name) : undefined;
   const isLastMonthChampionSignature = lastMonthChampionData?.tier === "SIGNATURE";
   const isChampionSignature = championData?.tier === "SIGNATURE";
+  // 항목2: 이번 회차 챔피언이 실제 '지난달 VOV' 타이틀 사회자와 같을 때만 1만원 할인 문구를 추가로 노출
+  // (매 플레이 챔피언에게 무조건 VOV 할인을 붙이면 실제 혜택 조건과 안 맞아 과장 표기가 됨)
+  const championIsRealVov = !!champion && !!lastMonthChampion && champion === lastMonthChampion.name && !isChampionSignature;
 
   // 결과 화면의 2~5위 미니 랭킹: 이번 회차에서 승리(부전승 포함)로 다음 라운드에
   // 진출한 횟수가 많은 순으로 정렬 (챔피언 제외). 진출 횟수가 같으면 공동 순위로 표시.
@@ -827,6 +845,35 @@ export default function Contest() {
                 </div>
               )}
 
+              {/* 항목3+4: 사은품 + 긴급성 - 결과 확인 직후, 실제 존재하는 혜택만 사용해 즉시 전환 유도 */}
+              <div className="relative max-w-sm mx-auto mb-6 text-left">
+                <div className="rounded-2xl border border-[#f4e2b8]/30 bg-gradient-to-b from-[#f4e2b8]/10 to-transparent px-5 py-4">
+                  <div className="flex items-center gap-1.5 mb-2.5">
+                    <Gift size={14} className="text-[#f4e2b8] shrink-0" />
+                    <p className="text-[11px] font-bold tracking-wide text-[#f4e2b8]">지금 상담하면 바로 드리는 혜택</p>
+                  </div>
+                  <ul className="space-y-1.5 mb-2.5">
+                    <li className="flex items-start gap-2 text-[12.5px] text-white/80 leading-relaxed break-keep">
+                      <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
+                      예식 분위기에 맞는 BGM 100여 곡 큐레이션 <span className="text-[#f4e2b8] font-medium">(3만원 상당)</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-[12.5px] text-white/80 leading-relaxed break-keep">
+                      <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
+                      결혼식 준비 체크리스트 &amp; 웨딩가이드 자료 무료 제공
+                    </li>
+                    {championIsRealVov && (
+                      <li className="flex items-start gap-2 text-[12.5px] text-white/80 leading-relaxed break-keep">
+                        <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
+                        이번 달 VOV 사회자 지정예약 <span className="text-[#f4e2b8] font-medium">1만원 추가 할인</span>
+                      </li>
+                    )}
+                  </ul>
+                  <p className="text-[11px] text-white/45 break-keep">
+                    ⏱ 카카오 상담 시 <span className="text-white/70 font-medium">"VOV 콘테스트 참여자"</span>라고 말씀해주시면 혜택이 바로 적용돼요
+                  </p>
+                </div>
+              </div>
+
               {/* 사회자 프로필 자세히 보기 - 챔피언 소개 다음, 상담 버튼 전 단계 */}
               <button
                 type="button"
@@ -846,10 +893,29 @@ export default function Contest() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent("consult_click", championData.name)}
-                className="inline-flex items-center gap-1.5 px-8 py-3.5 rounded-full bg-[#5BB5A2] text-black text-sm font-bold hover:bg-[#6fc5b2] transition-colors shadow-[0_8px_24px_rgba(91,181,162,0.35)] mb-5"
+                className="inline-flex items-center gap-1.5 px-8 py-3.5 rounded-full bg-[#5BB5A2] text-black text-sm font-bold hover:bg-[#6fc5b2] transition-colors shadow-[0_8px_24px_rgba(91,181,162,0.35)] mb-3"
               >
                 <MessageCircle size={16} /> {championData.name} 사회자 예약 상담하기
               </a>
+              <br />
+
+              {/* 항목4: 날짜만으로 예약 가능 여부를 먼저 확인하는 노터치 경로 (상담 신청 전 이탈 방지) */}
+              <a
+                href="https://inusmc.co.kr/schedule"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("schedule_check_click", championData.name)}
+                className="inline-flex items-center gap-1.5 text-[12px] font-medium text-white/55 hover:text-white/85 underline underline-offset-4 decoration-white/20 transition-colors mb-5"
+              >
+                <CalendarSearch size={13} /> 우리 예식일에 예약 가능한지 먼저 확인하기 →
+              </a>
+
+              {/* 항목3: 실제 후기 규모를 채널별로 세분화해 신뢰 신호 제공 */}
+              <p className="inline-flex items-center gap-1.5 text-[11px] text-white/45 mb-6 max-w-xs mx-auto text-center break-keep">
+                <Star size={11} className="text-[#d4b896] shrink-0" />
+                실제 고객 후기 2,700건+
+                <span className="text-white/30">(숨고 804·후기게시판 582·블로그 979·스마트스토어 377)</span>
+              </p>
 
               <p className="text-xs text-white/55 mb-1.5">
                 {championData.name} 사회자는 이번 달 현재까지 총{" "}
@@ -903,6 +969,11 @@ export default function Contest() {
                 </div>
               )}
 
+              {/* 항목5: 공유 유도 강화 - 공유하면 5,000원 추가 할인 (지인할인 등 기존 코드 체계와 동일하게 상담 시 구두 확인) */}
+              <p className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[#5BB5A2] bg-[#5BB5A2]/10 border border-[#5BB5A2]/25 rounded-full px-4 py-1.5 mb-3">
+                <Share2 size={12} className="shrink-0" /> 공유하고 상담 시 "콘테스트 공유했어요"라고 말씀하면 5,000원 추가 할인!
+              </p>
+
               {/* VOV 결과 카드 - 세로형 이미지로 생성해 기기에 바로 저장 + 링크 공유(항목8) */}
               <div className="flex flex-wrap items-center justify-center gap-2 mb-2">
                 <button
@@ -923,6 +994,11 @@ export default function Contest() {
                   {linkShareStatus === "copied" ? "링크 복사됨!" : linkShareStatus === "opened" ? "공유 완료" : "링크 공유하기"}
                 </button>
               </div>
+              {(shareStatus === "done" || linkShareStatus === "opened" || linkShareStatus === "copied") && (
+                <p className="text-[11px] text-[#f4e2b8] mb-1">
+                  공유 완료! 상담 시 위 문구를 말씀해주시면 5,000원 추가 할인해 드려요 🎁
+                </p>
+              )}
               {shareStatus === "copied" && (
                 <p className="text-[11px] text-[#5BB5A2] mb-1">
                   이미지 생성이 지원되지 않는 환경이라 결과 문구를 복사했어요.

@@ -154,7 +154,7 @@ function TierRosterModal({ tier, onClose }: { tier: Tier; onClose: () => void })
               }}
             >
               <Play size={14} className="fill-[#0b0b0b]" />
-              <span>{tier.name} 등급 실제 본식 영상 보기</span>
+              <span>등급별 자세한 영상보기</span>
             </a>
           </div>
         </div>

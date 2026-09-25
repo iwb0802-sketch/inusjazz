@@ -872,9 +872,6 @@ export default function Contest() {
                       </li>
                     )}
                   </ul>
-                  <p className="text-[11px] text-white/45 break-keep">
-                    ⏱ 카카오 상담 후 예약 시 <span className="text-white/70 font-medium">"VOV 콘테스트 참여자"</span>라고 말씀해주시면 혜택이 바로 적용돼요
-                  </p>
                 </div>
               </div>
 

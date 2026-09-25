@@ -855,7 +855,7 @@ export default function Contest() {
                   <ul className="space-y-1.5 mb-2.5">
                     <li className="flex items-start gap-2 text-[12.5px] text-white/80 leading-relaxed break-keep">
                       <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
-                      예식 분위기에 맞는 BGM 100여 곡 큐레이션 <span className="text-[#f4e2b8] font-medium">(3만원 상당)</span>
+                      <span>예식 분위기에 맞는 BGM 100여 곡 큐레이션 <span className="text-[#f4e2b8] font-medium">(3만원 상당)</span></span>
                     </li>
                     <li className="flex items-start gap-2 text-[12.5px] text-white/80 leading-relaxed break-keep">
                       <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
@@ -868,7 +868,7 @@ export default function Contest() {
                     {championIsRealVov && (
                       <li className="flex items-start gap-2 text-[12.5px] text-white/80 leading-relaxed break-keep">
                         <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
-                        이번 달 VOV 사회자 지정예약 <span className="text-[#f4e2b8] font-medium">1만원 추가 할인</span>
+                        <span>이번 달 VOV 사회자 지정예약 <span className="text-[#f4e2b8] font-medium">1만원 추가 할인</span></span>
                       </li>
                     )}
                   </ul>
@@ -886,7 +886,7 @@ export default function Contest() {
               >
                 <UserRound size={14} /> {championData.name} 사회자 프로필 자세히 보기
               </button>
-              <p className="text-[10.5px] text-white/30 mb-5">경력·진행 스타일 등 정보만 확인해요 (상담 신청 아님)</p>
+              <p className="text-[10.5px] text-white/30 mb-5 break-keep">경력·진행 스타일 등 정보만 확인해요 (상담 신청 아님)</p>
 
               {/* 상담 CTA - 결과 확인 직후 바로 노출, 정보 확인용 버튼과 구분되도록 채워진 스타일+상담 문구로 액션 성격을 명확히 함 */}
               <a
@@ -920,7 +920,7 @@ export default function Contest() {
                 </p>
               </div>
 
-              <p className="text-xs text-white/55 mb-1.5">
+              <p className="text-xs text-white/55 mb-1.5 break-keep">
                 {championData.name} 사회자는 이번 달 현재까지 총{" "}
                 <span className="text-[#5BB5A2] font-medium">
                   {(monthHearts[championData.name] || 0).toLocaleString()}개
@@ -973,7 +973,7 @@ export default function Contest() {
               )}
 
               {/* 항목5: 공유 유도 강화 - 공유하면 5,000원 추가 할인 (지인할인 등 기존 코드 체계와 동일하게 상담 시 구두 확인) */}
-              <p className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[#5BB5A2] bg-[#5BB5A2]/10 border border-[#5BB5A2]/25 rounded-full px-4 py-1.5 mb-3">
+              <p className="inline-flex flex-wrap items-center justify-center gap-1.5 text-[12px] font-medium text-[#5BB5A2] bg-[#5BB5A2]/10 border border-[#5BB5A2]/25 rounded-2xl px-4 py-2 mb-3 max-w-sm mx-auto text-center break-keep">
                 <Share2 size={12} className="shrink-0" /> 공유하고 상담 시 "콘테스트 공유했어요"라고 말씀하면 5,000원 추가 할인!
               </p>
 
@@ -1010,18 +1010,20 @@ export default function Contest() {
               {linkShareStatus === "error" && (
                 <p className="text-[11px] text-white/40 mb-1">링크 공유가 지원되지 않는 환경이에요.</p>
               )}
-              <p className="inline-flex items-center gap-1.5 text-[12px] font-medium text-white/70 bg-white/[0.06] border border-white/10 rounded-full px-4 py-2 mb-8">
+              <p className="inline-flex flex-wrap items-center justify-center gap-1.5 text-[12px] font-medium text-white/70 bg-white/[0.06] border border-white/10 rounded-2xl px-4 py-2 mb-5 max-w-sm mx-auto text-center break-keep">
                 <Camera size={13} className="text-[#5BB5A2] shrink-0" />
                 저장이 잘 안 되면, 지금 화면을 캡처(스크린샷)해서 보관해주세요!
               </p>
 
-              <button
-                type="button"
-                onClick={() => setShowBenefits((v) => !v)}
-                className="text-[11px] text-[#d4b896]/80 hover:text-[#d4b896] tracking-wide underline underline-offset-4 decoration-[#d4b896]/30 transition-colors mb-8"
-              >
-                {showBenefits ? "▲ 프리미엄 혜택 접기" : "▼ 프리미엄 혜택 자세히 보기"}
-              </button>
+              <div className="flex justify-center mb-8">
+                <button
+                  type="button"
+                  onClick={() => setShowBenefits((v) => !v)}
+                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-full border border-[#d4b896]/40 text-[13px] font-medium text-[#f4e2b8] hover:bg-[#d4b896]/10 hover:border-[#d4b896]/60 tracking-wide whitespace-nowrap transition-colors"
+                >
+                  {showBenefits ? "▲ 프리미엄 혜택 접기" : "▼ 프리미엄 혜택 자세히 보기"}
+                </button>
+              </div>
 
               {/* 예약 혜택 프리미엄 카드 */}
               {showBenefits && (

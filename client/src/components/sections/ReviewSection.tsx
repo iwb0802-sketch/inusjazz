@@ -259,6 +259,10 @@ export default function ReviewSection() {
             <p className="mt-2.5 text-xs sm:text-[13px] text-white/50 break-keep leading-relaxed">
               ※ 실제 이용 고객이 직접 남긴 후기만 집계하며, 그 외 게시물은 제외합니다. 채널별 게시 건수 합계 기준입니다.
             </p>
+            <p className="mt-2 text-xs sm:text-[13px] text-white/50 break-keep leading-relaxed">
+              ※ 블로그 후기글·후기 게시판은 고객님이 문자·카카오톡으로 보내주신 내용을 그대로 캡처한{" "}
+              <span className="font-bold" style={{ color: GOLD }}>편집·가공 없는 원본</span>입니다.
+            </p>
             <p className="mt-2 text-xs sm:text-[13px] font-medium text-white/70 break-keep leading-relaxed">
               후기는 계속 쌓이고 있어 <span className="font-bold text-white/95">현재 건수는 더 많습니다</span>
               <br />

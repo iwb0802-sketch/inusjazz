@@ -17,9 +17,11 @@ const sfxVolume: Record<string, number> = {
   heart: 0.55,
   select: 0.5,
   champion: 0.75,
+  drumroll: 0.6,
+  fanfare: 0.8,
 };
 
-export function playSfx(name: "heart" | "select" | "champion") {
+export function playSfx(name: "heart" | "select" | "champion" | "drumroll" | "fanfare") {
   if (muted) return;
   const audio = new Audio(`${BASE}${name}.mp3`);
   audio.volume = sfxVolume[name] ?? 0.5;

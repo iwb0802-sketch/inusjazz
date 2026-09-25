@@ -29,7 +29,7 @@ import { buildShareCard } from "@/components/contest/shareCard";
 const MINT = "#5BB5A2";
 const GOLD = "#d4b896";
 
-type Phase = "intro" | "match" | "champion";
+type Phase = "intro" | "match" | "reveal" | "champion";
 
 export default function Contest() {
   const [phase, setPhase] = useState<Phase>("intro");
@@ -63,6 +63,11 @@ export default function Contest() {
   // 하루 중복 플레이 방지: 이 기기의 오늘 첫 플레이만 전체 공유 집계에 반영됨
   const countsTowardTotalRef = useRef(true);
   const [isPracticeRound, setIsPracticeRound] = useState(false);
+  // 항목①: 챔피언 발표 전 "결과 발표 중..." 서스펜스 단계 - 후보 사진이 빠르게 스치는 효과
+  const [revealPool, setRevealPool] = useState<string[]>([]);
+  const [revealIndex, setRevealIndex] = useState(0);
+  // 항목②: 발표 순간 화면 전체가 하얗게 번쩍이는 플래시 효과
+  const [flash, setFlash] = useState(false);
 
   const toggleMute = useCallback(() => {
     setMuted((prev) => {
@@ -174,13 +179,26 @@ export default function Contest() {
       }
       // 라운드 종료
       if (nextWinners.length === 1) {
-        setChampion(nextWinners[0]);
-        setPhase("champion");
-        playSfx("champion");
-        trackEvent("game_complete", nextWinners[0]);
+        const finalWinner = nextWinners[0];
+        // 항목①: 곧바로 챔피언 화면으로 가지 않고, 후보 사진이 빠르게 스치는
+        // "결과 발표 중..." 서스펜스 단계를 약 1.5초간 먼저 보여준다.
+        const others = CONTESTANTS.map((c) => c.name).filter((n) => n !== finalWinner);
+        const shuffled = [...others].sort(() => Math.random() - 0.5).slice(0, 5);
+        setRevealPool([...shuffled, finalWinner]);
+        setRevealIndex(0);
+        setPhase("reveal");
+        playSfx("drumroll");
         if (typeof window !== "undefined") {
           window.scrollTo({ top: 0, left: 0, behavior: "auto" });
         }
+        setTimeout(() => {
+          setChampion(finalWinner);
+          setPhase("champion");
+          setFlash(true);
+          playSfx("fanfare");
+          trackEvent("game_complete", finalWinner);
+          setTimeout(() => setFlash(false), 260);
+        }, 1500);
       } else {
         const nextIdx = roundIndex + 1;
         setRoundIndex(nextIdx);
@@ -197,18 +215,45 @@ export default function Contest() {
   const totalMatchesThisRound = roundSetup?.matches.length ?? 0;
   const label = roundSetup ? roundLabel(roundSetup.playersIn.length) : "";
 
-  // 항목1: 챔피언 확정 순간 컨페티 리워드 애니메이션 (경쟁사 벤치마킹 - 결과 공개 시 시각적 임팩트 강화)
+  // 항목①: 서스펜스 단계 동안 후보 사진을 빠르게 전환 (두구두구 드럼롤과 함께)
+  useEffect(() => {
+    if (phase !== "reveal" || revealPool.length === 0) return;
+    const interval = setInterval(() => {
+      setRevealIndex((v) => (v + 1) % revealPool.length);
+    }, 110);
+    return () => clearInterval(interval);
+  }, [phase, revealPool]);
+
+  // 항목1+4: 챔피언 확정 순간 컨페티 리워드 애니메이션을 훨씬 풍성하게(4~5웨이브, 다양한 모양, 화면 곳곳)
   useEffect(() => {
     if (phase !== "champion") return;
     const colors = ["#d4b896", "#f4e2b8", "#5BB5A2", "#ffffff"];
+    const shapes: confetti.Shape[] = ["star", "circle", "square"];
     const fire = (opts: confetti.Options) =>
-      confetti({ colors, disableForReducedMotion: true, ...opts });
-    fire({ particleCount: 90, spread: 70, startVelocity: 45, origin: { x: 0.5, y: 0.35 } });
-    const t1 = setTimeout(() => {
-      fire({ particleCount: 50, spread: 60, startVelocity: 35, origin: { x: 0.15, y: 0.4 } });
-      fire({ particleCount: 50, spread: 60, startVelocity: 35, origin: { x: 0.85, y: 0.4 } });
-    }, 250);
-    return () => clearTimeout(t1);
+      confetti({ colors, shapes, disableForReducedMotion: true, ...opts });
+    // 1웨이브: 중앙에서 크게 터짐
+    fire({ particleCount: 130, spread: 80, startVelocity: 55, scalar: 1.1, origin: { x: 0.5, y: 0.3 } });
+    const timers = [
+      // 2웨이브: 좌우 동시 발사
+      setTimeout(() => {
+        fire({ particleCount: 60, spread: 65, startVelocity: 40, origin: { x: 0.1, y: 0.45 } });
+        fire({ particleCount: 60, spread: 65, startVelocity: 40, origin: { x: 0.9, y: 0.45 } });
+      }, 220),
+      // 3웨이브: 아래쪽 넓게
+      setTimeout(() => {
+        fire({ particleCount: 80, spread: 100, startVelocity: 35, origin: { x: 0.5, y: 0.6 } });
+      }, 450),
+      // 4웨이브: 별모양 위주로 위에서 흩날림
+      setTimeout(() => {
+        fire({ particleCount: 45, spread: 70, startVelocity: 30, shapes: ["star"], scalar: 1.2, origin: { x: 0.25, y: 0.2 } });
+        fire({ particleCount: 45, spread: 70, startVelocity: 30, shapes: ["star"], scalar: 1.2, origin: { x: 0.75, y: 0.2 } });
+      }, 700),
+      // 5웨이브: 마무리로 은은하게 한 번 더
+      setTimeout(() => {
+        fire({ particleCount: 55, spread: 90, startVelocity: 28, origin: { x: 0.5, y: 0.5 } });
+      }, 1000),
+    ];
+    return () => timers.forEach(clearTimeout);
   }, [phase]);
 
   const championData = champion ? getContestant(champion) : undefined;
@@ -387,6 +432,20 @@ export default function Contest() {
       >
         {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
       </button>
+
+      {/* 항목②: 챔피언 발표 순간 화면 전체가 하얗게 번쩍이는 플래시 효과 */}
+      <AnimatePresence>
+        {flash && (
+          <motion.div
+            key="flash"
+            className="fixed inset-0 z-[60] bg-white pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.9, 0] }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.26, times: [0, 0.25, 1] }}
+          />
+        )}
+      </AnimatePresence>
 
       {/* 게임 화면 전용 소형 상담 CTA - 결과 화면의 메인 상담 버튼과 별개, 하단 우측에 작게 배치 (하단 좌측 AI 챗봇 위젯과 겹치지 않도록) */}
       {phase === "match" && (
@@ -810,20 +869,84 @@ export default function Contest() {
             </motion.div>
           )}
 
+          {phase === "reveal" && revealPool.length > 0 && (
+            <motion.div
+              key="reveal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-center py-20"
+            >
+              <p className="text-[11px] tracking-[0.25em] text-[#d4b896] uppercase mb-8 animate-pulse">
+                결과 발표 중...
+              </p>
+              <div className="relative w-36 h-36 rounded-full overflow-hidden mx-auto ring-4 ring-[#d4b896]/40 shadow-[0_0_40px_rgba(212,184,150,0.35)]">
+                <AnimatePresence mode="popLayout">
+                  <motion.img
+                    key={revealIndex}
+                    src={getContestant(revealPool[revealIndex])?.image}
+                    alt=""
+                    initial={{ opacity: 0, scale: 1.08 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.09 }}
+                    className="absolute inset-0 w-full h-full object-cover object-top"
+                  />
+                </AnimatePresence>
+              </div>
+              <div className="flex items-center justify-center gap-1.5 mt-8">
+                {[0, 1, 2].map((i) => (
+                  <motion.span
+                    key={i}
+                    className="w-2 h-2 rounded-full bg-[#d4b896]"
+                    animate={{ opacity: [0.25, 1, 0.25] }}
+                    transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          )}
+
           {phase === "champion" && championData && (
             <motion.div
               key="champion"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="text-center rounded-2xl border border-[#d4b896]/30 bg-gradient-to-b from-[#d4b896]/10 to-transparent p-10"
+              className="relative text-center rounded-2xl border border-[#d4b896]/30 bg-gradient-to-b from-[#d4b896]/10 to-transparent p-10 overflow-hidden"
             >
-              <Crown className="mx-auto mb-3 text-[#d4b896]" size={32} />
-              <p className="text-[10px] tracking-[0.2em] text-[#d4b896] uppercase mb-4">이번 회차 챔피언</p>
-              <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 ring-4 ring-[#d4b896]/50">
+              {/* 항목③: 골드 스포트라이트 배경 - 은은하게 펄스 */}
+              <motion.div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 -z-0"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 60% 50% at 50% 15%, rgba(212,184,150,0.35), transparent 70%)",
+                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              />
+              {/* 항목③: 왕관이 위에서 톡 떨어지듯 바운스 */}
+              <motion.div
+                initial={{ y: -120, opacity: 0, rotate: -15 }}
+                animate={{ y: 0, opacity: 1, rotate: 0 }}
+                transition={{ type: "spring", bounce: 0.6, duration: 0.9, delay: 0.05 }}
+                className="relative z-10"
+              >
+                <Crown className="mx-auto mb-3 text-[#d4b896]" size={32} />
+              </motion.div>
+              <p className="relative z-10 text-[10px] tracking-[0.2em] text-[#d4b896] uppercase mb-4">이번 회차 챔피언</p>
+              {/* 항목③: 우승자 사진 팝업(확대) 등장 */}
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", bounce: 0.5, duration: 0.7, delay: 0.35 }}
+                className="relative z-10 w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 ring-4 ring-[#d4b896]/50 shadow-[0_0_50px_rgba(212,184,150,0.45)]"
+              >
                 <img src={championData.image} alt={championData.name} className="w-full h-full object-cover object-top" />
-              </div>
-              <h2 className="text-3xl font-semibold mb-2" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+              </motion.div>
+              <h2 className="relative z-10 text-3xl font-semibold mb-2" style={{ fontFamily: "'Noto Serif KR', serif" }}>
                 {championData.name}
               </h2>
               <p className="text-[13px] text-white/60 mb-1.5 break-keep">
@@ -972,11 +1095,6 @@ export default function Contest() {
                 </div>
               )}
 
-              {/* 항목5: 공유 유도 강화 - 공유하면 5,000원 추가 할인 (지인할인 등 기존 코드 체계와 동일하게 상담 시 구두 확인) */}
-              <p className="inline-flex flex-wrap items-center justify-center gap-1.5 text-[12px] font-medium text-[#5BB5A2] bg-[#5BB5A2]/10 border border-[#5BB5A2]/25 rounded-2xl px-4 py-2 mb-3 max-w-sm mx-auto text-center break-keep">
-                <Share2 size={12} className="shrink-0" /> 공유하고 상담 시 "콘테스트 공유했어요"라고 말씀하면 5,000원 추가 할인!
-              </p>
-
               {/* VOV 결과 카드 - 세로형 이미지로 생성해 기기에 바로 저장 + 링크 공유(항목8) */}
               <div className="flex flex-wrap items-center justify-center gap-2 mb-2">
                 <button
@@ -997,11 +1115,6 @@ export default function Contest() {
                   {linkShareStatus === "copied" ? "링크 복사됨!" : linkShareStatus === "opened" ? "공유 완료" : "링크 공유하기"}
                 </button>
               </div>
-              {(shareStatus === "done" || linkShareStatus === "opened" || linkShareStatus === "copied") && (
-                <p className="text-[11px] text-[#f4e2b8] mb-1">
-                  공유 완료! 상담 시 위 문구를 말씀해주시면 5,000원 추가 할인해 드려요 🎁
-                </p>
-              )}
               {shareStatus === "copied" && (
                 <p className="text-[11px] text-[#5BB5A2] mb-1">
                   이미지 생성이 지원되지 않는 환경이라 결과 문구를 복사했어요.

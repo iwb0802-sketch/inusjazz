@@ -266,9 +266,12 @@ export default function VideoGuideSection() {
         </div>
 
         <p className="mt-6 text-center text-white/40 text-[12.5px] sm:text-sm leading-relaxed break-keep">
-          <span className="whitespace-nowrap">실제 본식에서 확인되는</span>{" "}
-          <span className="text-[#d4b896]/90 whitespace-nowrap">분위기와 진행 완성도</span>를{" "}
-          <span className="whitespace-nowrap">직접 비교해보세요.</span>
+          <span className="whitespace-nowrap">등급은 진행 실력이 아닌,</span>{" "}
+          <span className="text-[#d4b896]/90 whitespace-nowrap">경력 연차를 기준</span>으로{" "}
+          <span className="whitespace-nowrap">나눴습니다.</span>
+          <br />
+          <span className="whitespace-nowrap">오래 진행할수록, 더 다양한 예식을</span>{" "}
+          <span className="whitespace-nowrap">겪어본 경험이 쌓이니까요.</span>
         </p>
       </div>
 

@@ -297,11 +297,11 @@ export default function ReviewSection() {
               <span className="font-bold" style={{ color: GOLD }}>681건</span>의 고객님들의 네이버 게시물은 2,700+ 집계에 포함하지 않습니다.
             </p>
             <p className="mt-2.5 text-xs sm:text-[13px] text-white/65 break-keep leading-[1.6] text-center max-w-md mx-auto">
-              검색 시점·검색어에 따라 수가 달라지는 블로그·카페 언급은
+              검색 시점·검색어에 따라 수가 달라지는 블로그·카페 언급은{" "}
               <br className="hidden sm:block" />
               정확한 건수를 확정할 수 없어 집계에서 제외했습니다.
               <br />
-              저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>2,700+ 건</span>은
+              저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>2,700+ 건</span>은{" "}
               전부 플랫폼에서 직접 확인 가능한 검증된 수치입니다.
             </p>
           </div>

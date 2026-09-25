@@ -294,7 +294,7 @@ export default function ReviewSection() {
               <ExternalLink size={15} />
             </a>
             <p className="mt-3 text-xs sm:text-[13px] text-white/50 break-keep leading-relaxed text-center max-w-md mx-auto">
-              <span className="font-bold" style={{ color: GOLD }}>681건</span>의 고객님들의 네이버 게시물은 2,700+ 집계에 포함하지 않습니다.
+              <span className="font-bold" style={{ color: GOLD }}>600건 이상</span>의 고객님들의 네이버 게시물은 2,700+ 집계에 포함하지 않습니다.
             </p>
             <p className="mt-2.5 text-xs sm:text-[13px] text-white/65 break-keep leading-[1.6] text-center max-w-md mx-auto">
               검색 시점·검색어에 따라 수가 달라지는 블로그·카페 언급은{" "}

@@ -36,8 +36,8 @@ export default function IntroSection() {
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 600 }}
           >
             사회자 한 명을 정하는 게 아니라,
-            <br className="hidden sm:block" />
-            <span className="text-[#5BB5A2]"> 예식에 맞는 한 명을 찾는 것.</span>
+            <br />
+            <span className="text-[#5BB5A2]">예식에 맞는 한 명을 찾는 것.</span>
           </p>
           <p className="mt-3 text-white/55 text-[13px] sm:text-base leading-relaxed max-w-xl mx-auto break-keep">
             <strong className="text-white font-semibold">300회 이상</strong> 실전 경험을 갖춘

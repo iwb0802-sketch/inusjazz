@@ -83,7 +83,7 @@ const HIDDEN_GEMS = [
     name: "김한솔",
     tier: "STANDARD",
     badge: "행사·파티 전문 MC 출신",
-    career: "진행 300회 이상",
+    career: "경력 3년+ · 진행 300회 이상",
     highlight: "부드럽고 편안한 진행과 센스있는 멘트로 분위기를 리드합니다.",
     fit: "화기애애하고 편안한 분위기",
     styles: ["감성형", "유쾌형"],

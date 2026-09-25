@@ -375,6 +375,20 @@ function McCard({ name, onOpenProfile }: { name: string; onOpenProfile: (profile
           <AudioBtn audioSrc={p.audio} size={26} />
         </div>
       )}
+      {p && (
+        <button
+          type="button"
+          onClick={(event) => { event.stopPropagation(); onOpenProfile(p); }}
+          aria-label={`${name} 사회자 프로필 보기`}
+          style={{ position:"absolute", left:7, top:78, zIndex:2, display:"inline-flex", alignItems:"center", gap:3, padding:"4px 7px", borderRadius:20, border:"1px solid rgba(212,184,150,0.58)", background:"rgba(7,14,27,0.82)", color:"#f4e5c9", fontSize:8, fontWeight:700, letterSpacing:"0.15px", cursor:"pointer", boxShadow:"0 2px 8px rgba(0,0,0,0.32)", backdropFilter:"blur(5px)", fontFamily:"inherit" }}
+        >
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
+            <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
+            <circle cx="12" cy="12" r="2.5" />
+          </svg>
+          프로필 보기
+        </button>
+      )}
       <div
         role="button"
         tabIndex={p ? 0 : -1}

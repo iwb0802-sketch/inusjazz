@@ -20,7 +20,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-minjunho.jpg",
     audioFile: "/audio/mc-minjunho.mp3",
     youtubeId: "xDXwvifOQgY",
-    reviewKeywords: ["부드러운딕션", "안정적인진행력", "완성도높은예식", "격식있는분위기"],
+    reviewKeywords: ["안정감있는진행", "자연스러운분위기리드", "돌발상황대응력", "몰입도높은진행", "부드럽고편안한진행", "격식있는진행"],
     url: "https://blog.naver.com/inusmusics/223597460181",
   },
   {
@@ -34,7 +34,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-simbiseong.jpg",
     audioFile: "/audio/mc-simbisung.mp3",
     youtubeId: "CmBugj0mAj8",
-    reviewKeywords: ["세심한현장체크", "깔끔한진행톤", "군더더기없는진행"],
+    reviewKeywords: ["안정감있는진행", "깔끔한진행톤", "원하는분위기맞춤진행", "밝고편안한예식분위기", "돌발상황대응력", "세심한예식준비"],
     url: "https://blog.naver.com/inusmusics/224198308789",
   },
   {
@@ -48,7 +48,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-idogeon.jpg",
     audioFile: "/audio/mc-idogeon.mp3",
     youtubeId: "TD9j7fjHf-s",
-    reviewKeywords: ["정확한딕션", "세심한사전준비", "안정감있는진행"],
+    reviewKeywords: ["세심한예식준비", "정확한딕션과전달력", "프로페셔널한진행", "정돈된목소리톤", "안정감있는진행", "깔끔하고매끄러운진행"],
     url: "https://blog.naver.com/inusmusics/224099418463",
   },
   {
@@ -62,7 +62,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-kimbeomtae.jpg",
     audioFile: "/audio/mc-beomtae.mp3",
     youtubeId: "sUvNrivuSvw",
-    reviewKeywords: ["부드러운목소리", "재치있는순발력", "화기애애한분위기"],
+    reviewKeywords: ["위트있는분위기리드", "센스있는멘트진행", "유쾌한예식분위기", "자연스러운분위기전환", "하객몰입도높은진행", "밝고편안한진행톤"],
     url: "https://blog.naver.com/inusmusics/223192531041",
   },
   {
@@ -76,7 +76,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-kimtaewoo.jpg",
     audioFile: "/audio/mc-taewoo.mp3",
     youtubeId: "GuQkCskr0dA",
-    reviewKeywords: ["유쾌한입담", "뛰어난순발력", "풍부한표현력"],
+    reviewKeywords: ["스탠드업코미디언의유쾌한진행", "재치있는입담", "순발력있는진행", "편안한분위기리드", "깔끔한진행", "감동까지살리는사회"],
     url: "https://blog.naver.com/inusmusics/224364756942",
   },
   {
@@ -90,7 +90,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-kimhansol.jpg",
     audioFile: "/audio/mc-kimhansol.mp3",
     youtubeId: "cBBdRueVua8",
-    reviewKeywords: ["편안한진행", "센스있는멘트", "화기애애한리드"],
+    reviewKeywords: ["부드럽고편안한진행", "깔끔하고정확한딕션", "센스있는분위기리드", "차분하고안정적인진행", "자연스러운멘트센스", "신뢰감있는목소리톤"],
     url: "https://blog.naver.com/inusmusics/224393408893",
   },
 ];

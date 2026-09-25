@@ -4,7 +4,7 @@
  * Brand: Mint (#5BB5A2) + Gold (#d4b896)
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Sparkles, ChevronRight, Play, Pause, Volume2, X, ExternalLink } from "lucide-react";
+import { Sparkles, ChevronRight, Play, Pause, Volume2, X, ExternalLink, ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 // 아직 널리 알려지지 않았지만 실력이 확실한 사회자 (숨은 강자)
@@ -20,6 +20,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-minjunho.jpg",
     audioFile: "/audio/mc-minjunho.mp3",
     youtubeId: "xDXwvifOQgY",
+    reviewKeywords: ["부드러운딕션", "안정적인진행력", "완성도높은예식", "격식있는분위기"],
     url: "https://blog.naver.com/inusmusics/223597460181",
   },
   {
@@ -33,6 +34,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-simbiseong.jpg",
     audioFile: "/audio/mc-simbisung.mp3",
     youtubeId: "CmBugj0mAj8",
+    reviewKeywords: ["세심한현장체크", "깔끔한진행톤", "군더더기없는진행"],
     url: "https://blog.naver.com/inusmusics/224198308789",
   },
   {
@@ -46,6 +48,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-idogeon.jpg",
     audioFile: "/audio/mc-idogeon.mp3",
     youtubeId: "TD9j7fjHf-s",
+    reviewKeywords: ["정확한딕션", "세심한사전준비", "안정감있는진행"],
     url: "https://blog.naver.com/inusmusics/224099418463",
   },
   {
@@ -59,6 +62,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-kimbeomtae.jpg",
     audioFile: "/audio/mc-beomtae.mp3",
     youtubeId: "sUvNrivuSvw",
+    reviewKeywords: ["부드러운목소리", "재치있는순발력", "화기애애한분위기"],
     url: "https://blog.naver.com/inusmusics/223192531041",
   },
   {
@@ -72,6 +76,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-kimtaewoo.jpg",
     audioFile: "/audio/mc-taewoo.mp3",
     youtubeId: "GuQkCskr0dA",
+    reviewKeywords: ["유쾌한입담", "뛰어난순발력", "풍부한표현력"],
     url: "https://blog.naver.com/inusmusics/224364756942",
   },
   {
@@ -85,6 +90,7 @@ const HIDDEN_GEMS = [
     image: "/images/mc-kimhansol.jpg",
     audioFile: "/audio/mc-kimhansol.mp3",
     youtubeId: "cBBdRueVua8",
+    reviewKeywords: ["편안한진행", "센스있는멘트", "화기애애한리드"],
     url: "https://blog.naver.com/inusmusics/224393408893",
   },
 ];
@@ -98,8 +104,12 @@ const tierStyle = (tier: string) =>
 
 type Gem = typeof HIDDEN_GEMS[0];
 
-// 스페셜리스트 프로필 모달 - 메인 사회자 모달과 동일한 구성(영상 상단 + 정보 + 하단 링크 버튼)
+// 스페셜리스트 프로필 모달 - 메인 12인 ProfileModal과 완전히 동일한 구조
+// (영상 → 스크롤 유도 힌트 → 리뷰 키워드 배지 → 프로필 링크 + 카카오 상담 버튼)
 function GemModal({ mc, onClose }: { mc: Gem; onClose: () => void }) {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [showScrollHint, setShowScrollHint] = useState(true);
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -109,6 +119,25 @@ function GemModal({ mc, onClose }: { mc: Gem; onClose: () => void }) {
       window.removeEventListener("keydown", handleKey);
     };
   }, [onClose]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const checkScroll = () => {
+      const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
+      const scrollable = el.scrollHeight > el.clientHeight + 24;
+      setShowScrollHint(scrollable && !atBottom);
+    };
+
+    checkScroll();
+    el.addEventListener("scroll", checkScroll);
+    const timer = setTimeout(checkScroll, 200);
+    return () => {
+      el.removeEventListener("scroll", checkScroll);
+      clearTimeout(timer);
+    };
+  }, [mc]);
 
   return (
     <div
@@ -137,7 +166,7 @@ function GemModal({ mc, onClose }: { mc: Gem; onClose: () => void }) {
         </button>
 
         {/* 스크롤 영역 */}
-        <div className="overflow-y-auto relative" style={{ maxHeight: "calc(92vh - 76px)" }}>
+        <div ref={scrollRef} className="overflow-y-auto relative" style={{ maxHeight: "calc(92vh - 80px)" }}>
           {/* 영상 */}
           <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
             <iframe
@@ -149,58 +178,49 @@ function GemModal({ mc, onClose }: { mc: Gem; onClose: () => void }) {
               style={{ border: 0 }}
             />
           </div>
-
-          {/* 정보 */}
-          <div className="px-5 py-4 sm:px-6 sm:py-5">
-            <div className="flex items-center gap-2 mb-2">
-              <span
-                className="text-[9px] sm:text-[10px] font-bold tracking-[0.12em] px-2 py-[3px] rounded-full"
-                style={tierStyle(mc.tier)}
-              >
-                {mc.tier}
-              </span>
-              <span
-                className="text-[9px] sm:text-[10px] font-semibold px-2 py-[3px] rounded-md break-keep"
-                style={{ background: "rgba(91,181,162,0.12)", color: "#7fd3c1", border: "1px solid rgba(91,181,162,0.28)" }}
-              >
-                {mc.badge}
-              </span>
-            </div>
-
-            <p className="text-white text-lg sm:text-xl font-bold" style={{ fontFamily: "'Noto Serif KR', serif" }}>
-              {mc.name} 사회자
-            </p>
-            <p className="text-[#d4b896]/85 text-[11px] sm:text-xs font-medium mt-1 mb-2.5 break-keep">{mc.career}</p>
-
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {mc.styles.map((style) => (
-                <span
-                  key={style}
-                  className="inline-flex items-center px-2 py-[3px] rounded-[4px]"
-                  style={{
-                    fontSize: "10px",
-                    letterSpacing: "0.02em",
-                    background: "rgba(212,184,150,0.10)",
-                    border: "1px solid rgba(212,184,150,0.35)",
-                    color: "#d4b896",
-                  }}
-                >
-                  {style}
-                </span>
-              ))}
-            </div>
-
-            <p className="text-white/70 text-[13px] sm:text-sm leading-relaxed break-keep">{mc.highlight}</p>
-
-            <div className="flex items-start gap-1.5 mt-3">
-              <span className="text-[10px] sm:text-[11px] text-white/35 flex-shrink-0 mt-[1px]">이런 예식에</span>
-              <span className="text-[11px] sm:text-xs text-white/80 font-medium break-keep leading-snug">{mc.fit}</span>
-            </div>
-          </div>
         </div>
 
-        {/* 하단 고정 버튼 */}
-        <div className="px-4 py-3 flex flex-row gap-2" style={{ borderTop: "1px solid rgba(91,181,162,0.2)", background: "rgba(0,0,0,0.6)", flexShrink: 0 }}>
+        {/* 스크롤 유도 힌트 */}
+        {showScrollHint && (
+          <div
+            className="absolute left-0 right-0 flex justify-center pointer-events-none"
+            style={{
+              bottom: "80px",
+              background: "linear-gradient(to top, rgba(13,13,13,0.9) 20%, rgba(13,13,13,0))",
+              paddingTop: "28px",
+              paddingBottom: "10px",
+            }}
+          >
+            <div
+              className="flex items-center gap-1 text-[11px] sm:text-xs"
+              style={{ color: "#d6b16b", animation: "mcScrollBounceGem 1.4s ease-in-out infinite" }}
+            >
+              <span>스크롤해서 더보기</span>
+              <ChevronDown size={14} />
+            </div>
+          </div>
+        )}
+
+        {/* 리뷰 키워드 배지 - 항상 노출되는 고정 영역 */}
+        {mc.reviewKeywords && mc.reviewKeywords.length > 0 && (
+          <div
+            className="px-4 py-3 flex flex-wrap items-center justify-center gap-2"
+            style={{ borderTop: "1px solid rgba(214,177,107,0.12)", background: "rgba(214,177,107,0.04)", flexShrink: 0 }}
+          >
+            {mc.reviewKeywords.map((kw, i) => (
+              <span
+                key={i}
+                className="text-[11px] sm:text-xs font-medium px-2.5 py-1 rounded-full"
+                style={{ color: "#d6b16b", background: "rgba(214,177,107,0.1)", border: "1px solid rgba(214,177,107,0.3)" }}
+              >
+                #{kw}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* 하단 고정 버튼 영역 */}
+        <div className="px-4 py-3 flex flex-row gap-2" style={{ borderTop: "1px solid rgba(214,177,107,0.2)", background: "rgba(0,0,0,0.6)", flexShrink: 0 }}>
           <a
             href={mc.url}
             target="_blank"
@@ -211,19 +231,31 @@ function GemModal({ mc, onClose }: { mc: Gem; onClose: () => void }) {
               fontSize: "13px",
               letterSpacing: "0.05em",
               fontWeight: 500,
-              background: "linear-gradient(135deg, rgba(212,184,150,0.15) 0%, rgba(212,184,150,0.05) 100%)",
-              border: "1px solid rgba(212,184,150,0.5)",
+              background: "linear-gradient(135deg, rgba(214,177,107,0.15) 0%, rgba(214,177,107,0.05) 100%)",
+              border: "1px solid rgba(214,177,107,0.5)",
               color: "#d6b16b",
             }}
           >
-            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "linear-gradient(135deg, rgba(212,184,150,0.3) 0%, rgba(212,184,150,0.1) 100%)" }} />
+            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "linear-gradient(135deg, rgba(214,177,107,0.3) 0%, rgba(214,177,107,0.1) 100%)" }} />
             <span className="relative">사회자 프로필 자세히 보기</span>
             <ExternalLink size={13} className="relative" />
+          </a>
+          <a
+            href="https://pf.kakao.com/_wxovaM/chat"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 flex-1 py-3 text-white text-sm font-semibold tracking-wide transition-all duration-300 hover:opacity-90 rounded-sm"
+            style={{ background: "#5BB5A2", fontFamily: "'Noto Sans KR', sans-serif" }}
+          >
+            💬 카카오 상담하기
           </a>
         </div>
       </div>
 
-      <style>{`@keyframes fadeInUpGem { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+      <style>{`
+        @keyframes fadeInUpGem { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes mcScrollBounceGem { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+      `}</style>
     </div>
   );
 }

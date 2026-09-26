@@ -344,11 +344,15 @@ export default function ReviewSection() {
             <p className="mt-3.5 text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
               <span className="font-bold" style={{ color: GOLD }}>600건 이상</span>의 고객님의 블로그 후기글과 카페글이 있지만,
               <br />
-              검색 결과에 정확한 건수가 표시되지 않아 집계에서 제외했습니다.
+              검색 결과에 정확한 건수가 표시되지 않아
+              <br className="sm:hidden" />{" "}
+              집계에서 제외했습니다.
               <br />
               저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>2,700+ 건</span>은
               <br className="sm:hidden" />{" "}
-              전부 플랫폼에서 직접 확인 가능한 검증된 수치입니다.
+              전부 플랫폼에서
+              <br className="hidden sm:block" />{" "}
+              직접 확인 가능한 검증된 수치입니다.
             </p>
           </div>
 

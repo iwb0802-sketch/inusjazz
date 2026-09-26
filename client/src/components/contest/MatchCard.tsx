@@ -181,7 +181,7 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
         <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2">
           {blind ? (
             <h3
-              className="text-2xl text-white/70 font-semibold tracking-widest pointer-events-none"
+              className="text-2xl text-white/85 font-semibold tracking-widest pointer-events-none"
               style={{ fontFamily: "'Noto Serif KR', serif" }}
             >
               {side === "left" ? "사회자 A" : "사회자 B"}
@@ -226,7 +226,7 @@ export default function MatchCard({ contestant, hearts, side, onSelectWinner, on
 
       <div className="p-4 flex flex-col gap-3 flex-1">
         {!blind && (
-          <p className="text-xs text-white/55 leading-relaxed line-clamp-2" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
+          <p className="text-xs text-white/75 leading-relaxed line-clamp-2" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
             {contestant.highlight}
           </p>
         )}

@@ -569,7 +569,7 @@ export default function Contest() {
               >
                 Contest
               </p>
-              <p className="text-[12px] text-white/60 tracking-wide mb-5 break-keep">
+              <p className="text-[12px] text-white/75 tracking-wide mb-5 break-keep">
                 VOV는 이너스뮤직 사회자들의 목소리를 직접 듣고 선택하는 콘테스트예요.
               </p>
 
@@ -577,7 +577,7 @@ export default function Contest() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.36, duration: 0.5 }}
-                className="text-sm text-white/55 leading-relaxed max-w-sm mx-auto mb-9 break-keep"
+                className="text-sm text-white/80 leading-relaxed max-w-sm mx-auto mb-9 break-keep"
               >
                 신랑신부님이 직접 듣고 선택하는
                 <br />
@@ -628,7 +628,7 @@ export default function Contest() {
                   >
                     <item.icon size={16} className="text-[#d4b896]" />
                     <span className="text-[11px] font-medium text-white/85">{item.label}</span>
-                    <span className="text-[11px] text-white/55 leading-snug">{item.desc}</span>
+                    <span className="text-[11px] text-white/70 leading-snug">{item.desc}</span>
                   </div>
                 ))}
               </motion.div>
@@ -754,21 +754,21 @@ export default function Contest() {
                   </span>
                   {isLastMonthChampionSignature ? (
                     <>
-                      <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
+                      <p className="text-[13px] leading-[1.75] text-white/85 break-keep">
                         <span className="inline-block">지난달 </span>
                         <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
                         <span className="inline-block">&nbsp;사회자는</span>{" "}
                         <span className="inline-block font-semibold" style={{ color: GOLD }}>SIGNATURE</span>
                         <span className="inline-block">&nbsp;등급이라</span>
                       </p>
-                      <p className="mt-1 text-[14px] font-bold tracking-wide break-keep text-white/80">
+                      <p className="mt-1 text-[14px] font-bold tracking-wide break-keep text-white/95">
                         VOV 지정예약 할인 대상에서 제외됩니다
                       </p>
                       <p className="mt-1.5 text-[11px] text-white/40 break-keep">SIGNATURE 등급 사회자는 이미 최상위 등급으로 별도 지정예약 할인이 적용되지 않아요</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
+                      <p className="text-[13px] leading-[1.75] text-white/85 break-keep">
                         <span className="inline-block">지난달 </span>
                         <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
                         <span className="inline-block">&nbsp;사회자를</span>{" "}
@@ -776,7 +776,7 @@ export default function Contest() {
                       </p>
                       <p className="mt-1 text-[15px] font-bold tracking-wide break-keep" style={{ color: GOLD }}>
                         1만 원 할인
-                        <span className="text-white/70 font-medium text-[13px]"> 혜택 제공</span>
+                        <span className="text-white/88 font-medium text-[13px]"> 혜택 제공</span>
                       </p>
                       <p className="mt-1.5 text-[11px] text-white/40 break-keep">다른 이벤트와 중복 적용 가능 (SIGNATURE 등급 사회자는 제외)</p>
                     </>
@@ -799,7 +799,7 @@ export default function Contest() {
           >
             <span style={{ color: MINT }}>V</span>OTE <span style={{ color: MINT }}>O</span>N <span style={{ color: MINT }}>V</span>OICE
           </h1>
-          <p className="text-sm text-white/65 leading-[1.8] max-w-md mx-auto break-keep">
+          <p className="text-sm text-white/80 leading-[1.8] max-w-md mx-auto break-keep">
             <span className="inline-block">신랑신부님이 직접 듣고 선택하는</span>{" "}
             <span className="inline-block">이너스뮤직 사회자 목소리 콘테스트</span>
           </p>
@@ -821,21 +821,21 @@ export default function Contest() {
               </span>
               {isLastMonthChampionSignature ? (
                 <>
-                  <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
+                  <p className="text-[13px] leading-[1.75] text-white/85 break-keep">
                     <span className="inline-block">지난달 </span>
                     <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
                     <span className="inline-block">&nbsp;사회자는</span>{" "}
                     <span className="inline-block font-semibold" style={{ color: GOLD }}>SIGNATURE</span>
                     <span className="inline-block">&nbsp;등급이라</span>
                   </p>
-                  <p className="mt-1 text-[14px] font-bold tracking-wide break-keep text-white/80">
+                  <p className="mt-1 text-[14px] font-bold tracking-wide break-keep text-white/95">
                     VOV 지정예약 할인 대상에서 제외됩니다
                   </p>
                   <p className="mt-1.5 text-[11px] text-white/40 break-keep">SIGNATURE 등급 사회자는 이미 최상위 등급으로 별도 지정예약 할인이 적용되지 않아요</p>
                 </>
               ) : (
                 <>
-                  <p className="text-[13px] leading-[1.75] text-white/75 break-keep">
+                  <p className="text-[13px] leading-[1.75] text-white/85 break-keep">
                     <span className="inline-block">지난달 </span>
                     <span className="inline-block font-semibold" style={{ color: MINT }}>VOTE&nbsp;ON&nbsp;VOICE</span>
                     <span className="inline-block">&nbsp;사회자를</span>{" "}
@@ -843,7 +843,7 @@ export default function Contest() {
                   </p>
                   <p className="mt-1 text-[15px] font-bold tracking-wide break-keep" style={{ color: GOLD }}>
                     1만 원 할인
-                    <span className="text-white/70 font-medium text-[13px]"> 혜택 제공</span>
+                    <span className="text-white/88 font-medium text-[13px]"> 혜택 제공</span>
                   </p>
                   <p className="mt-1.5 text-[11px] text-white/40 break-keep">다른 이벤트와 중복 적용 가능 (SIGNATURE 등급 사회자는 제외)</p>
                 </>
@@ -928,7 +928,7 @@ export default function Contest() {
                 </span>
               </div>
               <div className="text-center mt-5 px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 max-w-sm mx-auto">
-                <p className="text-[13px] text-white/70 leading-relaxed break-keep">
+                <p className="text-[13px] text-white/85 leading-relaxed break-keep">
                   선택 시 해당 사회자에게 자동으로 하트가 하나씩 주어집니다.
                 </p>
                 <p className="text-[13px] text-[#ff9db0] leading-relaxed break-keep mt-1">
@@ -1025,10 +1025,10 @@ export default function Contest() {
               <h2 className="relative z-10 text-3xl font-semibold mb-2" style={{ fontFamily: "'Noto Serif KR', serif" }}>
                 {championData.name}
               </h2>
-              <p className="text-[13px] text-white/60 mb-1.5 break-keep">
+              <p className="text-[13px] text-white/80 mb-1.5 break-keep">
                 이번 회차에서 가장 많은 선택을 받은 사회자입니다.
               </p>
-              <p className="text-sm text-white/55 max-w-sm mx-auto mb-4 break-keep">{championData.highlight}</p>
+              <p className="text-sm text-white/78 max-w-sm mx-auto mb-4 break-keep">{championData.highlight}</p>
 
               {/* 진행 스타일 태그 - 실제 사회자 소개 문구에서 도출한 내용만 표시 */}
               {championData.styleTags?.length > 0 && (

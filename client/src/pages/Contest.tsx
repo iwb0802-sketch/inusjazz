@@ -926,11 +926,18 @@ export default function Contest() {
           )}
 
           {phase === "reveal" && revealPool.length > 0 && (
+            // reveal 카드가 사라지는(exit) 동안에도 champion 카드가 이미 겹쳐서 마운트되는데,
+            // exit 애니메이션 중 reveal 카드가 여전히 문서 레이아웃 높이를 차지하고 있다가
+            // 애니메이션이 끝나 실제로 언마운트되는 순간 레이아웃이 줄어들면, 크롬의 스크롤
+            // 앵커링(scroll anchoring)이 그만큼 스크롤 위치를 아래로(화면상 위로) 당겨버려
+            // 챔피언 카드 위 랭킹 배너가 다시 보이는 원인이 된다. position:"absolute"로
+            // exit 중에는 레이아웃에서 완전히 빠지게 해 이 흔들림을 없앤다.
             <motion.div
               key="reveal"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              exit={{ opacity: 0, position: "absolute" }}
+              style={{ width: "100%" }}
               className="text-center py-20"
             >
               <p className="text-[11px] tracking-[0.25em] text-[#d4b896] uppercase mb-8 animate-pulse">

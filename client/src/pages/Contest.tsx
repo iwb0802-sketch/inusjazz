@@ -192,7 +192,11 @@ export default function Contest() {
         setPhase("reveal");
         playSfx("drumroll");
         if (typeof window !== "undefined" && revealAreaRef.current) {
-          const top = revealAreaRef.current.getBoundingClientRect().top + window.scrollY - 72;
+          // "메인으로"/음소거 버튼은 fixed 오버레이일 뿐 실제 상단 여백을 차지하지 않으므로,
+          // 예전처럼 -72px 만큼 여유를 두면 그 자리에 위쪽 순위 배너의 마지막 줄이 그대로 보여
+          // "챔피언보다 순위가 먼저 보인다"는 문제가 생겼다. 발표 카드 상단이 화면 최상단에
+          // 거의 딱 붙도록 여유를 최소화한다.
+          const top = revealAreaRef.current.getBoundingClientRect().top + window.scrollY - 12;
           window.scrollTo({ top, left: 0, behavior: "smooth" });
         }
         setTimeout(() => {
@@ -201,6 +205,12 @@ export default function Contest() {
           setFlash(true);
           playSfx("fanfare");
           trackEvent("game_complete", finalWinner);
+          // 리빌 단계 중 사용자가 스크롤을 건드렸거나 레이아웃이 변해 위치가 흐트러졌을 수 있으니,
+          // 챔피언 카드로 전환되는 순간 다시 한번 같은 지점으로 보정한다(점프 없이 즉시 이동).
+          if (typeof window !== "undefined" && revealAreaRef.current) {
+            const top = revealAreaRef.current.getBoundingClientRect().top + window.scrollY - 12;
+            window.scrollTo({ top, left: 0, behavior: "auto" });
+          }
           setTimeout(() => setFlash(false), 260);
         }, 1500);
       } else {

@@ -347,7 +347,8 @@ export default function ReviewSection() {
               검색 결과에 정확한 건수가 표시되지 않아
               <br className="sm:hidden" />{" "}
               집계에서 제외했습니다.
-              <br />
+            </p>
+            <p className="mt-2.5 text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
               저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>2,700+ 건</span>은
               <br className="sm:hidden" />{" "}
               전부 플랫폼에서

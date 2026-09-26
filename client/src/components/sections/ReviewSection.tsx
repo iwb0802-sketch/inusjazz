@@ -308,7 +308,8 @@ export default function ReviewSection() {
 
             {/* CTA: 실시간 업데이트 안내 */}
             <p className="mt-3.5 text-xs sm:text-[13px] font-medium text-white/70 break-keep leading-relaxed text-center">
-              후기는 계속 쌓이고 있어 <span className="font-bold text-white/95">지금은 더 많습니다.</span>{" "}
+              후기는 계속 쌓이고 있어 <span className="font-bold text-white/95">지금은 더 많습니다.</span>
+              <br />
               <span className="font-bold" style={{ color: GOLD }}>직접 확인</span>에서 실시간으로 보실 수 있습니다.
             </p>
           </div>

@@ -275,10 +275,11 @@ export default function ReviewSection() {
 
           {/* 합산 근거 */}
           <div
-            className="mt-6 mx-auto max-w-md rounded-lg py-4 px-5"
+            className="mt-6 mx-auto max-w-md rounded-lg py-5 px-5 sm:px-6"
             style={{ background: "rgba(212,184,150,0.06)", border: "1px dashed rgba(212,184,150,0.35)" }}
           >
-            <p className="text-xs sm:text-sm text-white/55 tracking-wide break-keep leading-relaxed">
+            {/* 합산식 */}
+            <p className="text-xs sm:text-sm text-white/55 tracking-wide break-keep leading-relaxed text-center">
               {PROOF_IMAGES.map((p, i) => (
                 <span key={p.source}>
                   {i > 0 && " + "}
@@ -289,20 +290,26 @@ export default function ReviewSection() {
                 {PROOF_TOTAL.toLocaleString()}건
               </span>
             </p>
-            <p className="mt-2.5 text-[11.5px] sm:text-xs break-keep leading-relaxed" style={{ color: "rgba(212,184,150,0.75)" }}>
-              위 캡처는 <span className="font-bold" style={{ color: GOLD }}>{PROOF_AS_OF} 기준</span>입니다
-            </p>
-            <p className="mt-2.5 text-xs sm:text-[13px] text-white/50 break-keep leading-relaxed">
-              ※ 실제 이용 고객이 직접 남긴 후기만 집계하며, 그 외 게시물은 제외합니다. 채널별 게시 건수 합계 기준입니다.
-            </p>
-            <p className="mt-2 text-xs sm:text-[13px] text-white/50 break-keep leading-relaxed">
-              ※ 블로그 후기글·후기 게시판은 고객님이 문자·카카오톡으로 보내주신 내용을 그대로 캡처한{" "}
-              <span className="font-bold" style={{ color: GOLD }}>편집·가공 없는 원본</span>입니다.
-            </p>
-            <p className="mt-2 text-xs sm:text-[13px] font-medium text-white/70 break-keep leading-relaxed">
-              후기는 계속 쌓이고 있어 <span className="font-bold text-white/95">현재 건수는 더 많습니다</span>
-              <br />
-              <span className="font-bold" style={{ color: GOLD }}>직접 확인</span>으로 실시간 수치를 보실 수 있습니다
+
+            <div className="my-3.5 mx-auto w-10 h-px" style={{ background: "rgba(212,184,150,0.25)" }} />
+
+            {/* 기준일 · 원본성 · 집계 원칙 — 칩 형태로 스캔하기 쉽게 */}
+            <div className="flex flex-wrap items-center justify-center gap-1.5">
+              {[`${PROOF_AS_OF} 기준`, "문자·카톡 원본 그대로", "실제 이용 고객만 집계"].map((chip) => (
+                <span
+                  key={chip}
+                  className="text-[10.5px] sm:text-[11px] font-medium px-2.5 py-1 rounded-full whitespace-nowrap"
+                  style={{ background: "rgba(212,184,150,0.10)", color: "rgba(212,184,150,0.9)" }}
+                >
+                  {chip}
+                </span>
+              ))}
+            </div>
+
+            {/* CTA: 실시간 업데이트 안내 */}
+            <p className="mt-3.5 text-xs sm:text-[13px] font-medium text-white/70 break-keep leading-relaxed text-center">
+              후기는 계속 쌓이고 있어 <span className="font-bold text-white/95">지금은 더 많습니다.</span>{" "}
+              <span className="font-bold" style={{ color: GOLD }}>직접 확인</span>에서 실시간으로 보실 수 있습니다.
             </p>
           </div>
 

@@ -31,6 +31,51 @@ const GOLD = "#d4b896";
 
 type Phase = "intro" | "match" | "reveal" | "champion";
 
+/**
+ * ref가 가리키는 요소의 화면상 위치가 더 이상 움직이지 않을 때까지(연속 두 프레임 값이
+ * 거의 같을 때까지) 기다렸다가 그 지점으로 스크롤한다.
+ * 블라인드 모드는 매치 중 순위 배너가 언마운트돼 있다가 결과 발표 순간(match→reveal) 다시
+ * 마운트되는데, 이 재마운트가 정확히 몇 프레임 뒤에 완전히 반영되는지 보장할 수 없어
+ * 고정 프레임 수(rAF 1~2번)만으로는 타이밍이 어긋나 순위 배너 일부가 같이 보이곤 했다.
+ * 일반 모드는 배너가 매치 중에도 이미 떠 있어 이런 레이아웃 변동이 없어 상대적으로 정교했다.
+ * 이 함수는 원인(배너 마운트/이미지/애니메이션 등)에 상관없이 레이아웃이 실제로 안정된
+ * 뒤에 스크롤하므로 일반/블라인드 두 모드 모두 동일하게 정교해진다.
+ *
+ * 챔피언 전환 시 이 함수를 다시 호출하면, 리빌 단계에서 먼저 호출된 "smooth" 스크롤이
+ * 아직 브라우저에서 애니메이션 중일 수 있다. 그 상태로 새로 위치를 재기 시작하면 매 프레임
+ * 값이 계속 바뀌는 중(진짜 레이아웃 불안정이 아니라 이전 스크롤의 관성)인데도 maxFrames에
+ * 도달하면 그 "움직이는 중"인 좌표를 최종값으로 오인해 스크롤 목표를 잘못 계산해버린다
+ * (챔피언 카드 위로 배너가 다시 보이는 원인). 측정을 시작하기 전에 진행 중인 스크롤을
+ * 먼저 즉시(behavior:auto) 같은 위치로 재호출해 멈춰 세운 뒤에 안정성 측정을 시작한다.
+ */
+function scrollToStableTop(ref: React.RefObject<HTMLDivElement | null>, offset: number, behavior: ScrollBehavior, maxFrames = 20) {
+  if (typeof window === "undefined") return;
+  window.scrollTo({ top: window.scrollY, left: 0, behavior: "auto" });
+  let lastTop: number | null = null;
+  let stableCount = 0;
+  let frame = 0;
+  const step = () => {
+    frame += 1;
+    const el = ref.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top;
+    if (lastTop !== null && Math.abs(top - lastTop) < 0.5) {
+      stableCount += 1;
+    } else {
+      stableCount = 0;
+    }
+    lastTop = top;
+    // 연속 2프레임 동안 위치가 안 변했으면 안정된 것으로 보고 스크롤, 아니면 최대 프레임까지 재시도
+    if (stableCount >= 2 || frame >= maxFrames) {
+      const target = top + window.scrollY - offset;
+      window.scrollTo({ top: target, left: 0, behavior });
+      return;
+    }
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
 export default function Contest() {
   const [phase, setPhase] = useState<Phase>("intro");
   const [roundIndex, setRoundIndex] = useState(1);
@@ -191,26 +236,16 @@ export default function Contest() {
         setRevealIndex(0);
         setPhase("reveal");
         playSfx("drumroll");
-        if (typeof window !== "undefined" && revealAreaRef.current) {
-          // "메인으로"/음소거 버튼은 fixed 오버레이일 뿐 실제 상단 여백을 차지하지 않으므로,
-          // 예전처럼 -72px 만큼 여유를 두면 그 자리에 위쪽 순위 배너의 마지막 줄이 그대로 보여
-          // "챔피언보다 순위가 먼저 보인다"는 문제가 생겼다. 발표 카드 상단이 화면 최상단에
-          // 거의 딱 붙도록 여유를 최소화한다.
-          const top = revealAreaRef.current.getBoundingClientRect().top + window.scrollY - 12;
-          window.scrollTo({ top, left: 0, behavior: "smooth" });
-        }
+        scrollToStableTop(revealAreaRef, 12, "smooth");
         setTimeout(() => {
           setChampion(finalWinner);
           setPhase("champion");
           setFlash(true);
           playSfx("fanfare");
           trackEvent("game_complete", finalWinner);
-          // 리빌 단계 중 사용자가 스크롤을 건드렸거나 레이아웃이 변해 위치가 흐트러졌을 수 있으니,
+          // 리빌 단계 중 사용자가 스크롤을 건드렸거나 레이아웃이 흐트러졌을 수 있으니,
           // 챔피언 카드로 전환되는 순간 다시 한번 같은 지점으로 보정한다(점프 없이 즉시 이동).
-          if (typeof window !== "undefined" && revealAreaRef.current) {
-            const top = revealAreaRef.current.getBoundingClientRect().top + window.scrollY - 12;
-            window.scrollTo({ top, left: 0, behavior: "auto" });
-          }
+          scrollToStableTop(revealAreaRef, 12, "auto");
           setTimeout(() => setFlash(false), 260);
         }, 1500);
       } else {
@@ -817,17 +852,23 @@ export default function Contest() {
           </div>
         </div>
 
-        {!(isBlind && phase === "match") && (
-          <div className="mb-10">
-            <VoiceKingBanner
-              monthHearts={monthHearts}
-              monthLabel={monthLabel}
-              lastMonthChampion={lastMonthChampion}
-              rankChange={rankChange}
-              updatedAt={heartsUpdatedAt}
-            />
-          </div>
-        )}
+        {/*
+          블라인드 모드 매치 중에는 순위를 감춰야 하지만, 예전처럼 아예 언마운트(조건부 렌더링)하면
+          결과 발표 순간(match→reveal) 배너가 다시 마운트되며 그만큼 레이아웃이 밀려나
+          발표 카드로의 스크롤 위치 계산이 어긋나는 문제가 있었다(일반 모드는 배너가 매치 중에도
+          계속 보여서 이 문제가 없었다). 항상 마운트해 높이를 그대로 차지하게 하고 보이기만
+          invisible로 감추면, 발표 순간 레이아웃이 전혀 움직이지 않아 두 모드 모두 동일하게
+          정교한 스크롤 포커싱이 된다.
+        */}
+        <div className={`mb-10 ${isBlind && phase === "match" ? "invisible" : ""}`} aria-hidden={isBlind && phase === "match"}>
+          <VoiceKingBanner
+            monthHearts={monthHearts}
+            monthLabel={monthLabel}
+            lastMonthChampion={lastMonthChampion}
+            rankChange={rankChange}
+            updatedAt={heartsUpdatedAt}
+          />
+        </div>
 
         {/*
           mode="wait"를 쓰면 매 선택마다 이전 카드가 완전히 사라진 뒤(문서 높이가 잠깐 0에 가까워짐)

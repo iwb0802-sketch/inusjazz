@@ -856,18 +856,31 @@ export default function Contest() {
           블라인드 모드 매치 중에는 순위를 감춰야 하지만, 예전처럼 아예 언마운트(조건부 렌더링)하면
           결과 발표 순간(match→reveal) 배너가 다시 마운트되며 그만큼 레이아웃이 밀려나
           발표 카드로의 스크롤 위치 계산이 어긋나는 문제가 있었다(일반 모드는 배너가 매치 중에도
-          계속 보여서 이 문제가 없었다). 항상 마운트해 높이를 그대로 차지하게 하고 보이기만
-          invisible로 감추면, 발표 순간 레이아웃이 전혀 움직이지 않아 두 모드 모두 동일하게
-          정교한 스크롤 포커싱이 된다.
+          계속 보여서 이 문제가 없었다). 그래서 VoiceKingBanner 자체는 항상 마운트 상태를
+          유지하고 CSS로만 hidden 처리한다(마운트/언마운트 경합 방지). 다만 배너의 원래 높이를
+          그대로 비워두면(구 invisible 방식) 블라인드 매치 화면 중간에 너무 큰 빈 공간이 생겨서,
+          그 자리에는 훨씬 작은 안내 placeholder를 별도로 렌더링한다. placeholder는 매치 진행
+          중에만 마운트/언마운트되지만 내용이 가벼워 한 프레임 안에 안정되므로 발표 순간
+          스크롤 계산에는 영향이 없다(scrollToStableTop이 레이아웃이 실제로 안정될 때까지 기다림).
         */}
-        <div className={`mb-10 ${isBlind && phase === "match" ? "invisible" : ""}`} aria-hidden={isBlind && phase === "match"}>
-          <VoiceKingBanner
-            monthHearts={monthHearts}
-            monthLabel={monthLabel}
-            lastMonthChampion={lastMonthChampion}
-            rankChange={rankChange}
-            updatedAt={heartsUpdatedAt}
-          />
+        <div className="mb-10">
+          <div className={isBlind && phase === "match" ? "hidden" : ""} aria-hidden={isBlind && phase === "match"}>
+            <VoiceKingBanner
+              monthHearts={monthHearts}
+              monthLabel={monthLabel}
+              lastMonthChampion={lastMonthChampion}
+              rankChange={rankChange}
+              updatedAt={heartsUpdatedAt}
+            />
+          </div>
+          {isBlind && phase === "match" && (
+            <div className="w-full max-w-3xl mx-auto rounded-2xl border border-white/10 bg-black/20 px-5 py-3.5 flex items-center justify-center gap-2 text-center">
+              <Crown size={14} className="text-[#d4b896]/70 shrink-0" />
+              <p className="text-[12px] text-white/45 tracking-wide break-keep">
+                이번 회차 실시간 순위는 결과 발표 후 공개돼요
+              </p>
+            </div>
+          )}
         </div>
 
         {/*

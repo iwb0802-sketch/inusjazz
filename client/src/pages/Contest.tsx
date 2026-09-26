@@ -62,6 +62,9 @@ export default function Contest() {
   const [shareStatus, setShareStatus] = useState<"idle" | "loading" | "done" | "opened" | "copied" | "error">("idle");
   // 하루 중복 플레이 방지: 이 기기의 오늘 첫 플레이만 전체 공유 집계에 반영됨
   const countsTowardTotalRef = useRef(true);
+  // 결과 발표(서스펜스→챔피언) 순간, 페이지 최상단이 아니라 실제 발표 영역으로 포커스를
+  // 맞추기 위한 ref. 랭킹 배너 등 상단 콘텐츠가 먼저 보이는 문제를 막는다.
+  const revealAreaRef = useRef<HTMLDivElement>(null);
   const [isPracticeRound, setIsPracticeRound] = useState(false);
   // 항목①: 챔피언 발표 전 "결과 발표 중..." 서스펜스 단계 - 후보 사진이 빠르게 스치는 효과
   const [revealPool, setRevealPool] = useState<string[]>([]);
@@ -188,8 +191,9 @@ export default function Contest() {
         setRevealIndex(0);
         setPhase("reveal");
         playSfx("drumroll");
-        if (typeof window !== "undefined") {
-          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+        if (typeof window !== "undefined" && revealAreaRef.current) {
+          const top = revealAreaRef.current.getBoundingClientRect().top + window.scrollY - 72;
+          window.scrollTo({ top, left: 0, behavior: "smooth" });
         }
         setTimeout(() => {
           setChampion(finalWinner);
@@ -821,6 +825,7 @@ export default function Contest() {
           mode를 제거해 이전/다음 카드가 짧게 겹쳐서 전환되도록 하면 높이가 갑자기 줄지 않아
           "선택 버튼 클릭 시 스크롤이 위로 올라가는" 문제가 사라진다.
         */}
+        <div ref={revealAreaRef} />
         <AnimatePresence initial={false}>
           {phase === "match" && contestantA && contestantB && roundSetup && (
             <motion.div key={`match-${roundIndex}-${matchIdx}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, position: "absolute" }} style={{ width: "100%" }}>

@@ -1259,6 +1259,7 @@ export default function Contest() {
                           { text: "MR 제공" },
                           { text: "MR 편집 & AR 편집" },
                           { text: "모바일청첩장 무료 제공 (예약고객에 한함)" },
+                          { text: "프리미엄 식전영상 무료 제작" },
                         ].map((item) => (
                           <li key={item.text} className="flex items-start gap-2 text-[13px] text-white/80 leading-relaxed break-keep">
                             <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />

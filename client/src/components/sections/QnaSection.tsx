@@ -22,13 +22,22 @@ import {
 } from "lucide-react";
 
 interface QnaItem {
-  question: string;
+  question: React.ReactNode;
   content: React.ReactNode;
 }
 
 const QNA_DATA: QnaItem[] = [
   {
-    question: "사회자 지정 시 지정된 사회자가 바로 대본을 작성하는 게 아닌, 왜 본사에서 대본을 작성하나요?",
+    question: (
+      <>
+        사회자 지정 시 지정된 사회자가
+        <br className="sm:hidden" />{" "}
+        바로 대본을 작성하는 게 아닌,
+        <br className="hidden sm:block" />{" "}
+        <br className="sm:hidden" />{" "}
+        왜 본사에서 1차 대본을 작성하나요?
+      </>
+    ),
     content: (
       <div className="space-y-6">
         <p className="text-[#555] text-sm sm:text-base leading-relaxed">
@@ -260,7 +269,7 @@ function QnaCard({ item, index }: { item: QnaItem; index: number }) {
             Q
           </span>
           <h3
-            className="text-[#1a1a1a] text-base sm:text-lg font-semibold"
+            className="text-[#1a1a1a] text-base sm:text-lg font-semibold break-keep leading-snug"
             style={{ fontFamily: "'Noto Serif KR', serif" }}
           >
             {item.question}

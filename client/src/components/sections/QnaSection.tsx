@@ -99,7 +99,7 @@ const QNA_DATA: QnaItem[] = [
             <div>
               <p className="text-white text-sm">그 결과,</p>
               <p className="text-white font-semibold break-keep">
-                누가 진행하든 <span className="text-[#5BB5A2]">일정 수준 이상의 퀄리티</span>가 보장됩니다
+                누가 진행하든 <span className="text-[#5BB5A2]">이너스뮤직만의 퀄리티</span>로 완성됩니다
               </p>
             </div>
           </div>

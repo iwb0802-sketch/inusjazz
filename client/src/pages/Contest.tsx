@@ -1064,6 +1064,10 @@ export default function Contest() {
                       <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
                       모바일 청첩장 무료 제작
                     </li>
+                    <li className="flex items-start gap-2 text-[12.5px] text-white/80 leading-relaxed break-keep">
+                      <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />
+                      프리미엄 식전영상 무료 제작
+                    </li>
                     {championIsRealVov && (
                       <li className="flex items-start gap-2 text-[12.5px] text-white/80 leading-relaxed break-keep">
                         <span className="mt-1.5 w-1 h-1 rounded-full bg-[#f4e2b8] flex-shrink-0" />

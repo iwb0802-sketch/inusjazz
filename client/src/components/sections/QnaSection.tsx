@@ -40,8 +40,12 @@ const QNA_DATA: QnaItem[] = [
     ),
     content: (
       <div className="space-y-6">
-        <p className="text-[#555] text-sm sm:text-base leading-relaxed">
-          <strong className="text-[#1a1a1a]">동일한 퀄리티 유지를 위해서입니다.</strong>
+        <p className="text-[#555] text-sm sm:text-base leading-relaxed break-keep">
+          <strong className="text-[#1a1a1a]">
+            대표의 전문성을
+            <br className="sm:hidden" />{" "}
+            대본에 직접 담기 위해서입니다.
+          </strong>
         </p>
 
         <div className="space-y-3">
@@ -49,7 +53,7 @@ const QNA_DATA: QnaItem[] = [
             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#d4b896]/15 flex items-center justify-center">
               <Users size={18} className="text-[#d4b896]" />
             </div>
-            <p className="text-[#555] text-sm leading-relaxed pt-2">
+            <p className="text-[#555] text-sm leading-relaxed pt-2 break-keep">
               사회자마다 각자 <strong className="text-[#1a1a1a]">고유의 개성과 진행 스타일</strong>이 있습니다
             </p>
           </div>
@@ -57,7 +61,7 @@ const QNA_DATA: QnaItem[] = [
             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#d4b896]/15 flex items-center justify-center">
               <ClipboardCheck size={18} className="text-[#d4b896]" />
             </div>
-            <p className="text-[#555] text-sm leading-relaxed pt-2">
+            <p className="text-[#555] text-sm leading-relaxed pt-2 break-keep">
               지정된 사회자가 처음부터 바로 대본을 작성하면 <strong className="text-[#1a1a1a]">대본의 편차</strong>가 발생할 수 있습니다
             </p>
           </div>
@@ -72,7 +76,7 @@ const QNA_DATA: QnaItem[] = [
               <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center">
                 <FileText size={18} className="text-[#5BB5A2]" />
               </div>
-              <p className="text-[#555] text-sm leading-relaxed pt-2">
+              <p className="text-[#555] text-sm leading-relaxed pt-2 break-keep">
                 <strong className="text-[#1a1a1a]">1차, 본사</strong>에서 대본의 뼈대를 먼저 세우고
               </p>
             </div>
@@ -80,7 +84,7 @@ const QNA_DATA: QnaItem[] = [
               <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center">
                 <Sparkles size={18} className="text-[#5BB5A2]" />
               </div>
-              <p className="text-[#555] text-sm leading-relaxed pt-2">
+              <p className="text-[#555] text-sm leading-relaxed pt-2 break-keep">
                 <strong className="text-[#1a1a1a]">2차, 지정된 사회자</strong>가 자신만의 개성과 노하우를 더해 완성합니다
               </p>
             </div>
@@ -94,7 +98,7 @@ const QNA_DATA: QnaItem[] = [
             </div>
             <div>
               <p className="text-white text-sm">그 결과,</p>
-              <p className="text-white font-semibold">
+              <p className="text-white font-semibold break-keep">
                 누가 진행하든 <span className="text-[#5BB5A2]">일정 수준 이상의 퀄리티</span>가 보장됩니다
               </p>
             </div>

@@ -42,9 +42,11 @@ const QNA_DATA: QnaItem[] = [
       <div className="space-y-6">
         <p className="text-[#555] text-sm sm:text-base leading-relaxed break-keep">
           <strong className="text-[#1a1a1a]">
-            대표의 전문성을
+            최상의 퀄리티 있는 진행을 위해,
             <br className="sm:hidden" />{" "}
-            대본에 직접 담기 위해서입니다.
+            본사의 노하우와 사회자의 개성을
+            <br className="sm:hidden" />{" "}
+            모두 담기 때문입니다.
           </strong>
         </p>
 

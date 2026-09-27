@@ -29,13 +29,15 @@ const KAKAO_LINK = "https://pf.kakao.com/_wxovaM/chat";
 const PACKAGE_LINK = "https://blog.naver.com/inusmusics/220652965646";
 const AUDIO_TOOL =
   "https://www.inusmusic.com/audio?utm_source=home&utm_medium=freetool&utm_campaign=audio_open";
+const PREWEDDING_VIDEO_TOOL =
+  "https://prewedding-video-renderer-production.up.railway.app/editor";
 
-// 혜택 카테고리 (총 15가지 · 23만원 상당)
+// 혜택 카테고리 (총 16가지 · 27만원 상당)
 const BENEFIT_GROUPS = [
   {
     icon: Smartphone,
-    label: "INVITATION & AUDIO",
-    title: "청첩장 · 음원",
+    label: "INVITATION & MEDIA",
+    title: "청첩장 · 음원 · 영상",
     color: "#c09a7e",
     items: [
       {
@@ -49,6 +51,12 @@ const BENEFIT_GROUPS = [
         d: "입장곡 · 행진곡을 직접 자르고 이어붙이는 전용 도구",
         w: "4만원 상당",
         href: AUDIO_TOOL,
+      },
+      {
+        t: "식전영상 셀프 제작 무료 이용",
+        d: "사진 · 영상을 직접 편집해 나만의 식전영상 완성",
+        w: "4만원 상당",
+        href: PREWEDDING_VIDEO_TOOL,
       },
       { t: "MR 제공 및 MR / AR 편집 지원", d: "요청 시 전문가가 직접 편집", w: "포함" },
     ],
@@ -235,8 +243,10 @@ export default function EventSection() {
             >
               <Sparkles size={18} className="text-[#1f6b58] flex-shrink-0 mt-[3px]" />
               <p className="text-[#2b241a] text-[13.5px] sm:text-[15.5px] font-bold leading-[1.75] break-keep">
-                <span className="whitespace-nowrap">맞춤 대본 · 음원 편집기 ·</span>{" "}
-                <span className="whitespace-nowrap">모바일 청첩장은</span>{" "}
+                <span className="whitespace-nowrap">맞춤 대본 ·</span>{" "}
+                <span className="whitespace-nowrap">음원 편집기 ·</span>{" "}
+                <span className="whitespace-nowrap">모바일 청첩장 ·</span>{" "}
+                <span className="whitespace-nowrap">식전영상은</span>{" "}
                 <span
                   className="whitespace-nowrap font-extrabold"
                   style={{

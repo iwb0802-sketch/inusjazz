@@ -333,34 +333,9 @@ export default function ReviewSection() {
             </p>
           </div>
 
-          {/* 네이버 고객 게시물 — 블로그/카페도 이제 집계에 포함 (엄격 기준) */}
+          {/* 네이버 고객 게시물 안내 — 블로그/카페도 집계에 포함 (엄격 기준) */}
           <div className="mt-5 flex flex-col items-center">
-            <a
-              href="https://search.naver.com/search.naver?ssc=tab.blog.all&sm=tab_jum&query=%EC%9D%B4%EB%84%88%EC%8A%A4%EB%AE%A4%EC%A7%81"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-2.5 px-6 sm:px-9 py-3.5 sm:py-4 rounded-full transition-all duration-300 break-keep text-center hover:scale-[1.03]"
-              style={{
-                background: `linear-gradient(135deg, ${GOLD} 0%, #e6cfae 100%)`,
-                color: "#141414",
-                boxShadow: "0 6px 24px rgba(212,184,150,0.35)",
-              }}
-            >
-              <span
-                className="inline-flex items-center justify-center rounded-[5px] font-bold"
-                style={{ width: 20, height: 20, backgroundColor: "#03C75A", color: "#fff", fontSize: 13, lineHeight: 1 }}
-              >
-                N
-              </span>
-              <span
-                className="text-[14px] sm:text-[16px] font-bold"
-                style={{ letterSpacing: "0.14em", fontFamily: "'Cormorant Garamond', serif" }}
-              >
-                NAVER CUSTOMER VOICE
-              </span>
-              <ExternalLink size={15} />
-            </a>
-            <p className="mt-3.5 text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
+            <p className="text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
               고객님이 직접 작성한 블로그·카페 후기글 중<br />
               <span className="font-bold" style={{ color: GOLD }}>"이너스뮤직"</span>이 정확히 언급된 글만
               <br className="sm:hidden" />{" "}

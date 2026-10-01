@@ -51,10 +51,10 @@ const PROOF_IMAGES = [
   },
   {
     src: "/images/proof/proof-singer-blog.jpg",
-    alt: "블로그 문자·카톡 후기 모음 983건",
+    alt: "블로그 문자·카톡 후기 모음 984건",
     label: "출처 · 블로그 (문자·카톡 후기 모음)",
     source: "블로그(문자·카톡)",
-    count: 983,
+    count: 984,
     url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=71&parentCategoryNo=71",
     linkLabel: "블로그 후기글에서 확인",
   },

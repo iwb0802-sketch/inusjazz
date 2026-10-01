@@ -607,7 +607,7 @@ export default function Contest() {
                 </span>
                 <span className="w-px h-3 bg-white/15" />
                 <span className="text-[11px] tracking-wide whitespace-nowrap">
-                  후기 <span className="text-[#d4b896] font-medium">2,700건+</span>
+                  후기 <span className="text-[#d4b896] font-medium">3,200건+</span>
                 </span>
               </motion.div>
 
@@ -1118,7 +1118,7 @@ export default function Contest() {
                 {/* 항목3: 실제 후기 규모를 채널별로 세분화해 신뢰 신호 제공 */}
                 <p className="flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-white/45 max-w-xs mx-auto text-center break-keep">
                   <Star size={11} className="text-[#d4b896] shrink-0" />
-                  <span>실제 고객 후기 2,700건+</span>
+                  <span>실제 고객 후기 3,200건+</span>
                   <span className="text-white/30">(숨고 804·후기게시판 582·블로그 979·스마트스토어 377)</span>
                 </p>
               </div>

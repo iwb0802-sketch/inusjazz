@@ -201,7 +201,7 @@ export default function ReviewSection() {
                 boxShadow: "0 0 16px rgba(212,184,150,0.25)",
               }}
             >
-              2700+ 후기
+              3200+ 후기
             </span>
           </div>
           <p className="mt-4 text-white/50 text-sm sm:text-base max-w-sm mx-auto leading-relaxed break-keep">
@@ -210,7 +210,7 @@ export default function ReviewSection() {
           <p className="mt-2 text-white/35 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed break-keep">
             숨고·네이버 스마트스토어·블로그 등 모든 플랫폼 후기를 합산하면
             <br className="sm:hidden" />
-            {" "}2,700건 이상 (사회자 개별 후기 포함)
+            {" "}3,200건 이상 (사회자 개별 후기 포함)
           </p>
 
           {/* 증빙 자료 — 숨고/홈페이지/블로그/스마트스토어 실제 후기 캡처 */}
@@ -349,7 +349,7 @@ export default function ReviewSection() {
               집계에서 제외했습니다.
             </p>
             <p className="mt-2.5 text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
-              저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>2,700+ 건</span>은
+              저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>3,200+ 건</span>은
               <br className="sm:hidden" />{" "}
               전부 플랫폼에서
               <br className="hidden sm:block" />{" "}

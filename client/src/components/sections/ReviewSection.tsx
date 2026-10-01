@@ -19,48 +19,67 @@ const REVIEW_IMAGES = [
 
 const GOLD = "#d4b896";
 
-// 후기 2500+ 증빙 자료 (숨고 프로필, 홈페이지 후기게시판, 블로그 사회자 후기글, 네이버 스마트스토어)
+// 후기 증빙 자료 — 위 3개: 숨고 / 후기게시판 / 스마트스토어
+// 아래 3개: 블로그(문자·카톡 후기 모음, 자사 운영 블로그) / 블로그(고객님이 직접 작성한 후기글) / 카페
 const PROOF_IMAGES = [
   {
     src: "/images/proof/proof-soomgo.jpg",
-    alt: "숨고 프로필 리뷰수 804건",
+    alt: "숨고 프로필 리뷰수 829건",
     label: "출처 · 숨고",
     source: "숨고",
-    count: 804,
+    count: 829,
     url: "https://soomgo.com/profile/users/4719699",
     linkLabel: "숨고 프로필에서 확인",
   },
   {
     src: "/images/proof/proof-blog.jpg",
-    alt: "홈페이지 후기게시판 Total 582건",
+    alt: "홈페이지 후기게시판 Total 584건",
     label: "출처 · 후기 게시판",
     source: "후기 게시판",
-    count: 582,
+    count: 584,
     url: "http://musicin.godohosting.com/bbs/board.php?bo_table=forum",
     linkLabel: "후기 게시판에서 확인",
   },
   {
+    src: "/images/proof/proof-smartstore.jpg",
+    alt: "네이버 스마트스토어 리뷰 414건",
+    label: "출처 · 스마트스토어",
+    source: "네이버 스마트스토어",
+    count: 414,
+    url: "https://smartstore.naver.com/inus_store/products/5466083565",
+    linkLabel: "스마트스토어에서 확인",
+  },
+  {
     src: "/images/proof/proof-singer-blog.jpg",
-    alt: "블로그 사회자 후기글 979건",
-    label: "출처 · 블로그",
-    source: "블로그",
-    count: 979,
+    alt: "블로그 문자·카톡 후기 모음 983건",
+    label: "출처 · 블로그 (문자·카톡 후기 모음)",
+    source: "블로그(문자·카톡)",
+    count: 983,
     url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=71&parentCategoryNo=71",
     linkLabel: "블로그 후기글에서 확인",
   },
   {
-    src: "/images/proof/proof-smartstore.jpg",
-    alt: "네이버 스마트스토어 리뷰 377건",
-    label: "출처 · 스마트스토어",
-    source: "네이버 스마트스토어",
-    count: 377,
-    url: "https://smartstore.naver.com/inus_store/products/5466083565",
-    linkLabel: "스마트스토어에서 확인",
+    src: "/images/proof/proof-blog-personal.jpg",
+    alt: "고객님이 직접 작성한 블로그 후기글 344건",
+    label: "출처 · 블로그 (고객님 작성글)",
+    source: "블로그(고객 작성)",
+    count: 344,
+    url: "https://search.naver.com/search.naver?ssc=tab.blog.all&sm=tab_jum&query=%EC%9D%B4%EB%84%88%EC%8A%A4%EB%AE%A4%EC%A7%81",
+    linkLabel: "네이버 블로그 검색에서 확인",
+  },
+  {
+    src: "/images/proof/proof-cafe.jpg",
+    alt: "네이버 카페 고객 후기글 126건",
+    label: "출처 · 카페",
+    source: "카페",
+    count: 126,
+    url: "https://search.naver.com/search.naver?ssc=tab.cafe.all&sm=tab_jum&query=%EC%9D%B4%EB%84%88%EC%8A%A4%EB%AE%A4%EC%A7%81",
+    linkLabel: "네이버 카페 검색에서 확인",
   },
 ];
 
 const PROOF_TOTAL = PROOF_IMAGES.reduce((sum, p) => sum + p.count, 0);
-const PROOF_AS_OF = "2026.09.23";
+const PROOF_AS_OF = "2026.10.01";
 
 // 네이버 블로그 후기 원문 발췌 — 아이디 마스킹, 본문 일부만 노출, 원문 링크 제공
 const BLOG_REVIEWS = [
@@ -205,16 +224,16 @@ export default function ReviewSection() {
             </span>
           </div>
           <p className="mt-4 text-white/50 text-sm sm:text-base max-w-sm mx-auto leading-relaxed break-keep">
-            실제 예식을 진행하신 신랑, 신부님의<br className="hidden sm:block" /> 카카오톡, 문자 후기입니다
+            실제 예식을 진행하신 신랑, 신부님의<br className="hidden sm:block" /> 카카오톡, 문자, 블로그·카페 후기입니다
           </p>
           <p className="mt-2 text-white/35 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed break-keep">
-            숨고·네이버 스마트스토어·블로그 등 모든 플랫폼 후기를 합산하면
+            숨고·후기게시판·스마트스토어·블로그·카페 등 모든 플랫폼 후기를 합산하면
             <br className="sm:hidden" />
             {" "}3,200건 이상 (사회자 개별 후기 포함)
           </p>
 
-          {/* 증빙 자료 — 숨고/홈페이지/블로그/스마트스토어 실제 후기 캡처 */}
-          <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 max-w-lg sm:max-w-2xl mx-auto">
+          {/* 증빙 자료 — 숨고/후기게시판/스마트스토어 (위) · 블로그(문자후기모음)/블로그(고객작성)/카페 (아래) */}
+          <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3 max-w-lg sm:max-w-2xl mx-auto">
             {PROOF_IMAGES.map((img) => (
               <div key={img.src} className="flex flex-col items-center gap-1.5">
                 <button
@@ -314,7 +333,7 @@ export default function ReviewSection() {
             </p>
           </div>
 
-          {/* 네이버 고객 게시물 (집계 제외) */}
+          {/* 네이버 고객 게시물 — 블로그/카페도 이제 집계에 포함 (엄격 기준) */}
           <div className="mt-5 flex flex-col items-center">
             <a
               href="https://search.naver.com/search.naver?ssc=tab.blog.all&sm=tab_jum&query=%EC%9D%B4%EB%84%88%EC%8A%A4%EB%AE%A4%EC%A7%81"
@@ -342,11 +361,10 @@ export default function ReviewSection() {
               <ExternalLink size={15} />
             </a>
             <p className="mt-3.5 text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
-              <span className="font-bold" style={{ color: GOLD }}>600건 이상</span>의 고객님의 블로그 후기글과 카페글이 있지만,
-              <br />
-              검색 결과에 정확한 건수가 표시되지 않아
+              고객님이 직접 작성한 블로그·카페 후기글 중<br />
+              <span className="font-bold" style={{ color: GOLD }}>"이너스뮤직"</span>이 정확히 언급된 글만
               <br className="sm:hidden" />{" "}
-              집계에서 제외했습니다.
+              엄격하게 집계했습니다.
             </p>
             <p className="mt-2.5 text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
               저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>3,200+ 건</span>은

@@ -255,7 +255,7 @@ export default function ReviewSection() {
                   </div>
                 </button>
                 <div className="flex flex-col items-center gap-1">
-                  <span className="text-white/45 text-[10px] sm:text-xs tracking-wide break-keep text-center">
+                  <span className="min-h-[30px] sm:min-h-0 flex items-center justify-center text-white/45 text-[10px] sm:text-xs tracking-wide break-keep text-center leading-tight">
                     {img.label}
                   </span>
                   <span

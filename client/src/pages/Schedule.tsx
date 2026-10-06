@@ -672,23 +672,25 @@ export default function Schedule() {
 
                 return (
                   <div key={key}>
-                    <div style={{ display:"flex", alignItems:"center", gap:11, marginBottom:12, padding:"12px 14px", background:"linear-gradient(135deg,rgba(239,68,68,0.18),rgba(239,68,68,0.06))", border:"1px solid rgba(248,113,113,0.45)", borderLeft:"4px solid #f87171", borderRadius:12 }}>
-                      <div style={{ width:34, height:34, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:"50%", background:"rgba(239,68,68,0.2)", color:"#fca5a5", fontSize:17 }}>✓</div>
-                      <div style={{ minWidth:0, flex:1 }}>
-                        <div style={{ display:"flex", alignItems:"center", gap:7, flexWrap:"wrap", marginBottom:3 }}>
-                          <span style={{ fontSize:15, fontWeight:800, color:"#fff", letterSpacing:"-0.2px" }}>이미 배정완료된 사회자</span>
-                          <span style={{ display:"inline-flex", alignItems:"center", padding:"3px 7px", borderRadius:20, background:"rgba(239,68,68,0.22)", color:"#fca5a5", border:"1px solid rgba(248,113,113,0.35)", fontSize:9, fontWeight:800 }}>예약 마감</span>
+                    <div style={{ marginBottom:24, padding:10, background:"linear-gradient(135deg,rgba(225,29,72,0.32),rgba(136,19,55,0.16))", border:"3px solid #e11d48", borderRadius:16, boxShadow:"0 8px 24px rgba(225,29,72,0.22)" }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12, padding:"14px 16px", background:"#881337", borderRadius:10, boxShadow:"inset 0 1px 0 rgba(255,255,255,0.18)" }}>
+                        <div style={{ width:38, height:38, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:"50%", background:"#fff", color:"#be123c", fontSize:18, fontWeight:900, boxShadow:"0 2px 6px rgba(0,0,0,0.25)" }}>🔒</div>
+                        <div style={{ minWidth:0, flex:1 }}>
+                          <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap", marginBottom:4 }}>
+                            <span style={{ fontSize:18, fontWeight:900, color:"#fff", letterSpacing:"-0.35px" }}>배정완료 사회자</span>
+                            <span style={{ display:"inline-flex", alignItems:"center", padding:"4px 8px", borderRadius:5, background:"#fff", color:"#881337", fontSize:10, fontWeight:900, letterSpacing:"0.1px" }}>예약 불가</span>
+                          </div>
+                          <div style={{ fontSize:12, fontWeight:700, color:"#ffe4e6", lineHeight:1.45 }}>선택하신 시간대에 이미 예식이 확정된 사회자입니다.</div>
                         </div>
-                        <div style={{ fontSize:11, color:"#cbd5e1", lineHeight:1.45 }}>선택하신 시간대에 이미 예식이 확정된 사회자입니다.</div>
                       </div>
+                      {sortedItems.length === 0 ? (
+                        <div style={{ textAlign:"center", padding:"24px 20px", color:C.textMuted, fontSize:13, background:C.card, borderRadius:10, border:`1px solid ${C.cardBorder}` }}>
+                          <div style={{ fontSize:24, marginBottom:8 }}>✅</div>이 시간대에 배정된 사회자가 없습니다.
+                        </div>
+                      ) : sortedItems.map((item: any, i: number) => (
+                        <AssignedCard key={i} item={item} slotKey={key} assignedMap={assignedMap} onOpenProfile={setSelectedProfile} />
+                      ))}
                     </div>
-                    {sortedItems.length === 0 ? (
-                      <div style={{ textAlign:"center", padding:"24px 20px", color:C.textMuted, fontSize:13, background:C.card, borderRadius:12, border:`1px solid ${C.cardBorder}`, marginBottom:20 }}>
-                        <div style={{ fontSize:24, marginBottom:8 }}>✅</div>이 시간대에 배정된 사회자가 없습니다.
-                      </div>
-                    ) : sortedItems.map((item: any, i: number) => (
-                      <AssignedCard key={i} item={item} slotKey={key} assignedMap={assignedMap} onOpenProfile={setSelectedProfile} />
-                    ))}
 
                     {/* 가능한 사회자 섹션 (other 탭 제외) */}
                     {key !== "other" && (

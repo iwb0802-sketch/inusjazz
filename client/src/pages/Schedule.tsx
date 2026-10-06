@@ -672,7 +672,16 @@ export default function Schedule() {
 
                 return (
                   <div key={key}>
-                    <div style={{ fontSize:11, fontWeight:700, color:C.textMuted, letterSpacing:1, marginBottom:10, paddingLeft:4 }}>배정된 사회자</div>
+                    <div style={{ display:"flex", alignItems:"center", gap:11, marginBottom:12, padding:"12px 14px", background:"linear-gradient(135deg,rgba(239,68,68,0.18),rgba(239,68,68,0.06))", border:"1px solid rgba(248,113,113,0.45)", borderLeft:"4px solid #f87171", borderRadius:12 }}>
+                      <div style={{ width:34, height:34, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:"50%", background:"rgba(239,68,68,0.2)", color:"#fca5a5", fontSize:17 }}>✓</div>
+                      <div style={{ minWidth:0, flex:1 }}>
+                        <div style={{ display:"flex", alignItems:"center", gap:7, flexWrap:"wrap", marginBottom:3 }}>
+                          <span style={{ fontSize:15, fontWeight:800, color:"#fff", letterSpacing:"-0.2px" }}>이미 배정완료된 사회자</span>
+                          <span style={{ display:"inline-flex", alignItems:"center", padding:"3px 7px", borderRadius:20, background:"rgba(239,68,68,0.22)", color:"#fca5a5", border:"1px solid rgba(248,113,113,0.35)", fontSize:9, fontWeight:800 }}>예약 마감</span>
+                        </div>
+                        <div style={{ fontSize:11, color:"#cbd5e1", lineHeight:1.45 }}>선택하신 시간대에 이미 예식이 확정된 사회자입니다.</div>
+                      </div>
+                    </div>
                     {sortedItems.length === 0 ? (
                       <div style={{ textAlign:"center", padding:"24px 20px", color:C.textMuted, fontSize:13, background:C.card, borderRadius:12, border:`1px solid ${C.cardBorder}`, marginBottom:20 }}>
                         <div style={{ fontSize:24, marginBottom:8 }}>✅</div>이 시간대에 배정된 사회자가 없습니다.
@@ -684,8 +693,16 @@ export default function Schedule() {
                     {/* 가능한 사회자 섹션 (other 탭 제외) */}
                     {key !== "other" && (
                       <div style={{ marginTop:24, paddingTop:18, borderTop:`1px solid ${C.cardBorder}` }}>
-                        <div style={{ fontSize:13, fontWeight:700, color:C.mint, marginBottom:4 }}>✨ 이 시간대 가능한 사회자</div>
-                        <div style={{ fontSize:11, color:C.textMuted, marginBottom:12 }}>앞뒤 2시간 30분 이내 다른 예식이 없는 사회자 (서울 기준)</div>
+                        <div style={{ display:"flex", alignItems:"center", gap:11, marginBottom:12, padding:"12px 14px", background:"linear-gradient(135deg,rgba(91,181,162,0.2),rgba(91,181,162,0.06))", border:`1px solid ${C.mintBorder}`, borderLeft:`4px solid ${C.mint}`, borderRadius:12 }}>
+                          <div style={{ width:34, height:34, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center", borderRadius:"50%", background:C.mintLight, color:"#a7e3d7", fontSize:17 }}>✦</div>
+                          <div style={{ minWidth:0, flex:1 }}>
+                            <div style={{ display:"flex", alignItems:"center", gap:7, flexWrap:"wrap", marginBottom:3 }}>
+                              <span style={{ fontSize:15, fontWeight:800, color:"#fff", letterSpacing:"-0.2px" }}>이 시간대 상담 가능한 사회자</span>
+                              <span style={{ display:"inline-flex", alignItems:"center", padding:"3px 7px", borderRadius:20, background:C.mintLight, color:"#9ee1d4", border:`1px solid ${C.mintBorder}`, fontSize:9, fontWeight:800 }}>서울 기준 상담 가능</span>
+                            </div>
+                            <div style={{ fontSize:11, color:"#cbd5e1", lineHeight:1.45 }}>앞뒤 2시간 30분 이내 다른 예식이 없는 사회자입니다.</div>
+                          </div>
+                        </div>
 
                         {/* 원했던 사회자가 마감이어도 이탈하지 않도록 — 개인이 아닌 '이너스 검증'을 신뢰하게 만드는 안내 */}
                         <div style={{ background:C.card, border:`1px solid ${C.mintBorder}`, borderLeft:`3px solid ${C.mint}`, borderRadius:10, padding:"11px 13px", marginBottom:14 }}>

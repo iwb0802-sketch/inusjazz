@@ -53,8 +53,8 @@ const BENEFIT_GROUPS = [
         href: AUDIO_TOOL,
       },
       {
-        t: "식전영상 셀프 제작 무료 이용",
-        d: "사진 · 영상을 직접 편집해 나만의 식전영상 완성",
+        t: "프리미엄 식전영상 제작 무료 지원",
+        d: "사진 · 영상을 직접 편집해 완성도 높은 식전영상 완성",
         w: "4만원 상당",
         href: PREWEDDING_VIDEO_TOOL,
       },
@@ -67,7 +67,7 @@ const BENEFIT_GROUPS = [
     title: "대본 · 진행 자료",
     color: "#5BB5A2",
     items: [
-      { t: "두 사람의 이야기를 담은 맞춤형 대본 제작", d: "상담 내용을 대표가 직접 반영", w: "5만원 상당" },
+      { t: "두 사람만의 스토리를 담은 감성 맞춤 대본 제작", d: "상담 내용을 대표가 직접 반영", w: "5만원 상당" },
       { t: "지정 사회자와 사전 통화 & 식순 협의", d: "예식 전 사회자와 직접 소통", w: "3만원 상당" },
       { t: "식순 멘트지 · 식순 체크지 · 사전 질문지", d: "예식 흐름을 한눈에 정리", w: "2만원 상당" },
       { t: "혼인서약서 8종 · 성혼선언문 8종 · 덕담 6종", d: "총 22종 샘플, 구글드라이브 공유 폴더로 전달", w: "포함" },
@@ -81,9 +81,9 @@ const BENEFIT_GROUPS = [
     title: "음악",
     color: "#c09a7e",
     items: [
+      { t: "편집된 트렌드 BGM 제공", d: "지속적인 업데이트로 최신 곡까지 반영", w: "포함" },
       { t: "예식 분위기에 맞는 식순별 BGM 100여 곡", d: "식순별로 정리된 큐레이션 제공", w: "3만원 상당" },
       { t: "요청 시 맞춤형 BGM 편집 지원", d: "곡 길이 · 진입 타이밍까지 조정", w: "2만원 상당" },
-      { t: "편집된 트렌드 BGM 제공", d: "지속적인 업데이트로 최신 곡까지 반영", w: "포함" },
     ],
   },
   {
@@ -249,7 +249,7 @@ export default function EventSection() {
                 <span className="whitespace-nowrap">맞춤 대본 ·</span>{" "}
                 <span className="whitespace-nowrap">음원 편집기 ·</span>{" "}
                 <span className="whitespace-nowrap">모바일 청첩장 ·</span>{" "}
-                <span className="whitespace-nowrap">식전영상은</span>{" "}
+                <span className="whitespace-nowrap">식전영상까지,</span>{" "}
                 <span
                   className="whitespace-nowrap font-extrabold"
                   style={{
@@ -258,7 +258,7 @@ export default function EventSection() {
                     padding: "0 2px",
                   }}
                 >
-                  별도 비용 없이 포함됩니다.
+                  27만원 상당 혜택이 비용 없이 포함됩니다.
                 </span>
               </p>
             </div>
@@ -288,7 +288,7 @@ export default function EventSection() {
             />
             <div className="relative">
               <div
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-4"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-5"
                 style={{ background: "rgba(212,184,150,0.14)", border: "1px solid rgba(212,184,150,0.4)" }}
               >
                 <ShieldCheck size={12} className="text-[#d4b896]" />
@@ -297,32 +297,88 @@ export default function EventSection() {
                 </span>
               </div>
 
-              <h3
-                className="text-white text-[19px] min-[375px]:text-[21px] sm:text-[26px] leading-snug break-keep mb-5"
-                style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-              >
-                <span className="whitespace-nowrap">예식 전주까지 취소하시면</span>{" "}
-                <span className="text-[#d4b896] whitespace-nowrap">계약금 100% 환불</span>
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
-                {[
-                  { icon: ShieldCheck, t: "계약금 100% 환불", d: "예식 전주까지 취소 시 위약금 없이 전액 반환" },
-                  { icon: Mic2, t: "사회자 18인 전원 공개", d: "목소리 · 진행 영상까지 예약 전에 직접 확인" },
-                  { icon: MapPin, t: "주말 예약현황 공개", d: "서울 · 경기 · 인천 진행 (지역에 따라 출장비 별도)" },
-                ].map((b) => (
-                  <div
-                    key={b.t}
-                    className="flex items-center gap-3 sm:flex-col sm:items-start rounded-lg px-3.5 py-3 sm:p-4"
-                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)" }}
-                  >
-                    <b.icon size={15} className="text-[#5BB5A2] flex-shrink-0 sm:mb-1" />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-white text-[13px] sm:text-sm font-bold break-keep">{b.t}</p>
-                      <p className="text-white/55 text-[11px] sm:text-xs mt-0.5 leading-snug break-keep">{b.d}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {/* 계약금 100% 환불 */}
+                <div
+                  className="rounded-xl p-5 sm:p-6"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(212,184,150,0.32)" }}
+                >
+                  <div className="flex items-center gap-2.5 mb-3.5">
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ background: "rgba(212,184,150,0.16)" }}
+                    >
+                      <ShieldCheck size={18} className="text-[#d4b896]" />
                     </div>
+                    <span className="text-[#d4b896] text-[10px] sm:text-[11px] font-bold tracking-[0.14em]">
+                      GUARANTEE
+                    </span>
                   </div>
-                ))}
+                  <h3
+                    className="text-white text-[20px] min-[375px]:text-[22px] sm:text-[25px] leading-snug break-keep mb-2"
+                    style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+                  >
+                    계약금 <span className="text-[#d4b896]">100% 환불</span>
+                  </h3>
+                  <p className="text-white/60 text-[12.5px] sm:text-sm leading-relaxed break-keep mb-3.5">
+                    예식 전주까지 취소 시 위약금 없이 전액 반환
+                  </p>
+                  <div
+                    className="rounded-lg px-3 py-2"
+                    style={{ background: "rgba(91,181,162,0.1)", border: "1px solid rgba(91,181,162,0.3)" }}
+                  >
+                    <p className="text-[11px] sm:text-[11.5px] leading-relaxed break-keep">
+                      <span className="text-white/40">업계 평균 계약 후 7일 이내</span>{" "}
+                      <span className="text-white/40">→</span>{" "}
+                      <span className="text-[#5BB5A2] font-bold">이너스뮤직은 예식 전주까지</span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* 사회자 18인 전원 공개 */}
+                <div
+                  className="rounded-xl p-5 sm:p-6"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(91,181,162,0.32)" }}
+                >
+                  <div className="flex items-center gap-2.5 mb-3.5">
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ background: "rgba(91,181,162,0.16)" }}
+                    >
+                      <Mic2 size={18} className="text-[#5BB5A2]" />
+                    </div>
+                    <span className="text-[#5BB5A2] text-[10px] sm:text-[11px] font-bold tracking-[0.14em]">
+                      TRANSPARENCY
+                    </span>
+                  </div>
+                  <h3
+                    className="text-white text-[20px] min-[375px]:text-[22px] sm:text-[25px] leading-snug break-keep mb-2"
+                    style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+                  >
+                    <span className="text-[#d4b896]">사회자 18인</span> 전원 공개
+                  </h3>
+                  <p className="text-white/60 text-[12.5px] sm:text-sm leading-relaxed break-keep mb-3.5">
+                    목소리 · 진행 영상까지 예약 전에 직접 확인
+                  </p>
+                  <a
+                    href="#mc"
+                    className="group inline-flex items-center gap-1 text-[#5BB5A2] text-[11.5px] sm:text-[12.5px] font-bold hover:text-[#7cc9b8] transition-colors"
+                  >
+                    전체 사회자 보러가기
+                    <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-[2px]" />
+                  </a>
+                </div>
+              </div>
+
+              {/* 주말 예약현황 공개 (보조 배지) */}
+              <div
+                className="mt-3 sm:mt-4 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-center"
+                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
+              >
+                <MapPin size={13} className="text-white/50 flex-shrink-0" />
+                <span className="text-white/55 text-[11.5px] sm:text-[12.5px] break-keep">
+                  주말 예약현황도 투명하게 공개 · 서울 · 경기 · 인천 진행 (지역에 따라 출장비 별도)
+                </span>
               </div>
             </div>
           </div>

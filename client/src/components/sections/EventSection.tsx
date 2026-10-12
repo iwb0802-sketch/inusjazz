@@ -22,6 +22,8 @@ import {
   ArrowRight,
   ChevronDown,
   Gem,
+  FileText,
+  Video,
 } from "lucide-react";
 
 const EVENT_LINK = "https://blog.naver.com/inusmusics/220652958346";
@@ -235,31 +237,50 @@ export default function EventSection() {
             </span>
           </div>
 
-          <div className="mt-4 mx-auto max-w-[19rem] min-[375px]:max-w-[23rem] sm:max-w-xl">
+          <div className="mt-4 mx-auto max-w-[22rem] min-[375px]:max-w-[25rem] sm:max-w-2xl">
             <div
-              className="flex items-start gap-2.5 px-4 py-3.5 sm:px-5 sm:py-4 rounded-xl text-left"
+              className="px-4 py-4 sm:px-7 sm:py-5 rounded-xl text-center"
               style={{
-                background: "linear-gradient(135deg, rgba(31,107,88,0.10) 0%, rgba(212,184,150,0.16) 100%)",
-                border: "1.5px solid rgba(31,107,88,0.38)",
-                boxShadow: "0 4px 16px rgba(31,107,88,0.12)",
+                background: "linear-gradient(135deg, rgba(31,107,88,0.09) 0%, rgba(212,184,150,0.15) 100%)",
+                border: "1.5px solid rgba(31,107,88,0.36)",
+                boxShadow: "0 6px 22px rgba(31,107,88,0.14)",
               }}
             >
-              <Sparkles size={18} className="text-[#1f6b58] flex-shrink-0 mt-[3px]" />
-              <p className="text-[#2b241a] text-[13.5px] sm:text-[15.5px] font-bold leading-[1.75] break-keep">
-                <span className="whitespace-nowrap">맞춤 대본 ·</span>{" "}
-                <span className="whitespace-nowrap">음원 편집기 ·</span>{" "}
-                <span className="whitespace-nowrap">모바일 청첩장 ·</span>{" "}
-                <span className="whitespace-nowrap">식전영상까지,</span>{" "}
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
+                {[
+                  { icon: FileText, t: "맞춤 대본" },
+                  { icon: Music4, t: "음원 편집기" },
+                  { icon: Smartphone, t: "모바일 청첩장" },
+                  { icon: Video, t: "식전영상" },
+                ].map((it) => (
+                  <span
+                    key={it.t}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white"
+                    style={{ border: "1px solid rgba(31,107,88,0.26)" }}
+                  >
+                    <it.icon size={13} className="text-[#1f6b58] flex-shrink-0" />
+                    <span className="text-[#1a1a1a] text-[11.5px] sm:text-[13px] font-bold whitespace-nowrap">
+                      {it.t}
+                    </span>
+                  </span>
+                ))}
+              </div>
+
+              <p
+                className="mt-3.5 sm:mt-4 text-[16.5px] min-[375px]:text-[18px] sm:text-[21px] leading-snug break-keep"
+                style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 800 }}
+              >
                 <span
-                  className="whitespace-nowrap font-extrabold"
+                  className="whitespace-nowrap"
                   style={{
-                    backgroundImage: "linear-gradient(180deg, transparent 60%, rgba(212,184,150,0.65) 60%)",
+                    backgroundImage: "linear-gradient(180deg, transparent 62%, rgba(212,184,150,0.78) 62%)",
                     color: "#14453a",
-                    padding: "0 2px",
+                    padding: "0 4px",
                   }}
                 >
-                  27만원 상당 혜택이 비용 없이 포함됩니다.
-                </span>
+                  27만원 상당 혜택
+                </span>{" "}
+                <span className="text-[#2b241a] whitespace-nowrap">전부 비용 없이 포함됩니다</span>
               </p>
             </div>
           </div>

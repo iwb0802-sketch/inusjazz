@@ -6,6 +6,13 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { ExternalLink, ChevronLeft, ChevronRight, MessageSquare } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
+import {
+  PROOF_IMAGES,
+  PROOF_AS_OF,
+  PROOF_TOTAL,
+  PROOF_TOTAL_DISPLAY,
+  PROOF_TOTAL_DISPLAY_KO,
+} from "@/data/reviewStats";
 
 const REVIEW_IMAGES = [
   { src: "/images/review1_d832f6e4.jpg", alt: "고객 후기 1" },
@@ -18,68 +25,6 @@ const REVIEW_IMAGES = [
 ];
 
 const GOLD = "#d4b896";
-
-// 후기 증빙 자료 — 위 3개: 숨고 / 후기게시판 / 스마트스토어
-// 아래 3개: 블로그(문자·카톡 후기 모음, 자사 운영 블로그) / 블로그(고객님이 직접 작성한 후기글) / 카페
-const PROOF_IMAGES = [
-  {
-    src: "/images/proof/proof-soomgo.jpg",
-    alt: "숨고 프로필 리뷰수 829건",
-    label: "출처 · 숨고",
-    source: "숨고",
-    count: 829,
-    url: "https://soomgo.com/profile/users/4719699",
-    linkLabel: "숨고 프로필에서 확인",
-  },
-  {
-    src: "/images/proof/proof-blog.jpg",
-    alt: "홈페이지 후기게시판 Total 584건",
-    label: "출처 · 후기 게시판",
-    source: "후기 게시판",
-    count: 584,
-    url: "http://musicin.godohosting.com/bbs/board.php?bo_table=forum",
-    linkLabel: "후기 게시판에서 확인",
-  },
-  {
-    src: "/images/proof/proof-smartstore.jpg",
-    alt: "네이버 스마트스토어 리뷰 414건",
-    label: "출처 · 스마트스토어",
-    source: "네이버 스마트스토어",
-    count: 414,
-    url: "https://smartstore.naver.com/inus_store/products/5466083565",
-    linkLabel: "스마트스토어에서 확인",
-  },
-  {
-    src: "/images/proof/proof-singer-blog.jpg",
-    alt: "블로그 문자·카톡 후기 모음 984건",
-    label: "출처 · 블로그 (문자·카톡 후기 모음)",
-    source: "블로그(문자·카톡)",
-    count: 984,
-    url: "https://blog.naver.com/PostList.naver?blogId=inusmusics&from=postList&categoryNo=71&parentCategoryNo=71",
-    linkLabel: "블로그 후기글에서 확인",
-  },
-  {
-    src: "/images/proof/proof-blog-personal.jpg",
-    alt: "고객님이 직접 작성한 블로그 후기글 344건",
-    label: "출처 · 블로그 (고객님 작성글)",
-    source: "블로그(고객 작성)",
-    count: 344,
-    url: "https://search.naver.com/search.naver?ssc=tab.blog.all&sm=tab_jum&query=%EC%9D%B4%EB%84%88%EC%8A%A4%EB%AE%A4%EC%A7%81",
-    linkLabel: "네이버 블로그 검색에서 확인",
-  },
-  {
-    src: "/images/proof/proof-cafe.jpg",
-    alt: "네이버 카페 고객 후기글 126건",
-    label: "출처 · 카페",
-    source: "카페",
-    count: 126,
-    url: "https://search.naver.com/search.naver?ssc=tab.cafe.all&sm=tab_jum&query=%EC%9D%B4%EB%84%88%EC%8A%A4%EB%AE%A4%EC%A7%81",
-    linkLabel: "네이버 카페 검색에서 확인",
-  },
-];
-
-const PROOF_TOTAL = PROOF_IMAGES.reduce((sum, p) => sum + p.count, 0);
-const PROOF_AS_OF = "2026.10.01";
 
 // 네이버 블로그 후기 원문 발췌 — 아이디 마스킹, 본문 일부만 노출, 원문 링크 제공
 const BLOG_REVIEWS = [
@@ -220,7 +165,7 @@ export default function ReviewSection() {
                 boxShadow: "0 0 16px rgba(212,184,150,0.25)",
               }}
             >
-              3200+ 후기
+              {PROOF_TOTAL_DISPLAY_KO} 후기
             </span>
           </div>
           <p className="mt-4 text-white/50 text-sm sm:text-base max-w-sm mx-auto leading-relaxed break-keep">
@@ -229,7 +174,7 @@ export default function ReviewSection() {
           <p className="mt-2 text-white/35 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed break-keep">
             숨고·후기게시판·스마트스토어·블로그·카페 등 모든 플랫폼 후기를 합산하면
             <br className="sm:hidden" />
-            {" "}3,200건 이상 (사회자 개별 후기 포함)
+            {" "}{PROOF_TOTAL_DISPLAY_KO} 이상 (사회자 개별 후기 포함)
           </p>
 
           {/* 증빙 자료 — 숨고/후기게시판/스마트스토어 (위) · 블로그(문자후기모음)/블로그(고객작성)/카페 (아래) */}
@@ -342,7 +287,7 @@ export default function ReviewSection() {
               엄격하게 집계했습니다.
             </p>
             <p className="mt-2.5 text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
-              저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>3,200+ 건</span>은
+              저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>{PROOF_TOTAL_DISPLAY} 건</span>은
               <br className="sm:hidden" />{" "}
               전부 플랫폼에서
               <br className="hidden sm:block" />{" "}

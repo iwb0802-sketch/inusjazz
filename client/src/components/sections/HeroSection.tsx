@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, Star } from "lucide-react";
 import { VENUE_NAMES } from "@/data/venues";
+import { PROOF_TOTAL_ROUNDED_LABEL } from "@/data/reviewStats";
 
 const HERO_BG = "/images/hero-v2-option2.webp";
 const HERO_BG_MOBILE = "/images/hero-mobile-v3.webp";
@@ -113,7 +114,7 @@ export default function HeroSection() {
                   letterSpacing: "0.01em",
                 }}
               >
-                3,200
+                {PROOF_TOTAL_ROUNDED_LABEL}
               </span>
               <span
                 className="text-[15px] sm:text-lg"

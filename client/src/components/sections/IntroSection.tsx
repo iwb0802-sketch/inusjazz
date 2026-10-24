@@ -1,6 +1,7 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { ShieldCheck, ScrollText, Zap, Palette, BookHeart, Gift, Wallet } from "lucide-react";
 import CountUpNumber from "@/components/CountUpNumber";
+import { PROOF_TOTAL_ROUNDED } from "@/data/reviewStats";
 
 const GOLD = "#d4b896";
 
@@ -114,7 +115,7 @@ export default function IntroSection() {
             {
               value: (
                 <>
-                  <CountUpNumber targetNumber={3200} duration={2000} className="text-[#d4b896]" style={{ fontFamily: "'Cormorant Garamond', serif" }} />
+                  <CountUpNumber targetNumber={PROOF_TOTAL_ROUNDED} duration={2000} className="text-[#d4b896]" style={{ fontFamily: "'Cormorant Garamond', serif" }} />
                   <span className="text-base sm:text-xl text-white/40 ml-0.5">+</span>
                 </>
               ),

@@ -85,8 +85,8 @@ export const PROOF_AS_OF = "2026.10.24";
 /** 정확한 합계 (예: 4,109) */
 export const PROOF_TOTAL = PROOF_IMAGES.reduce((sum, p) => sum + p.count, 0);
 
-/** 마케팅 문구용 100 단위 내림 합계 (예: 4,109 → 4,100) */
-export const PROOF_TOTAL_ROUNDED = Math.floor(PROOF_TOTAL / 100) * 100;
+/** 마케팅 문구용 "깔끔한" 표시 숫자 — 실제 합계와 무관하게 4,000으로 고정 (증빙 캡처 섹션의 실제 합산 금액만 PROOF_TOTAL로 정확히 표시) */
+export const PROOF_TOTAL_ROUNDED = 4000;
 
 /** "4,100" 형태 (쉼표 포함, + 없음) */
 export const PROOF_TOTAL_ROUNDED_LABEL = PROOF_TOTAL_ROUNDED.toLocaleString();

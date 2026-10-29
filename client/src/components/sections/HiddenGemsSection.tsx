@@ -89,7 +89,7 @@ const HIDDEN_GEMS = [
     styles: ["감성형", "유쾌형"],
     image: "/images/mc-kimhansol.jpg",
     audioFile: "/audio/mc-kimhansol.mp3",
-    youtubeId: "cBBdRueVua8",
+    youtubeId: "riY2IwEjIgU",
     reviewKeywords: ["부드럽고편안한진행", "깔끔하고정확한딕션", "센스있는분위기리드", "차분하고안정적인진행", "자연스러운멘트센스", "신뢰감있는목소리톤"],
     url: "https://blog.naver.com/inusmusics/224393408893",
   },

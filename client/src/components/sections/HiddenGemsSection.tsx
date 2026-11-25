@@ -182,7 +182,7 @@ export default function HiddenGemsSection() {
   const anim3 = useScrollAnimation();
   const [playing, setPlaying] = useState<string | null>(null);
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(true);
   const GEM_COLLAPSED = 3;
   const visibleGems = showAll ? HIDDEN_GEMS : HIDDEN_GEMS.slice(0, GEM_COLLAPSED);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -395,7 +395,7 @@ export default function HiddenGemsSection() {
                 className="inline-flex items-center justify-center gap-2 min-h-[48px] px-7 text-[13px] sm:text-sm transition-colors duration-300 hover:bg-[#d4b896]/10"
                 style={{ border: "1px solid rgba(212,184,150,0.45)", color: "#d4b896", letterSpacing: "0.04em" }}
               >
-                {showAll ? "접기" : `나머지 ${HIDDEN_GEMS.length - GEM_COLLAPSED}인 전원 보기`}
+                {showAll ? "숨은 강자 접기" : `나머지 ${HIDDEN_GEMS.length - GEM_COLLAPSED}인 전원 보기`}
                 <ChevronRight size={13} className={`transition-transform duration-300 ${showAll ? "-rotate-90" : "rotate-90"}`} />
               </button>
             </div>

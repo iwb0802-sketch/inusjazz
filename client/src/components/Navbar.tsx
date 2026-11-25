@@ -6,8 +6,8 @@ const NAV_LINKS = [
   { label: "후기", href: "#review" },
   { label: "가격", href: "#pricing" },
   { label: "혜택", href: "#event" },
-  { label: "FAQ", href: "#qna" },
   { label: "패키지", href: "#package" },
+  { label: "FAQ", href: "#qna" },
 ];
 
 const SERVICE_LINKS: { label: string; href: string; isNew?: boolean }[] = [

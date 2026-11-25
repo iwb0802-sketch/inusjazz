@@ -36,9 +36,9 @@ export default function Home() {
       <LiveBookingSection />
       <PricingSection />
       <EventSection />
-      <QnaSection />
       <PackageSection />
       <ProcessSection />
+      <QnaSection />
       <CtaSection />
       <Footer />
       <FloatingButtons />

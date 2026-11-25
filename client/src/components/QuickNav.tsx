@@ -11,9 +11,9 @@ const menuItems = [
   { id: "review",      label: "후기" },
   { id: "pricing",     label: "요금" },
   { id: "event",       label: "혜택" },
-  { id: "qna",         label: "Q&A" },
   { id: "package",     label: "패키지" },
   { id: "process",     label: "책임설계" },
+  { id: "qna",         label: "Q&A" },
 ];
 
 export default function QuickNav() {

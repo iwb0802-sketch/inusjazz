@@ -363,7 +363,7 @@ export default function QnaSection() {
   const anim1 = useScrollAnimation();
 
   return (
-    <section id="qna" className="bg-[#f8f6f3] pt-10 sm:pt-12 pb-16 sm:pb-20">
+    <section id="qna" className="bg-[#f8f6f3] pt-16 sm:pt-20 pb-16 sm:pb-20">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div ref={anim1.ref} className={`text-center mb-10 sm:mb-12 fade-up ${anim1.isVisible ? "visible" : ""}`}>

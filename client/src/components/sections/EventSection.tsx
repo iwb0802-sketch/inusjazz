@@ -116,8 +116,13 @@ const REST_GROUPS = BENEFIT_GROUPS.map((g) => ({
 const REST_COUNT = REST_GROUPS.reduce((n, g) => n + g.items.length, 0);
 
 // 추가 혜택 표
-const EXTRA_ROWS = [
+const EXTRA_ROWS: { label: string; value: string; note?: string }[] = [
   { label: "상담 후기 작성 (네이버 · 숨고)", value: "2만원" },
+  {
+    label: "SNS에 이너스뮤직 선택 이유 남기기",
+    value: "1~3만원",
+    note: "결제 금액 10만원대 1만원 · 20만원대 2만원 · 30만원 이상 3만원 / 블로그 · 카페 · 인스타",
+  },
   { label: "지인 코드번호 사용", value: "1만원" },
   { label: "지난달 VOV 선정 사회자 지정", value: "1만원" },
 ];
@@ -266,7 +271,7 @@ export default function EventSection() {
         <div ref={anim3.ref} className={`fade-up ${anim3.isVisible ? "visible" : ""} mt-12 sm:mt-16`}>
           <div className="text-center mb-5">
             <h3 className="text-[#1a1a1a] text-[18px] sm:text-[22px] break-keep" style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}>
-              추가 혜택 · <span className="text-[#a8814f]">최대 4만원</span>
+              추가 <span className="text-[#a8814f]">혜택</span>
             </h3>
             <p className="mt-2 text-[#777] text-[12px] sm:text-[13px] break-keep">조건에 해당하면 중복 적용됩니다</p>
           </div>
@@ -278,7 +283,10 @@ export default function EventSection() {
                 className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4"
                 style={{ borderBottom: "1px solid #f0ece7" }}
               >
-                <span className="text-[#2a2a2a] text-[13.5px] sm:text-[15px] break-keep">{r.label}</span>
+                <span className="min-w-0 text-[#2a2a2a] text-[13.5px] sm:text-[15px] break-keep">
+                  {r.label}
+                  {r.note && <span className="block text-[#999] text-[11px] sm:text-[12px] mt-0.5 leading-snug">{r.note}</span>}
+                </span>
                 <span className="text-[#a8814f] text-[15px] sm:text-[17px] font-bold whitespace-nowrap flex-shrink-0" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
                   -{r.value}
                 </span>
@@ -288,14 +296,13 @@ export default function EventSection() {
               <span className="text-[#2a2a2a] text-[13.5px] sm:text-[15px] break-keep">후기 작성 시 네이버 포인트 지급</span>
               <span className="text-[#777] text-[12px] sm:text-[13px] whitespace-nowrap">별도</span>
             </div>
-            <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-4" style={{ background: "#181512" }}>
-              <span className="text-white/85 text-[13px] sm:text-[14px] break-keep">
-                할인 합계
-                <span className="block text-white/40 text-[10.5px] sm:text-[11px] mt-0.5">시그니처 등급은 VOV 할인 제외 · 최대 3만원</span>
-              </span>
-              <span className="text-[#e0c188] text-[20px] sm:text-[24px] font-bold whitespace-nowrap" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                최대 -4만원
-              </span>
+            <div className="px-4 sm:px-6 py-4" style={{ background: "#181512" }}>
+              <p className="text-white/85 text-[12.5px] sm:text-[13.5px] break-keep leading-relaxed">
+                모든 혜택은 중복 적용됩니다
+              </p>
+              <p className="mt-1 text-white/45 text-[11px] sm:text-[12px] break-keep leading-relaxed">
+                SNS 혜택은 잔금에서 차감 · 글 링크는 카톡 또는 블로그 댓글로 전달 · 시그니처 등급은 VOV 제외
+              </p>
             </div>
             <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4" style={{ background: "#fbf7f2" }}>
               <span className="text-[#2a2a2a] text-[13.5px] sm:text-[15px] break-keep font-semibold">상담 당일 계약 시</span>
@@ -305,7 +312,9 @@ export default function EventSection() {
             </div>
           </div>
           <p className="mt-4 text-center text-[#999] text-[11px] sm:text-xs break-keep leading-relaxed">
-            당일 계약 할인은 위 최대 4만원과 별도로 안내됩니다 · 적용 방식은 상담 시 확인
+            지인을 소개해 주신 분께는 감사금 1만원을 드리며 잔금에서 차감됩니다
+            <br className="hidden sm:block" />{" "}
+            당일 계약 할인은 위 혜택과 별도로 안내됩니다 · 적용 방식은 상담 시 확인
           </p>
         </div>
 

@@ -5,13 +5,13 @@
  */
 import { useMemo, useState } from "react";
 import { Check, Copy, MessageCircle, CalendarCheck } from "lucide-react";
-import { BENEFIT_OPTIONS, PRICE_TIERS, won, type BenefitOption, type TierId } from "@/data/pricing";
+import { BENEFIT_OPTIONS, PRICE_TIERS, amountFor, won, type BenefitOption, type TierId } from "@/data/pricing";
 
 const KAKAO_LINK = "https://pf.kakao.com/_wxovaM/chat";
 
 export default function QuoteCalculator() {
   const [tierId, setTierId] = useState<TierId>("premium");
-  const [checked, setChecked] = useState<Record<string, boolean>>({ review: true, friend: false, vov: false });
+  const [checked, setChecked] = useState<Record<string, boolean>>({ review: true, sns: false, friend: false, vov: false });
   const [notice, setNotice] = useState("");
 
   const tier = PRICE_TIERS.find((t) => t.id === tierId)!;
@@ -21,13 +21,13 @@ export default function QuoteCalculator() {
     () => BENEFIT_OPTIONS.filter((b) => checked[b.id] && !b.excludeTiers?.includes(tierId)),
     [checked, tierId],
   );
-  const discount = applied.reduce((n, b) => n + b.amount, 0);
+  const discount = applied.reduce((n, b) => n + amountFor(b, tier), 0);
   const total = tier.list - discount;
 
   const summary = [
     "[이너스뮤직 사회자 견적 문의]",
     `등급: ${tier.name} (정가 ${won(tier.list)})`,
-    ...applied.map((b) => `- ${b.label} -${won(b.amount)}`),
+    ...applied.map((b) => `- ${b.label} -${won(amountFor(b, tier))}`),
     `예상 금액: ${won(total)}`,
     "예식일 / 예식장: ",
   ].join("\n");
@@ -154,7 +154,7 @@ export default function QuoteCalculator() {
                   className={`flex-shrink-0 text-[15px] sm:text-[16px] font-bold whitespace-nowrap ${ok ? "text-[#a8814f]" : "text-[#c5c0b8]"}`}
                   style={{ fontFamily: "'Cormorant Garamond', serif" }}
                 >
-                  -{b.amount / 10000}만원
+                  -{amountFor(b, tier) / 10000}만원
                 </span>
               </button>
             );
@@ -171,7 +171,7 @@ export default function QuoteCalculator() {
             {applied.map((b) => (
               <div key={b.id} className="flex items-center justify-between gap-3 text-white/60">
                 <span className="break-keep">{b.label}</span>
-                <span className="whitespace-nowrap text-[#e0c188]">-{won(b.amount)}</span>
+                <span className="whitespace-nowrap text-[#e0c188]">-{won(amountFor(b, tier))}</span>
               </div>
             ))}
             {applied.length === 0 && (
@@ -195,7 +195,7 @@ export default function QuoteCalculator() {
         </div>
 
         <p className="mt-3 text-center text-[#999] text-[11px] sm:text-[12px] break-keep leading-relaxed">
-          상담 당일 계약 시 추가 -1만원은 위 금액과 별도로 안내됩니다
+          상담 당일 계약 시 추가 -1만원은 별도로 안내됩니다
           <br className="hidden sm:block" />{" "}
           부가세 포함 · 경기·인천 지역 출장비 별도
         </p>

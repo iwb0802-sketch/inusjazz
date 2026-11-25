@@ -16,6 +16,11 @@ import {
 } from "lucide-react";
 import { PRICE_TIERS, won } from "@/data/pricing";
 
+const DESIGNATED_EVENT = PRICE_TIERS.filter((t) => t.designated).map((t) => t.event);
+const EVENT_MAX = Math.max(...DESIGNATED_EVENT).toLocaleString("ko-KR");
+const EVENT_MIN = Math.min(...DESIGNATED_EVENT).toLocaleString("ko-KR");
+const RANDOM_TIER = PRICE_TIERS.find((t) => !t.designated)!;
+
 
 export default function PricingSection() {
   const [showDiscount, setShowDiscount] = useState(false);
@@ -84,9 +89,9 @@ export default function PricingSection() {
                         : { background: "#1a1a1a", boxShadow: "0 4px 16px rgba(26,26,26,0.22)" }
                     }
                   >
-                    {showDiscount ? "할인가 닫기" : (
+                    {showDiscount ? "혜택가 닫기" : (
                       <>
-                        <span className="text-[#f0d9a8]">최대 4만원</span> 할인가 보기
+                        <span className="text-[#f0d9a8]">혜택 적용가</span> 보기
                       </>
                     )}
                     <ChevronDown
@@ -105,13 +110,13 @@ export default function PricingSection() {
                     >
                       <p className="text-[13px] sm:text-sm font-bold tracking-wide mb-1.5 break-keep" style={{ color: "#a87b57" }}>이벤트 참여 시</p>
                       <p className="text-[#1a1a1a] text-2xl sm:text-3xl font-bold tracking-tight break-keep">
-                        <span className="whitespace-nowrap">220,000<span className="text-base font-normal text-[#666]">원</span></span>
+                        <span className="whitespace-nowrap">{EVENT_MAX}<span className="text-base font-normal text-[#666]">원</span></span>
                         <span className="text-[#c9b49c] font-normal mx-1.5">~</span>
-                        <span className="whitespace-nowrap">120,000<span className="text-base font-normal text-[#666]">원</span></span>
+                        <span className="whitespace-nowrap">{EVENT_MIN}<span className="text-base font-normal text-[#666]">원</span></span>
                       </p>
                       <p className="text-[#777] text-[11.5px] sm:text-xs font-medium mt-2.5 break-keep leading-relaxed">
-                        이벤트 중복 참여 시 <span className="font-bold text-[#a87b57]">최대 4만원 할인</span>
-                        <span className="block mt-0.5 text-[10.5px] text-[#999]">(SIGNATURE 등급은 최대 3만원 할인)</span>
+                        상담 후기 · SNS · 지인 · VOV 혜택을 <span className="font-bold text-[#a87b57]">모두 적용</span>한 가격
+                        <span className="block mt-0.5 text-[10.5px] text-[#999]">시그니처 등급은 VOV 제외 · SNS 혜택은 금액대별</span>
                       </p>
                     </div>
                   </div>
@@ -179,7 +184,7 @@ export default function PricingSection() {
                 <div className="text-center mb-6">
                   <p className="text-[#999] text-[11px] sm:text-xs tracking-[0.14em] mb-1.5">정가</p>
                   <p className="text-[#1a1a1a] text-3xl sm:text-4xl font-bold tracking-tight whitespace-nowrap">
-                    140,000<span className="text-base font-normal text-[#666]">원</span>
+                    {RANDOM_TIER.list.toLocaleString("ko-KR")}<span className="text-base font-normal text-[#666]">원</span>
                   </p>
 
                   <button
@@ -196,9 +201,9 @@ export default function PricingSection() {
                         : { background: "#1a1a1a", boxShadow: "0 4px 16px rgba(26,26,26,0.22)" }
                     }
                   >
-                    {showDiscount ? "할인가 닫기" : (
+                    {showDiscount ? "혜택가 닫기" : (
                       <>
-                        <span className="text-[#f0d9a8]">최대 4만원</span> 할인가 보기
+                        <span className="text-[#f0d9a8]">혜택 적용가</span> 보기
                       </>
                     )}
                     <ChevronDown
@@ -217,10 +222,10 @@ export default function PricingSection() {
                     >
                       <p className="text-[#a08a6f] text-[11px] sm:text-xs tracking-[0.12em] mb-1 break-keep">이벤트 참여 시</p>
                       <p className="text-[#1a1a1a] text-3xl sm:text-4xl font-bold tracking-tight whitespace-nowrap">
-                        100,000<span className="text-base font-normal text-[#666]">원</span>
+                        {RANDOM_TIER.event.toLocaleString("ko-KR")}<span className="text-base font-normal text-[#666]">원</span>
                       </p>
                       <p className="text-[#999] text-[10.5px] sm:text-[11px] mt-2 break-keep leading-relaxed">
-                        이벤트 중복 참여 시 최대 4만원 할인
+                        상담 후기 · SNS · 지인 · VOV 혜택을 모두 적용한 가격
                       </p>
                     </div>
                   </div>

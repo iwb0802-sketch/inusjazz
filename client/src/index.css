@@ -302,3 +302,8 @@ html {
     grid-row: auto;
   }
 }
+
+/* 한글 줄바꿈: 단어 단위로 끊고, 마지막 줄에 한두 글자만 남는 현상을 줄인다 */
+body { word-break: keep-all; overflow-wrap: break-word; font-variant-numeric: lining-nums; font-feature-settings: "lnum" 1; }
+p, li, dd, blockquote { text-wrap: pretty; }
+h1, h2, h3, h4 { text-wrap: balance; }

@@ -526,24 +526,36 @@ function AssignedCard({ item, slotKey, assignedMap, onOpenProfile }: { item: any
 export default function Schedule() {
   const today = new Date();
   const defaultDate = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
-  const [date, setDate] = useState(defaultDate);
+  const queryDate = (() => {
+    if (typeof window === "undefined") return "";
+    const q = new URLSearchParams(window.location.search).get("date") || "";
+    return /^\d{4}-\d{2}-\d{2}$/.test(q) ? q : "";
+  })();
+  const [date, setDate] = useState(queryDate || defaultDate);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("am");
   const [selectedProfile, setSelectedProfile] = useState<McProfile | null>(null);
 
-  const search = async () => {
-    if (!date) return;
+  const search = async (override?: string) => {
+    const d = typeof override === "string" ? override : date;
+    if (!d) return;
     setLoading(true); setError(""); setData(null);
     try {
-      const res = await fetch(`${API_URL}?date=${date}`);
+      const res = await fetch(`${API_URL}?date=${d}`);
       const json = await res.json();
       if (json.code !== 1) setError(json.message || "조회 실패");
       else { setData(json); setActiveTab("am"); }
     } catch { setError("서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요."); }
     setLoading(false);
   };
+
+  // 메인 페이지에서 ?date=YYYY-MM-DD 로 들어오면 자동 조회
+  useEffect(() => {
+    if (queryDate) search(queryDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 상담 신청 URL (날짜+시간대 포함)
   const getConsultUrl = (slotLabel: string) => {
@@ -584,7 +596,7 @@ export default function Schedule() {
             <input type="date" value={date} onChange={e => setDate(e.target.value)}
               onKeyDown={e => e.key==="Enter" && search()}
               style={{ flex:1, height:48, background:"rgba(255,255,255,0.08)", border:`1.5px solid ${C.cardBorder}`, borderRadius:10, color:C.text, fontSize:16, padding:"0 14px", fontFamily:"inherit", outline:"none", minWidth:0 }} />
-            <button onClick={search}
+            <button onClick={() => search()}
               style={{ height:48, padding:"0 24px", background:`linear-gradient(135deg,#3d9e8c,${C.mint})`, border:"none", borderRadius:10, color:"#fff", fontSize:15, fontWeight:700, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap", boxShadow:`0 4px 15px rgba(91,181,162,0.3)`, flexShrink:0 }}>
               조회
             </button>
@@ -604,7 +616,7 @@ export default function Schedule() {
         {error && (
           <div style={{ textAlign:"center", padding:"24px 20px", background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.3)", borderRadius:12 }}>
             <div style={{ color:"#f87171", marginBottom:12 }}>⚠️ {error}</div>
-            <button onClick={search} style={{ padding:"8px 20px", background:`linear-gradient(135deg,#3d9e8c,${C.mint})`, border:"none", borderRadius:8, color:"#fff", fontSize:13, fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>
+            <button onClick={() => search()} style={{ padding:"8px 20px", background:`linear-gradient(135deg,#3d9e8c,${C.mint})`, border:"none", borderRadius:8, color:"#fff", fontSize:13, fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>
               다시 시도
             </button>
           </div>

@@ -69,6 +69,23 @@ export default function Footer() {
               >
                 카카오톡 상담하기 →
               </a>
+              <div className="mt-4 flex items-center gap-4 text-xs">
+                {[
+                  { label: "HOME", href: "https://www.inusmusic.com/" },
+                  { label: "INSTAGRAM", href: "https://www.instagram.com/inusmusic/" },
+                  { label: "YOUTUBE", href: "https://www.youtube.com/channel/UC1zF6ZTCwMxzK9fEqI9ESLA" },
+                ].map((l) => (
+                  <a
+                    key={l.label}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="tracking-[0.14em] text-white/40 hover:text-[#d4b896] transition-colors"
+                  >
+                    {l.label}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </div>

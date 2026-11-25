@@ -1,40 +1,31 @@
 /**
  * EventSection - 이너스뮤직 특별 이벤트 총정리
  * 허브(inusmusic.com) '이벤트 총정리' 내용을 사회자 사이트 기준으로 재구성
- * Design: Light premium (white / #faf9f7) + Mint(#5BB5A2) & Gold(#d4b896)
+ * Design: Light premium (white / #faf9f7) + Gold(#a8814f / #d4b896) · 민트는 버튼·링크에만
  */
 import { useState } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import QuoteCalculator from "./QuoteCalculator";
 import {
-  Gift,
   Check,
   Mic2,
-  Users,
-  Sparkles,
-  Crown,
   Music4,
   Smartphone,
   Headset,
   ShieldCheck,
-  MapPin,
-  Coins,
   ExternalLink,
   ArrowRight,
   ChevronDown,
-  Gem,
-  FileText,
-  Video,
 } from "lucide-react";
 
 const EVENT_LINK = "https://blog.naver.com/inusmusics/220652958346";
 const KAKAO_LINK = "https://pf.kakao.com/_wxovaM/chat";
-const PACKAGE_LINK = "https://blog.naver.com/inusmusics/220652965646";
 const AUDIO_TOOL =
   "https://www.inusmusic.com/audio?utm_source=home&utm_medium=freetool&utm_campaign=audio_open";
 const PREWEDDING_VIDEO_TOOL =
   "https://prewedding-video-renderer-production.up.railway.app/editor";
 
-// 혜택 카테고리 (총 16가지 · 27만원 상당)
+// 혜택 카테고리 (총 19가지 · 27만원 상당)
 const BENEFIT_GROUPS = [
   {
     icon: Smartphone,
@@ -43,19 +34,19 @@ const BENEFIT_GROUPS = [
     color: "#c09a7e",
     items: [
       {
-        t: "모바일 청첩장 무료 제작",
+        t: "모바일 청첩장 제작",
         d: "예약 고객 한정 · 공유 권한 부여 (무한 수정)",
         w: "4만원 상당",
         href: "https://inuscard.com/",
       },
       {
-        t: "셀프 음원 편집기 무료 이용",
+        t: "셀프 음원 편집기 이용",
         d: "입장곡 · 행진곡을 직접 자르고 이어붙이는 전용 도구",
         w: "4만원 상당",
         href: AUDIO_TOOL,
       },
       {
-        t: "프리미엄 식전영상 제작 무료 지원",
+        t: "프리미엄 식전영상 제작 지원",
         d: "사진 · 영상을 직접 편집해 완성도 높은 식전영상 완성",
         w: "4만원 상당",
         href: PREWEDDING_VIDEO_TOOL,
@@ -67,7 +58,7 @@ const BENEFIT_GROUPS = [
     icon: Mic2,
     label: "SCRIPT & DOCS",
     title: "대본 · 진행 자료",
-    color: "#5BB5A2",
+    color: "#a8814f",
     items: [
       { t: "두 사람만의 스토리를 담은 감성 맞춤 대본 제작", d: "상담 내용을 대표가 직접 반영", w: "5만원 상당" },
       { t: "지정 사회자와 사전 통화 & 식순 협의", d: "예식 전 사회자와 직접 소통", w: "3만원 상당" },
@@ -92,7 +83,7 @@ const BENEFIT_GROUPS = [
     icon: Headset,
     label: "CARE & PROOF",
     title: "케어 · 증빙",
-    color: "#5BB5A2",
+    color: "#a8814f",
     items: [
       { t: "대표 · 전문 코디네이터 전담 관리", d: "예약부터 예식 당일까지 담당자가 끝까지 함께합니다", w: "포함" },
       { t: "세금계산서 · 현금영수증 발행", d: "요청 시 정식 증빙 발행", w: "포함" },
@@ -112,554 +103,221 @@ const BENEFIT_GROUPS = [
   },
 ];
 
-// 중복 적용 가능한 할인 (총 4가지 · 최대 5만원)
-const DISCOUNTS = [
-  {
-    icon: Sparkles,
-    label: "REVIEW",
-    title: "2만원 할인",
-    desc: "네이버 혹은 숨고 상담 후기 작성 시",
-    href: EVENT_LINK,
-    external: true,
-    color: "#c09a7e",
-  },
-  {
-    icon: Users,
-    label: "FRIEND",
-    title: "1만원 할인",
-    desc: "지인 코드번호 부여받으실 경우",
-    href: KAKAO_LINK,
-    external: true,
-    color: "#5BB5A2",
-  },
-  {
-    icon: Crown,
-    label: "VOTE ON VOICE",
-    title: "1만원 할인",
-    desc: "지난달 VOV 선정 사회자 지정 예약 시",
-    href: "/contest",
-    external: false,
-    color: "#d4b896",
-  },
-  {
-    icon: Coins,
-    label: "NAVER POINT",
-    title: "네이버 포인트 지급",
-    desc: "상담 후기 작성 시",
-    href: KAKAO_LINK,
-    external: true,
-    color: "#c09a7e",
-  },
+// 상단에 먼저 보여주는 대표 혜택 4가지 (금액이 명시된 항목)
+const HIGHLIGHT_TITLES = [
+  "두 사람만의 스토리를 담은 감성 맞춤 대본 제작",
+  "지정 사회자와 사전 통화 & 식순 협의",
+  "모바일 청첩장 제작",
+  "프리미엄 식전영상 제작 지원",
 ];
+const ALL_ITEMS = BENEFIT_GROUPS.flatMap((g) => g.items.map((it) => ({ ...it, group: g })));
+const HIGHLIGHTS = HIGHLIGHT_TITLES.map((t) => ALL_ITEMS.find((it) => it.t === t)!).filter(Boolean);
+const REST_GROUPS = BENEFIT_GROUPS.map((g) => ({
+  ...g,
+  items: g.items.filter((it) => !HIGHLIGHT_TITLES.includes(it.t)),
+})).filter((g) => g.items.length > 0);
+const REST_COUNT = REST_GROUPS.reduce((n, g) => n + g.items.length, 0);
 
-// 완성형 웨딩 패키지 등급 (GRAND → PRESTIGE → CLASSIC → ESSENTIAL)
-// 주의: "SIGNATURE"는 사회자 최상위 등급명(McSection)으로 별도 사용 중이므로 패키지 쪽엔 쓰지 않음
-const PACKAGE_TIERS = [
-  {
-    key: "GRAND",
-    icon: Crown,
-    label: "GRAND",
-    badge: "가장 완성도 높은 선택",
-    name: "프리미엄 콜렉트",
-    rows: [{ n: "뮤지컬 4인(5곡) + 피아노 독주 + 주례없는 사회", p: "950,000원" }],
-    color: "#cba55f",
-    featured: true,
-  },
-  {
-    key: "PRESTIGE",
-    icon: Sparkles,
-    label: "PRESTIGE",
-    badge: "고급형",
-    name: "프레스티지",
-    rows: [{ n: "뮤지컬 4인(3곡) + 주례없는 사회", p: "680,000원" }],
-    color: "#5BB5A2",
-    featured: false,
-  },
-  {
-    key: "CLASSIC",
-    icon: Music4,
-    label: "CLASSIC",
-    badge: "스탠다드형",
-    name: "클래식",
-    rows: [
-      { n: "뮤지컬 2인(3곡) + 주례없는 사회", p: "450,000원" },
-      { n: "피아노 3중주 + 축가 + 주례없는 사회", p: "480,000원" },
-      { n: "재즈 3중주 + 축가 + 주례없는 사회", p: "520,000원" },
-    ],
-    color: "#c09a7e",
-    featured: false,
-  },
-  {
-    key: "ESSENTIAL",
-    icon: Gem,
-    label: "ESSENTIAL",
-    badge: "실속형",
-    name: "에센셜",
-    rows: [{ n: "축가 + 주례없는 사회", p: "260,000원" }],
-    color: "#999",
-    featured: false,
-  },
+// 추가 혜택 표
+const EXTRA_ROWS = [
+  { label: "상담 후기 작성 (네이버 · 숨고)", value: "2만원", href: EVENT_LINK, ext: true },
+  { label: "지인 코드번호 사용", value: "1만원", href: KAKAO_LINK, ext: true },
+  { label: "지난달 VOV 선정 사회자 지정", value: "1만원", href: "/contest", ext: false },
 ];
 
 export default function EventSection() {
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
   const anim3 = useScrollAnimation();
-  const anim4 = useScrollAnimation();
-  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [showRest, setShowRest] = useState(false);
 
   return (
-    <section id="event" className="bg-white py-20 sm:py-28 lg:py-32">
+    <section id="event" className="relative bg-[#f8f6f3] pb-20 sm:pb-28">
       <div className="max-w-5xl mx-auto px-5 sm:px-6">
-        {/* Header */}
-        <div ref={anim1.ref} className={`fade-up ${anim1.isVisible ? "visible" : ""} text-center mb-10 sm:mb-14`}>
-          <span
-            className="text-[#a8814f] text-[11px] sm:text-[13px] font-semibold tracking-[0.22em] uppercase"
-            style={{ fontFamily: "'Cormorant Garamond', serif" }}
-          >
-            SPECIAL BENEFITS
-          </span>
-          <h2
-            className="mt-3 text-[#1a1a1a] text-[23px] min-[375px]:text-[26px] sm:text-3xl md:text-4xl break-keep leading-[1.35]"
-            style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-          >
-            <span className="whitespace-nowrap">이너스뮤직</span>{" "}
-            <span className="text-[#2f8b78] whitespace-nowrap">특별 이벤트</span>
-          </h2>
-
-          <div
-            className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 mt-5 px-4 py-2.5 rounded-full"
-            style={{ background: "rgba(91,181,162,0.09)", border: "1px solid rgba(91,181,162,0.32)" }}
-          >
-            <Gift size={14} className="text-[#3f9d8a] flex-shrink-0" />
-            <span className="text-[#2f8b78] text-[12.5px] sm:text-[14px] font-bold break-keep whitespace-nowrap">
-              예약 하나로, 준비할 게 없어집니다
-            </span>
-          </div>
-
-          <div className="mt-4 mx-auto max-w-[22rem] min-[375px]:max-w-[25rem] sm:max-w-2xl">
-            <div
-              className="px-4 py-4 sm:px-7 sm:py-5 rounded-xl text-center"
-              style={{
-                background: "linear-gradient(135deg, rgba(31,107,88,0.09) 0%, rgba(212,184,150,0.15) 100%)",
-                border: "1.5px solid rgba(31,107,88,0.36)",
-                boxShadow: "0 6px 22px rgba(31,107,88,0.14)",
-              }}
-            >
-              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
-                {[
-                  { icon: FileText, t: "맞춤 대본" },
-                  { icon: Music4, t: "음원 편집기" },
-                  { icon: Smartphone, t: "모바일 청첩장" },
-                  { icon: Video, t: "식전영상" },
-                ].map((it) => (
-                  <span
-                    key={it.t}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white"
-                    style={{ border: "1px solid rgba(31,107,88,0.26)" }}
-                  >
-                    <it.icon size={13} className="text-[#1f6b58] flex-shrink-0" />
-                    <span className="text-[#1a1a1a] text-[11.5px] sm:text-[13px] font-bold whitespace-nowrap">
-                      {it.t}
-                    </span>
-                  </span>
-                ))}
-              </div>
-
-              <p
-                className="mt-3.5 sm:mt-4 text-[16.5px] min-[375px]:text-[18px] sm:text-[21px] leading-snug break-keep"
-                style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 800 }}
-              >
-                <span
-                  className="whitespace-nowrap"
-                  style={{
-                    backgroundImage: "linear-gradient(180deg, transparent 62%, rgba(212,184,150,0.78) 62%)",
-                    color: "#14453a",
-                    padding: "0 4px",
-                  }}
-                >
-                  27만원 상당 혜택
-                </span>{" "}
-                <span className="text-[#2b241a] whitespace-nowrap">전부 비용 없이 포함됩니다</span>
-              </p>
-            </div>
-          </div>
-
-          <p className="mt-4 text-[#5a5a5a] text-[13.5px] sm:text-base leading-[1.75] break-keep max-w-[17.5rem] min-[375px]:max-w-[20rem] sm:max-w-none mx-auto">
-            <span className="whitespace-nowrap">사회자 예약만 하셔도</span>{" "}
-            <span className="whitespace-nowrap">아래 혜택이 함께 준비되고,</span>
-            <br className="sm:hidden" />
-            <span className="whitespace-nowrap">여기에 최대 4만원까지</span>{" "}
-            <span className="whitespace-nowrap">추가 할인됩니다.</span>
-          </p>
+        {/* 가격표에 이어지는 혜택 — 구분선 */}
+        <div className="mx-auto mb-10 sm:mb-12 flex items-center justify-center gap-3">
+          <span className="h-px w-16 bg-[#d4b896]/60" />
+          <span className="w-1.5 h-1.5 rotate-45 bg-[#d4b896]" />
+          <span className="h-px w-16 bg-[#d4b896]/60" />
         </div>
 
-        {/* 안심 보장 3종 */}
-        <div ref={anim2.ref} className={`fade-up ${anim2.isVisible ? "visible" : ""}`}>
+        {/* 1. 예약 혜택 요약 카드 */}
+        <div ref={anim1.ref} className={`fade-up ${anim1.isVisible ? "visible" : ""} mx-auto max-w-2xl`}>
           <div
-            className="relative overflow-hidden rounded-xl p-6 sm:p-8 mb-4 sm:mb-5"
+            className="px-5 py-7 sm:px-9 sm:py-9 rounded-xl text-center"
             style={{
-              background: "linear-gradient(135deg, #1f2422 0%, #14211d 55%, #1a1a1a 100%)",
-              border: "1px solid rgba(212,184,150,0.28)",
+              background: "linear-gradient(160deg,#181512,#0f0f0f)",
+              border: "1px solid rgba(212,184,150,0.55)",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.18)",
             }}
           >
-            <div
-              className="absolute -top-16 -right-16 w-56 h-56 rounded-full pointer-events-none"
-              style={{ background: "radial-gradient(circle, rgba(91,181,162,0.18) 0%, transparent 70%)" }}
-            />
-            <div className="relative">
-              <div
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-5"
-                style={{ background: "rgba(212,184,150,0.14)", border: "1px solid rgba(212,184,150,0.4)" }}
-              >
-                <ShieldCheck size={12} className="text-[#d4b896]" />
-                <span className="text-[#d4b896] text-[10px] sm:text-[11px] font-bold tracking-[0.12em]">
-                  이너스 안심 보장
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                {/* 계약금 100% 환불 */}
-                <div
-                  className="rounded-xl p-5 sm:p-6"
-                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(212,184,150,0.32)" }}
-                >
-                  <div className="flex items-center gap-2.5 mb-3.5">
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ background: "rgba(212,184,150,0.16)" }}
-                    >
-                      <ShieldCheck size={18} className="text-[#d4b896]" />
-                    </div>
-                    <span className="text-[#d4b896] text-[10px] sm:text-[11px] font-bold tracking-[0.14em]">
-                      GUARANTEE
-                    </span>
-                  </div>
-                  <h3
-                    className="text-white text-[20px] min-[375px]:text-[22px] sm:text-[25px] leading-snug break-keep mb-2"
-                    style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-                  >
-                    계약금 <span className="text-[#d4b896]">100% 환불</span>
-                  </h3>
-                  <p className="text-white/60 text-[12.5px] sm:text-sm leading-relaxed break-keep mb-3.5">
-                    예식 전주까지 취소 시 위약금 없이 전액 반환
-                  </p>
-                  <div
-                    className="rounded-lg px-3 py-2"
-                    style={{ background: "rgba(91,181,162,0.1)", border: "1px solid rgba(91,181,162,0.3)" }}
-                  >
-                    <p className="text-[11px] sm:text-[11.5px] leading-relaxed break-keep">
-                      <span className="text-white/40">업계 평균 계약 후 7일 이내</span>{" "}
-                      <span className="text-white/40">→</span>{" "}
-                      <span className="text-[#5BB5A2] font-bold">이너스뮤직은 예식 전주까지</span>
-                    </p>
-                  </div>
-                </div>
-
-                {/* 사회자 18인 전원 공개 */}
-                <div
-                  className="rounded-xl p-5 sm:p-6"
-                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(91,181,162,0.32)" }}
-                >
-                  <div className="flex items-center gap-2.5 mb-3.5">
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ background: "rgba(91,181,162,0.16)" }}
-                    >
-                      <Mic2 size={18} className="text-[#5BB5A2]" />
-                    </div>
-                    <span className="text-[#5BB5A2] text-[10px] sm:text-[11px] font-bold tracking-[0.14em]">
-                      TRANSPARENCY
-                    </span>
-                  </div>
-                  <h3
-                    className="text-white text-[20px] min-[375px]:text-[22px] sm:text-[25px] leading-snug break-keep mb-2"
-                    style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-                  >
-                    <span className="text-[#d4b896]">사회자 18인</span> 전원 공개
-                  </h3>
-                  <p className="text-white/60 text-[12.5px] sm:text-sm leading-relaxed break-keep mb-3.5">
-                    목소리 · 진행 영상까지 예약 전에 직접 확인
-                  </p>
-                  <a
-                    href="#mc"
-                    className="group inline-flex items-center gap-1 text-[#5BB5A2] text-[11.5px] sm:text-[12.5px] font-bold hover:text-[#7cc9b8] transition-colors"
-                  >
-                    전체 사회자 보러가기
-                    <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-[2px]" />
-                  </a>
-                </div>
-              </div>
-
-              {/* 주말 예약현황 공개 (보조 배지) */}
-              <div
-                className="mt-3 sm:mt-4 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-center"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
-              >
-                <MapPin size={13} className="text-white/50 flex-shrink-0" />
-                <span className="text-white/55 text-[11.5px] sm:text-[12.5px] break-keep">
-                  주말 예약현황도 투명하게 공개 · 서울 · 경기 · 인천 진행 (지역에 따라 출장비 별도)
-                </span>
-              </div>
-            </div>
+            <span
+              className="text-[#d4b896] text-[11px] sm:text-[12px] tracking-[0.28em]"
+              style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
+            >
+              WITH YOUR RESERVATION
+            </span>
+            <p
+              className="mt-3 text-white text-[19px] sm:text-[25px] leading-snug break-keep"
+              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+            >
+              사회자 예약과 함께{" "}
+              <span className="text-[#e0c188] whitespace-nowrap">27만원 상당</span>의 구성이
+              <br className="hidden sm:block" />{" "}
+              <span className="whitespace-nowrap">함께 준비됩니다</span>
+            </p>
+            <p className="mt-3 text-white/45 text-[11px] sm:text-xs break-keep">
+              항목별 상당 금액의 합 · 총 {ALL_ITEMS.length}가지
+            </p>
           </div>
+        </div>
 
-          {/* 혜택 카테고리 4종 */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-            {BENEFIT_GROUPS.map((g) => (
+        {/* 2. 대표 혜택 4가지 */}
+        <div ref={anim2.ref} className={`fade-up ${anim2.isVisible ? "visible" : ""} mt-4 sm:mt-5`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            {HIGHLIGHTS.map((it) => (
               <div
-                key={g.title}
-                className="rounded-xl p-5 sm:p-6"
-                style={{ background: "#faf9f7", border: "1px solid #ececec" }}
+                key={it.t}
+                className="rounded-xl p-5 bg-white"
+                style={{ border: "1px solid rgba(212,184,150,0.45)", boxShadow: "0 2px 12px rgba(0,0,0,0.03)" }}
               >
-                <div className="flex items-center gap-2.5 mb-3">
-                  <div
-                    className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ background: `${g.color}1f` }}
-                  >
-                    <g.icon size={17} style={{ color: g.color }} />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="block text-[10px] font-bold tracking-[0.16em]" style={{ color: g.color }}>
-                      {g.label}
-                    </span>
-                    <h3
-                      className="text-[#1a1a1a] text-[15px] sm:text-base font-bold break-keep"
-                      style={{ fontFamily: "'Noto Serif KR', serif" }}
-                    >
-                      {g.title}
-                    </h3>
-                  </div>
-                  <span className="flex-shrink-0 text-[#aaa] text-[11px] font-semibold">{g.items.length}가지</span>
-                </div>
-
-                <div className="space-y-1.5">
-                  {g.items.map((it) => (
-                    <div key={it.t} className="flex items-start gap-2">
-                      <Check size={14} className="text-[#5BB5A2] flex-shrink-0 mt-[3px]" />
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[#2a2a2a] text-[13px] sm:text-sm font-semibold break-keep leading-[1.5]">
-                          {it.t}
-                        </p>
-                        {openGroup === g.title && (
-                          <p className="text-[#888] text-[11.5px] sm:text-xs mt-0.5 leading-relaxed break-keep">
-                            {it.d}
-                          </p>
-                        )}
-                        {"href" in it && it.href && (
-                          <a
-                            href={it.href as string}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group inline-flex items-center gap-1 mt-1 text-[11.5px] sm:text-xs font-bold text-[#3f9d8a] hover:text-[#2f8b78] transition-colors"
-                          >
-                            지금 바로 사용해보기
-                            <ExternalLink size={11} className="transition-transform duration-300 group-hover:translate-x-[2px]" />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setOpenGroup(openGroup === g.title ? null : g.title)}
-                  className="mt-3 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#999] hover:text-[#666] transition-colors"
+                <span
+                  className="block text-[#a8814f] text-[12px] sm:text-[13px] font-bold tracking-wide"
+                  style={{ fontFamily: "'Noto Serif KR', serif" }}
                 >
-                  {openGroup === g.title ? "설명 접기" : "자세히 보기"}
-                  <ChevronDown
-                    size={13}
-                    className={`transition-transform duration-300 ${openGroup === g.title ? "rotate-180" : ""}`}
-                  />
-                </button>
+                  {it.w}
+                </span>
+                <p
+                  className="mt-1.5 text-[#1a1a1a] text-[15px] sm:text-[16px] font-bold break-keep leading-snug"
+                  style={{ fontFamily: "'Noto Serif KR', serif" }}
+                >
+                  {it.t}
+                </p>
+                <p className="mt-1.5 text-[#777] text-[12px] sm:text-[13px] break-keep leading-relaxed">{it.d}</p>
+                {"href" in it && it.href && (
+                  <a
+                    href={it.href as string}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-1 mt-2 text-[12px] font-bold text-[#2f8b78] hover:text-[#23705f] transition-colors"
+                  >
+                    미리 사용해보기
+                    <ExternalLink size={11} className="transition-transform duration-300 group-hover:translate-x-[2px]" />
+                  </a>
+                )}
               </div>
             ))}
           </div>
-        </div>
 
-        {/* 완성형 웨딩 패키지 */}
-        <div ref={anim3.ref} className={`fade-up ${anim3.isVisible ? "visible" : ""} mt-10 sm:mt-16 pt-8 sm:pt-10 border-t border-[#eee]`}>
-          <div className="text-center mb-6 sm:mb-8">
-            <span className="block text-[#c09a7e] text-[10px] sm:text-[11px] font-bold tracking-[0.2em] mb-2">
-              INNERS MUSIC PACKAGES
-            </span>
-            <h3
-              className="text-[#1a1a1a] text-[20px] sm:text-[26px] leading-snug break-keep"
-              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={() => setShowRest((v) => !v)}
+              aria-expanded={showRest}
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-[13px] font-semibold text-[#555] bg-white hover:bg-[#fbf7f2] transition-colors"
+              style={{ border: "1px solid #ddd" }}
             >
-              완성형 <span className="text-[#5BB5A2]">웨딩 패키지</span>
-            </h3>
-            <p className="mt-2.5 text-[#777] text-[12px] sm:text-sm leading-relaxed break-keep">
-              등급 상관없이 원하는 사회자 또는 아티스트 지정 가능 · 같은 팀이 사전에 호흡을 맞춰 예식이 매끄럽습니다
-            </p>
-            <p className="mt-1.5 text-[#a8814f] text-[11px] sm:text-xs leading-relaxed break-keep">
-              ※ 시그니처 등급 사회자 지정 시 추가 비용이 발생합니다
-            </p>
+              {showRest ? "나머지 구성 접기" : `나머지 ${REST_COUNT}가지 구성 보기`}
+              <ChevronDown size={15} className={`transition-transform duration-300 ${showRest ? "rotate-180" : ""}`} />
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-            {PACKAGE_TIERS.map((tier) => (
-              <div
-                key={tier.key}
-                className={`relative rounded-xl overflow-hidden ${tier.featured ? "sm:col-span-2" : ""}`}
-                style={
-                  tier.featured
-                    ? { background: "#1a1a1a", border: "2px solid #cba55f", boxShadow: "0 8px 28px rgba(203,165,95,0.25)" }
-                    : { background: "#fff", border: "1px solid rgba(212,184,150,0.4)", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }
-                }
-              >
-                <div className={`p-5 sm:p-7 ${tier.featured ? "sm:flex sm:items-center sm:gap-8" : ""}`}>
-                  <div className={tier.featured ? "sm:flex-1 min-w-0" : ""}>
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <div
-                        className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{ background: tier.featured ? "rgba(203,165,95,0.18)" : `${tier.color}1f` }}
-                      >
-                        <tier.icon size={16} style={{ color: tier.featured ? "#e0c188" : tier.color }} />
-                      </div>
-                      <span
-                        className="text-[10px] sm:text-[11px] font-bold tracking-[0.16em]"
-                        style={{ color: tier.featured ? "#e0c188" : tier.color }}
-                      >
-                        {tier.label}
-                      </span>
-                      <span
-                        className="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-full"
-                        style={
-                          tier.featured
-                            ? { background: "rgba(203,165,95,0.18)", color: "#e0c188" }
-                            : { background: "#f5f2ee", color: "#999" }
-                        }
-                      >
-                        {tier.badge}
-                      </span>
+          {showRest && (
+            <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+              {REST_GROUPS.map((g) => (
+                <div key={g.title} className="rounded-xl p-5 bg-white" style={{ border: "1px solid #ececec" }}>
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: `${g.color}1f` }}>
+                      <g.icon size={16} style={{ color: g.color }} />
                     </div>
-                    <h4
-                      className={`${tier.featured ? "text-white" : "text-[#1a1a1a]"} text-[17px] sm:text-[19px] font-bold break-keep`}
-                      style={{ fontFamily: "'Noto Serif KR', serif" }}
-                    >
-                      {tier.name}
-                    </h4>
+                    <h3 className="text-[#1a1a1a] text-[15px] font-bold break-keep flex-1" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+                      {g.title}
+                    </h3>
+                    <span className="text-[#aaa] text-[11px] font-semibold">{g.items.length}가지</span>
                   </div>
-
-                  <div className={`mt-3.5 rounded-lg overflow-hidden ${tier.featured ? "sm:mt-0 sm:flex-1" : ""}`} style={{ border: tier.featured ? "1px solid rgba(203,165,95,0.35)" : "1px solid rgba(212,184,150,0.35)" }}>
-                    {tier.rows.map((r, i) => (
-                      <div
-                        key={r.n}
-                        className="flex items-center justify-between gap-3 px-3 py-2.5 sm:px-4"
-                        style={{
-                          background: tier.featured
-                            ? i % 2 === 0 ? "rgba(255,255,255,0.04)" : "transparent"
-                            : i % 2 === 0 ? "rgba(212,184,150,0.08)" : "#fff",
-                          borderTop: i === 0 ? "none" : tier.featured ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(212,184,150,0.3)",
-                        }}
-                      >
-                        <span
-                          className={`${tier.featured ? "text-[#e8e8e8]" : "text-[#3a3a3a]"} text-[12px] sm:text-[13px] leading-snug break-keep font-medium`}
-                        >
-                          {r.n}
-                        </span>
-                        <span
-                          className="text-[14px] sm:text-[15px] font-bold whitespace-nowrap flex-shrink-0"
-                          style={{ color: tier.featured ? "#e0c188" : "#5BB5A2" }}
-                        >
-                          {r.p}
-                        </span>
+                  <div className="space-y-2">
+                    {g.items.map((it) => (
+                      <div key={it.t} className="flex items-start gap-2">
+                        <Check size={14} className="text-[#c09a7e] flex-shrink-0 mt-[3px]" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[#2a2a2a] text-[13px] font-semibold break-keep leading-[1.5]">
+                            {it.t}
+                            {it.w !== "포함" && <span className="ml-1.5 text-[#a8814f] text-[11px] font-bold whitespace-nowrap">{it.w}</span>}
+                          </p>
+                          <p className="text-[#888] text-[11.5px] mt-0.5 leading-relaxed break-keep">{it.d}</p>
+                          {"href" in it && it.href && (
+                            <a
+                              href={it.href as string}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 mt-1 text-[11.5px] font-bold text-[#2f8b78] hover:text-[#23705f]"
+                            >
+                              미리 사용해보기 <ExternalLink size={11} />
+                            </a>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a
-              href={PACKAGE_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center justify-center gap-1.5 w-full sm:w-auto rounded-lg px-5 py-3.5 text-[13px] sm:text-sm font-bold text-[#555] transition-all duration-300 hover:-translate-y-[2px]"
-              style={{ background: "#fff", border: "1px solid #ddd" }}
-            >
-              <span className="whitespace-nowrap">더 자세한 패키지 보기</span>
-              <ExternalLink size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-            </a>
-            <a
-              href={KAKAO_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center justify-center gap-1.5 w-full sm:w-auto rounded-lg px-5 py-3.5 text-[13px] sm:text-sm font-bold transition-all duration-300 hover:-translate-y-[2px]"
-              style={{
-                background: "linear-gradient(135deg,#e0c188,#cba55f)",
-                color: "#1a1a1a",
-                boxShadow: "0 6px 18px rgba(203,165,95,0.28)",
-              }}
-            >
-              <span className="whitespace-nowrap">패키지 문의하기</span>
-              <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-            </a>
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* 중복 적용 가능한 할인 */}
-        <div ref={anim4.ref} className={`fade-up ${anim4.isVisible ? "visible" : ""} mt-10 sm:mt-16 pt-8 sm:pt-10 border-t border-[#eee]`}>
+        {/* 3. 추가 혜택 표 */}
+        <div ref={anim3.ref} className={`fade-up ${anim3.isVisible ? "visible" : ""} mt-12 sm:mt-16`}>
           <div className="text-center mb-5">
-            <h3
-              className="text-[#1a1a1a] text-[17px] sm:text-xl break-keep"
-              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-            >
-              중복 적용되는 혜택 <span className="text-[#c09a7e]">4가지 · 할인 최대 4만원 + 포인트</span>
+            <h3 className="text-[#1a1a1a] text-[18px] sm:text-[22px] break-keep" style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}>
+              추가 혜택 · <span className="text-[#a8814f]">최대 4만원</span>
             </h3>
-            <p className="mt-2.5 text-[#6b6b6b] text-[12px] sm:text-[13px] leading-[1.75] break-keep max-w-[19rem] sm:max-w-lg mx-auto">
-              <span className="whitespace-nowrap">기본 할인은</span>{" "}
-              <span className="whitespace-nowrap">후기 2만원 + 지인 코드 1만원이고,</span>
-              <br className="sm:hidden" />
-              <span className="whitespace-nowrap">여기에 <span className="font-bold text-[#2f8b78]">VOV 선정 사회자</span>를</span>{" "}
-              <span className="whitespace-nowrap">지정하시면 1만원이 추가되어</span>{" "}
-              <span className="whitespace-nowrap">최대 4만원까지 할인됩니다.</span>
-              <br />
-              <span className="text-[11px] text-[#999]">(SIGNATURE 등급은 VOV 할인 제외, 최대 3만원)</span>
-            </p>
+            <p className="mt-2 text-[#777] text-[12px] sm:text-[13px] break-keep">조건에 해당하면 중복 적용됩니다</p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-4">
-            {DISCOUNTS.map((e) => (
+          <div className="mx-auto max-w-2xl rounded-xl overflow-hidden bg-white" style={{ border: "1px solid rgba(212,184,150,0.5)" }}>
+            {EXTRA_ROWS.map((r) => (
               <a
-                key={e.label}
-                href={e.href}
-                {...(e.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="group rounded-xl p-3.5 sm:p-5 transition-all duration-300 hover:-translate-y-[2px] active:scale-[0.99]"
-                style={{ background: "#fff", border: `1px solid ${e.color}55`, boxShadow: "0 2px 10px rgba(0,0,0,0.03)" }}
+                key={r.label}
+                href={r.href}
+                {...(r.ext ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4 hover:bg-[#fbf7f2] transition-colors"
+                style={{ borderBottom: "1px solid #f0ece7" }}
               >
-                <div className="flex items-center gap-2 mb-1.5">
-                  <div
-                    className="w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ background: `${e.color}1f` }}
-                  >
-                    <e.icon size={15} style={{ color: e.color }} />
-                  </div>
-                  <span className="text-[8.5px] sm:text-[9.5px] font-bold tracking-[0.1em] leading-tight" style={{ color: e.color }}>
-                    {e.label}
+                <span className="text-[#2a2a2a] text-[13.5px] sm:text-[15px] break-keep">{r.label}</span>
+                <span className="flex items-center gap-1.5 flex-shrink-0">
+                  <span className="text-[#a8814f] text-[15px] sm:text-[17px] font-bold whitespace-nowrap" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                    -{r.value}
                   </span>
-                </div>
-                <p
-                  className="text-[#1a1a1a] text-[13.5px] sm:text-[15px] font-bold break-keep leading-snug"
-                  style={{ fontFamily: "'Noto Serif KR', serif" }}
-                >
-                  {e.title}
-                </p>
-                <p className="text-[#888] text-[11px] sm:text-xs mt-0.5 leading-snug break-keep">{e.desc}</p>
+                  <ArrowRight size={13} className="text-[#bbb]" />
+                </span>
               </a>
             ))}
+            <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4" style={{ borderBottom: "1px solid #f0ece7" }}>
+              <span className="text-[#2a2a2a] text-[13.5px] sm:text-[15px] break-keep">후기 작성 시 네이버 포인트 지급</span>
+              <span className="text-[#777] text-[12px] sm:text-[13px] whitespace-nowrap">별도</span>
+            </div>
+            <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-4" style={{ background: "#181512" }}>
+              <span className="text-white/85 text-[13px] sm:text-[14px] break-keep">
+                할인 합계
+                <span className="block text-white/40 text-[10.5px] sm:text-[11px] mt-0.5">시그니처 등급은 VOV 할인 제외 · 최대 3만원</span>
+              </span>
+              <span className="text-[#e0c188] text-[20px] sm:text-[24px] font-bold whitespace-nowrap" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                최대 -4만원
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4" style={{ background: "#fbf7f2" }}>
+              <span className="text-[#2a2a2a] text-[13.5px] sm:text-[15px] break-keep font-semibold">상담 당일 계약 시</span>
+              <span className="text-[#a8814f] text-[15px] sm:text-[17px] font-bold whitespace-nowrap" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                추가 -1만원
+              </span>
+            </div>
           </div>
-
-          <p className="text-center text-[#999] text-[11px] sm:text-xs mt-5 break-keep leading-relaxed">
-            <span className="whitespace-nowrap">할인 혜택은 중복 적용이 가능합니다.</span>
-            <br className="sm:hidden" />{" "}
-            <span className="whitespace-nowrap">자세한 내용은 상담 시 안내드립니다.</span>
+          <p className="mt-4 text-center text-[#999] text-[11px] sm:text-xs break-keep leading-relaxed">
+            당일 계약 할인은 위 최대 4만원과 별도로 안내됩니다 · 적용 방식은 상담 시 확인
           </p>
         </div>
+
+        <QuoteCalculator />
       </div>
     </section>
   );

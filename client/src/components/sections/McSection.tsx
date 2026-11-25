@@ -524,6 +524,7 @@ export default function McSection() {
   const [activeFilter, setActiveFilter] = useState("전체");
   const [filteredMcs, setFilteredMcs] = useState(MCS);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: "center",
@@ -580,6 +581,11 @@ export default function McSection() {
     }
   }, [filteredMcs, emblaApi]);
 
+  // 기본 노출 6명 · 스타일 필터 선택 시 해당 스타일 전원 · "전체 보기"로 12인 전원
+  const COLLAPSED_COUNT = 6;
+  const canCollapse = activeFilter === "전체" && filteredMcs.length > COLLAPSED_COUNT;
+  const visibleMcs = canCollapse && !expanded ? filteredMcs.slice(0, COLLAPSED_COUNT) : filteredMcs;
+
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
@@ -601,7 +607,7 @@ export default function McSection() {
 
   return (
     <>
-      <section id="mc" className="bg-[#0d0d0d] pt-16 pb-24 sm:pt-24 sm:pb-32 lg:pt-32 lg:pb-40 overflow-hidden">
+      <section id="mc" className="bg-[#0d0d0d] pt-16 pb-14 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div ref={anim1.ref} className={`text-center mb-12 sm:mb-16 fade-up ${anim1.isVisible ? "visible" : ""}`}>
@@ -726,7 +732,7 @@ export default function McSection() {
 
           {/* Grid Layout */}
           <div className="flex flex-wrap justify-start lg:justify-center gap-4 sm:gap-6">
-            {filteredMcs.map((mc, mcIndex) => (
+            {visibleMcs.map((mc, mcIndex) => (
               <div
                 key={mc.name}
                 className="group relative bg-[#161616] rounded-sm transition-all duration-500 cursor-pointer flex flex-col hover:-translate-y-1 w-[calc(50%-8px)] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
@@ -762,7 +768,7 @@ export default function McSection() {
                 }}
               >
                 {/* Profile Image */}
-                <div className="relative" style={{ height: "320px", overflow: "visible" }}>
+                <div className="relative h-[250px] sm:h-[320px]" style={{ overflow: "visible" }}>
                   {/* 이미지 클립 컨테이너 */}
                   <div className="absolute inset-0 overflow-hidden rounded-t-sm">
                     {mc.image ? (
@@ -1020,6 +1026,38 @@ export default function McSection() {
               </div>
             ))}
           </div>
+
+          {canCollapse && (
+            <div className="flex justify-center mt-7 sm:mt-9">
+              <button
+                type="button"
+                onClick={() => setExpanded((v) => !v)}
+                aria-expanded={expanded}
+                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-7 text-[13px] sm:text-sm transition-colors duration-300 hover:bg-[#d4b896]/10"
+                style={{
+                  fontFamily: "'Noto Sans KR', sans-serif",
+                  border: "1px solid rgba(212,184,150,0.45)",
+                  color: "#d4b896",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                {expanded
+                  ? "사회자 접기"
+                  : `나머지 ${filteredMcs.length - COLLAPSED_COUNT}인 전원 보기`}
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  className={`transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+            </div>
+          )}
 
         </div>
       </section>

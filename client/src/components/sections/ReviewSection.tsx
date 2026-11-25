@@ -4,14 +4,12 @@
  * Auto-sliding image carousel with smooth transitions
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { ExternalLink, ChevronLeft, ChevronRight, MessageSquare } from "lucide-react";
+import { ExternalLink, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import {
   PROOF_IMAGES,
   PROOF_AS_OF,
   PROOF_TOTAL,
-  PROOF_TOTAL_DISPLAY,
-  PROOF_TOTAL_DISPLAY_KO,
 } from "@/data/reviewStats";
 
 const REVIEW_IMAGES = [
@@ -25,6 +23,7 @@ const REVIEW_IMAGES = [
 ];
 
 const GOLD = "#d4b896";
+const maxCount = Math.max(...PROOF_IMAGES.map((p) => p.count));
 
 // 네이버 블로그 후기 원문 발췌 — 아이디 마스킹, 본문 일부만 노출, 원문 링크 제공
 const BLOG_REVIEWS = [
@@ -68,6 +67,7 @@ export default function ReviewSection() {
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showProof, setShowProof] = useState(false);
   const [lightbox, setLightbox] = useState<(typeof PROOF_IMAGES)[number] | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const touchStartX = useRef(0);
@@ -115,7 +115,7 @@ export default function ReviewSection() {
   };
 
   return (
-    <section id="review" className="relative bg-[#1a1a1a] py-24 sm:py-32 lg:py-40 overflow-hidden">
+    <section id="review" className="relative bg-[#1a1a1a] py-16 sm:py-20 lg:py-24 overflow-hidden">
       {/* Subtle background pattern — gold only */}
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -129,17 +129,8 @@ export default function ReviewSection() {
         {/* Header */}
         <div
           ref={anim1.ref}
-          className={`text-center mb-14 sm:mb-16 fade-up ${anim1.isVisible ? "visible" : ""}`}
+          className={`text-center mb-10 sm:mb-14 fade-up ${anim1.isVisible ? "visible" : ""}`}
         >
-          {/* Icon badge — gold */}
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full mb-5"
-            style={{
-              background: "rgba(212,184,150,0.10)",
-              border: "1px solid rgba(212,184,150,0.25)",
-            }}>
-            <MessageSquare size={20} style={{ color: GOLD }} />
-          </div>
-
           <span
             className="block text-[#d4b896] text-xs sm:text-sm tracking-[0.3em] uppercase mb-4"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
@@ -152,154 +143,45 @@ export default function ReviewSection() {
           >
             고객님들의 <span style={{ color: GOLD }}>생생한 후기</span>
           </h2>
-          <p className="mt-3 text-sm sm:text-base font-medium break-keep" style={{ color: GOLD }}>
-            업계 최다 수준의 실제 후기, 이너스뮤직이 증명합니다
-          </p>
-          <div className="flex items-center justify-center gap-2 mt-3">
+
+          {/* 합계 */}
+          <div className="mt-8 flex items-baseline justify-center gap-1.5">
             <span
-              className="inline-flex items-center px-4 py-1.5 rounded-full text-sm sm:text-base font-bold tracking-wide"
-              style={{
-                background: "rgba(212,184,150,0.16)",
-                border: "1px solid rgba(212,184,150,0.55)",
-                color: GOLD,
-                boxShadow: "0 0 16px rgba(212,184,150,0.25)",
-              }}
+              style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, fontSize: "clamp(3.4rem,13vw,5rem)", color: GOLD, lineHeight: 1 }}
             >
-              {PROOF_TOTAL_DISPLAY_KO} 후기
+              {PROOF_TOTAL.toLocaleString()}
             </span>
+            <span className="text-white/70 text-base sm:text-lg">건</span>
           </div>
-          <p className="mt-4 text-white/50 text-sm sm:text-base max-w-sm mx-auto leading-relaxed break-keep">
-            실제 예식을 진행하신 신랑, 신부님의<br className="hidden sm:block" /> 카카오톡, 문자, 블로그·카페 후기입니다
-          </p>
-          <p className="mt-2 text-white/35 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed break-keep">
-            숨고·후기게시판·스마트스토어·블로그·카페 등 모든 플랫폼 후기를 합산하면
-            <br className="sm:hidden" />
-            {" "}{PROOF_TOTAL_DISPLAY_KO} 이상 (사회자 개별 후기 포함)
+          <p className="mt-2 text-white/45 text-xs sm:text-sm break-keep">
+            {PROOF_AS_OF} 기준 · 6개 채널 합산 · 채널별 원본 링크 공개
           </p>
 
-          {/* 증빙 자료 — 숨고/후기게시판/스마트스토어 (위) · 블로그(문자후기모음)/블로그(고객작성)/카페 (아래) */}
-          <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3 max-w-lg sm:max-w-2xl mx-auto">
-            {PROOF_IMAGES.map((img) => (
-              <div key={img.src} className="flex flex-col items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setLightbox(img)}
-                  className="group relative w-full rounded-lg overflow-hidden bg-[#161616] transition-transform duration-300 hover:scale-[1.03]"
-                  style={{ border: "1px solid rgba(212,184,150,0.3)" }}
-                >
-                  <img
-                    src={img.src}
-                    alt={img.alt}
-                    className="w-full h-24 sm:h-32 object-contain p-1.5"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-end justify-center pb-1.5">
-                    <span className="text-white/0 group-hover:text-white/90 text-[10px] transition-colors duration-300">
-                      크게보기
-                    </span>
-                  </div>
-                </button>
-                <div className="flex flex-col items-center gap-1">
-                  <span className="min-h-[30px] sm:min-h-0 flex items-center justify-center text-white/45 text-[10px] sm:text-xs tracking-wide break-keep text-center leading-tight">
-                    {img.label}
-                  </span>
+          {/* 출처별 막대 */}
+          <div className="mt-8 mx-auto max-w-xl text-left">
+            {[...PROOF_IMAGES].sort((a, b) => b.count - a.count).map((img) => (
+              <a
+                key={img.src}
+                href={img.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 py-1.5"
+              >
+                <span className="w-[6.2rem] sm:w-36 shrink-0 text-[12px] sm:text-[13px] text-white/60 group-hover:text-white/90 transition-colors break-keep leading-tight">
+                  {img.source}
+                </span>
+                <span className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.07)" }}>
                   <span
-                    className="text-xl sm:text-2xl font-bold tabular-nums leading-none tracking-tight"
-                    style={{ color: GOLD }}
-                  >
-                    {img.count.toLocaleString()}
-                    <span className="text-[11px] sm:text-xs font-medium text-white/45 ml-0.5">건</span>
-                  </span>
-                  <a
-                    href={img.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 mt-1.5 w-full px-2 py-2 rounded-md text-[12px] sm:text-[13px] font-bold tracking-wide transition-all duration-300 break-keep text-center"
-                    style={{
-                      color: "#1a1a1a",
-                      background: "linear-gradient(135deg, #d4b896, #c9a87a)",
-                      boxShadow: "0 2px 10px rgba(212,184,150,0.28)",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 16px rgba(212,184,150,0.5)";
-                      (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-1px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 2px 10px rgba(212,184,150,0.28)";
-                      (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
-                    }}
-                  >
-                    직접 확인
-                    <ExternalLink size={13} />
-                  </a>
-                </div>
-              </div>
+                    className="block h-full rounded-full"
+                    style={{ width: `${(img.count / maxCount) * 100}%`, background: "linear-gradient(to right, rgba(212,184,150,0.55), #d4b896)" }}
+                  />
+                </span>
+                <span className="w-12 shrink-0 text-right text-sm font-bold tabular-nums" style={{ color: GOLD }}>
+                  {img.count.toLocaleString()}
+                </span>
+                <ExternalLink size={12} className="shrink-0 text-white/25 group-hover:text-[#5BB5A2] transition-colors" />
+              </a>
             ))}
-          </div>
-
-          {/* 합산 근거 */}
-          <div
-            className="mt-6 mx-auto max-w-md rounded-lg py-5 px-5 sm:px-6"
-            style={{ background: "rgba(212,184,150,0.06)", border: "1px dashed rgba(212,184,150,0.35)" }}
-          >
-            {/* 합산식 */}
-            <p className="text-xs sm:text-sm text-white/55 tracking-wide break-keep leading-relaxed text-center">
-              {PROOF_IMAGES.map((p, i) => (
-                <span key={p.source}>
-                  {i > 0 && " + "}
-                  <span className="text-white/70">{p.count.toLocaleString()}</span>
-                </span>
-              ))}{" = "}
-              <span className="font-bold" style={{ color: GOLD, fontFamily: "'JetBrains Mono', monospace" }}>
-                {PROOF_TOTAL.toLocaleString()}건
-              </span>
-            </p>
-
-            <div className="my-3.5 mx-auto w-10 h-px" style={{ background: "rgba(212,184,150,0.25)" }} />
-
-            {/* 기준일 · 원본성 · 집계 원칙 — 칩 형태로 스캔하기 쉽게 */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5">
-              {[`${PROOF_AS_OF} 기준`, "문자·카톡 원본 그대로", "실제 이용 고객만 집계"].map((chip) => (
-                <span
-                  key={chip}
-                  className="text-[10.5px] sm:text-[11px] font-medium px-2.5 py-1 rounded-full whitespace-nowrap"
-                  style={{ background: "rgba(212,184,150,0.10)", color: "rgba(212,184,150,0.9)" }}
-                >
-                  {chip}
-                </span>
-              ))}
-            </div>
-
-            {/* CTA: 실시간 업데이트 안내 */}
-            <p className="mt-3.5 text-xs sm:text-[13px] font-medium text-white/70 break-keep leading-relaxed text-center">
-              후기는 계속 쌓이고 있어 <span className="font-bold text-white/95">지금은 더 많습니다.</span>
-              <br />
-              <span className="font-bold" style={{ color: GOLD }}>직접 확인</span>에서 실시간으로 보실 수 있습니다.
-            </p>
-          </div>
-
-          {/* 네이버 고객 게시물 안내 — 블로그/카페도 집계에 포함 (엄격 기준) */}
-          <div className="mt-5 flex flex-col items-center">
-            <p className="text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
-              고객님이 직접 작성한 블로그·카페 후기글 중<br />
-              <span className="font-bold" style={{ color: GOLD }}>"이너스뮤직"</span>이 정확히 언급된 글만
-              <br className="sm:hidden" />{" "}
-              엄격하게 집계했습니다.
-            </p>
-            <p className="mt-2.5 text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
-              저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>{PROOF_TOTAL_DISPLAY} 건</span>은
-              <br className="sm:hidden" />{" "}
-              전부 플랫폼에서
-              <br className="hidden sm:block" />{" "}
-              직접 확인 가능한 검증된 수치입니다.
-            </p>
-          </div>
-
-          {/* Decorative divider */}
-          <div className="flex items-center justify-center gap-3 mt-6">
-            <div className="w-12 h-px bg-[#d4b896]/30" />
-            <div className="w-1.5 h-1.5 rounded-full bg-[#d4b896]/50" />
-            <div className="w-12 h-px bg-[#d4b896]/30" />
           </div>
         </div>
 
@@ -508,14 +390,14 @@ export default function ReviewSection() {
           </div>
 
           {/* 후기 출처 안내 */}
-          <div className="mt-12 flex flex-col items-center gap-3">
+          <div className="mt-8 flex flex-col items-center gap-3">
             <p className="text-white/25 text-xs tracking-wider">
               카카오톡, 문자로 직접 받은 후기만 게재합니다
             </p>
           </div>
 
           {/* 네이버 블로그 후기 원문 발췌 카드 */}
-          <div className="mt-20 sm:mt-24">
+          <div className="mt-14 sm:mt-16">
             <div className="flex flex-col items-center mb-8 sm:mb-10">
               <span
                 className="text-[#d4b896] text-[11px] sm:text-xs tracking-[0.25em] uppercase mb-3"
@@ -535,7 +417,7 @@ export default function ReviewSection() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 max-w-4xl mx-auto">
-              {BLOG_REVIEWS.map((r) => (
+              {BLOG_REVIEWS.slice(0, showProof ? BLOG_REVIEWS.length : 2).map((r) => (
                 <div
                   key={r.url}
                   className="relative flex flex-col rounded-xl p-5 sm:p-6"
@@ -588,14 +470,145 @@ export default function ReviewSection() {
             </p>
           </div>
 
+          {/* 전체 증빙 펼치기 */}
+          <div className="mt-9 sm:mt-10 text-center">
+            <button
+              type="button"
+              onClick={() => setShowProof((v) => !v)}
+              aria-expanded={showProof}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-colors duration-300 hover:bg-white/5"
+              style={{ border: "1px solid rgba(212,184,150,0.4)", color: GOLD }}
+            >
+              {showProof ? "전체 후기·증빙 접기" : "전체 후기·증빙 펼치기"}
+              <ChevronDown size={16} className={`transition-transform duration-300 ${showProof ? "rotate-180" : ""}`} />
+            </button>
+          </div>
+
+          {showProof && (
+            <div className="mt-10 text-center">
+          {/* 증빙 자료 — 숨고/후기게시판/스마트스토어 (위) · 블로그(문자후기모음)/블로그(고객작성)/카페 (아래) */}
+          <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3 max-w-lg sm:max-w-2xl mx-auto">
+            {PROOF_IMAGES.map((img) => (
+              <div key={img.src} className="flex flex-col items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setLightbox(img)}
+                  className="group relative w-full rounded-lg overflow-hidden bg-[#161616] transition-transform duration-300 hover:scale-[1.03]"
+                  style={{ border: "1px solid rgba(212,184,150,0.3)" }}
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="w-full h-24 sm:h-32 object-contain p-1.5"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-end justify-center pb-1.5">
+                    <span className="text-white/0 group-hover:text-white/90 text-[10px] transition-colors duration-300">
+                      크게보기
+                    </span>
+                  </div>
+                </button>
+                <div className="flex flex-col items-center gap-1">
+                  <span className="min-h-[30px] sm:min-h-0 flex items-center justify-center text-white/45 text-[10px] sm:text-xs tracking-wide break-keep text-center leading-tight">
+                    {img.label}
+                  </span>
+                  <span
+                    className="text-xl sm:text-2xl font-bold tabular-nums leading-none tracking-tight"
+                    style={{ color: GOLD }}
+                  >
+                    {img.count.toLocaleString()}
+                    <span className="text-[11px] sm:text-xs font-medium text-white/45 ml-0.5">건</span>
+                  </span>
+                  <a
+                    href={img.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 mt-1.5 w-full px-2 py-2 rounded-md text-[12px] sm:text-[13px] font-bold tracking-wide transition-all duration-300 break-keep text-center"
+                    style={{
+                      color: "#1a1a1a",
+                      background: "linear-gradient(135deg, #d4b896, #c9a87a)",
+                      boxShadow: "0 2px 10px rgba(212,184,150,0.28)",
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 16px rgba(212,184,150,0.5)";
+                      (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-1px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 2px 10px rgba(212,184,150,0.28)";
+                      (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
+                    }}
+                  >
+                    직접 확인
+                    <ExternalLink size={13} />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 합산 근거 */}
+          <div
+            className="mt-6 mx-auto max-w-md rounded-lg py-5 px-5 sm:px-6"
+            style={{ background: "rgba(212,184,150,0.06)", border: "1px dashed rgba(212,184,150,0.35)" }}
+          >
+            {/* 합산식 */}
+            <p className="text-xs sm:text-sm text-white/55 tracking-wide break-keep leading-relaxed text-center">
+              {PROOF_IMAGES.map((p, i) => (
+                <span key={p.source}>
+                  {i > 0 && " + "}
+                  <span className="text-white/70">{p.count.toLocaleString()}</span>
+                </span>
+              ))}{" = "}
+              <span className="font-bold" style={{ color: GOLD, fontFamily: "'JetBrains Mono', monospace" }}>
+                {PROOF_TOTAL.toLocaleString()}건
+              </span>
+            </p>
+
+            <div className="my-3.5 mx-auto w-10 h-px" style={{ background: "rgba(212,184,150,0.25)" }} />
+
+            {/* 기준일 · 원본성 · 집계 원칙 — 칩 형태로 스캔하기 쉽게 */}
+            <div className="flex flex-wrap items-center justify-center gap-1.5">
+              {[`${PROOF_AS_OF} 기준`, "문자·카톡 원본 그대로", "실제 이용 고객만 집계"].map((chip) => (
+                <span
+                  key={chip}
+                  className="text-[10.5px] sm:text-[11px] font-medium px-2.5 py-1 rounded-full whitespace-nowrap"
+                  style={{ background: "rgba(212,184,150,0.10)", color: "rgba(212,184,150,0.9)" }}
+                >
+                  {chip}
+                </span>
+              ))}
+            </div>
+
+            {/* CTA: 실시간 업데이트 안내 */}
+            <p className="mt-3.5 text-xs sm:text-[13px] font-medium text-white/70 break-keep leading-relaxed text-center">
+              후기는 계속 쌓이고 있어 <span className="font-bold text-white/95">지금은 더 많습니다.</span>
+              <br />
+              <span className="font-bold" style={{ color: GOLD }}>직접 확인</span>에서 실시간으로 보실 수 있습니다.
+            </p>
+          </div>
+
+          {/* 네이버 고객 게시물 안내 — 블로그/카페도 집계에 포함 (엄격 기준) */}
+          <div className="mt-5 flex flex-col items-center">
+            <p className="text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
+              고객님이 직접 작성한 블로그·카페 후기글 중<br />
+              <span className="font-bold" style={{ color: GOLD }}>"이너스뮤직"</span>이 정확히 언급된 글만
+              <br className="sm:hidden" />{" "}
+              엄격하게 집계했습니다.
+            </p>
+            <p className="mt-2.5 text-[13px] sm:text-sm text-white/60 break-keep leading-relaxed text-center max-w-[21rem] sm:max-w-md mx-auto">
+              저희가 보여드리는 <span className="font-bold" style={{ color: GOLD }}>{PROOF_TOTAL.toLocaleString()}건</span>은
+              <br className="sm:hidden" />{" "}
+              전부 플랫폼에서
+              <br className="hidden sm:block" />{" "}
+              직접 확인 가능한 검증된 수치입니다.
+            </p>
+          </div>
+
+            </div>
+          )}
+
         </div>
       </div>
-
-      {/* Bottom gradient transition to next section */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
-        style={{ background: "linear-gradient(to top, #0d0d0d 0%, transparent 100%)" }}
-      />
 
       {/* 증빙 자료 라이트박스 */}
       {lightbox && (

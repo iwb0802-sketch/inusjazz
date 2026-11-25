@@ -1,21 +1,14 @@
 /**
- * ProcessSection - 웨딩 사회자 서비스 프로세스 7단계
- * Design: Dark background, 3 grouped phase cards
- * Brand: Gold (#d4b896) primary accent
+ * ProcessSection - 책임 설계 (환불 타임라인 + 4단계 + 신뢰 포인트)
+ * Design: Dark background, refund timeline → 4 steps → trust cards
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useState } from "react";
 import {
   CalendarCheck,
-  FileText,
-  Mail,
   PenTool,
   Headphones,
-  MessageSquare,
   MapPin,
-  ClipboardList,
-  Pencil,
-  PartyPopper,
   Sparkles,
   ShieldCheck,
   FileEdit,
@@ -57,230 +50,138 @@ const TRUST_POINTS = [
   },
 ];
 
-const PHASES = [
+const STEPS = [
   {
-    phase: "PHASE 1",
-    title: "예약 준비",
-    icon: ClipboardList,
-    steps: [
-      {
-        num: "01",
-        icon: CalendarCheck,
-        title: "예약 & 사회자 지정",
-        desc: "원하시는 스타일에 맞는 사회자를 직접 지정",
-        note: "지정된 사회자는 인사차 1차 해피콜 연락드립니다",
-      },
-      {
-        num: "02",
-        icon: FileText,
-        title: "사전 질문지 & 예식자료 제공",
-        desc: "두 사람의 스토리와 예식 정보를 담은 질문지와 정보체크지 전달",
-      },
-    ],
+    num: "01",
+    icon: CalendarCheck,
+    title: "예약 · 사회자 지정",
+    desc: "목소리와 진행 영상을 확인하고 원하는 사회자를 직접 지정합니다. 지정 후 사회자가 인사 연락을 드립니다.",
   },
   {
-    phase: "PHASE 2",
-    title: "대본 제작",
-    icon: Pencil,
-    steps: [
-      {
-        num: "03",
-        icon: Mail,
-        title: "대본 내용 회신",
-        desc: "예식 2~3주 전까지, 두 분의 스토리가 담긴 질문지와 정보체크지 회신",
-        note: "질문지와 정보체크지를 미리 보내주실수록 맞춤 대본 제작이 더 빨라집니다",
-      },
-      {
-        num: "04",
-        icon: PenTool,
-        title: "대표 맞춤 대본 제작",
-        badge: "무제한 수정 가능",
-        desc: "10년+ 경력 대표가 직접 제작해 두 분과 사회자에게 함께 전달, 마음에 드실 때까지 자유롭게 수정해드립니다 (제작기간: 3~5일)",
-      },
-      {
-        num: "05",
-        icon: Headphones,
-        title: "본사 최종 안내",
-        desc: "예식주 화요일, 전문 상담 직원이 일정과 진행사항 최종 체크",
-      },
-    ],
+    num: "02",
+    icon: PenTool,
+    title: "질문지 → 대표 맞춤 대본",
+    badge: "무제한 수정",
+    desc: "질문지와 정보체크지를 바탕으로 10년+ 경력 대표가 대본을 직접 제작합니다. 제작기간 3~5일.",
   },
   {
-    phase: "PHASE 3",
-    title: "당일 진행",
-    icon: PartyPopper,
-    steps: [
-      {
-        num: "06",
-        icon: MessageSquare,
-        title: "사회자 최종 확인",
-        desc: "예식주 수요일, 이미 전달받은 대본을 바탕으로 사회자가 신랑신부님께 다시 연락드려 자신만의 개성과 노하우를 더해 함께 점검하고 한 번 더 다듬는 최종 확인",
-      },
-      {
-        num: "07",
-        icon: MapPin,
-        title: "예식당일 현장 도착",
-        desc: "예식 40~50분 전 도착, 리허설 및 준비 마무리",
-      },
-    ],
+    num: "03",
+    icon: Headphones,
+    title: "예식주 점검",
+    desc: "화요일 본사가 일정과 진행사항을 체크하고, 수요일엔 사회자가 신랑신부님께 다시 연락해 대본을 다듬습니다.",
+  },
+  {
+    num: "04",
+    icon: MapPin,
+    title: "예식 당일",
+    desc: "2시간 전·1시간 전 두 번 확인하고, 사회자는 예식 40~50분 전에 도착합니다. 예비 사회자가 상시 대기합니다.",
   },
 ];
 
 export default function ProcessSection() {
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
+  const anim3 = useScrollAnimation();
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   return (
-    <section id="process" className="bg-[#0d0d0d] py-24 sm:py-32 lg:py-40">
+    <section id="process" className="relative bg-[#0d0d0d] pt-20 sm:pt-24 pb-16 sm:pb-20">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-16" style={{ background: "linear-gradient(180deg, #f8f6f3 0%, #0d0d0d 100%)" }} />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div ref={anim1.ref} className={`text-center mb-16 sm:mb-20 fade-up ${anim1.isVisible ? "visible" : ""}`}>
+        <div ref={anim1.ref} className={`text-center mb-10 sm:mb-12 fade-up ${anim1.isVisible ? "visible" : ""}`}>
           <span
             className="text-[#d4b896] text-xs sm:text-sm tracking-[0.3em] uppercase"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
-            SERVICE PROCESS
+            OUR PROMISE
           </span>
           <h2
             className="mt-4 text-white text-2xl sm:text-3xl md:text-4xl"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            체계적인 <span style={{ color: GOLD }}>7단계</span> 맞춤 진행
+            예식 당일까지 <span style={{ color: GOLD }}>책임 설계</span>합니다
           </h2>
-          <p className="mt-4 text-white/50 text-sm sm:text-base">
-            예약부터 당일 진행까지, 빈틈없는 프로세스로 완성도를 높입니다
+          <p className="mt-4 text-white/50 text-sm sm:text-base break-keep">
+            계약부터 예식까지, 4단계로 빈틈을 줄였습니다
           </p>
         </div>
 
-        {/* Phase Cards */}
+        {/* 환불 타임라인 */}
         <div
           ref={anim2.ref}
-          className={`grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 fade-up ${anim2.isVisible ? "visible" : ""}`}
+          className={`mb-10 sm:mb-12 rounded-sm px-5 sm:px-8 py-6 sm:py-7 fade-up ${anim2.isVisible ? "visible" : ""}`}
+          style={{ background: "#141414", border: "1px solid rgba(212,184,150,0.25)" }}
         >
-          {PHASES.map((phase, pi) => {
-            const PhaseIcon = phase.icon;
+          <div className="relative flex items-stretch">
+            <div className="flex flex-col items-start flex-shrink-0">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: GOLD }} />
+              <span className="mt-2 text-white/80 text-xs sm:text-sm">계약</span>
+            </div>
+            <div className="relative flex-1 mx-2 sm:mx-3">
+              <div className="absolute left-0 right-0 top-[4px] h-[2px]" style={{ background: "linear-gradient(90deg, #d4b896, #d4b896)" }} />
+              <p className="pt-4 sm:pt-5 text-center">
+                <span
+                  className="text-[26px] sm:text-[34px] leading-none"
+                  style={{ color: GOLD, fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
+                >
+                  100%
+                </span>
+                <span className="ml-2 text-white text-xs sm:text-sm">계약금 환불</span>
+              </p>
+            </div>
+            <div className="flex flex-col items-center flex-shrink-0">
+              <span className="w-2.5 h-2.5 rounded-full border-2" style={{ borderColor: GOLD, background: "#0d0d0d" }} />
+              <span className="mt-2 text-white/80 text-xs sm:text-sm whitespace-nowrap">예식 전주</span>
+            </div>
+            <div className="relative w-10 sm:w-20 mx-2 sm:mx-3">
+              <div className="absolute left-0 right-0 top-[4px] h-[2px] bg-white/15" />
+            </div>
+            <div className="flex flex-col items-end flex-shrink-0">
+              <span className="w-2.5 h-2.5 rounded-full bg-white/30" />
+              <span className="mt-2 text-white/50 text-xs sm:text-sm">예식</span>
+            </div>
+          </div>
+          <p className="mt-5 text-white/45 text-[11px] sm:text-xs text-center break-keep">
+            사회자를 확정한 뒤에도 예식 전주까지는 계약금 전액을 돌려드립니다
+          </p>
+        </div>
+
+        {/* 4 Steps */}
+        <div ref={anim3.ref} className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 fade-up ${anim3.isVisible ? "visible" : ""}`}>
+          {STEPS.map((step) => {
+            const Icon = step.icon;
             return (
               <div
-                key={pi}
-                className="group bg-[#141414] rounded-sm overflow-hidden transition-all duration-500"
-                style={{
-                  border: "1px solid rgba(212,184,150,0.18)",
-                  boxShadow: "0 2px 16px rgba(0,0,0,0.4)",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.border = "1px solid rgba(212,184,150,0.45)";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(212,184,150,0.10)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.border = "1px solid rgba(212,184,150,0.18)";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 16px rgba(0,0,0,0.4)";
-                }}
+                key={step.num}
+                className="bg-[#141414] rounded-sm p-5"
+                style={{ border: "1px solid rgba(212,184,150,0.18)" }}
               >
-                {/* Phase Header */}
-                <div
-                  className="px-6 py-5 border-b"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(212,184,150,0.08), transparent)",
-                    borderColor: "rgba(212,184,150,0.12)",
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{
-                        backgroundColor: "rgba(212,184,150,0.15)",
-                        border: "1px solid rgba(212,184,150,0.35)",
-                      }}
-                    >
-                      <PhaseIcon size={18} style={{ color: GOLD }} />
-                    </div>
-                    <div>
-                      <span
-                        className="text-[10px] tracking-[0.2em] uppercase block"
-                        style={{ color: GOLD, fontFamily: "'Cormorant Garamond', serif" }}
-                      >
-                        {phase.phase}
-                      </span>
-                      <h3
-                        className="text-white text-base sm:text-lg font-semibold"
-                        style={{ fontFamily: "'Noto Serif KR', serif" }}
-                      >
-                        {phase.title}
-                      </h3>
-                    </div>
-                  </div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-2xl leading-none" style={{ color: GOLD, fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}>
+                    {step.num}
+                  </span>
+                  <Icon size={18} style={{ color: GOLD }} />
                 </div>
-
-                {/* Steps */}
-                <div className="px-6 py-5 space-y-4">
-                  {phase.steps.map((step, si) => {
-                    return (
-                      <div key={si} className="flex items-start gap-3">
-                        <div className="flex-shrink-0 mt-0.5">
-                          <span
-                            className="font-semibold text-xs"
-                            style={{ color: GOLD, fontFamily: "'Cormorant Garamond', serif" }}
-                          >
-                            {step.num}
-                          </span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-white/90 text-sm font-medium leading-snug flex items-center gap-1.5 flex-wrap break-keep">
-                            {step.title}
-                            {"badge" in step && step.badge && (
-                              <span
-                                className="text-[10px] font-semibold px-1.5 py-0.5 rounded-sm tracking-wide"
-                                style={{
-                                  color: GOLD,
-                                  backgroundColor: "rgba(212,184,150,0.15)",
-                                  border: "1px solid rgba(212,184,150,0.4)",
-                                }}
-                              >
-                                {step.badge}
-                              </span>
-                            )}
-                          </p>
-                          <p className="text-white/65 text-xs mt-1 leading-relaxed break-keep">
-                            {step.desc}
-                          </p>
-                          {"note" in step && step.note && (
-                            <p className="text-white/45 text-[11px] mt-1 leading-relaxed break-keep">
-                              {step.note}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                <p className="text-white text-[15px] font-semibold leading-snug break-keep flex items-center gap-1.5 flex-wrap" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+                  {step.title}
+                </p>
+                {"badge" in step && step.badge && (
+                  <span
+                    className="inline-block mt-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-sm tracking-wide"
+                    style={{ color: GOLD, backgroundColor: "rgba(212,184,150,0.15)", border: "1px solid rgba(212,184,150,0.4)" }}
+                  >
+                    {step.badge}
+                  </span>
+                )}
+                <p className="mt-2.5 text-white/60 text-xs leading-relaxed break-keep">{step.desc}</p>
               </div>
             );
           })}
         </div>
 
-        {/* Bottom flow indicator */}
-        <div className="mt-10 sm:mt-14 flex items-center justify-center gap-3 sm:gap-4">
-          {PHASES.map((phase, i) => (
-            <div key={i} className="flex items-center gap-3 sm:gap-4">
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: GOLD }}
-                />
-                <span className="text-white/50 text-xs sm:text-sm">{phase.title}</span>
-              </div>
-              {i < PHASES.length - 1 && (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/20">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              )}
-            </div>
-          ))}
-        </div>
-
         {/* 대본 제작 과정 맛보기 버튼 */}
-        <div className="mt-10 sm:mt-14 flex justify-center">
+        <div className="mt-8 sm:mt-10 flex justify-center">
           <button
             onClick={() => setIsPreviewOpen(true)}
             className="group inline-flex items-center gap-2 px-5 sm:px-6 py-3 rounded-full text-xs sm:text-sm font-medium transition-all duration-300"
@@ -304,26 +205,14 @@ export default function ProcessSection() {
           </button>
         </div>
 
-        {/* Final Step - 예약 결정 전 신뢰 포인트 */}
-        <div className="mt-20 sm:mt-28 pt-14 sm:pt-16 border-t" style={{ borderColor: "rgba(212,184,150,0.15)" }}>
-          <div className="text-center mb-10 sm:mb-14">
-            <span
-              className="text-[#d4b896] text-xs sm:text-sm tracking-[0.3em] uppercase"
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
-            >
-              FINAL STEP
-            </span>
-            <h3
-              className="mt-4 text-white text-xl sm:text-2xl md:text-3xl break-keep"
-              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-            >
-              예약 <span style={{ color: GOLD }}>결정</span> 전,
-              <br className="sm:hidden" /> 꼭 확인하시면 좋은 것
-            </h3>
-            <p className="mt-4 text-white/50 text-sm sm:text-base break-keep">
-              결혼식은 단 한 번뿐입니다. 이너스뮤직은 그 무게를 시스템으로 지킵니다.
-            </p>
-          </div>
+        {/* 신뢰 포인트 */}
+        <div className="mt-14 sm:mt-16 pt-10 sm:pt-12 border-t" style={{ borderColor: "rgba(212,184,150,0.15)" }}>
+          <h3
+            className="text-center mb-8 text-white text-lg sm:text-2xl break-keep"
+            style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+          >
+            예약 <span style={{ color: GOLD }}>결정</span> 전, 꼭 확인하시면 좋은 것
+          </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
             {TRUST_POINTS.map((point, ti) => {

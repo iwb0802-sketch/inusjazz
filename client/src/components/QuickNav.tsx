@@ -6,16 +6,14 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const menuItems = [
-  { id: "intro",       label: "소개" },
   { id: "mc",          label: "사회자" },
-  { id: "video",       label: "영상" },
   { id: "video-guide", label: "가이드" },
   { id: "review",      label: "후기" },
-  { id: "process",     label: "진행절차" },
-  { id: "package",     label: "패키지" },
   { id: "pricing",     label: "요금" },
-  { id: "service",     label: "서비스" },
+  { id: "event",       label: "혜택" },
   { id: "qna",         label: "Q&A" },
+  { id: "package",     label: "패키지" },
+  { id: "process",     label: "책임설계" },
 ];
 
 export default function QuickNav() {

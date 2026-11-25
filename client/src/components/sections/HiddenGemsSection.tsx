@@ -182,6 +182,9 @@ export default function HiddenGemsSection() {
   const anim3 = useScrollAnimation();
   const [playing, setPlaying] = useState<string | null>(null);
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
+  const GEM_COLLAPSED = 3;
+  const visibleGems = showAll ? HIDDEN_GEMS : HIDDEN_GEMS.slice(0, GEM_COLLAPSED);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -211,7 +214,7 @@ export default function HiddenGemsSection() {
   };
 
   return (
-    <section id="hidden-gems" className="relative bg-[#0d0d0d] pt-0 pb-24 sm:pb-32 lg:pb-40 overflow-hidden">
+    <section id="hidden-gems" className="relative bg-[#0d0d0d] pt-0 pb-16 sm:pb-20 lg:pb-24 overflow-hidden">
       <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
         <div ref={anim3.ref} className={`fade-up ${anim3.isVisible ? "visible" : ""}`}>
           <div className="text-center mb-8 sm:mb-10">
@@ -254,7 +257,7 @@ export default function HiddenGemsSection() {
 
           {/* 프로필 카드: 모바일 = 가로형 리스트 / 데스크탑 = 매거진 세로 카드 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 max-w-5xl mx-auto">
-            {HIDDEN_GEMS.map((mc) => (
+            {visibleGems.map((mc) => (
               <div
                 key={mc.name}
                 className="group flex sm:flex-col rounded-xl overflow-hidden transition-all duration-300"
@@ -270,7 +273,7 @@ export default function HiddenGemsSection() {
                 }}
               >
                 {/* 사진 */}
-                <div className="relative w-[104px] min-[375px]:w-[118px] sm:w-full flex-shrink-0 aspect-[3/4] sm:aspect-[4/5] overflow-hidden bg-[#151515]">
+                <div className="relative w-[104px] min-[375px]:w-[118px] sm:w-full flex-shrink-0 aspect-[3/4] sm:aspect-[5/4] overflow-hidden bg-[#151515]">
                   <img
                     src={mc.image}
                     alt={`${mc.name} 사회자`}
@@ -382,6 +385,21 @@ export default function HiddenGemsSection() {
               </div>
             ))}
           </div>
+
+          {HIDDEN_GEMS.length > GEM_COLLAPSED && (
+            <div className="flex justify-center mt-7 sm:mt-9">
+              <button
+                type="button"
+                onClick={() => setShowAll((v) => !v)}
+                aria-expanded={showAll}
+                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-7 text-[13px] sm:text-sm transition-colors duration-300 hover:bg-[#d4b896]/10"
+                style={{ border: "1px solid rgba(212,184,150,0.45)", color: "#d4b896", letterSpacing: "0.04em" }}
+              >
+                {showAll ? "접기" : `나머지 ${HIDDEN_GEMS.length - GEM_COLLAPSED}인 전원 보기`}
+                <ChevronRight size={13} className={`transition-transform duration-300 ${showAll ? "-rotate-90" : "rotate-90"}`} />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 
 const NAV_LINKS = [
-  { label: "메인", href: "#hero" },
-  { label: "소개", href: "#intro" },
   { label: "사회자", href: "#mc" },
-  { label: "영상", href: "#video" },
   { label: "후기", href: "#review" },
-  { label: "견적", href: "#pricing" },
+  { label: "가격", href: "#pricing" },
+  { label: "혜택", href: "#event" },
+  { label: "FAQ", href: "#qna" },
+  { label: "패키지", href: "#package" },
 ];
 
 const SERVICE_LINKS: { label: string; href: string; isNew?: boolean }[] = [

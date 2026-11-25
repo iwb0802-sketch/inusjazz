@@ -6,6 +6,7 @@
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useState } from "react";
+import { Link } from "wouter";
 import {
   Star,
   ClipboardCheck,
@@ -26,7 +27,54 @@ interface QnaItem {
   content: React.ReactNode;
 }
 
+const P = ({ children }: { children: React.ReactNode }) => (
+  <p className="text-[#555] text-sm sm:text-base leading-relaxed break-keep">{children}</p>
+);
+const B = ({ children }: { children: React.ReactNode }) => (
+  <strong className="text-[#1a1a1a]">{children}</strong>
+);
+
 const QNA_DATA: QnaItem[] = [
+  {
+    question: "계약금은 언제까지 환불되나요?",
+    content: (
+      <div className="space-y-3">
+        <P><B>예식 전주까지 계약금 100% 환불</B>됩니다.</P>
+        <P>사회자를 확정한 뒤에도 일정이 바뀌면 부담 없이 취소하실 수 있도록 설계했습니다.</P>
+      </div>
+    ),
+  },
+  {
+    question: "예식 날짜에 가능한 사회자는 어떻게 확인하나요?",
+    content: (
+      <div className="space-y-3">
+        <P>
+          <Link href="/schedule" className="text-[#2f8b78] underline underline-offset-2 font-semibold">날짜 조회 페이지</Link>에서
+          <B> 예식 날짜만 입력</B>하시면 됩니다. 연락처를 남기지 않아도 해당 날짜에 가능한 사회자가 바로 나옵니다.
+        </P>
+      </div>
+    ),
+  },
+  {
+    question: "후기·지인 혜택은 얼마까지 받을 수 있나요?",
+    content: (
+      <div className="space-y-3">
+        <P>
+          후기 <B>-2만원</B>, 지인 코드 <B>-1만원</B>, 보트온보이스(VOV) <B>-1만원</B>이며
+          중복 적용 시 <B>최대 4만원</B>입니다(시그니처 등급은 최대 3만원).
+        </P>
+        <P>참여 방법은 카카오톡 상담에서 안내해 드립니다.</P>
+      </div>
+    ),
+  },
+  {
+    question: "서울 외 지역도 진행하나요?",
+    content: (
+      <div className="space-y-3">
+        <P>진행 가능합니다. 서울 외 지역은 <B>출장비가 별도</B>이며, 금액은 상담 시 안내해 드립니다.</P>
+      </div>
+    ),
+  },
   {
     question: (
       <>
@@ -73,16 +121,16 @@ const QNA_DATA: QnaItem[] = [
           </p>
           <div className="space-y-3">
             <div className="flex items-start gap-4 bg-[#f8f6f3] rounded-sm p-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center">
-                <FileText size={18} className="text-[#5BB5A2]" />
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#a8814f]/10 flex items-center justify-center">
+                <FileText size={18} className="text-[#a8814f]" />
               </div>
               <p className="text-[#555] text-sm leading-relaxed pt-2 break-keep">
                 <strong className="text-[#1a1a1a]">1차, 본사</strong>에서 대본의 뼈대를 먼저 세우고
               </p>
             </div>
             <div className="flex items-start gap-4 bg-[#f8f6f3] rounded-sm p-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center">
-                <Sparkles size={18} className="text-[#5BB5A2]" />
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#a8814f]/10 flex items-center justify-center">
+                <Sparkles size={18} className="text-[#a8814f]" />
               </div>
               <p className="text-[#555] text-sm leading-relaxed pt-2 break-keep">
                 <strong className="text-[#1a1a1a]">2차, 지정된 사회자</strong>가 자신만의 개성과 노하우를 더해 완성합니다
@@ -93,15 +141,15 @@ const QNA_DATA: QnaItem[] = [
 
         <div className="bg-[#1a1a1a] rounded-sm p-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-[#5BB5A2]/20 flex items-center justify-center">
-              <ShieldCheck size={22} className="text-[#5BB5A2]" />
+            <div className="w-12 h-12 rounded-full bg-[#d4b896]/20 flex items-center justify-center">
+              <ShieldCheck size={22} className="text-[#e0c188]" />
             </div>
             <div>
               <p className="text-white text-sm">그 결과,</p>
               <p className="text-white font-semibold break-keep">
                 누가 진행하든
                 <br className="sm:hidden" />{" "}
-                <span className="text-[#5BB5A2]">이너스뮤직만의 최상의 퀄리티</span>로 완성됩니다
+                <span className="text-[#e0c188]">이너스뮤직만의 최상의 퀄리티</span>로 완성됩니다
               </p>
             </div>
           </div>
@@ -142,16 +190,16 @@ const QNA_DATA: QnaItem[] = [
           </p>
           <div className="space-y-3">
             <div className="flex items-start gap-4 bg-[#f8f6f3] rounded-sm p-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center">
-                <Calendar size={18} className="text-[#5BB5A2]" />
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#a8814f]/10 flex items-center justify-center">
+                <Calendar size={18} className="text-[#a8814f]" />
               </div>
               <p className="text-[#555] text-sm leading-relaxed pt-2">
                 최소 3년 이상의 사회 경험을 보유하고 있으며
               </p>
             </div>
             <div className="flex items-start gap-4 bg-[#f8f6f3] rounded-sm p-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center">
-                <Users size={18} className="text-[#5BB5A2]" />
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#a8814f]/10 flex items-center justify-center">
+                <Users size={18} className="text-[#a8814f]" />
               </div>
               <p className="text-[#555] text-sm leading-relaxed pt-2">
                 많게는 10년 이상의 경력을 가진 사회자까지 구성되어 있습니다
@@ -195,7 +243,7 @@ const QNA_DATA: QnaItem[] = [
               <MapPin size={18} className="text-[#d4b896]" />
             </div>
             <div className="pt-1">
-              <p className="text-[#555] text-sm leading-relaxed">
+              <p className="text-[#555] text-sm leading-relaxed text-balance">
                 예식 <strong className="text-[#1a1a1a]">1시간 전</strong>, 현장 도착 여부 <strong className="text-[#1a1a1a]">2차 확인</strong>
               </p>
             </div>
@@ -218,16 +266,16 @@ const QNA_DATA: QnaItem[] = [
           </p>
           <div className="space-y-3">
             <div className="flex items-start gap-4 bg-[#f8f6f3] rounded-sm p-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center">
-                <Handshake size={18} className="text-[#5BB5A2]" />
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#a8814f]/10 flex items-center justify-center">
+                <Handshake size={18} className="text-[#a8814f]" />
               </div>
               <p className="text-[#555] text-sm leading-relaxed pt-2">
                 업체와 <strong className="text-[#1a1a1a]">전속 계약 체결</strong> 후 진행되며
               </p>
             </div>
             <div className="flex items-start gap-4 bg-[#f8f6f3] rounded-sm p-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#5BB5A2]/10 flex items-center justify-center">
-                <ShieldCheck size={18} className="text-[#5BB5A2]" />
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#a8814f]/10 flex items-center justify-center">
+                <ShieldCheck size={18} className="text-[#a8814f]" />
               </div>
               <p className="text-[#555] text-sm leading-relaxed pt-2">
                 <strong className="text-[#1a1a1a]">사전 관리 시스템</strong>을 통해 철저히 관리됩니다
@@ -239,18 +287,18 @@ const QNA_DATA: QnaItem[] = [
         {/* 0% Badge */}
         <div className="bg-[#1a1a1a] rounded-sm p-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-[#5BB5A2]/20 flex items-center justify-center">
-              <Award size={22} className="text-[#5BB5A2]" />
+            <div className="w-12 h-12 rounded-full bg-[#d4b896]/20 flex items-center justify-center">
+              <Award size={22} className="text-[#e0c188]" />
             </div>
             <div>
               <p className="text-white text-sm">그 결과,</p>
               <p className="text-white font-semibold">
-                지금까지 <span className="text-[#5BB5A2]">펑크율 0%</span>를 유지하고 있습니다
+                지금까지 <span className="text-[#e0c188]">펑크율 0%</span>를 유지하고 있습니다
               </p>
             </div>
           </div>
           <div className="hidden sm:flex flex-col items-center">
-            <span className="text-[#5BB5A2] text-3xl font-bold">0%</span>
+            <span className="text-[#e0c188] text-3xl font-bold">0%</span>
             <span className="text-white/40 text-xs mt-1">펑크율</span>
           </div>
         </div>
@@ -311,10 +359,10 @@ export default function QnaSection() {
   const anim1 = useScrollAnimation();
 
   return (
-    <section id="qna" className="bg-[#f8f6f3] py-24 sm:py-32 lg:py-40">
+    <section id="qna" className="bg-[#f8f6f3] pt-10 sm:pt-12 pb-16 sm:pb-20">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div ref={anim1.ref} className={`text-center mb-16 sm:mb-20 fade-up ${anim1.isVisible ? "visible" : ""}`}>
+        <div ref={anim1.ref} className={`text-center mb-10 sm:mb-12 fade-up ${anim1.isVisible ? "visible" : ""}`}>
           <span
             className="text-[#a8814f] text-[11px] sm:text-[13px] font-semibold tracking-[0.22em] uppercase"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
@@ -325,7 +373,7 @@ export default function QnaSection() {
             className="mt-4 text-[#1a1a1a] text-2xl sm:text-3xl md:text-4xl"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            자주 묻는 <span className="text-[#2f8b78]">질문</span>
+            자주 묻는 <span className="text-[#a8814f]">질문</span>
           </h2>
         </div>
 

@@ -5,7 +5,6 @@
  */
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/sections/HeroSection";
-import IntroSection from "@/components/sections/IntroSection";
 import LiveBookingSection from "@/components/sections/LiveBookingSection";
 import PackageSection from "@/components/sections/PackageSection";
 import PricingSection from "@/components/sections/PricingSection";
@@ -20,36 +19,29 @@ import EventSection from "@/components/sections/EventSection";
 import CtaSection from "@/components/sections/CtaSection";
 import Footer from "@/components/Footer";
 import FloatingButtons from "@/components/FloatingButtons";
-import QuickNav from "@/components/QuickNav";
-import InusCardPopup from "@/components/InusCardPopup";
 
 
 export default function Home() {
   return (
     <div className="min-h-screen">
-      <InusCardPopup />
       <Navbar />
       <HeroSection />
-      <IntroSection />
-      <ReviewSection />
-      <LiveBookingSection />
-      {/* 순서: 사회자 이름 노출 전에 VOTE ON VOICE 블라인드 투표 유도 */}
+      {/* 사회자 이름 노출 전에 VOTE ON VOICE 블라인드 투표 유도 */}
       <VoteOnVoiceSection />
       <McSection />
-      {/* 숨은 강자 — 사회자 카드 직후에 배치 (맥락 연결) */}
       <HiddenGemsSection />
       <VideoGuideSection />
-      {/* 사회자 확인 직후 가격 → 이벤트로 가격 저항 완화 → 패키지 업셀 */}
+      {/* 증거(후기) → 한 줄 희소성 → 가격 + 혜택 → Q&A → 패키지 → 책임 설계 → 날짜 확인 */}
+      <ReviewSection />
+      <LiveBookingSection />
       <PricingSection />
       <EventSection />
-      {/* 가격·혜택 직후 진행 방식으로 불안 해소 → 아웃링크가 많은 패키지는 뒤로 */}
-      <ProcessSection />
-      <PackageSection />
       <QnaSection />
+      <PackageSection />
+      <ProcessSection />
       <CtaSection />
       <Footer />
       <FloatingButtons />
-      <QuickNav />
     </div>
   );
 }

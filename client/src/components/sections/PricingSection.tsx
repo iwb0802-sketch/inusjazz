@@ -14,6 +14,7 @@ import {
   MapPin,
   Crown,
 } from "lucide-react";
+import { PRICE_TIERS, won } from "@/data/pricing";
 
 
 export default function PricingSection() {
@@ -23,10 +24,11 @@ export default function PricingSection() {
   const anim3 = useScrollAnimation();
 
   return (
-    <section id="pricing" className="bg-[#f8f6f3] py-24 sm:py-32 lg:py-40">
+    <section id="pricing" className="relative bg-[#f8f6f3] pt-20 sm:pt-24 pb-10 sm:pb-12">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-16" style={{ background: "linear-gradient(180deg, #1a1a1a 0%, #f8f6f3 100%)" }} />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div ref={anim1.ref} className={`text-center mb-16 sm:mb-20 fade-up ${anim1.isVisible ? "visible" : ""}`}>
+        <div ref={anim1.ref} className={`text-center mb-10 sm:mb-12 fade-up ${anim1.isVisible ? "visible" : ""}`}>
           <span
             className="text-[#a8814f] text-[11px] sm:text-[13px] font-semibold tracking-[0.22em] uppercase"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
@@ -37,43 +39,8 @@ export default function PricingSection() {
             className="mt-4 text-[#1a1a1a] text-2xl sm:text-3xl md:text-4xl"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            사회자 <span className="text-[#2f8b78]">가격 안내</span>
+            사회자 <span className="text-[#a8814f]">가격 안내</span>
           </h2>
-        </div>
-
-        {/* The Inners Standard — 가격 직전 신뢰 요약 (환불 · 라인업 · 특전) */}
-        <div className="mx-auto -mt-8 sm:-mt-10 mb-12 sm:mb-14 max-w-[880px] border-y border-[#d4b896] py-6 sm:py-8">
-          <p
-            className="text-center text-[#a8814f] text-[10px] sm:text-xs tracking-[0.28em] mb-5 sm:mb-6"
-            style={{ fontFamily: "'Cormorant Garamond', serif" }}
-          >
-            THE INNERS STANDARD
-          </p>
-          <div className="grid grid-cols-3">
-            {[
-              { big: "100", unit: "%", cap: ["예식 전주까지", "계약금 전액 환불"] },
-              { big: "18", unit: "인", cap: ["사회자 전원 공개", "목소리를 듣고 직접 선택"] },
-              { big: "27", unit: "만원 상당", cap: ["계약 고객께 드리는", "16가지 구성"] },
-            ].map((it, i) => (
-              <div
-                key={it.big}
-                className={`text-center px-1.5 sm:px-3 ${i > 0 ? "border-l border-[#d4b896]/60" : ""}`}
-              >
-                <p
-                  className="text-[#1a1a1a] text-[22px] sm:text-[30px] leading-tight tracking-tight"
-                  style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 600 }}
-                >
-                  {it.big}
-                  <span className="text-[11px] sm:text-[15px] font-normal text-[#6b6b6b] ml-0.5 sm:ml-1">{it.unit}</span>
-                </p>
-                <p className="mt-2 sm:mt-2.5 text-[#6b6b6b] text-[11px] sm:text-[13px] leading-relaxed break-keep">
-                  {it.cap[0]}
-                  <br />
-                  {it.cap[1]}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Pricing Cards */}
@@ -156,68 +123,38 @@ export default function PricingSection() {
                   <span className="text-[#999] text-[11.5px] font-semibold tracking-wide">{showDiscount ? "정가 / 이벤트 참여가" : "정가"}</span>
                 </div>
                 <div className="space-y-3 mb-8">
-                  <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
-                    <div className="flex items-center gap-2">
-                      <Crown size={14} className="text-[#c9a961]" />
-                      <span className="text-[#333] text-base font-semibold">시그니처 등급</span>
+                  {PRICE_TIERS.filter((t) => t.designated).map((t) => (
+                    <div key={t.id} className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
+                      <div className="flex items-center gap-2">
+                        {t.id === "signature" ? (
+                          <Crown size={14} className="text-[#c9a961]" />
+                        ) : (
+                          <Diamond size={14} className="text-[#d4b896]" />
+                        )}
+                        <span className="text-[#333] text-base font-semibold">{t.name}</span>
+                      </div>
+                      <span className="flex items-baseline gap-1.5">
+                        <span className="text-[#1a1a1a] text-base font-bold">{won(t.list)}</span>
+                        {showDiscount && (
+                          <span className="text-[#a87b57] text-[13px] font-bold">/ {won(t.event)}</span>
+                        )}
+                      </span>
                     </div>
-                    <span className="flex items-baseline gap-1.5">
-                      <span className="text-[#1a1a1a] text-base font-bold">250,000원</span>
-                      {showDiscount && (
-                        <span className="text-[#a87b57] text-[13px] font-bold">/ 220,000원</span>
-                      )}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
-                    <div className="flex items-center gap-2">
-                      <Diamond size={14} className="text-[#d4b896]" />
-                      <span className="text-[#333] text-base font-semibold">프리미엄 등급</span>
-                    </div>
-                    <span className="flex items-baseline gap-1.5">
-                      <span className="text-[#1a1a1a] text-base font-bold">220,000원</span>
-                      {showDiscount && (
-                        <span className="text-[#a87b57] text-[13px] font-bold">/ 180,000원</span>
-                      )}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
-                    <div className="flex items-center gap-2">
-                      <Diamond size={14} className="text-[#d4b896]" />
-                      <span className="text-[#333] text-base font-semibold">베스트 등급</span>
-                    </div>
-                    <span className="flex items-baseline gap-1.5">
-                      <span className="text-[#1a1a1a] text-base font-bold">180,000원</span>
-                      {showDiscount && (
-                        <span className="text-[#a87b57] text-[13px] font-bold">/ 140,000원</span>
-                      )}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between py-3 border-b border-[#f0ece7]">
-                    <div className="flex items-center gap-2">
-                      <Diamond size={14} className="text-[#d4b896]" />
-                      <span className="text-[#333] text-base font-semibold">일반 등급</span>
-                    </div>
-                    <span className="flex items-baseline gap-1.5">
-                      <span className="text-[#1a1a1a] text-base font-bold">160,000원</span>
-                      {showDiscount && (
-                        <span className="text-[#a87b57] text-[13px] font-bold">/ 120,000원</span>
-                      )}
-                    </span>
-                  </div>
+                  ))}
                 </div>
 
                 {/* Features */}
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <Check size={16} className="text-[#5BB5A2] flex-shrink-0 mt-0.5" />
+                    <Check size={16} className="text-[#a8814f] flex-shrink-0 mt-0.5" />
                     <span className="text-[#555] text-sm">원하는 사회자 직접 선택</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <Check size={16} className="text-[#5BB5A2] flex-shrink-0 mt-0.5" />
+                    <Check size={16} className="text-[#a8814f] flex-shrink-0 mt-0.5" />
                     <span className="text-[#555] text-sm">진행 스타일 & 영상 사전 확인</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <Check size={16} className="text-[#5BB5A2] flex-shrink-0 mt-0.5" />
+                    <Check size={16} className="text-[#a8814f] flex-shrink-0 mt-0.5" />
                     <span className="text-[#555] text-sm">예식에 최적화된 맞춤형 설계</span>
                   </div>
                 </div>
@@ -227,10 +164,10 @@ export default function PricingSection() {
             {/* 랜덤 배정 */}
             <div className="relative bg-white border border-[#e8e4df] rounded-sm overflow-hidden">
               {/* Badge */}
-              <div className="bg-[#5BB5A2] py-4 px-6 flex items-center justify-center gap-3">
-                <Shuffle size={20} className="text-white" />
+              <div className="bg-[#efe8dd] py-4 px-6 flex items-center justify-center gap-3">
+                <Shuffle size={20} className="text-[#a8814f]" />
                 <span
-                  className="text-white text-lg sm:text-xl tracking-wider"
+                  className="text-[#1a1a1a] text-lg sm:text-xl tracking-wider"
                   style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
                 >
                   사회자 랜덤 배정
@@ -292,15 +229,15 @@ export default function PricingSection() {
                 {/* Features */}
                 <div className="space-y-4 mb-8">
                   <div className="flex items-start gap-3 py-3 border-b border-[#f0ece7]">
-                    <Check size={16} className="text-[#5BB5A2] flex-shrink-0 mt-0.5" />
+                    <Check size={16} className="text-[#a8814f] flex-shrink-0 mt-0.5" />
                     <span className="text-[#555] text-sm">3가지 등급의 사회자 중 1인 자동 배정</span>
                   </div>
                   <div className="flex items-start gap-3 py-3 border-b border-[#f0ece7]">
-                    <Check size={16} className="text-[#5BB5A2] flex-shrink-0 mt-0.5" />
+                    <Check size={16} className="text-[#a8814f] flex-shrink-0 mt-0.5" />
                     <span className="text-[#555] text-sm">예식 전주 금요일 배정</span>
                   </div>
                   <div className="flex items-start gap-3 py-3 border-b border-[#f0ece7]">
-                    <Check size={16} className="text-[#5BB5A2] flex-shrink-0 mt-0.5" />
+                    <Check size={16} className="text-[#a8814f] flex-shrink-0 mt-0.5" />
                     <span className="text-[#555] text-sm">안정적인 진행</span>
                   </div>
                   <div className="flex items-start gap-3 py-3 border-b border-[#f0ece7]">

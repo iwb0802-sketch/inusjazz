@@ -304,17 +304,9 @@ export default function EventSection() {
                 SNS 혜택은 잔금에서 차감 · 글 링크는 카톡 또는 블로그 댓글로 전달 · 시그니처 등급은 VOV 제외
               </p>
             </div>
-            <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4" style={{ background: "#fbf7f2" }}>
-              <span className="text-[#2a2a2a] text-[13.5px] sm:text-[15px] break-keep font-semibold">상담 당일 계약 시</span>
-              <span className="text-[#a8814f] text-[15px] sm:text-[17px] font-bold whitespace-nowrap" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                추가 -1만원
-              </span>
-            </div>
           </div>
           <p className="mt-4 text-center text-[#999] text-[11px] sm:text-xs break-keep leading-relaxed">
             지인을 소개해 주신 분께는 감사금 1만원을 드리며 잔금에서 차감됩니다
-            <br className="hidden sm:block" />{" "}
-            당일 계약 할인은 위 혜택과 별도로 안내됩니다 · 적용 방식은 상담 시 확인
           </p>
         </div>
 

@@ -41,6 +41,41 @@ export default function PricingSection() {
           </h2>
         </div>
 
+        {/* The Inners Standard — 가격 직전 신뢰 요약 (환불 · 라인업 · 특전) */}
+        <div className="mx-auto -mt-8 sm:-mt-10 mb-12 sm:mb-14 max-w-[880px] border-y border-[#d4b896] py-6 sm:py-8">
+          <p
+            className="text-center text-[#a8814f] text-[10px] sm:text-xs tracking-[0.28em] mb-5 sm:mb-6"
+            style={{ fontFamily: "'Cormorant Garamond', serif" }}
+          >
+            THE INNERS STANDARD
+          </p>
+          <div className="grid grid-cols-3">
+            {[
+              { big: "100", unit: "%", cap: ["예식 전주까지", "계약금 전액 환불"] },
+              { big: "18", unit: "인", cap: ["사회자 전원 공개", "목소리를 듣고 직접 선택"] },
+              { big: "27", unit: "만원 상당", cap: ["계약 고객께 드리는", "16가지 구성"] },
+            ].map((it, i) => (
+              <div
+                key={it.big}
+                className={`text-center px-1.5 sm:px-3 ${i > 0 ? "border-l border-[#d4b896]/60" : ""}`}
+              >
+                <p
+                  className="text-[#1a1a1a] text-[22px] sm:text-[30px] leading-tight tracking-tight"
+                  style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 600 }}
+                >
+                  {it.big}
+                  <span className="text-[11px] sm:text-[15px] font-normal text-[#6b6b6b] ml-0.5 sm:ml-1">{it.unit}</span>
+                </p>
+                <p className="mt-2 sm:mt-2.5 text-[#6b6b6b] text-[11px] sm:text-[13px] leading-relaxed break-keep">
+                  {it.cap[0]}
+                  <br />
+                  {it.cap[1]}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Pricing Cards */}
         <div ref={anim2.ref} className={`fade-up ${anim2.isVisible ? "visible" : ""}`}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">

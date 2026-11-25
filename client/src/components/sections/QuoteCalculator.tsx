@@ -197,7 +197,7 @@ export default function QuoteCalculator() {
         <p className="mt-3 text-center text-[#999] text-[11px] sm:text-[12px] break-keep leading-relaxed">
           상담 당일 계약 시 추가 -1만원은 위 금액과 별도로 안내됩니다
           <br className="hidden sm:block" />{" "}
-          부가세 포함 · 서울 외 지역 출장비 별도
+          부가세 포함 · 경기·인천 지역 출장비 별도
         </p>
 
         {/* 행동 */}

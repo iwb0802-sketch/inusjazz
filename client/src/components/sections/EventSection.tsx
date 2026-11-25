@@ -14,12 +14,9 @@ import {
   Headset,
   ShieldCheck,
   ExternalLink,
-  ArrowRight,
   ChevronDown,
 } from "lucide-react";
 
-const EVENT_LINK = "https://blog.naver.com/inusmusics/220652958346";
-const KAKAO_LINK = "https://pf.kakao.com/_wxovaM/chat";
 const AUDIO_TOOL =
   "https://www.inusmusic.com/audio?utm_source=home&utm_medium=freetool&utm_campaign=audio_open";
 const PREWEDDING_VIDEO_TOOL =
@@ -120,9 +117,9 @@ const REST_COUNT = REST_GROUPS.reduce((n, g) => n + g.items.length, 0);
 
 // 추가 혜택 표
 const EXTRA_ROWS = [
-  { label: "상담 후기 작성 (네이버 · 숨고)", value: "2만원", href: EVENT_LINK, ext: true },
-  { label: "지인 코드번호 사용", value: "1만원", href: KAKAO_LINK, ext: true },
-  { label: "지난달 VOV 선정 사회자 지정", value: "1만원", href: "/contest", ext: false },
+  { label: "상담 후기 작성 (네이버 · 숨고)", value: "2만원" },
+  { label: "지인 코드번호 사용", value: "1만원" },
+  { label: "지난달 VOV 선정 사회자 지정", value: "1만원" },
 ];
 
 export default function EventSection() {
@@ -276,21 +273,16 @@ export default function EventSection() {
 
           <div className="mx-auto max-w-2xl rounded-xl overflow-hidden bg-white" style={{ border: "1px solid rgba(212,184,150,0.5)" }}>
             {EXTRA_ROWS.map((r) => (
-              <a
+              <div
                 key={r.label}
-                href={r.href}
-                {...(r.ext ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4 hover:bg-[#fbf7f2] transition-colors"
+                className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4"
                 style={{ borderBottom: "1px solid #f0ece7" }}
               >
                 <span className="text-[#2a2a2a] text-[13.5px] sm:text-[15px] break-keep">{r.label}</span>
-                <span className="flex items-center gap-1.5 flex-shrink-0">
-                  <span className="text-[#a8814f] text-[15px] sm:text-[17px] font-bold whitespace-nowrap" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                    -{r.value}
-                  </span>
-                  <ArrowRight size={13} className="text-[#bbb]" />
+                <span className="text-[#a8814f] text-[15px] sm:text-[17px] font-bold whitespace-nowrap flex-shrink-0" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                  -{r.value}
                 </span>
-              </a>
+              </div>
             ))}
             <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4" style={{ borderBottom: "1px solid #f0ece7" }}>
               <span className="text-[#2a2a2a] text-[13.5px] sm:text-[15px] break-keep">후기 작성 시 네이버 포인트 지급</span>

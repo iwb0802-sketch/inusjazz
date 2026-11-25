@@ -265,7 +265,7 @@ export default function PricingSection() {
             </p>
             <div className="flex items-center justify-center gap-2 text-[#999] text-xs">
               <MapPin size={14} className="text-[#999] flex-shrink-0" />
-              <span>*서울 외 지역 출장비 별도</span>
+              <span>*서울·경기·인천 진행 · 경기·인천 출장비 별도</span>
             </div>
           </div>
         </div>

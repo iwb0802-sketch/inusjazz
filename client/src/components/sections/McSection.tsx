@@ -524,7 +524,7 @@ export default function McSection() {
   const [activeFilter, setActiveFilter] = useState("전체");
   const [filteredMcs, setFilteredMcs] = useState(MCS);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: "center",

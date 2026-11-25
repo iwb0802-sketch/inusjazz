@@ -216,8 +216,8 @@ export default function EventSection() {
               type="button"
               onClick={() => setShowRest((v) => !v)}
               aria-expanded={showRest}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-[13px] font-semibold text-[#555] bg-white hover:bg-[#fbf7f2] transition-colors"
-              style={{ border: "1px solid #ddd" }}
+              className="rest-glow-btn inline-flex items-center gap-1.5 px-6 py-3 rounded-full text-[13.5px] font-bold text-[#7a5a2e] bg-[#fffdf9] hover:bg-[#fbf3e6] transition-colors"
+              style={{ border: "1px solid rgba(190,150,95,0.6)" }}
             >
               {showRest ? "나머지 구성 접기" : `나머지 ${REST_COUNT}가지 구성 보기`}
               <ChevronDown size={15} className={`transition-transform duration-300 ${showRest ? "rotate-180" : ""}`} />

@@ -346,7 +346,9 @@ export default function EventSection() {
             ))}
             <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4" style={{ borderBottom: "1px solid #f0ece7" }}>
               <span className="text-[#2a2a2a] text-[13.5px] sm:text-[15px] break-keep">후기 작성 시 네이버 포인트 지급</span>
-              <span className="text-[#777] text-[12px] sm:text-[13px] whitespace-nowrap">별도</span>
+              <span className="text-[#a8814f] text-[14px] sm:text-[16px] font-bold whitespace-nowrap flex-shrink-0 text-right leading-tight" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                <span className="block text-[10.5px] sm:text-[11px] font-semibold text-[#a8814f]/80" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>적립금</span>2,000~15,000원
+              </span>
             </div>
             <div className="px-4 sm:px-6 py-4" style={{ background: "#181512" }}>
               <p className="text-white/85 text-[12.5px] sm:text-[13.5px] break-keep leading-relaxed">

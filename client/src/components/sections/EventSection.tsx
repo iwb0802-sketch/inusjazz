@@ -100,6 +100,18 @@ const BENEFIT_GROUPS = [
   },
 ];
 
+// 안심 보장 제도 (혜택 합계 · 가지 수에는 포함하지 않음)
+const ASSURANCE_ITEMS = [
+  {
+    t: "대체 사회자 배정 + 남은 잔금 할인",
+    d: "사회자 개인 사정(질병 · 가족사 등)으로 진행이 어려울 때에도, 이너스뮤직이 대체 사회자를 책임지고 배정하고 남은 잔금을 할인해 드립니다.",
+  },
+  {
+    t: "결제 금액 2배 환불 보장",
+    d: "사회자가 예식에 도착하지 못하거나 본식 시작 이후 도착하는 경우, 결제 금액의 2배를 환불해 드립니다.",
+  },
+];
+
 // 상단에 먼저 보여주는 대표 혜택 4가지 (금액이 명시된 항목)
 const HIGHLIGHT_TITLES = [
   "두 사람만의 스토리를 담은 감성 맞춤 대본 제작",
@@ -263,6 +275,46 @@ export default function EventSection() {
                   </div>
                 </div>
               ))}
+              {/* 안심 보장 제도 — 혜택 금액(27만원 · 19가지)에는 포함하지 않는 별도 약속 */}
+              <div
+                className="rounded-xl p-5 sm:p-6"
+                style={{
+                  background: "linear-gradient(160deg,#181512,#0f0f0f)",
+                  border: "1px solid rgba(212,184,150,0.55)",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.14)",
+                }}
+              >
+                <div className="flex items-center gap-2.5 mb-1">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "rgba(212,184,150,0.16)" }}>
+                    <ShieldCheck size={16} className="text-[#d4b896]" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span
+                      className="block text-[#d4b896] text-[10.5px] tracking-[0.26em]"
+                      style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
+                    >
+                      INUS ASSURANCE
+                    </span>
+                    <h3 className="text-white text-[15px] font-bold break-keep" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+                      이너스뮤직 안심 보장 제도
+                    </h3>
+                  </div>
+                </div>
+                <p className="text-white/55 text-[11.5px] sm:text-[12px] break-keep leading-relaxed mb-4">
+                  예식 당일까지, 이너스뮤직이 책임으로 약속드립니다
+                </p>
+                <div className="space-y-3.5">
+                  {ASSURANCE_ITEMS.map((it) => (
+                    <div key={it.t} className="flex items-start gap-2.5">
+                      <Check size={14} className="text-[#d4b896] flex-shrink-0 mt-[4px]" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-white text-[13.5px] font-semibold break-keep leading-[1.5]">{it.t}</p>
+                        <p className="text-white/60 text-[12px] mt-1 leading-relaxed break-keep">{it.d}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
         </div>

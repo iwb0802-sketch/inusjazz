@@ -476,8 +476,8 @@ export default function ReviewSection() {
               type="button"
               onClick={() => setShowProof((v) => !v)}
               aria-expanded={showProof}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-colors duration-300 hover:bg-white/5"
-              style={{ border: "1px solid rgba(212,184,150,0.4)", color: GOLD }}
+              className="proof-glow-btn inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-colors duration-300 hover:bg-[rgba(212,184,150,0.14)]"
+              style={{ border: "1px solid rgba(212,184,150,0.7)", color: GOLD, background: "rgba(212,184,150,0.06)" }}
             >
               {showProof ? "전체 후기·증빙 접기" : "전체 후기·증빙 펼치기"}
               <ChevronDown size={16} className={`transition-transform duration-300 ${showProof ? "rotate-180" : ""}`} />

@@ -5,13 +5,14 @@
  */
 import { useMemo, useState } from "react";
 import { Check, Copy, MessageCircle, CalendarCheck } from "lucide-react";
-import { BENEFIT_OPTIONS, PRICE_TIERS, amountFor, won, type BenefitOption, type TierId } from "@/data/pricing";
+import { BENEFIT_OPTIONS, PRICE_TIERS, TRAVEL_AREAS, amountFor, won, type BenefitOption, type TierId } from "@/data/pricing";
 
 const KAKAO_LINK = "https://pf.kakao.com/_wxovaM/chat";
 
 export default function QuoteCalculator() {
   const [tierId, setTierId] = useState<TierId>("premium");
   const [checked, setChecked] = useState<Record<string, boolean>>({ review: true, sns: false, friend: false, vov: false });
+  const [areaId, setAreaId] = useState("seoul");
   const [notice, setNotice] = useState("");
 
   const tier = PRICE_TIERS.find((t) => t.id === tierId)!;
@@ -22,13 +23,20 @@ export default function QuoteCalculator() {
     [checked, tierId],
   );
   const discount = applied.reduce((n, b) => n + amountFor(b, tier), 0);
-  const total = tier.list - discount;
+  const area = TRAVEL_AREAS.find((a) => a.id === areaId)!;
+  const travelFee = area.fee ?? 0;
+  const total = tier.list - discount + travelFee;
 
   const summary = [
     "[이너스뮤직 사회자 견적 문의]",
     `등급: ${tier.name} (정가 ${won(tier.list)})`,
     ...applied.map((b) => `- ${b.label} -${won(amountFor(b, tier))}`),
-    `예상 금액: ${won(total)}`,
+    area.fee === null
+      ? "예식 지역: 그 외 지역 (출장비 상담 후 안내)"
+      : area.fee === 0
+        ? `예식 지역: ${area.label}`
+        : `예식 지역: ${area.label} (출장비 +${won(area.fee)})`,
+    area.fee === null ? `예상 금액: ${won(total)} (출장비 별도)` : `예상 금액: ${won(total)}`,
     "예식일 / 예식장: ",
   ].join("\n");
 
@@ -109,9 +117,43 @@ export default function QuoteCalculator() {
           })}
         </div>
 
-        {/* 2. 혜택 */}
+        {/* 2. 예식 지역 */}
         <p className="text-[#1a1a1a] text-[13.5px] sm:text-[14px] font-bold mt-6 mb-2.5">
           <span className="text-[#a8814f] mr-1.5" style={{ fontFamily: "'Cormorant Garamond', serif" }}>2</span>
+          예식 지역
+          <span className="ml-1.5 text-[#999] text-[11.5px] font-normal">출장비 · 사회자 1인 기준</span>
+        </p>
+        <div role="radiogroup" aria-label="예식 지역" className="grid grid-cols-2 gap-2 sm:gap-2.5">
+          {TRAVEL_AREAS.map((a) => {
+            const on = a.id === areaId;
+            return (
+              <button
+                key={a.id}
+                type="button"
+                role="radio"
+                aria-checked={on}
+                onClick={() => setAreaId(a.id)}
+                className={`flex min-h-[60px] flex-col items-start justify-center rounded-lg px-3.5 py-2.5 text-left transition-all duration-200 active:scale-[0.98] ${a.label.length > 8 || a.fee === null ? "col-span-2" : ""}`}
+                style={
+                  on
+                    ? { background: "#181512", border: "1px solid #181512" }
+                    : { background: "#fff", border: "1px solid #e4dfd8" }
+                }
+              >
+                <span className={`text-[13px] sm:text-[14px] font-semibold break-keep leading-snug ${on ? "text-white" : "text-[#333]"}`}>
+                  {a.label}
+                </span>
+                <span className={`text-[12.5px] sm:text-[13px] font-bold mt-0.5 ${on ? "text-[#e0c188]" : "text-[#a8814f]"}`}>
+                  {a.fee === null ? "상담 후 안내" : won(a.fee)}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 3. 혜택 */}
+        <p className="text-[#1a1a1a] text-[13.5px] sm:text-[14px] font-bold mt-6 mb-2.5">
+          <span className="text-[#a8814f] mr-1.5" style={{ fontFamily: "'Cormorant Garamond', serif" }}>3</span>
           적용할 혜택
         </p>
         <div className="rounded-lg overflow-hidden" style={{ border: "1px solid #ece7e0" }}>
@@ -177,6 +219,12 @@ export default function QuoteCalculator() {
             {applied.length === 0 && (
               <div className="text-white/35 text-[12px]">적용된 혜택이 없습니다</div>
             )}
+            {travelFee > 0 && (
+              <div className="flex items-center justify-between gap-3 text-white/60">
+                <span className="break-keep">출장비 ({area.label})</span>
+                <span className="whitespace-nowrap">+{won(travelFee)}</span>
+              </div>
+            )}
           </div>
           <div className="my-3.5 h-px bg-white/10" />
           <div className="flex items-end justify-between gap-3">
@@ -192,10 +240,13 @@ export default function QuoteCalculator() {
           {discount > 0 && (
             <p className="mt-2 text-right text-white/40 text-[11px]">총 {won(discount)} 절약</p>
           )}
+          {area.fee === null && (
+            <p className="mt-2 text-right text-white/50 text-[11.5px]">출장비는 상담 시 안내</p>
+          )}
         </div>
 
         <p className="mt-3 text-center text-[#999] text-[11px] sm:text-[12px] break-keep leading-relaxed">
-          부가세 포함 · 경기·인천 지역 출장비 별도
+          부가세 포함 · 출장비 포함 금액
         </p>
 
         {/* 행동 */}

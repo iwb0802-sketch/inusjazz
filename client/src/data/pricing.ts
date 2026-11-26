@@ -66,3 +66,24 @@ export const PRICE_TIERS: PriceTier[] = [
 ];
 
 export const won = (n: number) => `${n.toLocaleString("ko-KR")}원`;
+
+/**
+ * 지역별 출장비 (사회자 1인 기준, 부가세 포함)
+ * fee === null 은 "그 외 지역(상담 후 안내)". 가격표와 견적 계산기가 공용으로 사용합니다.
+ */
+export interface TravelArea {
+  id: string;
+  /** 계산기 선택지 표기 */
+  label: string;
+  /** 출장비(원). null = 상담 후 안내 */
+  fee: number | null;
+}
+
+export const TRAVEL_AREAS: TravelArea[] = [
+  { id: "seoul", label: "서울", fee: 0 },
+  { id: "gwangmyeong", label: "광명", fee: 10000 },
+  { id: "anyang", label: "안양·성남·야탑", fee: 20000 },
+  { id: "bundang", label: "분당·부천", fee: 30000 },
+  { id: "suwon", label: "의정부·수원·인천·용인", fee: 40000 },
+  { id: "other", label: "그 외 지역", fee: null },
+];

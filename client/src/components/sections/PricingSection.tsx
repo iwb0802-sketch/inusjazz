@@ -14,7 +14,7 @@ import {
   MapPin,
   Crown,
 } from "lucide-react";
-import { PRICE_TIERS, won } from "@/data/pricing";
+import { PRICE_TIERS, TRAVEL_AREAS, won } from "@/data/pricing";
 
 const DESIGNATED_EVENT = PRICE_TIERS.filter((t) => t.designated).map((t) => t.event);
 const EVENT_MAX = Math.max(...DESIGNATED_EVENT).toLocaleString("ko-KR");
@@ -268,10 +268,28 @@ export default function PricingSection() {
             <p className="text-center text-[#777] text-xs sm:text-sm break-keep">
               ※ 랜덤 배정 / 지정 배정 모두 명시된 사항을 제외한 모든 혜택은 동일하게 제공됩니다.
             </p>
-            <div className="flex items-center justify-center gap-2 text-[#999] text-xs">
-              <MapPin size={14} className="text-[#999] flex-shrink-0" />
-              <span>*서울·경기·인천 진행 · 경기·인천 출장비 별도</span>
+          </div>
+
+          {/* 출장비 안내 */}
+          <div className="mt-10 sm:mt-12 mx-auto max-w-md">
+            <div className="flex items-center justify-center gap-2 text-[#1a1a1a] text-sm sm:text-[15px] font-bold">
+              <MapPin size={15} className="text-[#a8814f] flex-shrink-0" />
+              출장비 안내
             </div>
+            <p className="mt-1.5 text-center text-[#999] text-[11.5px] sm:text-xs">사회자 1인 기준 · 부가세 포함</p>
+            <ul className="mt-4 rounded-lg bg-white border border-[#ece7e0] divide-y divide-[#f0ece7]">
+              {TRAVEL_AREAS.filter((a) => a.fee !== null).map((a) => (
+                <li key={a.id} className="flex items-center justify-between gap-4 px-4 sm:px-5 py-3 text-[13px] sm:text-sm">
+                  <span className="text-[#555] break-keep">{a.label}</span>
+                  <span className="text-[#1a1a1a] font-semibold whitespace-nowrap">
+                    {a.fee === 0 ? "추가 비용 없음" : won(a.fee as number)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3 text-center text-[#888] text-[11.5px] sm:text-xs break-keep leading-relaxed">
+              그 외 지역은 예식 장소를 알려주시면 확인 후 안내드리겠습니다.
+            </p>
           </div>
         </div>
       </div>

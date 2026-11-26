@@ -8,7 +8,7 @@ const PROOFS = [
   { value: PROOF_TOTAL.toLocaleString(), unit: "건", label: "누적 후기", sub: "6개 채널", href: "#review" },
   { value: "18", unit: "인", label: "사회자 전원", sub: "목소리·영상 공개", href: "#mc" },
   { value: "100", unit: "%", label: "계약금 환불", sub: "예식 전주까지", href: "#process" },
-  { value: "14", unit: "만원~", label: "정가 기준", sub: "경기·인천 출장비 별도", href: "#pricing" },
+  { value: "14", unit: "만원~", label: "정가 기준", sub: "경기·인천\n출장비 1~4만 원", href: "#pricing" },
 ];
 
 const HERO_BG = "/images/hero-v2-option2.webp";
@@ -103,7 +103,7 @@ export default function HeroSection() {
               <a
                 key={p.label}
                 href={p.href}
-                className="group flex flex-col items-center justify-center py-3 sm:py-4 px-0.5 hover:bg-white/5 transition-colors"
+                className="group flex flex-col items-center justify-start py-3 sm:py-4 px-0.5 hover:bg-white/5 transition-colors"
                 style={i > 0 ? { borderLeft: "1px solid rgba(212,184,150,0.2)" } : undefined}
               >
                 <span className="flex items-baseline whitespace-nowrap" style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, color: "#d4b896", lineHeight: 1 }}>
@@ -111,7 +111,7 @@ export default function HeroSection() {
                   <span className="text-[0.8rem] sm:text-base ml-0.5" style={{ fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 500 }}>{p.unit}</span>
                 </span>
                 <span className="mt-1.5 text-[11px] sm:text-[13px] text-white/85 whitespace-nowrap" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>{p.label}</span>
-                <span className="mt-0.5 text-[9.5px] sm:text-[11px] text-white/45 whitespace-nowrap" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>{p.sub}</span>
+                <span className="mt-0.5 text-[9.5px] sm:text-[11px] text-white/45 break-keep text-center leading-snug whitespace-pre-line sm:whitespace-normal" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>{p.sub}</span>
               </a>
             ))}
           </div>

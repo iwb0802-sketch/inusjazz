@@ -4,7 +4,7 @@
  * Design: Premium dark + gold accent
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Crown, Star, Mic, Play, X } from "lucide-react";
+import { Crown, Star, Mic, Play, X, Instagram, Youtube } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const TIERS = [
@@ -279,6 +279,33 @@ export default function VideoGuideSection() {
             <span className="whitespace-nowrap">갖춘 사회자만 해당됩니다.</span>
           </span>
         </p>
+
+        {/* 더 많은 영상 - 인스타/유튜브 */}
+        <div className="mt-10 pt-8 border-t border-white/10 text-center">
+          <p className="text-white/60 text-[13px] sm:text-sm break-keep">
+            더 다양한 예식 영상은 <span className="text-[#d4b896]">인스타그램·유튜브</span>에서 볼 수 있어요
+          </p>
+          <div className="mt-4 flex flex-col min-[380px]:flex-row items-stretch justify-center gap-3 max-w-md mx-auto">
+            <a
+              href="https://www.instagram.com/inusmusic/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 border border-white/25 text-white/90 text-sm rounded-sm hover:bg-white/10 transition-colors whitespace-nowrap"
+            >
+              <Instagram size={17} />
+              인스타그램 영상
+            </a>
+            <a
+              href="https://www.youtube.com/channel/UC1zF6ZTCwMxzK9fEqI9ESLA"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 border border-white/25 text-white/90 text-sm rounded-sm hover:bg-white/10 transition-colors whitespace-nowrap"
+            >
+              <Youtube size={18} />
+              유튜브 영상
+            </a>
+          </div>
+        </div>
       </div>
 
       {activeTier && (

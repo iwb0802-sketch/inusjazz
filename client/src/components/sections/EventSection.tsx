@@ -143,7 +143,7 @@ export default function EventSection() {
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
   const anim3 = useScrollAnimation();
-  const [showRest, setShowRest] = useState(false);
+  const [showDesc, setShowDesc] = useState(false);
 
   return (
     <section id="event" className="relative bg-[#f8f6f3] pb-20 sm:pb-28">
@@ -264,60 +264,66 @@ export default function EventSection() {
             </div>
           </div>
 
+          {/* 나머지 구성 — 접지 않고 항상 노출. 제목만 압축해서 보여주고 설명은 토글 */}
+          <div className="mt-8 sm:mt-10 flex items-center justify-center gap-3">
+            <span className="h-px w-8 sm:w-14 bg-[#d4b896]/60" />
+            <p className="text-[#1a1a1a] text-[15px] sm:text-[17px] font-bold break-keep text-center" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+              그 밖에 함께 준비되는 <span className="text-[#a8814f]">{REST_COUNT}가지</span>
+            </p>
+            <span className="h-px w-8 sm:w-14 bg-[#d4b896]/60" />
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+            {REST_GROUPS.map((g) => (
+              <div key={g.title} className="rounded-xl p-5 bg-white" style={{ border: "1px solid #ececec" }}>
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: `${g.color}1f` }}>
+                    <g.icon size={16} style={{ color: g.color }} />
+                  </div>
+                  <h3 className="text-[#1a1a1a] text-[15px] font-bold break-keep flex-1" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+                    {g.title}
+                  </h3>
+                  <span className="text-[#aaa] text-[11px] font-semibold">{g.items.length}가지</span>
+                </div>
+                <div className={showDesc ? "space-y-2.5" : "space-y-1.5"}>
+                  {g.items.map((it) => (
+                    <div key={it.t} className="flex items-start gap-2">
+                      <Check size={14} className="text-[#c09a7e] flex-shrink-0 mt-[3px]" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[#2a2a2a] text-[13px] font-semibold break-keep leading-[1.5]">
+                          {it.t}
+                          {it.w !== "포함" && <span className="ml-1.5 text-[#a8814f] text-[11px] font-bold whitespace-nowrap">{it.w}</span>}
+                        </p>
+                        {showDesc && <p className="text-[#888] text-[11.5px] mt-0.5 leading-relaxed break-keep">{it.d}</p>}
+                        {"href" in it && it.href && (
+                          <a
+                            href={it.href as string}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 mt-1 text-[11.5px] font-bold text-[#2f8b78] hover:text-[#23705f]"
+                          >
+                            미리 사용해보기 <ExternalLink size={11} />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
           <div className="mt-4 text-center">
             <button
               type="button"
-              onClick={() => setShowRest((v) => !v)}
-              aria-expanded={showRest}
-              className="rest-glow-btn inline-flex items-center gap-1.5 px-6 py-3 rounded-full text-[13.5px] font-bold text-[#7a5a2e] bg-[#fffdf9] hover:bg-[#fbf3e6] transition-colors"
-              style={{ border: "1px solid rgba(190,150,95,0.6)" }}
+              onClick={() => setShowDesc((v) => !v)}
+              aria-expanded={showDesc}
+              className="inline-flex items-center gap-1 px-4 py-2 text-[12.5px] font-semibold text-[#7a5a2e] hover:text-[#5a3f1c] transition-colors"
             >
-              {showRest ? "나머지 구성 접기" : `나머지 ${REST_COUNT}가지 구성 보기`}
-              <ChevronDown size={15} className={`transition-transform duration-300 ${showRest ? "rotate-180" : ""}`} />
+              {showDesc ? "항목 설명 접기" : "항목별 설명 보기"}
+              <ChevronDown size={14} className={`transition-transform duration-300 ${showDesc ? "rotate-180" : ""}`} />
             </button>
           </div>
-
-          {showRest && (
-            <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-              {REST_GROUPS.map((g) => (
-                <div key={g.title} className="rounded-xl p-5 bg-white" style={{ border: "1px solid #ececec" }}>
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: `${g.color}1f` }}>
-                      <g.icon size={16} style={{ color: g.color }} />
-                    </div>
-                    <h3 className="text-[#1a1a1a] text-[15px] font-bold break-keep flex-1" style={{ fontFamily: "'Noto Serif KR', serif" }}>
-                      {g.title}
-                    </h3>
-                    <span className="text-[#aaa] text-[11px] font-semibold">{g.items.length}가지</span>
-                  </div>
-                  <div className="space-y-2">
-                    {g.items.map((it) => (
-                      <div key={it.t} className="flex items-start gap-2">
-                        <Check size={14} className="text-[#c09a7e] flex-shrink-0 mt-[3px]" />
-                        <div className="min-w-0 flex-1">
-                          <p className="text-[#2a2a2a] text-[13px] font-semibold break-keep leading-[1.5]">
-                            {it.t}
-                            {it.w !== "포함" && <span className="ml-1.5 text-[#a8814f] text-[11px] font-bold whitespace-nowrap">{it.w}</span>}
-                          </p>
-                          <p className="text-[#888] text-[11.5px] mt-0.5 leading-relaxed break-keep">{it.d}</p>
-                          {"href" in it && it.href && (
-                            <a
-                              href={it.href as string}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 mt-1 text-[11.5px] font-bold text-[#2f8b78] hover:text-[#23705f]"
-                            >
-                              미리 사용해보기 <ExternalLink size={11} />
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
         {/* 3. 추가 혜택 표 */}

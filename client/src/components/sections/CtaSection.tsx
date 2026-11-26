@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import DateField from "@/components/DateField";
 import { CalendarCheck } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
@@ -47,14 +48,11 @@ export default function CtaSection() {
               navigate(date ? `/schedule?date=${date}` : "/schedule");
             }}
           >
-            <input
-              type="date"
+            <DateField
               value={date}
+              onChange={setDate}
               min={todayStr}
-              onChange={(e) => setDate(e.target.value)}
-              aria-label="예식 날짜"
-              className="flex-1 min-w-0 px-4 py-4 rounded-sm bg-white/10 border border-white/30 text-white text-base focus:outline-none focus:border-[#5BB5A2]"
-              style={{ colorScheme: "dark" }}
+              className="flex-1 min-w-0 px-4 py-3.5 rounded-sm bg-white/10 border border-white/40 focus-within:border-[#5BB5A2]"
             />
             <button
               type="submit"

@@ -1,6 +1,7 @@
 /**
  * 사회자 스케줄 현황 페이지 - /schedule
  */
+import DateField from "@/components/DateField";
 import { useEffect, useRef, useState } from "react";
 
 const API_URL = "/api/schedule";
@@ -591,11 +592,11 @@ export default function Schedule() {
 
         {/* 날짜 검색 */}
         <div style={{ background:C.card, borderRadius:16, padding:20, marginBottom:24, border:`1px solid ${C.cardBorder}` }}>
-          <div style={{ fontSize:12, color:C.textSub, marginBottom:10, fontWeight:600 }}>📅 예식 날짜 선택</div>
+          <div style={{ fontSize:12, color:C.textSub, marginBottom:10, fontWeight:600 }}>예식 날짜 선택</div>
           <div style={{ display:"flex", gap:10 }}>
-            <input type="date" value={date} onChange={e => setDate(e.target.value)}
-              onKeyDown={e => e.key==="Enter" && search()}
-              style={{ flex:1, height:48, background:"rgba(255,255,255,0.08)", border:`1.5px solid ${C.cardBorder}`, borderRadius:10, color:C.text, fontSize:16, padding:"0 14px", fontFamily:"inherit", outline:"none", minWidth:0 }} />
+            <DateField value={date} onChange={setDate} onEnter={() => search()}
+              textColor={C.text} placeholderColor={C.textSub} iconColor={C.mint}
+              style={{ flex:1, minHeight:52, background:"rgba(255,255,255,0.08)", border:`1.5px solid ${C.cardBorder}`, borderRadius:10, padding:"0 14px", minWidth:0 }} />
             <button onClick={() => search()}
               style={{ height:48, padding:"0 24px", background:`linear-gradient(135deg,#3d9e8c,${C.mint})`, border:"none", borderRadius:10, color:"#fff", fontSize:15, fontWeight:700, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap", boxShadow:`0 4px 15px rgba(91,181,162,0.3)`, flexShrink:0 }}>
               조회

@@ -13,13 +13,42 @@ import {
   UserCheck,
   MapPin,
   Crown,
+  PlayCircle,
+  Star,
+  ShieldCheck,
+  Users,
 } from "lucide-react";
 import { PRICE_TIERS, TRAVEL_AREAS, won } from "@/data/pricing";
+import { PROOF_TOTAL, PROOF_AS_OF } from "@/data/reviewStats";
 
 const DESIGNATED_EVENT = PRICE_TIERS.filter((t) => t.designated).map((t) => t.event);
 const EVENT_MAX = Math.max(...DESIGNATED_EVENT).toLocaleString("ko-KR");
 const EVENT_MIN = Math.min(...DESIGNATED_EVENT).toLocaleString("ko-KR");
 const RANDOM_TIER = PRICE_TIERS.find((t) => !t.designated)!;
+
+// 가격 옆에 보여주는 근거 (가격 차이를 설명하는 영역)
+const PRICE_REASONS = [
+  {
+    Icon: PlayCircle,
+    t: "영상과 목소리로 직접 선택",
+    d: "사회자 18인의 진행 영상과 목소리를 먼저 확인하고, 지정 배정으로 직접 고르실 수 있습니다.",
+  },
+  {
+    Icon: Star,
+    t: `실제 후기 ${PROOF_TOTAL.toLocaleString("ko-KR")}건`,
+    d: `6개 채널에 쌓인 후기의 합산입니다. (${PROOF_AS_OF} 기준)`,
+  },
+  {
+    Icon: ShieldCheck,
+    t: "결제 금액 2배 환불 보장",
+    d: "사회자가 도착하지 못하거나 본식 시작 이후 도착하면 결제 금액의 2배를 환불해 드립니다.",
+  },
+  {
+    Icon: Users,
+    t: "예비 사회자 · 대표 상시 대기",
+    d: "예비 사회자가 대기하고, 대표도 서브 인원으로 함께 대기해 돌발 상황에 바로 대응합니다.",
+  },
+];
 
 
 export default function PricingSection() {
@@ -253,6 +282,29 @@ export default function PricingSection() {
 
 
               </div>
+            </div>
+          </div>
+
+          {/* 가격 근거 */}
+          <div className="mt-8 sm:mt-10 rounded-sm border border-[#d4b896]/40 bg-white px-5 sm:px-8 py-7 sm:py-8">
+            <p
+              className="text-center text-[#1a1a1a] text-base sm:text-lg break-keep"
+              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+            >
+              이 가격에 담긴 <span className="text-[#a8814f]">약속</span>
+            </p>
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
+              {PRICE_REASONS.map(({ Icon, t, d }) => (
+                <div key={t} className="flex items-start gap-3.5">
+                  <span className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#faf6f0] border border-[#d4b896]/50">
+                    <Icon size={17} className="text-[#a8814f]" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[#1a1a1a] text-[14.5px] sm:text-[15px] font-bold break-keep">{t}</p>
+                    <p className="mt-1 text-[#777] text-[12.5px] sm:text-[13px] leading-relaxed break-keep">{d}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 

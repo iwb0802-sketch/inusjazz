@@ -6,6 +6,7 @@
 import { useState } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import QuoteCalculator from "./QuoteCalculator";
+import { ASSURANCE_ITEMS } from "@/data/assurance";
 import {
   Check,
   Mic2,
@@ -22,7 +23,7 @@ const AUDIO_TOOL =
 const PREWEDDING_VIDEO_TOOL =
   "https://prewedding-video-renderer-production.up.railway.app/editor";
 
-// 혜택 카테고리 (총 19가지 · 27만원 상당)
+// 혜택 카테고리 (금액이 명시된 항목의 합 27만원 상당 · 총 가지 수는 ALL_ITEMS.length로 자동 계산)
 const BENEFIT_GROUPS = [
   {
     icon: Smartphone,
@@ -95,23 +96,11 @@ const BENEFIT_GROUPS = [
     items: [
       { t: "전속 계약 100% 책임 진행", d: "No-show 걱정 없는 전속 사회자만 배정", w: "포함" },
       { t: "예식 2시간 전 · 1시간 전 현장 도착 이중 체크", d: "담당자가 직접 확인", w: "포함" },
-      { t: "만일의 상황 대비, 예비 사회자 상시 대기", d: "돌발 변수까지 이너스가 책임집니다", w: "포함" },
     ],
   },
 ];
 
-// 안심 보장 제도 (혜택 합계 · 가지 수에는 포함하지 않음)
-const ASSURANCE_ITEMS = [
-  {
-    t: "대체 사회자 배정 + 남은 잔금 10% 할인",
-    d: "사회자 개인 사정(질병 · 가족사 등)으로 진행이 어려울 때에도, 이너스뮤직이 대체 사회자를 책임지고 배정하고 남은 잔금을 10% 할인해 드립니다.",
-  },
-  {
-    t: "결제 금액 2배 환불 보장",
-    d: "사회자가 예식에 도착하지 못하거나 본식 시작 이후 도착하는 경우, 결제 금액의 2배를 환불해 드립니다.",
-  },
-];
-
+// (안심 보장 · 예비 사회자 · 대표 대기 문구는 data/assurance.ts 단일 소스)
 // 상단에 먼저 보여주는 대표 혜택 4가지 (금액이 명시된 항목)
 const HIGHLIGHT_TITLES = [
   "두 사람만의 스토리를 담은 감성 맞춤 대본 제작",

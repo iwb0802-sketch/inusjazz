@@ -258,7 +258,7 @@ const QNA_DATA: QnaItem[] = [
             </div>
             <div className="pt-1">
               <p className="text-[#555] text-sm leading-relaxed">
-                만일의 상황 대비, <strong className="text-[#1a1a1a]">예비 사회자 대기</strong>
+                만일의 상황 대비, <strong className="text-[#1a1a1a]">예비 사회자 · 대표 대기</strong>
               </p>
             </div>
           </div>

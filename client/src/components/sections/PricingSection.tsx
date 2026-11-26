@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { PRICE_TIERS, TRAVEL_AREAS, won } from "@/data/pricing";
 import { PROOF_TOTAL, PROOF_AS_OF } from "@/data/reviewStats";
+import { ASSURANCE_SUMMARY, STANDBY } from "@/data/assurance";
 
 const DESIGNATED_EVENT = PRICE_TIERS.filter((t) => t.designated).map((t) => t.event);
 const EVENT_MAX = Math.max(...DESIGNATED_EVENT).toLocaleString("ko-KR");
@@ -31,23 +32,15 @@ const PRICE_REASONS = [
   {
     Icon: PlayCircle,
     t: "영상과 목소리로 직접 선택",
-    d: "사회자 18인의 진행 영상과 목소리를 먼저 확인하고, 지정 배정으로 직접 고르실 수 있습니다.",
+    d: "지정 배정으로 18인의 진행 영상과 목소리를 확인하고 직접 고르실 수 있습니다.",
   },
   {
     Icon: Star,
-    t: `실제 후기 ${PROOF_TOTAL.toLocaleString("ko-KR")}건`,
-    d: `6개 채널에 쌓인 후기의 합산입니다. (${PROOF_AS_OF} 기준)`,
+    t: `누적 후기 ${PROOF_TOTAL.toLocaleString("ko-KR")}건`,
+    d: `6개 채널 합산 · ${PROOF_AS_OF} 기준`,
   },
-  {
-    Icon: ShieldCheck,
-    t: "결제 금액 2배 환불 보장",
-    d: "사회자가 도착하지 못하거나 본식 시작 이후 도착하면 결제 금액의 2배를 환불해 드립니다.",
-  },
-  {
-    Icon: Users,
-    t: "예비 사회자 · 대표 상시 대기",
-    d: "예비 사회자가 대기하고, 대표도 서브 인원으로 함께 대기해 돌발 상황에 바로 대응합니다.",
-  },
+  { Icon: ShieldCheck, ...ASSURANCE_SUMMARY },
+  { Icon: Users, ...STANDBY },
 ];
 
 
@@ -286,23 +279,25 @@ export default function PricingSection() {
           </div>
 
           {/* 가격 근거 */}
-          <div className="mt-8 sm:mt-10 rounded-sm border border-[#d4b896]/40 bg-white px-5 sm:px-8 py-7 sm:py-8">
+          <div className="mt-10 sm:mt-14 rounded-sm border border-[#d4b896]/40 bg-white px-6 sm:px-10 py-10 sm:py-14">
             <p
-              className="text-center text-[#1a1a1a] text-base sm:text-lg break-keep"
+              className="text-center text-[#1a1a1a] text-lg sm:text-xl break-keep"
               style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
             >
               이 가격에 담긴 <span className="text-[#a8814f]">약속</span>
             </p>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
+            <div className="mx-auto mt-3 h-px w-10 bg-[#d4b896]" />
+            <div className="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-0 sm:gap-y-10 lg:gap-y-0">
               {PRICE_REASONS.map(({ Icon, t, d }) => (
-                <div key={t} className="flex items-start gap-3.5">
-                  <span className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#faf6f0] border border-[#d4b896]/50">
-                    <Icon size={17} className="text-[#a8814f]" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[#1a1a1a] text-[14.5px] sm:text-[15px] font-bold break-keep">{t}</p>
-                    <p className="mt-1 text-[#777] text-[12.5px] sm:text-[13px] leading-relaxed break-keep">{d}</p>
+                <div
+                  key={t}
+                  className="py-5 sm:py-0 sm:px-7 border-t border-[#d4b896]/25 first:border-t-0 first:pt-0 last:pb-0 sm:border-t-0 sm:first:pt-0 sm:last:pb-0 lg:border-l lg:first:border-l-0 sm:odd:pl-0 lg:odd:pl-7 lg:first:pl-0"
+                >
+                  <div className="flex items-center gap-2.5 sm:block">
+                    <Icon size={20} strokeWidth={1.4} className="flex-shrink-0 text-[#a8814f]" />
+                    <p className="sm:mt-3.5 text-[#1a1a1a] text-[14.5px] sm:text-[15px] font-bold break-keep">{t}</p>
                   </div>
+                  <p className="mt-2 text-[#777] text-[12.5px] sm:text-[13px] leading-[1.75] break-keep">{d}</p>
                 </div>
               ))}
             </div>

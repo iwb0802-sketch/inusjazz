@@ -13,33 +13,14 @@ import {
   UserCheck,
   MapPin,
   Crown,
-  PlayCircle,
-  Star,
-  Users,
 } from "lucide-react";
 import { PRICE_TIERS, TRAVEL_AREAS, won } from "@/data/pricing";
-import { PROOF_TOTAL, PROOF_AS_OF } from "@/data/reviewStats";
-import { PROMISES, STANDBY } from "@/data/assurance";
+import { PROMISES } from "@/data/assurance";
 
 const DESIGNATED_EVENT = PRICE_TIERS.filter((t) => t.designated).map((t) => t.event);
 const EVENT_MAX = Math.max(...DESIGNATED_EVENT).toLocaleString("ko-KR");
 const EVENT_MIN = Math.min(...DESIGNATED_EVENT).toLocaleString("ko-KR");
 const RANDOM_TIER = PRICE_TIERS.find((t) => !t.designated)!;
-
-// '이 가격에 담긴 약속' 하단의 함께 드리는 안심 요소
-const PRICE_REASONS = [
-  {
-    Icon: PlayCircle,
-    t: "영상과 목소리로 직접 선택",
-    d: "지정 배정으로 18인의 진행 영상과 목소리를 확인하고 직접 고르실 수 있습니다.",
-  },
-  {
-    Icon: Star,
-    t: `누적 후기 ${PROOF_TOTAL.toLocaleString("ko-KR")}건`,
-    d: `6개 채널 합산 · ${PROOF_AS_OF} 기준`,
-  },
-  { Icon: Users, ...STANDBY },
-];
 
 
 export default function PricingSection() {
@@ -277,7 +258,7 @@ export default function PricingSection() {
             </div>
           </div>
 
-          {/* 가격 근거 — '이 가격에 담긴 약속' (계약금 환불 · 대체 사회자 · 2배 환불 + 대기 체계) */}
+          {/* 가격 근거 — '이 가격에 담긴 약속' (계약금 환불 · 대체 사회자 · 2배 환불 · 예비 사회자/대표 대기) */}
           <div
             id="promise"
             ref={anim4.ref}
@@ -307,24 +288,26 @@ export default function PricingSection() {
               <div className="mx-auto mt-5 h-px w-10 bg-[#d4b896]/70" />
             </div>
 
-            <div className="mt-9 sm:mt-14 grid grid-cols-1 md:grid-cols-3">
-              {PROMISES.map((p) => (
+            <div className="mt-9 sm:mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-y-12 lg:gap-y-0">
+              {PROMISES.map((p, i) => (
                 <div
                   key={p.t}
-                  className="flex items-start gap-5 md:block md:text-center py-6 md:py-0 md:px-8 border-t border-[#d4b896]/20 first:border-t-0 first:pt-0 last:pb-0 md:border-t-0 md:border-l md:first:border-l-0 md:first:pl-0 md:last:pr-0"
+                  className={`flex items-start gap-5 md:block md:text-center py-6 md:py-0 md:px-8 lg:px-6 border-t border-[#d4b896]/20 first:border-t-0 first:pt-0 last:pb-0 md:border-t-0 ${i % 2 === 1 ? "md:border-l md:border-[#d4b896]/20" : ""} lg:border-l lg:border-[#d4b896]/20 lg:first:border-l-0`}
                 >
                   <div className="w-[92px] md:w-auto flex-shrink-0">
                     <p
-                      className="text-[#e6cfa6] leading-none whitespace-nowrap text-[42px] md:text-[64px]"
-                      style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
+                      className={`text-[#e6cfa6] leading-none whitespace-nowrap ${/[가-힣]/.test(p.fig) ? "text-[32px] md:text-[48px] md:pt-[10px]" : "text-[42px] md:text-[64px]"}`}
+                      style={{ fontFamily: /[가-힣]/.test(p.fig) ? "'Noto Serif KR', serif" : "'Cormorant Garamond', serif", fontWeight: 600 }}
                     >
                       {p.fig}
-                      <span
-                        className="ml-0.5 text-[0.42em] align-baseline"
-                        style={{ fontFamily: p.unit === "%" ? "'Cormorant Garamond', serif" : "'Noto Serif KR', serif" }}
-                      >
-                        {p.unit}
-                      </span>
+                      {p.unit && (
+                        <span
+                          className="ml-0.5 text-[0.42em] align-baseline"
+                          style={{ fontFamily: p.unit === "%" ? "'Cormorant Garamond', serif" : "'Noto Serif KR', serif" }}
+                        >
+                          {p.unit}
+                        </span>
+                      )}
                     </p>
                     <p className="mt-2.5 text-white/45 text-[11px] tracking-[0.12em] break-keep">{p.cap}</p>
                   </div>
@@ -332,19 +315,6 @@ export default function PricingSection() {
                     <p className="text-white text-[15px] sm:text-[16px] font-bold break-keep leading-snug">{p.t}</p>
                     <p className="mt-2 text-white/60 text-[12.5px] sm:text-[13px] leading-[1.8] break-keep">{p.d}</p>
                     {p.note && <p className="mt-2.5 text-[#d4b896]/85 text-[11.5px] sm:text-[12px] break-keep">{p.note}</p>}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* 함께 드리는 안심 요소 — 조용하게 */}
-            <div className="mt-8 sm:mt-14 pt-7 sm:pt-9 border-t border-[#d4b896]/20 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-10">
-              {PRICE_REASONS.map(({ Icon, t, d }) => (
-                <div key={t} className="flex items-start gap-3">
-                  <Icon size={17} strokeWidth={1.4} className="flex-shrink-0 mt-[2px] text-[#d4b896]" />
-                  <div className="min-w-0">
-                    <p className="text-white/90 text-[13.5px] font-semibold break-keep leading-snug">{t}</p>
-                    <p className="mt-1.5 text-white/50 text-[12px] leading-[1.75] break-keep">{d}</p>
                   </div>
                 </div>
               ))}

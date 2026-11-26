@@ -1,5 +1,5 @@
 /**
- * ProcessSection - 책임 설계 (4단계 + 신뢰 포인트) · 환불·보장 정책은 가격 섹션 '이 가격에 담긴 약속'
+ * ProcessSection - 준비 과정 (4단계 + 신뢰 포인트) · 환불·보장 정책은 가격 섹션 '이 가격에 담긴 약속'
  * Design: Dark background, 4 steps → trust cards
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
@@ -99,7 +99,7 @@ export default function ProcessSection() {
             className="mt-4 text-white text-2xl sm:text-3xl md:text-4xl"
             style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
           >
-            예식 당일까지 <span style={{ color: GOLD }}>책임 설계</span>합니다
+            예식 당일까지 <span style={{ color: GOLD }}>체계적으로</span> 준비합니다
           </h2>
           <p className="mt-4 text-white/50 text-sm sm:text-base break-keep">
             계약부터 예식까지, 4단계로 빈틈을 줄였습니다

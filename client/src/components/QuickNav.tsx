@@ -12,7 +12,7 @@ const menuItems = [
   { id: "pricing",     label: "요금" },
   { id: "event",       label: "혜택" },
   { id: "package",     label: "패키지" },
-  { id: "process",     label: "책임설계" },
+  { id: "process",     label: "준비과정" },
   { id: "qna",         label: "Q&A" },
 ];
 

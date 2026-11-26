@@ -31,7 +31,7 @@ export default function Home() {
       <McSection />
       <HiddenGemsSection />
       <VideoGuideSection />
-      {/* 증거(후기) → 한 줄 희소성 → 가격 + 혜택 → Q&A → 패키지 → 책임 설계 → 날짜 확인 */}
+      {/* 증거(후기) → 한 줄 희소성 → 가격 + 혜택 → Q&A → 패키지 → 준비 과정 → 날짜 확인 */}
       <ReviewSection />
       <LiveBookingSection />
       <PricingSection />

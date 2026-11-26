@@ -109,6 +109,11 @@ const HIGHLIGHT_TITLES = [
   "모바일 청첩장 제작",
   "프리미엄 식전영상 제작 지원",
 ];
+// 실제 서비스 화면 썸네일 (라이브 도구 캡처)
+const HIGHLIGHT_THUMBS: Record<string, { src: string; alt: string }> = {
+  "모바일 청첩장 제작": { src: "/images/ev-card.webp", alt: "이너스 모바일 청첩장 실제 제작 화면" },
+  "프리미엄 식전영상 제작 지원": { src: "/images/ev-vid.webp", alt: "이너스 식전영상 편집기 실제 화면" },
+};
 const ALL_ITEMS = BENEFIT_GROUPS.flatMap((g) => g.items.map((it) => ({ ...it, group: g })));
 const HIGHLIGHTS = HIGHLIGHT_TITLES.map((t) => ALL_ITEMS.find((it) => it.t === t)!).filter(Boolean);
 const REST_GROUPS = BENEFIT_GROUPS.map((g) => ({
@@ -189,6 +194,20 @@ export default function EventSection() {
                 data-rf="card"
                 className="rf-card rounded-xl p-5 bg-white"
               >
+                {HIGHLIGHT_THUMBS[it.t] && (
+                  <div className="relative -mx-1 mb-4 overflow-hidden rounded-lg bg-[#f4efe8]" style={{ aspectRatio: "2.4 / 1" }}>
+                    <img
+                      src={HIGHLIGHT_THUMBS[it.t].src}
+                      alt={HIGHLIGHT_THUMBS[it.t].alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 h-full w-full object-cover object-top"
+                    />
+                    <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-[3px] text-[10px] font-semibold tracking-wide text-white/90 backdrop-blur-sm">
+                      실제 화면
+                    </span>
+                  </div>
+                )}
                 <span
                   className="rf-w block text-[#a8814f] text-[12px] sm:text-[13px] font-bold tracking-wide"
                   style={{ fontFamily: "'Noto Serif KR', serif" }}

@@ -102,7 +102,7 @@ export default function ProcessSection() {
             예식 당일까지 <span style={{ color: GOLD }}>체계적으로</span> 준비합니다
           </h2>
           <p className="mt-4 text-white/50 text-sm sm:text-base break-keep">
-            계약부터 예식까지, 4단계로 빈틈을 줄였습니다
+            계약부터 예식까지, 4단계로 빈틈없이 준비합니다
           </p>
         </div>
 

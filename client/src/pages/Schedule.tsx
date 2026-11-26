@@ -592,7 +592,7 @@ export default function Schedule() {
 
         {/* 날짜 검색 */}
         <div style={{ background:C.card, borderRadius:16, padding:20, marginBottom:24, border:`1px solid ${C.cardBorder}` }}>
-          <div style={{ fontSize:12, color:C.textSub, marginBottom:10, fontWeight:600 }}>예식 날짜 선택</div>
+          <div style={{ fontSize:12, color:C.textSub, marginBottom:10, fontWeight:600, textAlign:"center" }}>예식 날짜 선택</div>
           <div style={{ display:"flex", gap:10 }}>
             <DateField value={date} onChange={setDate} onEnter={() => search()}
               textColor={C.text} placeholderColor={C.textSub} iconColor={C.mint}

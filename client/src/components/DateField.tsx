@@ -46,11 +46,11 @@ export default function DateField({
 
   return (
     <div
-      className={`relative flex items-center gap-3 ${className}`}
+      className={`relative flex items-center justify-center gap-3 ${className}`}
       style={{ cursor: "pointer", ...style }}
     >
       <Calendar size={20} style={{ color: iconColor, flexShrink: 0 }} aria-hidden />
-      <div className="flex-1 min-w-0 text-left leading-tight" aria-hidden>
+      <div className="min-w-0 text-center leading-tight" aria-hidden>
         {label ? (
           <span className="block font-semibold truncate" style={{ color: textColor, fontSize: 16 }}>
             {label}

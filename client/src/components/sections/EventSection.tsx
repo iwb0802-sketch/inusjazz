@@ -6,7 +6,6 @@
 import { useState } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import QuoteCalculator from "./QuoteCalculator";
-import { ASSURANCE_ITEMS } from "@/data/assurance";
 import {
   Check,
   Mic2,
@@ -100,7 +99,7 @@ const BENEFIT_GROUPS = [
   },
 ];
 
-// (안심 보장 · 예비 사회자 · 대표 대기 문구는 data/assurance.ts 단일 소스)
+// (안심 보장 · 대기 문구는 data/assurance.ts 단일 소스 — 가격 섹션 '이 가격에 담긴 약속'에서 안내)
 // 상단에 먼저 보여주는 대표 혜택 4가지 (금액이 명시된 항목)
 const HIGHLIGHT_TITLES = [
   "두 사람만의 스토리를 담은 감성 맞춤 대본 제작",
@@ -210,47 +209,6 @@ export default function EventSection() {
                 )}
               </div>
             ))}
-          </div>
-
-          {/* 안심 보장 제도 — 펼치지 않아도 바로 보이도록 상시 노출. 혜택 금액(27만원 · 19가지)에는 포함하지 않는 별도 약속 */}
-          <div
-            className="mt-3 sm:mt-4 rounded-xl p-5 sm:p-7"
-            style={{
-              background: "linear-gradient(160deg,#181512,#0f0f0f)",
-              border: "1px solid rgba(212,184,150,0.55)",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.14)",
-            }}
-          >
-            <div className="flex items-center gap-2.5 mb-1">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "rgba(212,184,150,0.16)" }}>
-                <ShieldCheck size={16} className="text-[#d4b896]" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <span
-                  className="block text-[#d4b896] text-[10.5px] tracking-[0.26em]"
-                  style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
-                >
-                  INUS ASSURANCE
-                </span>
-                <h3 className="text-white text-[15px] font-bold break-keep" style={{ fontFamily: "'Noto Serif KR', serif" }}>
-                  이너스뮤직 안심 보장 제도
-                </h3>
-              </div>
-            </div>
-            <p className="text-white/55 text-[11.5px] sm:text-[12px] break-keep leading-relaxed mb-4">
-              예식 당일까지, 이너스뮤직이 책임으로 약속드립니다
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-6">
-              {ASSURANCE_ITEMS.map((it) => (
-                <div key={it.t} className="flex items-start gap-2.5">
-                  <Check size={14} className="text-[#d4b896] flex-shrink-0 mt-[4px]" />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-white text-[13.5px] font-semibold break-keep leading-[1.5]">{it.t}</p>
-                    <p className="text-white/60 text-[12px] mt-1 leading-relaxed break-keep">{it.d}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* 나머지 구성 — 접지 않고 항상 노출. 제목만 압축해서 보여주고 설명은 토글 */}

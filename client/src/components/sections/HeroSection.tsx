@@ -7,7 +7,7 @@ import { PROOF_TOTAL, PROOF_AS_OF } from "@/data/reviewStats";
 const PROOFS = [
   { value: PROOF_TOTAL.toLocaleString(), unit: "건", label: "누적 후기", sub: "6개 채널", href: "#review" },
   { value: "18", unit: "인", label: "사회자 전원", sub: "목소리·영상 공개", href: "#mc" },
-  { value: "100", unit: "%", label: "계약금 환불", sub: "예식 전주까지", href: "#process" },
+  { value: "100", unit: "%", label: "계약금 환불", sub: "예식 전주까지", href: "#promise" },
   { value: "14", unit: "만원~", label: "정가 기준", sub: "경기·인천\n출장비 1~4만 원", href: "#pricing" },
 ];
 

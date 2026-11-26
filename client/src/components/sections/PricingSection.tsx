@@ -15,19 +15,18 @@ import {
   Crown,
   PlayCircle,
   Star,
-  ShieldCheck,
   Users,
 } from "lucide-react";
 import { PRICE_TIERS, TRAVEL_AREAS, won } from "@/data/pricing";
 import { PROOF_TOTAL, PROOF_AS_OF } from "@/data/reviewStats";
-import { ASSURANCE_SUMMARY, STANDBY } from "@/data/assurance";
+import { PROMISES, STANDBY } from "@/data/assurance";
 
 const DESIGNATED_EVENT = PRICE_TIERS.filter((t) => t.designated).map((t) => t.event);
 const EVENT_MAX = Math.max(...DESIGNATED_EVENT).toLocaleString("ko-KR");
 const EVENT_MIN = Math.min(...DESIGNATED_EVENT).toLocaleString("ko-KR");
 const RANDOM_TIER = PRICE_TIERS.find((t) => !t.designated)!;
 
-// 가격 옆에 보여주는 근거 (가격 차이를 설명하는 영역)
+// '이 가격에 담긴 약속' 하단의 함께 드리는 안심 요소
 const PRICE_REASONS = [
   {
     Icon: PlayCircle,
@@ -39,7 +38,6 @@ const PRICE_REASONS = [
     t: `누적 후기 ${PROOF_TOTAL.toLocaleString("ko-KR")}건`,
     d: `6개 채널 합산 · ${PROOF_AS_OF} 기준`,
   },
-  { Icon: ShieldCheck, ...ASSURANCE_SUMMARY },
   { Icon: Users, ...STANDBY },
 ];
 
@@ -49,6 +47,7 @@ export default function PricingSection() {
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
   const anim3 = useScrollAnimation();
+  const anim4 = useScrollAnimation();
 
   return (
     <section id="pricing" className="relative bg-[#f8f6f3] pt-20 sm:pt-24 pb-10 sm:pb-12">
@@ -278,26 +277,75 @@ export default function PricingSection() {
             </div>
           </div>
 
-          {/* 가격 근거 */}
-          <div className="mt-10 sm:mt-14 rounded-sm border border-[#d4b896]/40 bg-white px-6 sm:px-10 py-10 sm:py-14">
-            <p
-              className="text-center text-[#1a1a1a] text-lg sm:text-xl break-keep"
-              style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
-            >
-              이 가격에 담긴 <span className="text-[#a8814f]">약속</span>
-            </p>
-            <div className="mx-auto mt-3 h-px w-10 bg-[#d4b896]" />
-            <div className="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-0 sm:gap-y-10 lg:gap-y-0">
-              {PRICE_REASONS.map(({ Icon, t, d }) => (
+          {/* 가격 근거 — '이 가격에 담긴 약속' (계약금 환불 · 대체 사회자 · 2배 환불 + 대기 체계) */}
+          <div
+            id="promise"
+            ref={anim4.ref}
+            className={`mt-10 sm:mt-14 scroll-mt-20 rounded-sm px-6 sm:px-10 lg:px-14 py-10 sm:py-16 fade-up ${anim4.isVisible ? "visible" : ""}`}
+            style={{
+              background: "linear-gradient(160deg,#181512,#0f0f0f)",
+              border: "1px solid rgba(212,184,150,0.45)",
+              boxShadow: "0 14px 40px rgba(0,0,0,0.14)",
+            }}
+          >
+            <div className="text-center">
+              <span
+                className="block text-[#d4b896] text-[10.5px] sm:text-[11.5px] tracking-[0.3em]"
+                style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
+              >
+                INUS ASSURANCE
+              </span>
+              <p
+                className="mt-3 text-white text-[21px] sm:text-[26px] break-keep"
+                style={{ fontFamily: "'Noto Serif KR', serif", fontWeight: 700 }}
+              >
+                이 가격에 담긴 <span className="text-[#d4b896]">약속</span>
+              </p>
+              <p className="mt-3 text-white/55 text-[12.5px] sm:text-[13.5px] leading-relaxed break-keep">
+                계약부터 예식 당일까지, 이너스뮤직이 책임으로 약속드립니다
+              </p>
+              <div className="mx-auto mt-5 h-px w-10 bg-[#d4b896]/70" />
+            </div>
+
+            <div className="mt-9 sm:mt-14 grid grid-cols-1 md:grid-cols-3">
+              {PROMISES.map((p) => (
                 <div
-                  key={t}
-                  className="py-5 sm:py-0 sm:px-7 border-t border-[#d4b896]/25 first:border-t-0 first:pt-0 last:pb-0 sm:border-t-0 sm:first:pt-0 sm:last:pb-0 lg:border-l lg:first:border-l-0 sm:odd:pl-0 lg:odd:pl-7 lg:first:pl-0"
+                  key={p.t}
+                  className="flex items-start gap-5 md:block md:text-center py-6 md:py-0 md:px-8 border-t border-[#d4b896]/20 first:border-t-0 first:pt-0 last:pb-0 md:border-t-0 md:border-l md:first:border-l-0 md:first:pl-0 md:last:pr-0"
                 >
-                  <div className="flex items-center gap-2.5 sm:block">
-                    <Icon size={20} strokeWidth={1.4} className="flex-shrink-0 text-[#a8814f]" />
-                    <p className="sm:mt-3.5 text-[#1a1a1a] text-[14.5px] sm:text-[15px] font-bold break-keep">{t}</p>
+                  <div className="w-[92px] md:w-auto flex-shrink-0">
+                    <p
+                      className="text-[#e6cfa6] leading-none whitespace-nowrap text-[42px] md:text-[64px]"
+                      style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
+                    >
+                      {p.fig}
+                      <span
+                        className="ml-0.5 text-[0.42em] align-baseline"
+                        style={{ fontFamily: p.unit === "%" ? "'Cormorant Garamond', serif" : "'Noto Serif KR', serif" }}
+                      >
+                        {p.unit}
+                      </span>
+                    </p>
+                    <p className="mt-2.5 text-white/45 text-[11px] tracking-[0.12em] break-keep">{p.cap}</p>
                   </div>
-                  <p className="mt-2 text-[#777] text-[12.5px] sm:text-[13px] leading-[1.75] break-keep">{d}</p>
+                  <div className="min-w-0 flex-1 md:mt-7">
+                    <p className="text-white text-[15px] sm:text-[16px] font-bold break-keep leading-snug">{p.t}</p>
+                    <p className="mt-2 text-white/60 text-[12.5px] sm:text-[13px] leading-[1.8] break-keep">{p.d}</p>
+                    {p.note && <p className="mt-2.5 text-[#d4b896]/85 text-[11.5px] sm:text-[12px] break-keep">{p.note}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* 함께 드리는 안심 요소 — 조용하게 */}
+            <div className="mt-8 sm:mt-14 pt-7 sm:pt-9 border-t border-[#d4b896]/20 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-10">
+              {PRICE_REASONS.map(({ Icon, t, d }) => (
+                <div key={t} className="flex items-start gap-3">
+                  <Icon size={17} strokeWidth={1.4} className="flex-shrink-0 mt-[2px] text-[#d4b896]" />
+                  <div className="min-w-0">
+                    <p className="text-white/90 text-[13.5px] font-semibold break-keep leading-snug">{t}</p>
+                    <p className="mt-1.5 text-white/50 text-[12px] leading-[1.75] break-keep">{d}</p>
+                  </div>
                 </div>
               ))}
             </div>

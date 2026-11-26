@@ -1,6 +1,6 @@
 /**
- * ProcessSection - 책임 설계 (환불 타임라인 + 4단계 + 신뢰 포인트)
- * Design: Dark background, refund timeline → 4 steps → trust cards
+ * ProcessSection - 책임 설계 (4단계 + 신뢰 포인트) · 환불·보장 정책은 가격 섹션 '이 가격에 담긴 약속'
+ * Design: Dark background, 4 steps → trust cards
  */
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useState } from "react";
@@ -80,7 +80,6 @@ const STEPS = [
 
 export default function ProcessSection() {
   const anim1 = useScrollAnimation();
-  const anim2 = useScrollAnimation();
   const anim3 = useScrollAnimation();
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
@@ -104,46 +103,6 @@ export default function ProcessSection() {
           </h2>
           <p className="mt-4 text-white/50 text-sm sm:text-base break-keep">
             계약부터 예식까지, 4단계로 빈틈을 줄였습니다
-          </p>
-        </div>
-
-        {/* 환불 타임라인 */}
-        <div
-          ref={anim2.ref}
-          className={`mb-10 sm:mb-12 rounded-sm px-5 sm:px-8 py-6 sm:py-7 fade-up ${anim2.isVisible ? "visible" : ""}`}
-          style={{ background: "#141414", border: "1px solid rgba(212,184,150,0.25)" }}
-        >
-          <div className="relative flex items-stretch">
-            <div className="flex flex-col items-start flex-shrink-0">
-              <span className="w-2.5 h-2.5 rounded-full" style={{ background: GOLD }} />
-              <span className="mt-2 text-white/80 text-xs sm:text-sm">계약</span>
-            </div>
-            <div className="relative flex-1 mx-2 sm:mx-3">
-              <div className="absolute left-0 right-0 top-[4px] h-[2px]" style={{ background: "linear-gradient(90deg, #d4b896, #d4b896)" }} />
-              <p className="pt-4 sm:pt-5 text-center">
-                <span
-                  className="text-[26px] sm:text-[34px] leading-none"
-                  style={{ color: GOLD, fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
-                >
-                  100%
-                </span>
-                <span className="ml-2 text-white text-xs sm:text-sm">계약금 환불</span>
-              </p>
-            </div>
-            <div className="flex flex-col items-center flex-shrink-0">
-              <span className="w-2.5 h-2.5 rounded-full border-2" style={{ borderColor: GOLD, background: "#0d0d0d" }} />
-              <span className="mt-2 text-white/80 text-xs sm:text-sm whitespace-nowrap">예식 전주</span>
-            </div>
-            <div className="relative w-10 sm:w-20 mx-2 sm:mx-3">
-              <div className="absolute left-0 right-0 top-[4px] h-[2px] bg-white/15" />
-            </div>
-            <div className="flex flex-col items-end flex-shrink-0">
-              <span className="w-2.5 h-2.5 rounded-full bg-white/30" />
-              <span className="mt-2 text-white/50 text-xs sm:text-sm">예식</span>
-            </div>
-          </div>
-          <p className="mt-5 text-white/45 text-[11px] sm:text-xs text-center break-keep">
-            사회자를 확정한 뒤에도 예식 전주까지는 계약금 전액을 돌려드립니다
           </p>
         </div>
 

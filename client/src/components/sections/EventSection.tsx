@@ -5,6 +5,8 @@
  */
 import { useState } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useReadingFocus } from "@/hooks/useReadingFocus";
+import { useCountUp } from "@/hooks/useCountUp";
 import QuoteCalculator from "./QuoteCalculator";
 import {
   Check,
@@ -131,11 +133,15 @@ export default function EventSection() {
   const anim1 = useScrollAnimation();
   const anim2 = useScrollAnimation();
   const anim3 = useScrollAnimation();
+  const anim4 = useScrollAnimation();
+  const focusRef = useReadingFocus<HTMLDivElement>();
+  const totalCount = useCountUp(ALL_ITEMS.length, anim4.isVisible);
+  const totalWon = useCountUp(27, anim4.isVisible);
   const [showDesc, setShowDesc] = useState(false);
 
   return (
     <section id="event" className="relative bg-[#f8f6f3] pb-20 sm:pb-28">
-      <div className="max-w-5xl mx-auto px-5 sm:px-6">
+      <div ref={focusRef} className="max-w-5xl mx-auto px-5 sm:px-6">
         {/* 가격표에 이어지는 혜택 — 구분선 */}
         <div className="mx-auto mb-10 sm:mb-12 flex items-center justify-center gap-3">
           <span className="h-px w-16 bg-[#d4b896]/60" />
@@ -180,17 +186,17 @@ export default function EventSection() {
             {HIGHLIGHTS.map((it) => (
               <div
                 key={it.t}
-                className="rounded-xl p-5 bg-white"
-                style={{ border: "1px solid rgba(212,184,150,0.45)", boxShadow: "0 2px 12px rgba(0,0,0,0.03)" }}
+                data-rf="card"
+                className="rf-card rounded-xl p-5 bg-white"
               >
                 <span
-                  className="block text-[#a8814f] text-[12px] sm:text-[13px] font-bold tracking-wide"
+                  className="rf-w block text-[#a8814f] text-[12px] sm:text-[13px] font-bold tracking-wide"
                   style={{ fontFamily: "'Noto Serif KR', serif" }}
                 >
                   {it.w}
                 </span>
                 <p
-                  className="mt-1.5 text-[#1a1a1a] text-[15px] sm:text-[16px] font-bold break-keep leading-snug"
+                  className="rf-t mt-1.5 text-[#1a1a1a] text-[15px] sm:text-[16px] font-bold break-keep leading-snug"
                   style={{ fontFamily: "'Noto Serif KR', serif" }}
                 >
                   {it.t}
@@ -234,10 +240,10 @@ export default function EventSection() {
                 </div>
                 <div className={showDesc ? "space-y-2.5" : "space-y-1.5"}>
                   {g.items.map((it) => (
-                    <div key={it.t} className="flex items-start gap-2">
-                      <Check size={14} className="text-[#c09a7e] flex-shrink-0 mt-[3px]" />
+                    <div key={it.t} data-rf="row" className="rf-row flex items-start gap-2">
+                      <Check size={14} className="rf-chk text-[#c09a7e] flex-shrink-0 mt-[3px]" />
                       <div className="min-w-0 flex-1">
-                        <p className="text-[#2a2a2a] text-[13px] font-semibold break-keep leading-[1.5]">
+                        <p className="rf-t text-[#2a2a2a] text-[13px] font-semibold break-keep leading-[1.5]">
                           {it.t}
                           {it.w !== "포함" && <span className="ml-1.5 text-[#a8814f] text-[11px] font-bold whitespace-nowrap">{it.w}</span>}
                         </p>
@@ -271,6 +277,47 @@ export default function EventSection() {
               <ChevronDown size={14} className={`transition-transform duration-300 ${showDesc ? "rotate-180" : ""}`} />
             </button>
           </div>
+        </div>
+
+        {/* 합계 — 훑어본 구성의 총량을 한 번 더 정리 (스크롤로 들어올 때 숫자가 한 번만 올라감) */}
+        <div ref={anim4.ref} className={`fade-up ${anim4.isVisible ? "visible" : ""} mt-14 sm:mt-20`}>
+          <div className="mx-auto flex items-center justify-center gap-3">
+            <span className="h-px w-12 bg-[#d4b896]/60" />
+            <span className="w-1.5 h-1.5 rotate-45 bg-[#d4b896]" />
+            <span className="h-px w-12 bg-[#d4b896]/60" />
+          </div>
+          <p
+            className="mt-6 text-center text-[#7a5a2e] text-[11px] sm:text-[12px] tracking-[0.28em]"
+            style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}
+          >
+            IN TOTAL
+          </p>
+          <div className="mt-5 mx-auto max-w-md grid grid-cols-2">
+            {[
+              { n: totalCount, final: ALL_ITEMS.length, unit: "가지", cap: "함께 준비되는 구성" },
+              { n: totalWon, final: 27, unit: "만원", cap: "상당" },
+            ].map((c, i) => (
+              <div key={c.unit} className={`text-center px-3 ${i === 1 ? "border-l border-[#d4b896]/50" : ""}`}>
+                <p className="flex items-baseline justify-center gap-1 leading-none">
+                  <span
+                    className="relative inline-block text-[#a8814f] text-[48px] sm:text-[60px]"
+                    style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 600, fontVariantNumeric: "lining-nums tabular-nums" }}
+                  >
+                    <span className="invisible">{c.final}</span>
+                    <span className="absolute inset-0 text-center">{c.n}</span>
+                  </span>
+                  <span className="text-[#1a1a1a] text-[15px] sm:text-[17px] font-bold" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+                    {c.unit}
+                  </span>
+                </p>
+                <p className="mt-3 text-[#888] text-[11.5px] sm:text-[12.5px] break-keep">{c.cap}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-7 text-center text-[#777] text-[12.5px] sm:text-[13.5px] leading-relaxed break-keep">
+            청첩장 · 대본 · 음악 · 케어 · 책임 진행까지,
+            <br className="sm:hidden" /> 사회자 예약과 함께 모두 준비됩니다
+          </p>
         </div>
 
         {/* 3. 추가 혜택 표 */}

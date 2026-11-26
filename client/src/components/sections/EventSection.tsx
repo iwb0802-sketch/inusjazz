@@ -109,6 +109,21 @@ const HIGHLIGHT_TITLES = [
   "모바일 청첩장 제작",
   "프리미엄 식전영상 제작 지원",
 ];
+// 대본·사전 통화 카드의 시각 패널 (실제 대본 발췌 · 이름 비공개 / 사회자 프로필)
+const SCRIPT_TITLE = "두 사람만의 스토리를 담은 감성 맞춤 대본 제작";
+const CALL_TITLE = "지정 사회자와 사전 통화 & 식순 협의";
+const SCRIPT_EXCERPT = [
+  "인생이라는 긴 여정 위에서 수많은 계절을 지나,",
+  "마침내 평생을 함께 걸어갈 단 한 사람을 만났습니다.",
+  "단아하고 차분한 모습 속에 단단한 마음을 품은\u00a0사람\u00a0—",
+  "그리고 신랑의 눈에는, 세상에서 가장 예쁜 웃음과 사랑스러운 애교로 언제나 자신보다 상대를 먼저 생각해 주는 깊은 배려심을 가진 사람입니다.",
+];
+const CALL_PHOTOS = [
+  "/images/mc-jaesun-headroom.jpg",
+  "/images/mc-minsu-headroom.jpg",
+  "/images/mc-myeongjun-headroom.jpg",
+  "/images/mc-yuna-headroom.jpg",
+];
 // 실제 서비스 화면 썸네일 (라이브 도구 캡처)
 const HIGHLIGHT_THUMBS: Record<string, { src: string; alt: string }> = {
   "모바일 청첩장 제작": { src: "/images/ev-card.webp", alt: "이너스 모바일 청첩장 실제 제작 화면" },
@@ -192,8 +207,47 @@ export default function EventSection() {
               <div
                 key={it.t}
                 data-rf="card"
-                className="rf-card rounded-xl p-5 bg-white"
+                className="rf-card flex flex-col rounded-xl p-5 bg-white"
               >
+                {it.t === SCRIPT_TITLE && (
+                  <div className="relative -mx-1 mb-4 flex-1 overflow-hidden rounded-lg bg-[#16130e] px-4 py-4 sm:px-5 sm:py-5">
+                    <span className="absolute right-2.5 top-2.5 rounded-full bg-white/10 px-2 py-[3px] text-[10px] font-semibold tracking-wide text-white/80">
+                      실제 대본 발췌
+                    </span>
+                    <p className="text-[10.5px] font-semibold tracking-[0.18em] text-[#e0c188]/80">
+                      신부 입장
+                    </p>
+                    <p className="mt-0.5 text-[10.5px] text-white/35">♪ 음원 재생 · 0~45초 사이 낭독</p>
+                    <div
+                      className="mt-3 space-y-1 text-[13px] sm:text-[13.5px] font-semibold leading-[1.75] text-[#e8cd9b] break-keep"
+                      style={{ fontFamily: "'Noto Serif KR', serif" }}
+                    >
+                      {SCRIPT_EXCERPT.map((line) => (
+                        <p key={line}>{line}</p>
+                      ))}
+                    </div>
+                    <p className="mt-3 text-[12px] sm:text-[12.5px] leading-[1.7] text-white/60 break-keep" style={{ fontFamily: "'Noto Serif KR', serif" }}>
+                      신부 ○○○ 양의 입장을 따뜻한 박수로 맞이해 주시기 바랍니다!
+                    </p>
+                    <p className="mt-3 border-t border-white/10 pt-2.5 text-[10.5px] text-white/35">
+                      실제 제작 대본 · 신랑신부 이름 비공개 처리
+                    </p>
+                  </div>
+                )}
+                {it.t === CALL_TITLE && (
+                  <div className="relative -mx-1 mb-4 flex-1 overflow-hidden rounded-lg bg-[#f4efe8] p-3 sm:p-4">
+                    <span className="absolute left-5 top-5 z-10 rounded-full bg-black/60 px-2 py-[3px] text-[10px] font-semibold tracking-wide text-white/90 backdrop-blur-sm">
+                      사회자 프로필
+                    </span>
+                    <div className="grid h-full min-h-[190px] grid-cols-4 gap-2">
+                      {CALL_PHOTOS.map((src) => (
+                        <div key={src} className="relative overflow-hidden rounded-md bg-white">
+                          <img src={src} alt="이너스 소속 사회자 프로필" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover object-top" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {HIGHLIGHT_THUMBS[it.t] && (
                   <div className="relative -mx-1 mb-4 overflow-hidden rounded-lg bg-[#f4efe8]" style={{ aspectRatio: "2.4 / 1" }}>
                     <img

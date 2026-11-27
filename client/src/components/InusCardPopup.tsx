@@ -101,7 +101,7 @@ export default function InusCardPopup() {
               이너스뮤직 모바일 청첩장
             </h3>
             <p className="mt-1.5 text-sm leading-6 text-[#d7ccb4]/75">
-              예약 고객님께 무료로 제공해드립니다.
+              예약 고객님께 제작을 지원해 드립니다.
             </p>
           </div>
 
@@ -109,7 +109,7 @@ export default function InusCardPopup() {
           <div className="px-5 py-4 space-y-2.5">
             {[
               "이너스뮤직 예약 고객님 전용 혜택",
-              "감성적인 모바일 청첩장 무료 제작",
+              "감성적인 모바일 청첩장 제작 지원",
               "카카오톡 공유 · URL 발송 지원",
             ].map((item) => (
               <div key={item} className="flex items-start gap-2.5">

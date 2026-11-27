@@ -54,7 +54,7 @@ export default function BottomCTA() {
           {/* 좌측: 문구 (PC에서만 표시) */}
           <div className="hidden sm:block">
             <p className="text-white/90 text-sm font-medium" style={{ fontFamily: "'Noto Serif KR', serif" }}>
-              웨딩 사회자 무료 상담
+              웨딩 사회자 상담
             </p>
             <p className="text-white/40 text-xs mt-0.5">
               카카오톡으로 편하게 문의하세요

@@ -50,7 +50,6 @@ const BENEFIT_GROUPS = [
         w: "4만원 상당",
         href: PREWEDDING_VIDEO_TOOL,
       },
-      { t: "MR 제공 및 MR / AR 편집 지원", d: "요청 시 전문가가 직접 편집", w: "포함" },
     ],
   },
   {
@@ -76,6 +75,7 @@ const BENEFIT_GROUPS = [
       { t: "편집된 트렌드 BGM 제공", d: "지속적인 업데이트로 최신 곡까지 반영", w: "포함" },
       { t: "예식 분위기에 맞는 식순별 BGM 100여 곡", d: "식순별로 정리된 큐레이션 제공", w: "3만원 상당" },
       { t: "요청 시 맞춤형 BGM 편집 지원", d: "곡 길이 · 진입 타이밍까지 조정", w: "2만원 상당" },
+      { t: "MR 제공 및 MR / AR 편집 지원", d: "요청 시 전문가가 직접 편집", w: "포함" },
     ],
   },
   {
@@ -107,6 +107,7 @@ const HIGHLIGHT_TITLES = [
   "두 사람만의 스토리를 담은 감성 맞춤 대본 제작",
   "지정 사회자와 사전 통화 & 식순 협의",
   "모바일 청첩장 제작",
+  "셀프 음원 편집기 이용",
   "프리미엄 식전영상 제작 지원",
 ];
 // 대본·사전 통화 카드의 시각 패널 (실제 대본 발췌 · 이름 비공개 / 사회자 프로필)
@@ -127,6 +128,7 @@ const CALL_PHOTOS = [
 // 실제 서비스 화면 썸네일 (라이브 도구 캡처)
 const HIGHLIGHT_THUMBS: Record<string, { src: string; alt: string }> = {
   "모바일 청첩장 제작": { src: "/images/ev-card.webp", alt: "이너스 모바일 청첩장 실제 제작 화면" },
+  "셀프 음원 편집기 이용": { src: "/images/ev-audio.webp", alt: "이너스 음원 편집기 실제 화면" },
   "프리미엄 식전영상 제작 지원": { src: "/images/ev-vid.webp", alt: "이너스 식전영상 편집기 실제 화면" },
 };
 const ALL_ITEMS = BENEFIT_GROUPS.flatMap((g) => g.items.map((it) => ({ ...it, group: g })));
@@ -202,12 +204,12 @@ export default function EventSection() {
 
         {/* 2. 대표 혜택 4가지 */}
         <div ref={anim2.ref} className={`fade-up ${anim2.isVisible ? "visible" : ""} mt-4 sm:mt-5`}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            {HIGHLIGHTS.map((it) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">
+            {HIGHLIGHTS.map((it, idx) => (
               <div
                 key={it.t}
                 data-rf="card"
-                className="rf-card flex flex-col rounded-xl p-5 bg-white"
+                className={`rf-card flex flex-col rounded-xl p-5 bg-white ${idx < 2 ? "lg:col-span-3" : idx === HIGHLIGHTS.length - 1 ? "sm:col-span-2 lg:col-span-2" : "lg:col-span-2"}`}
               >
                 {it.t === SCRIPT_TITLE && (
                   <div className="relative -mx-1 mb-4 flex-1 overflow-hidden rounded-lg bg-[#16130e] px-4 py-4 sm:px-5 sm:py-5">
@@ -249,7 +251,7 @@ export default function EventSection() {
                   </div>
                 )}
                 {HIGHLIGHT_THUMBS[it.t] && (
-                  <div className="relative -mx-1 mb-4 overflow-hidden rounded-lg bg-[#f4efe8]" style={{ aspectRatio: "2.4 / 1" }}>
+                  <div className="relative -mx-1 mb-4 overflow-hidden rounded-lg bg-[#f4efe8] aspect-[2.4/1] lg:aspect-[1.9/1]">
                     <img
                       src={HIGHLIGHT_THUMBS[it.t].src}
                       alt={HIGHLIGHT_THUMBS[it.t].alt}
@@ -275,9 +277,9 @@ export default function EventSection() {
                   {it.t}
                 </p>
                 <p className="mt-1.5 text-[#777] text-[12px] sm:text-[13px] break-keep leading-relaxed">{it.d}</p>
-                {"href" in it && it.href && (
+                {(it as { href?: string }).href && (
                   <a
-                    href={it.href as string}
+                    href={(it as { href?: string }).href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group inline-flex items-center gap-1 mt-2 text-[12px] font-bold text-[#2f8b78] hover:text-[#23705f] transition-colors"
@@ -321,9 +323,9 @@ export default function EventSection() {
                           {it.w !== "포함" && <span className="ml-1.5 text-[#a8814f] text-[11px] font-bold whitespace-nowrap">{it.w}</span>}
                         </p>
                         {showDesc && <p className="text-[#888] text-[11.5px] mt-0.5 leading-relaxed break-keep">{it.d}</p>}
-                        {"href" in it && it.href && (
+                        {(it as { href?: string }).href && (
                           <a
-                            href={it.href as string}
+                            href={(it as { href?: string }).href}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1 mt-1 text-[11.5px] font-bold text-[#2f8b78] hover:text-[#23705f]"

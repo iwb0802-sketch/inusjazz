@@ -9,7 +9,7 @@ const EXTRAS: { icon: any; label: string; href: string; isNew?: boolean }[] = [
   { icon: Smartphone, label: "모바일 청첩장", href: "https://inuscard.com" },
   { icon: AudioWaveform, label: "음원편집", href: "/audio", isNew: true },
   { icon: Clapperboard, label: "식전영상제작", href: "https://prewedding-video-renderer-production.up.railway.app/editor", isNew: true },
-  { icon: Package, label: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
+  { icon: Package, label: "완성 패키지", href: "https://www.inusmusic.com/package" },
 ];
 
 export default function ServiceSection() {

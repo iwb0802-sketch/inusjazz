@@ -2,7 +2,7 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Music, Mic, Theater, MicVocal, Smartphone, AudioWaveform, Clapperboard, Crown, Sparkles, Music4, Gem, ExternalLink, ArrowRight } from "lucide-react";
 
 const KAKAO_LINK = "https://pf.kakao.com/_wxovaM/chat";
-const PACKAGE_LINK = "https://blog.naver.com/inusmusics/220652965646";
+const PACKAGE_LINK = "https://www.inusmusic.com/package";
 
 // 완성형 웨딩 패키지 등급 (GRAND → PRESTIGE → CLASSIC → ESSENTIAL)
 // 주의: "SIGNATURE"는 사회자 최상위 등급명(McSection)으로 별도 사용 중이므로 패키지 쪽엔 쓰지 않음

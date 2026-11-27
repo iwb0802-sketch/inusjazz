@@ -19,7 +19,7 @@ const SERVICE_LINKS: { label: string; href: string; isNew?: boolean }[] = [
   { label: "모바일 청첩장", href: "https://inuscard.com" },
   { label: "음원편집", href: "/audio", isNew: true },
   { label: "식전영상제작", href: "https://prewedding-video-renderer-production.up.railway.app/editor", isNew: true },
-  { label: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
+  { label: "완성 패키지", href: "https://www.inusmusic.com/package" },
 ];
 
 export default function Navbar() {
